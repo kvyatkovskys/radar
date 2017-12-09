@@ -1,0 +1,11 @@
+Pods/Pods.xcodeproj/xcuserdata
+Circle.xcodeproj/xcuserdata/chiliec.xcuserdatad/xcschemes
+Circle.xcworkspace/xcshareddata
+Circle.xcworkspace/xcuserdata
+.scannerwork
+*.mobileprovision
+*.zip
+*.ipa
+*.cer
+*.html
+*.junit
