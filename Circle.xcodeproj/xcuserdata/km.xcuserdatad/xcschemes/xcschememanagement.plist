@@ -7,7 +7,20 @@
 		<key>Circle.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>0</integer>
+			<integer>6</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>8B4115461FDB2CEF00C6614C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8B41155A1FDB2CEF00C6614C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>
