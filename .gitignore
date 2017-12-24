@@ -1,8 +1,8 @@
 Pods/Pods.xcodeproj/xcuserdata
-Circle.xcodeproj/xcuserdata/chiliec.xcuserdatad/xcschemes
-Circle.xcworkspace/xcshareddata
-Circle.xcworkspace/xcuserdata
-.scannerwork
+*.xcscheme
+*.xcshareddata
+*.xcuserdata
+*.scannerwork
 *.mobileprovision
 *.zip
 *.ipa
