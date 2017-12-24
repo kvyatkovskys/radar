@@ -10,7 +10,9 @@ import UIKit
 import SnapKit
 import MapKit
 
-final class MainViewController: UIViewController, LocationManagerDelegate {
+let heightHeader: CGFloat = 100.0
+
+final class MainViewController: UIViewController, LocationManagerDelegate, UIScrollViewDelegate, UITableViewDelegate {
     typealias Dependecies = HasRouter
     
     // для работы с геопозиции
@@ -20,14 +22,17 @@ final class MainViewController: UIViewController, LocationManagerDelegate {
     
     fileprivate let router: Router
     
+    fileprivate var tableHeaderHeight: Constraint?
+    
     fileprivate lazy var tableView: UITableView = {
         let table = UITableView()
         //table.tableFooterView = UIView(frame: CGRect.zero)
+        table.delegate = self
         return table
     }()
     
     fileprivate lazy var headerView: UIView = {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 100.0))
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: heightHeader))
         view.backgroundColor = .white
         return view
     }()
@@ -35,24 +40,28 @@ final class MainViewController: UIViewController, LocationManagerDelegate {
     fileprivate lazy var mapView: MKMapView = {
         let map = MKMapView()
         map.mapType = .standard
-        map.isZoomEnabled = true
+        map.isZoomEnabled = false
         map.isRotateEnabled = true
-        map.isScrollEnabled = true
+        map.isScrollEnabled = false
         map.showsBuildings = true
         map.showsCompass = true
         map.showsPointsOfInterest = true
         map.showsUserLocation = true
         map.showsScale = false
+        map.contentMode = .scaleAspectFill
+        map.isUserInteractionEnabled = false
         return map
     }()
     
     fileprivate func updateConstraints() {
         tableView.snp.makeConstraints { (make) in
-            make.top.bottom.left.right.equalToSuperview()
+            make.top.equalToSuperview().offset(64.0)
+            make.bottom.left.right.equalToSuperview()
         }
         
         mapView.snp.makeConstraints { (make) in
-            make.left.top.bottom.right.equalToSuperview()
+            tableHeaderHeight = make.height.equalTo(heightHeader).constraint
+            make.left.bottom.right.equalToSuperview()
         }
         
         super.updateViewConstraints()
@@ -69,6 +78,8 @@ final class MainViewController: UIViewController, LocationManagerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // показываем бар
+        navigationController?.isNavigationBarHidden = false
         
         headerView.addSubview(mapView)
         view.addSubview(tableView)
@@ -76,6 +87,14 @@ final class MainViewController: UIViewController, LocationManagerDelegate {
         
         updateConstraints()
         startDetectLocation()
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard let header = tableView.tableHeaderView else { return }
+        
+        let offsetY = -scrollView.contentOffset.y
+        tableHeaderHeight?.update(offset: max(header.bounds.height, header.bounds.height + offsetY))        
+        view.layoutIfNeeded()
     }
     
     // MARK: LocationManagerDelegate
@@ -114,8 +133,7 @@ final class MainViewController: UIViewController, LocationManagerDelegate {
     
     func centerMapOnLocation(_ location: CLLocation) {
         let regionRadius: CLLocationDistance = 1000
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,
-                                                                  regionRadius, regionRadius)
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius, regionRadius)
         mapView.setRegion(coordinateRegion, animated: true)
     }
 }

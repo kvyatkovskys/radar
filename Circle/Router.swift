@@ -20,6 +20,6 @@ final class Router {
         let mainViewController = MainViewController(MainViewDependecies(self))
         rootViewController.setViewControllers([mainViewController], animated: true)
         rootViewController.isNavigationBarHidden = true
-        rootViewController.navigationBar.isTranslucent = false
+        rootViewController.navigationBar.isTranslucent = true
     }
 }
