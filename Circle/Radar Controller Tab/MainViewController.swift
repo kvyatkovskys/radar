@@ -9,10 +9,11 @@
 import UIKit
 import SnapKit
 import MapKit
+import RadarSDK
 
 let heightHeader: CGFloat = 100.0
 
-final class MainViewController: UIViewController, LocationManagerDelegate, UIScrollViewDelegate, UITableViewDelegate {
+final class MainViewController: UIViewController, LocationManagerDelegate, UIScrollViewDelegate, UITableViewDelegate, RadarDelegate {
     typealias Dependecies = HasRouter
     
     // для работы с геопозиции
@@ -78,8 +79,8 @@ final class MainViewController: UIViewController, LocationManagerDelegate, UIScr
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // показываем бар
-        navigationController?.isNavigationBarHidden = false
+        
+        Radar.setDelegate(self)
         
         headerView.addSubview(mapView)
         view.addSubview(tableView)
@@ -89,6 +90,16 @@ final class MainViewController: UIViewController, LocationManagerDelegate, UIScr
         startDetectLocation()
     }
     
+    // MARK: RadarDelegate
+    func didReceiveEvents(_ events: [RadarEvent], user: RadarUser) {
+        print(events, user)
+    }
+    
+    func didFail(status: RadarStatus) {
+        print(status.rawValue)
+    }
+    
+    // MARK: UIScrollDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard let header = tableView.tableHeaderView else { return }
         
@@ -102,14 +113,14 @@ final class MainViewController: UIViewController, LocationManagerDelegate, UIScr
         locationsManager.start { [unowned self] (start) in
             if !start {
                 let alertController = UIAlertController(
-                    title: "Доступ к местоположению отключен",
-                    message: "Чтобы определить местоположение автоматически, откройте настройки этого приложения и установите для него доступ 'При использовании приложения'.",
+                    title: "Access to the location is disabled.",
+                    message: "To locate the location automatically, open the setting for this application and set i to 'When using the application' or 'Always usage'.",
                     preferredStyle: .alert)
                 
-                let cancelAction = UIAlertAction(title: "Отменить", style: .cancel, handler: nil)
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
                 alertController.addAction(cancelAction)
                 
-                let openAction = UIAlertAction(title: "Открыть Настройки", style: .default) { _ in
+                let openAction = UIAlertAction(title: "Open settings", style: .default) { _ in
                     if let url = URL(string: UIApplicationOpenSettingsURLString) {
                         UIApplication.shared.openURL(url)
                     }
@@ -122,12 +133,16 @@ final class MainViewController: UIViewController, LocationManagerDelegate, UIScr
     }
     
     func locationManager(didFailWithError error: Error) {
-        showAlertLight(title: "Ошибка", message: "Мы не можем определить ваше местоположение!")
+        showAlertLight(title: "Error", message: "We can't determine your location!")
     }
     
-    func locationManager(currentLocation: Location?) {
-        if let latitude = currentLocation?.latitude, let longitude = currentLocation?.longitude {
-            centerMapOnLocation(CLLocation(latitude: latitude, longitude: longitude))
+    func locationManager(currentLocation: CLLocation?) {
+        if let location = currentLocation {
+            Radar.setUserId(UIDevice.current.identifierForVendor?.uuidString ?? "")
+            centerMapOnLocation(location)
+            Radar.updateLocation(location, completionHandler: { (status, _, events, user) in
+                print(status, events, user)
+            })
         }
     }
     

@@ -18,6 +18,8 @@
 		8B41156D1FDC845B00C6614C /* AppInjections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B41156C1FDC845B00C6614C /* AppInjections.swift */; };
 		8B44C37D1FEFDFA5003C0754 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B44C37C1FEFDFA5003C0754 /* LocationManager.swift */; };
 		8B44C37F1FEFE195003C0754 /* QuickAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B44C37E1FEFE195003C0754 /* QuickAlertController.swift */; };
+		8B44C3831FF012C8003C0754 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B44C3821FF012C8003C0754 /* SettingsViewController.swift */; };
+		8B44C3861FF01A4F003C0754 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B44C3851FF01A4F003C0754 /* Keys.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +49,8 @@
 		8B41156C1FDC845B00C6614C /* AppInjections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInjections.swift; sourceTree = "<group>"; };
 		8B44C37C1FEFDFA5003C0754 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		8B44C37E1FEFE195003C0754 /* QuickAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAlertController.swift; sourceTree = "<group>"; };
+		8B44C3821FF012C8003C0754 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		8B44C3851FF01A4F003C0754 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		B0DF7CDED56C3712288ED366 /* Pods-CircleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CircleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CircleTests/Pods-CircleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C1D7303EAE4F5F8B3765FDDF /* Pods_CircleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CircleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8A689D0A03FBE0C3621184D /* Pods-CircleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CircleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CircleTests/Pods-CircleTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -118,9 +122,10 @@
 				8B41154A1FDB2CEF00C6614C /* AppDelegate.swift */,
 				8B41156A1FDC83AF00C6614C /* Router.swift */,
 				8B41156C1FDC845B00C6614C /* AppInjections.swift */,
-				8B41154C1FDB2CEF00C6614C /* MainViewController.swift */,
-				8B44C37E1FEFE195003C0754 /* QuickAlertController.swift */,
+				8B44C3841FF012E1003C0754 /* Setting Controller Tab */,
+				8B44C3811FF012A2003C0754 /* Radar Controller Tab */,
 				8B44C37C1FEFDFA5003C0754 /* LocationManager.swift */,
+				8B44C3801FF00F58003C0754 /* Project Settings */,
 				8B4115511FDB2CEF00C6614C /* Assets.xcassets */,
 				8B4115531FDB2CEF00C6614C /* LaunchScreen.storyboard */,
 				8B4115561FDB2CEF00C6614C /* Info.plist */,
@@ -135,6 +140,39 @@
 				8B4115611FDB2CEF00C6614C /* Info.plist */,
 			);
 			path = CircleTests;
+			sourceTree = "<group>";
+		};
+		8B44C3801FF00F58003C0754 /* Project Settings */ = {
+			isa = PBXGroup;
+			children = (
+				8B44C37E1FEFE195003C0754 /* QuickAlertController.swift */,
+				8B44C3871FF01C88003C0754 /* Keys */,
+			);
+			path = "Project Settings";
+			sourceTree = "<group>";
+		};
+		8B44C3811FF012A2003C0754 /* Radar Controller Tab */ = {
+			isa = PBXGroup;
+			children = (
+				8B41154C1FDB2CEF00C6614C /* MainViewController.swift */,
+			);
+			path = "Radar Controller Tab";
+			sourceTree = "<group>";
+		};
+		8B44C3841FF012E1003C0754 /* Setting Controller Tab */ = {
+			isa = PBXGroup;
+			children = (
+				8B44C3821FF012C8003C0754 /* SettingsViewController.swift */,
+			);
+			path = "Setting Controller Tab";
+			sourceTree = "<group>";
+		};
+		8B44C3871FF01C88003C0754 /* Keys */ = {
+			isa = PBXGroup;
+			children = (
+				8B44C3851FF01A4F003C0754 /* Keys.swift */,
+			);
+			path = Keys;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -368,7 +406,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B41154D1FDB2CEF00C6614C /* MainViewController.swift in Sources */,
+				8B44C3861FF01A4F003C0754 /* Keys.swift in Sources */,
 				8B41156D1FDC845B00C6614C /* AppInjections.swift in Sources */,
+				8B44C3831FF012C8003C0754 /* SettingsViewController.swift in Sources */,
 				8B44C37D1FEFDFA5003C0754 /* LocationManager.swift in Sources */,
 				8B41156B1FDC83AF00C6614C /* Router.swift in Sources */,
 				8B44C37F1FEFE195003C0754 /* QuickAlertController.swift in Sources */,

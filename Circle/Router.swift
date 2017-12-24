@@ -15,11 +15,20 @@ final class Router {
         self.rootViewController = rootViewController
     }
     
-    // контроллер на главный экран
-    func showMainController() {
+    func showMainTabController() -> UITabBarController {
         let mainViewController = MainViewController(MainViewDependecies(self))
-        rootViewController.setViewControllers([mainViewController], animated: true)
-        rootViewController.isNavigationBarHidden = true
-        rootViewController.navigationBar.isTranslucent = true
+        let locationImage = UIImage(named: "ic_my_location")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        mainViewController.navigationItem.title = "Near you"
+        mainViewController.tabBarItem = UITabBarItem(title: "My location", image: locationImage, tag: 1)
+        mainViewController.navigationController?.navigationBar.isTranslucent = true
+        
+        let settingsController = SettingsViewController(SettingsViewDependecies(self))
+        let settingsImage = UIImage(named: "ic_settings")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        settingsController.navigationItem.title = "Settings of app"
+        settingsController.tabBarItem = UITabBarItem(title: "Settings", image: settingsImage, tag: 2)
+        
+        let tabBar = UITabBarController()
+        tabBar.viewControllers = [mainViewController, settingsController].map({ UINavigationController(rootViewController: $0) })
+        return tabBar
     }
 }

@@ -9,11 +9,9 @@
 import Foundation
 import CoreLocation
 
-typealias Location = (latitude: CLLocationDegrees, longitude: CLLocationDegrees)
-
 protocol LocationManagerDelegate: class {
     func locationManager(didFailWithError error: Error)
-    func locationManager(currentLocation: Location?)
+    func locationManager(currentLocation: CLLocation?)
 }
 
 final class LocationManager: NSObject, CLLocationManagerDelegate {
@@ -67,10 +65,8 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let currentLocation = locations.first {
-            let latitude = currentLocation.coordinate.latitude
-            let longitude = currentLocation.coordinate.longitude
             locationManager.stopUpdatingLocation()
-            delegate?.locationManager(currentLocation: Location(latitude: latitude, longitude: longitude))
+            delegate?.locationManager(currentLocation: currentLocation)
         } else {
             delegate?.locationManager(currentLocation: nil)
         }

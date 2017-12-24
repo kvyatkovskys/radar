@@ -9,8 +9,8 @@
 import UIKit
 
 struct TitleButtonAlert {
-    static let buttonOK = "Готово"
-    static let buttonCancel = "Отменить"
+    static let buttonOK = "Done"
+    static let buttonCancel = "Cancel"
 }
 
 extension UIViewController {
