@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RadarSDK
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
+        Radar.initialize(publishableKey: Keys.publishedKey)
         initialAuthViewController()
         
         return true
@@ -26,10 +28,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         
         let rootVC = UINavigationController()
-        let router = Router(rootViewController: rootVC)
-        router.showMainController()
-        
-        window?.rootViewController = rootVC
+        let router = Router(rootViewController: rootVC)        
+        window?.rootViewController = router.showMainTabController()
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
