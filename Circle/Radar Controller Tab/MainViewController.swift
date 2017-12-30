@@ -110,8 +110,11 @@ final class MainViewController: UIViewController, LocationManagerDelegate, UIScr
                 
                 let openAction = UIAlertAction(title: "Open settings", style: .default) { _ in
                     if let url = URL(string: UIApplicationOpenSettingsURLString) {
-                        UIApplication.shared.openURL(url)
-                    }
+                        UIApplication.shared.open(url,
+                                                  options: [:],
+                                                  completionHandler: { (handler) in
+                                                    print(handler)
+                        })                    }
                 }
                 alertController.addAction(openAction)
                 
