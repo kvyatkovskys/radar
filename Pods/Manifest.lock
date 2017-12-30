@@ -1,8 +1,8 @@
 PODS:
   - RadarSDK (1.2.29)
-  - RxCocoa (4.0.0):
+  - RxCocoa (4.1.0):
     - RxSwift (~> 4.0)
-  - RxSwift (4.0.0)
+  - RxSwift (4.1.0)
   - SnapKit (4.0.0)
   - Unbox (2.5.0)
 
@@ -15,8 +15,8 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   RadarSDK: 6cf04a3d4d0b6d3733059102d752569018987352
-  RxCocoa: d62846ca96495d862fa4c59ea7d87e5031d7340e
-  RxSwift: fd680d75283beb5e2559486f3c0ff852f0d35334
+  RxCocoa: cc1fec49cdc8fabe645964de7c51c099a36c2aa8
+  RxSwift: 4219941c1244c88002901bd87a69d3aea9ae71f0
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   Unbox: 30e437e6151a6de16139375fd4e8dd9a664cfbf7
 

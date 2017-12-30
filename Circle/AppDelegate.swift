@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import RadarSDK
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,10 +15,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        Radar.initialize(publishableKey: Keys.publishedKey)
+        FBManager.startConfiguration(application, withOptions: launchOptions)
         initialAuthViewController()
         
         return true
+    }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        return FBManager.start(app, opneUrl: url, withOptions: options)
     }
     
     fileprivate func initialAuthViewController() {
@@ -48,6 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        FBManager.activateApp()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

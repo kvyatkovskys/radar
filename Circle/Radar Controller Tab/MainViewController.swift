@@ -9,11 +9,10 @@
 import UIKit
 import SnapKit
 import MapKit
-import RadarSDK
 
 let heightHeader: CGFloat = 100.0
 
-final class MainViewController: UIViewController, LocationManagerDelegate, UIScrollViewDelegate, UITableViewDelegate, RadarDelegate {
+final class MainViewController: UIViewController, LocationManagerDelegate, UIScrollViewDelegate, UITableViewDelegate {
     typealias Dependecies = HasRouter
     
     // для работы с геопозиции
@@ -80,23 +79,12 @@ final class MainViewController: UIViewController, LocationManagerDelegate, UIScr
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        Radar.setDelegate(self)
-        
         headerView.addSubview(mapView)
         view.addSubview(tableView)
         tableView.tableHeaderView = headerView
         
         updateConstraints()
         startDetectLocation()
-    }
-    
-    // MARK: RadarDelegate
-    func didReceiveEvents(_ events: [RadarEvent], user: RadarUser) {
-        print(events, user)
-    }
-    
-    func didFail(status: RadarStatus) {
-        print(status.rawValue)
     }
     
     // MARK: UIScrollDelegate
@@ -138,11 +126,9 @@ final class MainViewController: UIViewController, LocationManagerDelegate, UIScr
     
     func locationManager(currentLocation: CLLocation?) {
         if let location = currentLocation {
-            Radar.setUserId(UIDevice.current.identifierForVendor?.uuidString ?? "")
+            let placeManager = FBPlacesManager()
+            placeManager.findPlaces(for: location)
             centerMapOnLocation(location)
-            Radar.updateLocation(location, completionHandler: { (status, _, events, user) in
-                print(status, events, user)
-            })
         }
     }
     
