@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import RxSwift
+import Unbox
 
 enum Categories: String {
     case arts = "ARTS_ENTERTAINMENT"
@@ -17,30 +19,21 @@ enum Categories: String {
     case medical = "MEDICAL_HEALTH"
     case shopping = "SHOPPING_RETAIL"
     case travel = "TRAVEL_TRANSPORTATION"
-    
-    var allCategories: [Categories] = {
-        return [.arts, .education, .fitness, .food, .hotel, .medical, .shopping, .travel]
-    }()
 }
 
 struct PlaceManager {
     fileprivate let placeManager: FBSDKPlacesManager
-    
+
     init() {
         self.placeManager = FBSDKPlacesManager()
     }
     
-    func getInfoAboutPlace(location: CLLocation) {
+    func getInfoAboutPlace(location: CLLocation,
+                           categories: [Categories] = [.arts, .education, .fitness, .food, .hotel, .medical, .shopping, .travel],
+                           distance: CLLocationDistance = 1000, results: @escaping ([PlaceModel]) -> Void) {
         let request = placeManager.placeSearchRequest(for: location,
                                                       searchTerm: nil,
-                                                      categories: ["ARTS_ENTERTAINMENT",
-                                                                   "EDUCATION",
-                                                                   "FITNESS_RECREATION",
-                                                                   "FOOD_BEVERAGE",
-                                                                   "HOTEL_LODGING",
-                                                                   "MEDICAL_HEALTH",
-                                                                   "SHOPPING_RETAIL",
-                                                                   "TRAVEL_TRANSPORTATION"],
+                                                      categories: categories.map({ $0.rawValue }),
                                                       fields: [FBSDKPlacesFieldKeyPlaceID,
                                                                FBSDKPlacesFieldKeyName,
                                                                FBSDKPlacesFieldKeyAbout,
@@ -59,11 +52,17 @@ struct PlaceManager {
                                                                FBSDKPlacesFieldKeyWebsite,
                                                                FBSDKPlacesResponseKeyMatchedCategories,
                                                                FBSDKPlacesFieldKeyLocation],
-                                                      distance: 1000,
+                                                      distance: distance,
                                                       cursor: nil)
         
-        request?.start(completionHandler: { (_, data, error) in
-            print(data as Any, error as Any)
+        request?.start(completionHandler: { (_, result, error) in
+            guard error == nil else {
+                return
+            }
+            
+            if let data = result as? [String: Any], let model: PlaceDataModel = try? unbox(dictionary: data) {
+                results(model.data)
+            }
         })
     }
 }

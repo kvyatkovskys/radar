@@ -9,6 +9,7 @@
 import UIKit
 import SnapKit
 import MapKit
+import RxSwift
 
 let heightHeader: CGFloat = 100.0
 
@@ -26,7 +27,7 @@ final class MainViewController: UIViewController, LocationManagerDelegate, UIScr
     
     fileprivate lazy var tableView: UITableView = {
         let table = UITableView()
-        //table.tableFooterView = UIView(frame: CGRect.zero)
+        table.tableFooterView = UIView(frame: CGRect.zero)
         table.delegate = self
         return table
     }()
@@ -130,7 +131,10 @@ final class MainViewController: UIViewController, LocationManagerDelegate, UIScr
     func locationManager(currentLocation: CLLocation?) {
         if let location = currentLocation {
             centerMapOnLocation(location)
-            placeManager.getInfoAboutPlace(location: location)
+            placeManager.getInfoAboutPlace(location: location, results: { (results) in
+                print(results.first)
+                
+            })
         }
     }
     
