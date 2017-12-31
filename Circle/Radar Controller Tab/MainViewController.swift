@@ -9,11 +9,12 @@
 import UIKit
 import SnapKit
 import MapKit
-import RadarSDK
+import RxSwift
+import RxCocoa
 
 let heightHeader: CGFloat = 100.0
 
-final class MainViewController: UIViewController, LocationManagerDelegate, UIScrollViewDelegate, UITableViewDelegate, RadarDelegate {
+final class MainViewController: UIViewController, LocationManagerDelegate {
     typealias Dependecies = HasRouter
     
     // для работы с геопозиции
@@ -22,13 +23,12 @@ final class MainViewController: UIViewController, LocationManagerDelegate, UIScr
     }()
     
     fileprivate let router: Router
-    
-    fileprivate var tableHeaderHeight: Constraint?
+    fileprivate let placeManager = PlaceManager()
+    fileprivate let disposeBag = DisposeBag()
     
     fileprivate lazy var tableView: UITableView = {
         let table = UITableView()
-        //table.tableFooterView = UIView(frame: CGRect.zero)
-        table.delegate = self
+        table.tableFooterView = UIView(frame: CGRect.zero)
         return table
     }()
     
@@ -61,7 +61,7 @@ final class MainViewController: UIViewController, LocationManagerDelegate, UIScr
         }
         
         mapView.snp.makeConstraints { (make) in
-            tableHeaderHeight = make.height.equalTo(heightHeader).constraint
+            make.height.equalTo(heightHeader)
             make.left.bottom.right.equalToSuperview()
         }
         
@@ -80,32 +80,26 @@ final class MainViewController: UIViewController, LocationManagerDelegate, UIScr
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        Radar.setDelegate(self)
-        
         headerView.addSubview(mapView)
         view.addSubview(tableView)
         tableView.tableHeaderView = headerView
         
         updateConstraints()
         startDetectLocation()
-    }
-    
-    // MARK: RadarDelegate
-    func didReceiveEvents(_ events: [RadarEvent], user: RadarUser) {
-        print(events, user)
-    }
-    
-    func didFail(status: RadarStatus) {
-        print(status.rawValue)
-    }
-    
-    // MARK: UIScrollDelegate
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let header = tableView.tableHeaderView else { return }
         
-        let offsetY = -scrollView.contentOffset.y
-        tableHeaderHeight?.update(offset: max(header.bounds.height, header.bounds.height + offsetY))        
-        view.layoutIfNeeded()
+        tableView.rx.setDelegate(self).disposed(by: disposeBag)
+        tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
+        tableView.rx.modelSelected(PlaceModel.self)
+            .subscribe(onNext: { (place) in
+                print(place)
+            }, onError: { (error) in
+                print(error)
+            }).disposed(by: disposeBag)
+        
+        tableView.rx.itemSelected
+            .subscribe(onNext: { [unowned self] (indexPath) in
+                self.tableView.deselectRow(at: indexPath, animated: true)
+            }).disposed(by: disposeBag)
     }
     
     // MARK: LocationManagerDelegate
@@ -122,8 +116,11 @@ final class MainViewController: UIViewController, LocationManagerDelegate, UIScr
                 
                 let openAction = UIAlertAction(title: "Open settings", style: .default) { _ in
                     if let url = URL(string: UIApplicationOpenSettingsURLString) {
-                        UIApplication.shared.openURL(url)
-                    }
+                        UIApplication.shared.open(url,
+                                                  options: [:],
+                                                  completionHandler: { (handler) in
+                                                    print(handler)
+                        })                    }
                 }
                 alertController.addAction(openAction)
                 
@@ -138,11 +135,12 @@ final class MainViewController: UIViewController, LocationManagerDelegate, UIScr
     
     func locationManager(currentLocation: CLLocation?) {
         if let location = currentLocation {
-            Radar.setUserId(UIDevice.current.identifierForVendor?.uuidString ?? "")
             centerMapOnLocation(location)
-            Radar.updateLocation(location, completionHandler: { (status, _, events, user) in
-                print(status, events, user)
-            })
+            placeManager.getInfoAboutPlace(location: location)
+                .bind(to: tableView.rx.items(cellIdentifier: PlaceTableViewCell.cellIndetifier,
+                                             cellType: PlaceTableViewCell.self)) { (_, model: PlaceModel, cell) in
+                                                cell.title = model.name
+                }.disposed(by: disposeBag)
         }
     }
     
@@ -150,5 +148,11 @@ final class MainViewController: UIViewController, LocationManagerDelegate, UIScr
         let regionRadius: CLLocationDistance = 1000
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius, regionRadius)
         mapView.setRegion(coordinateRegion, animated: true)
+    }
+}
+
+extension MainViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 70.0
     }
 }
