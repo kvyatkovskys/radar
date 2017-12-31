@@ -22,6 +22,7 @@
 		8B44C3861FF01A4F003C0754 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B44C3851FF01A4F003C0754 /* Keys.swift */; };
 		8B5F71511FF916B300E628F9 /* PlaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F71501FF916B300E628F9 /* PlaceManager.swift */; };
 		8B5F71531FF923A700E628F9 /* PlaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F71521FF923A700E628F9 /* PlaceModel.swift */; };
+		8B5F71571FF93C9700E628F9 /* PlaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F71561FF93C9700E628F9 /* PlaceTableViewCell.swift */; };
 		8BEA04411FF829A2001DFF7E /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BEA043C1FF829A0001DFF7E /* FBSDKShareKit.framework */; };
 		8BEA04421FF829A2001DFF7E /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BEA043D1FF829A0001DFF7E /* Bolts.framework */; };
 		8BEA04431FF829A2001DFF7E /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BEA043E1FF829A1001DFF7E /* FBSDKLoginKit.framework */; };
@@ -61,6 +62,7 @@
 		8B5F71471FF82AAA00E628F9 /* Circle-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Circle-Bridging-Header.h"; sourceTree = "<group>"; };
 		8B5F71501FF916B300E628F9 /* PlaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceManager.swift; sourceTree = "<group>"; };
 		8B5F71521FF923A700E628F9 /* PlaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceModel.swift; sourceTree = "<group>"; };
+		8B5F71561FF93C9700E628F9 /* PlaceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceTableViewCell.swift; sourceTree = "<group>"; };
 		8BEA043C1FF829A0001DFF7E /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		8BEA043D1FF829A0001DFF7E /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
 		8BEA043E1FF829A1001DFF7E /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				8B41154C1FDB2CEF00C6614C /* MainViewController.swift */,
+				8B5F71561FF93C9700E628F9 /* PlaceTableViewCell.swift */,
 			);
 			path = "Radar Controller Tab";
 			sourceTree = "<group>";
@@ -463,6 +466,7 @@
 				8B41156D1FDC845B00C6614C /* AppInjections.swift in Sources */,
 				8B44C3831FF012C8003C0754 /* SettingsViewController.swift in Sources */,
 				8B44C37D1FEFDFA5003C0754 /* LocationManager.swift in Sources */,
+				8B5F71571FF93C9700E628F9 /* PlaceTableViewCell.swift in Sources */,
 				8B5F71511FF916B300E628F9 /* PlaceManager.swift in Sources */,
 				8B41156B1FDC83AF00C6614C /* Router.swift in Sources */,
 				8B5F71531FF923A700E628F9 /* PlaceModel.swift in Sources */,

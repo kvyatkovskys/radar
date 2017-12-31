@@ -27,10 +27,10 @@ struct PlaceManager {
     init() {
         self.placeManager = FBSDKPlacesManager()
     }
-    
+    //results: @escaping ([PlaceModel]) -> Void)
     func getInfoAboutPlace(location: CLLocation,
                            categories: [Categories] = [.arts, .education, .fitness, .food, .hotel, .medical, .shopping, .travel],
-                           distance: CLLocationDistance = 1000, results: @escaping ([PlaceModel]) -> Void) {
+                           distance: CLLocationDistance = 1000) -> Observable<[PlaceModel]> {
         let request = placeManager.placeSearchRequest(for: location,
                                                       searchTerm: nil,
                                                       categories: categories.map({ $0.rawValue }),
@@ -55,14 +55,19 @@ struct PlaceManager {
                                                       distance: distance,
                                                       cursor: nil)
         
-        request?.start(completionHandler: { (_, result, error) in
-            guard error == nil else {
-                return
-            }
-            
-            if let data = result as? [String: Any], let model: PlaceDataModel = try? unbox(dictionary: data) {
-                results(model.data)
-            }
+        return Observable.create({ observable in
+            request?.start(completionHandler: { (_, result, error) in
+                guard error == nil else {
+                    observable.on(.error(error!))
+                    return
+                }
+                
+                if let data = result as? [String: Any], let model: PlaceDataModel = try? unbox(dictionary: data) {
+                    observable.on(.next(model.data))
+                    observable.on(.completed)
+                }
+            })
+            return Disposables.create()
         })
     }
 }
