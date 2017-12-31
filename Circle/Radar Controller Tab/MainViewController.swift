@@ -21,7 +21,7 @@ final class MainViewController: UIViewController, LocationManagerDelegate, UIScr
     }()
     
     fileprivate let router: Router
-    
+    fileprivate let placeManager = PlaceManager()
     fileprivate var tableHeaderHeight: Constraint?
     
     fileprivate lazy var tableView: UITableView = {
@@ -129,9 +129,8 @@ final class MainViewController: UIViewController, LocationManagerDelegate, UIScr
     
     func locationManager(currentLocation: CLLocation?) {
         if let location = currentLocation {
-            let placeManager = FBPlacesManager()
-            placeManager.findPlaces(for: location)
             centerMapOnLocation(location)
+            placeManager.getInfoAboutPlace(location: location)
         }
     }
     

@@ -14,15 +14,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
-        FBManager.startConfiguration(application, withOptions: launchOptions)
         initialAuthViewController()
+        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
         return true
     }
     
-    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-        return FBManager.start(app, opneUrl: url, withOptions: options)
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
+        return FBSDKApplicationDelegate.sharedInstance().application(app,
+                                                                     open: url,
+                                                                     sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as! String,
+                                                                     annotation: options[UIApplicationOpenURLOptionsKey.annotation])
     }
     
     fileprivate func initialAuthViewController() {
@@ -51,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        FBManager.activateApp()
+        FBSDKAppEvents.activateApp()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
