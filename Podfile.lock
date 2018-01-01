@@ -1,5 +1,5 @@
 PODS:
-  - RadarSDK (1.2.29)
+  - Kingfisher (4.6.1)
   - RxCocoa (4.1.0):
     - RxSwift (~> 4.0)
   - RxSwift (4.1.0)
@@ -7,19 +7,19 @@ PODS:
   - Unbox (2.5.0)
 
 DEPENDENCIES:
-  - RadarSDK
+  - Kingfisher
   - RxCocoa
   - RxSwift
   - SnapKit
   - Unbox
 
 SPEC CHECKSUMS:
-  RadarSDK: 6cf04a3d4d0b6d3733059102d752569018987352
+  Kingfisher: 1f9157d9c02b380cbd0b7cc890161195164eb634
   RxCocoa: cc1fec49cdc8fabe645964de7c51c099a36c2aa8
   RxSwift: 4219941c1244c88002901bd87a69d3aea9ae71f0
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   Unbox: 30e437e6151a6de16139375fd4e8dd9a664cfbf7
 
-PODFILE CHECKSUM: c6ed1ea2f0a9f49867e46e6928d3a628ca8218cb
+PODFILE CHECKSUM: 4b91a560774909842ea694a52b03d17327ad985f
 
 COCOAPODS: 1.3.1

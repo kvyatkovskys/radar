@@ -8,12 +8,20 @@
 
 import UIKit
 
+// color for navigation bar
+fileprivate extension UIColor {
+    static var navBarColor: UIColor {
+        return UIColor(withHex: 0x34495e, alpha: 1.0)
+    }
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        setupNavigationBar()
         initialAuthViewController()
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
@@ -35,6 +43,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let rootVC = UINavigationController()
         let router = Router(rootViewController: rootVC)        
         window?.rootViewController = router.showMainTabController()
+    }
+    
+    fileprivate func setupNavigationBar() {
+        let navBarAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+        
+        UINavigationBar.appearance().titleTextAttributes = navBarAttributes
+        UINavigationBar.appearance().barTintColor = UIColor.navBarColor
+        UINavigationBar.appearance().tintColor = UIColor.white
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

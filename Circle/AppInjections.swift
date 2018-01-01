@@ -7,17 +7,24 @@
 //
 
 import Foundation
+import Kingfisher
 
 protocol HasRouter {
     var router: Router { get }
 }
 
+protocol HasKingfisher {
+    var kingfisherOptions: KingfisherOptionsInfo { get }
+}
+
 /// container dependecies injection's for main tab controller
-struct MainViewDependecies: HasRouter {
+struct MainViewDependecies: HasRouter, HasKingfisher {
     let router: Router
+    let kingfisherOptions: KingfisherOptionsInfo
     
-    init(_ router: Router) {
+    init(_ router: Router, _ kingfisherOptions: KingfisherOptionsInfo) {
         self.router = router
+        self.kingfisherOptions = kingfisherOptions
     }
 }
 

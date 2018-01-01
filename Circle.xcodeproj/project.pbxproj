@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0C09101538FFD3248E65345B /* Pods_CircleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1D7303EAE4F5F8B3765FDDF /* Pods_CircleTests.framework */; };
 		2CE34B24D65E94C397FD1B43 /* Pods_Circle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E0022E72D06AC70840D3662 /* Pods_Circle.framework */; };
+		8B18BFD61FFA594D00C7906D /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18BFD51FFA594D00C7906D /* ColorExtension.swift */; };
 		8B41154B1FDB2CEF00C6614C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B41154A1FDB2CEF00C6614C /* AppDelegate.swift */; };
 		8B41154D1FDB2CEF00C6614C /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B41154C1FDB2CEF00C6614C /* MainViewController.swift */; };
 		8B4115521FDB2CEF00C6614C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B4115511FDB2CEF00C6614C /* Assets.xcassets */; };
@@ -19,7 +20,6 @@
 		8B44C37D1FEFDFA5003C0754 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B44C37C1FEFDFA5003C0754 /* LocationManager.swift */; };
 		8B44C37F1FEFE195003C0754 /* QuickAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B44C37E1FEFE195003C0754 /* QuickAlertController.swift */; };
 		8B44C3831FF012C8003C0754 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B44C3821FF012C8003C0754 /* SettingsViewController.swift */; };
-		8B44C3861FF01A4F003C0754 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B44C3851FF01A4F003C0754 /* Keys.swift */; };
 		8B5F71511FF916B300E628F9 /* PlaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F71501FF916B300E628F9 /* PlaceManager.swift */; };
 		8B5F71531FF923A700E628F9 /* PlaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F71521FF923A700E628F9 /* PlaceModel.swift */; };
 		8B5F71571FF93C9700E628F9 /* PlaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F71561FF93C9700E628F9 /* PlaceTableViewCell.swift */; };
@@ -44,6 +44,7 @@
 		65187D40B7A35C90F17F99D7 /* Pods-Circle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Circle.release.xcconfig"; path = "Pods/Target Support Files/Pods-Circle/Pods-Circle.release.xcconfig"; sourceTree = "<group>"; };
 		6E0022E72D06AC70840D3662 /* Pods_Circle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Circle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C60842BBC33FD63E648DBC6 /* Pods-Circle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Circle.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Circle/Pods-Circle.debug.xcconfig"; sourceTree = "<group>"; };
+		8B18BFD51FFA594D00C7906D /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		8B4115471FDB2CEF00C6614C /* Circle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Circle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B41154A1FDB2CEF00C6614C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8B41154C1FDB2CEF00C6614C /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -58,7 +59,6 @@
 		8B44C37C1FEFDFA5003C0754 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		8B44C37E1FEFE195003C0754 /* QuickAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAlertController.swift; sourceTree = "<group>"; };
 		8B44C3821FF012C8003C0754 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
-		8B44C3851FF01A4F003C0754 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		8B5F71471FF82AAA00E628F9 /* Circle-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Circle-Bridging-Header.h"; sourceTree = "<group>"; };
 		8B5F71501FF916B300E628F9 /* PlaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceManager.swift; sourceTree = "<group>"; };
 		8B5F71521FF923A700E628F9 /* PlaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceModel.swift; sourceTree = "<group>"; };
@@ -149,6 +149,7 @@
 				8B41154A1FDB2CEF00C6614C /* AppDelegate.swift */,
 				8B41156A1FDC83AF00C6614C /* Router.swift */,
 				8B41156C1FDC845B00C6614C /* AppInjections.swift */,
+				8B18BFD51FFA594D00C7906D /* ColorExtension.swift */,
 				8B44C3841FF012E1003C0754 /* Setting Controller Tab */,
 				8B44C3811FF012A2003C0754 /* Radar Controller Tab */,
 				8B5F71551FF933BB00E628F9 /* Location Manager */,
@@ -175,7 +176,6 @@
 			isa = PBXGroup;
 			children = (
 				8B44C37E1FEFE195003C0754 /* QuickAlertController.swift */,
-				8B44C3871FF01C88003C0754 /* Keys */,
 			);
 			path = "Project Settings";
 			sourceTree = "<group>";
@@ -195,14 +195,6 @@
 				8B44C3821FF012C8003C0754 /* SettingsViewController.swift */,
 			);
 			path = "Setting Controller Tab";
-			sourceTree = "<group>";
-		};
-		8B44C3871FF01C88003C0754 /* Keys */ = {
-			isa = PBXGroup;
-			children = (
-				8B44C3851FF01A4F003C0754 /* Keys.swift */,
-			);
-			path = Keys;
 			sourceTree = "<group>";
 		};
 		8B5F714B1FF82D8200E628F9 /* Info plist */ = {
@@ -343,6 +335,7 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Circle/Pods-Circle-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
@@ -350,6 +343,7 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
@@ -462,7 +456,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B41154D1FDB2CEF00C6614C /* MainViewController.swift in Sources */,
-				8B44C3861FF01A4F003C0754 /* Keys.swift in Sources */,
 				8B41156D1FDC845B00C6614C /* AppInjections.swift in Sources */,
 				8B44C3831FF012C8003C0754 /* SettingsViewController.swift in Sources */,
 				8B44C37D1FEFDFA5003C0754 /* LocationManager.swift in Sources */,
@@ -471,6 +464,7 @@
 				8B41156B1FDC83AF00C6614C /* Router.swift in Sources */,
 				8B5F71531FF923A700E628F9 /* PlaceModel.swift in Sources */,
 				8B44C37F1FEFE195003C0754 /* QuickAlertController.swift in Sources */,
+				8B18BFD61FFA594D00C7906D /* ColorExtension.swift in Sources */,
 				8B41154B1FDB2CEF00C6614C /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

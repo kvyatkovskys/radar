@@ -30,6 +30,7 @@ struct PlaceModel {
     let description: String?
     let coverPhoto: CoverPhotoPlace?
     let about: String?
+    let location: LocationPlace?
 }
 
 extension PlaceModel: Unboxable {
@@ -45,6 +46,19 @@ extension PlaceModel: Unboxable {
         self.description = unboxer.unbox(key: "description")
         self.coverPhoto = unboxer.unbox(key: "cover")
         self.about = unboxer.unbox(key: "about")
+        self.location = unboxer.unbox(key: "location")
+    }
+}
+
+struct LocationPlace {
+    let coordinate: CLLocation
+}
+
+extension LocationPlace: Unboxable {
+    init(unboxer: Unboxer) throws {
+        let latitude: Double = try unboxer.unbox(key: "latitude")
+        let longitude: Double = try unboxer.unbox(key: "longitude")
+        self.coordinate = CLLocation(latitude: latitude, longitude: longitude)
     }
 }
 

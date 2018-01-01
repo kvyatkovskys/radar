@@ -7,8 +7,12 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class Router {
+    fileprivate lazy var optionKingfisher: KingfisherOptionsInfo = {
+        return [KingfisherOptionsInfoItem.transition(.fade(0.2))]
+    }()
     fileprivate let rootViewController: UINavigationController
     
     init(rootViewController: UINavigationController) {
@@ -16,9 +20,9 @@ final class Router {
     }
     
     func showMainTabController() -> UITabBarController {
-        let mainViewController = MainViewController(MainViewDependecies(self))
+        let mainViewController = MainViewController(MainViewDependecies(self, optionKingfisher))
         let locationImage = UIImage(named: "ic_my_location")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
-        mainViewController.navigationItem.title = "Near you"
+        mainViewController.navigationItem.title = "Around here"
         mainViewController.tabBarItem = UITabBarItem(title: "My location", image: locationImage, tag: 1)
         mainViewController.navigationController?.navigationBar.isTranslucent = true
         

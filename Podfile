@@ -5,7 +5,7 @@ def pods
   pod 'RxCocoa'
   pod 'SnapKit'
   pod 'Unbox'
-  pod 'RadarSDK'
+  pod 'Kingfisher'
 end
 
 target 'Circle' do

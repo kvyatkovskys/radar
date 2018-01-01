@@ -8,8 +8,35 @@
 
 import UIKit
 
+fileprivate extension UIColor {
+    static var shadowGray: UIColor {
+        return UIColor(withHex: 0xecf0f1, alpha: 1.0)
+    }
+}
+
 final class PlaceTableViewCell: UITableViewCell {
     static let cellIndetifier = "PlaceTableViewCell"
+    
+    fileprivate let mainView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 5.0
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.2
+        view.layer.shadowOffset = CGSize(width: -1.0, height: 1.0)
+        view.layer.shadowRadius = 8.0
+        view.layer.shouldRasterize = true
+        view.layer.rasterizationScale = UIScreen.main.scale
+        return view
+    }()
+    
+    let imageCell: UIImageView = {
+        let image = UIImageView()
+        image.clipsToBounds = true
+        image.contentMode = .scaleAspectFill
+        image.backgroundColor = .shadowGray
+        return image
+    }()
     
     fileprivate let titleLabel: UILabel = {
         let label = UILabel()
@@ -26,9 +53,19 @@ final class PlaceTableViewCell: UITableViewCell {
     override func updateConstraints() {
         super.updateConstraints()
         
+        mainView.snp.makeConstraints { (make) in
+            make.top.bottom.left.right.equalToSuperview().inset(10.0)
+        }
+        
+        imageCell.snp.makeConstraints { (make) in
+            make.top.left.equalToSuperview().offset(10.0)
+            make.size.equalTo(CGSize(width: 100.0, height: 130.0))
+        }
+        
         titleLabel.snp.makeConstraints { (make) in
-            make.top.bottom.right.equalToSuperview()
-            make.left.equalToSuperview().offset(15.0)
+            make.left.equalTo(imageCell.snp.right).offset(10.0)
+            make.top.right.equalToSuperview().inset(10.0)
+            make.height.greaterThanOrEqualTo(60.0)
         }
     }
     
@@ -38,7 +75,9 @@ final class PlaceTableViewCell: UITableViewCell {
         contentView.backgroundColor = UIColor.clear
         backgroundColor = UIColor.clear
         
-        addSubview(titleLabel)
+        addSubview(mainView)
+        mainView.addSubview(imageCell)
+        mainView.addSubview(titleLabel)
         updateConstraints()
     }
     

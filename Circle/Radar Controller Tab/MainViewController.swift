@@ -11,11 +11,12 @@ import SnapKit
 import MapKit
 import RxSwift
 import RxCocoa
+import Kingfisher
 
 let heightHeader: CGFloat = 100.0
 
 final class MainViewController: UIViewController, LocationManagerDelegate {
-    typealias Dependecies = HasRouter
+    typealias Dependecies = HasRouter & HasKingfisher
     
     // для работы с геопозиции
     fileprivate lazy var locationsManager: LocationManager = {
@@ -23,12 +24,15 @@ final class MainViewController: UIViewController, LocationManagerDelegate {
     }()
     
     fileprivate let router: Router
+    fileprivate let kingfisherOptions: KingfisherOptionsInfo
     fileprivate let placeManager = PlaceManager()
     fileprivate let disposeBag = DisposeBag()
     
     fileprivate lazy var tableView: UITableView = {
         let table = UITableView()
         table.tableFooterView = UIView(frame: CGRect.zero)
+        table.backgroundColor = .clear
+        table.separatorColor = .clear
         return table
     }()
     
@@ -70,6 +74,7 @@ final class MainViewController: UIViewController, LocationManagerDelegate {
     
     init(_ dependencies: Dependecies) {
         self.router = dependencies.router
+        self.kingfisherOptions = dependencies.kingfisherOptions
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -80,6 +85,13 @@ final class MainViewController: UIViewController, LocationManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if #available(iOS 11.0, *) {
+            navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white,
+                                                                            NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 28)]
+            navigationController?.navigationItem.largeTitleDisplayMode = .automatic
+        }
+        
+        view.backgroundColor = .white
         headerView.addSubview(mapView)
         view.addSubview(tableView)
         tableView.tableHeaderView = headerView
@@ -138,8 +150,14 @@ final class MainViewController: UIViewController, LocationManagerDelegate {
             centerMapOnLocation(location)
             placeManager.getInfoAboutPlace(location: location)
                 .bind(to: tableView.rx.items(cellIdentifier: PlaceTableViewCell.cellIndetifier,
-                                             cellType: PlaceTableViewCell.self)) { (_, model: PlaceModel, cell) in
+                                             cellType: PlaceTableViewCell.self)) { [unowned self] (_, model: PlaceModel, cell) in
                                                 cell.title = model.name
+                                                cell.imageCell.kf.indicatorType = .activity
+                                                cell.imageCell.kf.setImage(with: model.coverPhoto?.url,
+                                                                           placeholder: nil,
+                                                                           options: self.kingfisherOptions,
+                                                                           progressBlock: nil,
+                                                                           completionHandler: nil)
                 }.disposed(by: disposeBag)
         }
     }
@@ -153,6 +171,6 @@ final class MainViewController: UIViewController, LocationManagerDelegate {
 
 extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70.0
+        return 170.0
     }
 }
