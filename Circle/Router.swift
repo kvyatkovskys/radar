@@ -20,7 +20,7 @@ final class Router {
     }
     
     func showMainTabController() -> UITabBarController {
-        let mainViewController = MainViewController(MainViewDependecies(self, optionKingfisher))
+        let mainViewController = MainViewController(MainViewDependecies(self, optionKingfisher, PlaceViewModel(PlaceService())))
         let locationImage = UIImage(named: "ic_my_location")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         mainViewController.navigationItem.title = "Around here"
         mainViewController.tabBarItem = UITabBarItem(title: "My location", image: locationImage, tag: 1)

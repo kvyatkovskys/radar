@@ -15,17 +15,17 @@ import Kingfisher
 
 let heightHeader: CGFloat = 100.0
 
-final class MainViewController: UIViewController, LocationManagerDelegate {
-    typealias Dependecies = HasRouter & HasKingfisher
+final class MainViewController: UIViewController, LocationServiceDelegate {    
+    typealias Dependecies = HasRouter & HasKingfisher & HasPlaceViewModel
     
     // для работы с геопозиции
-    fileprivate lazy var locationsManager: LocationManager = {
-        return LocationManager(delegate: self)
+    fileprivate lazy var locationService: LocationService = {
+        return LocationService(delegate: self)
     }()
     
     fileprivate let router: Router
+    fileprivate let viewModel: PlaceViewModel
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
-    fileprivate let placeManager = PlaceManager()
     fileprivate let disposeBag = DisposeBag()
     
     fileprivate lazy var tableView: UITableView = {
@@ -75,6 +75,7 @@ final class MainViewController: UIViewController, LocationManagerDelegate {
     init(_ dependencies: Dependecies) {
         self.router = dependencies.router
         self.kingfisherOptions = dependencies.kingfisherOptions
+        self.viewModel = dependencies.viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -116,7 +117,7 @@ final class MainViewController: UIViewController, LocationManagerDelegate {
     
     // MARK: LocationManagerDelegate
     func startDetectLocation() {
-        locationsManager.start { [unowned self] (start) in
+        locationService.start { [unowned self] (start) in
             if !start {
                 let alertController = UIAlertController(
                     title: "Access to the location is disabled.",
@@ -141,17 +142,19 @@ final class MainViewController: UIViewController, LocationManagerDelegate {
         }
     }
     
-    func locationManager(didFailWithError error: Error) {
+    func locationService(didFailWithError error: Error) {
         showAlertLight(title: "Error", message: "We can't determine your location!")
     }
     
-    func locationManager(currentLocation: CLLocation?) {
+    func locationService(currentLocation: CLLocation?) {
         if let location = currentLocation {
             centerMapOnLocation(location)
-            placeManager.getInfoAboutPlace(location: location)
+            
+            viewModel.getInfoPlace(location: location)
                 .bind(to: tableView.rx.items(cellIdentifier: PlaceTableViewCell.cellIndetifier,
                                              cellType: PlaceTableViewCell.self)) { [unowned self] (_, model: PlaceModel, cell) in
                                                 cell.title = model.name
+                                                cell.categories = model.categories
                                                 cell.imageCell.kf.indicatorType = .activity
                                                 cell.imageCell.kf.setImage(with: model.coverPhoto?.url,
                                                                            placeholder: nil,
