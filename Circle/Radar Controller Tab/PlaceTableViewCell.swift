@@ -20,6 +20,8 @@ final class PlaceTableViewCell: UITableViewCell {
     static let cellIndetifier = "PlaceTableViewCell"
     
     fileprivate let disposeBag = DisposeBag()
+    fileprivate var collectionDataSource: CategoriesViewDataSource?
+    fileprivate var collectionDelegate: CategoriesViewDelegate?
     
     fileprivate let mainView: UIView = {
         let view = UIView()
@@ -52,6 +54,7 @@ final class PlaceTableViewCell: UITableViewCell {
     
     fileprivate lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: 90.0, height: 20.0)
         layout.scrollDirection = UICollectionViewScrollDirection.horizontal
         layout.minimumLineSpacing = 1.0
         layout.minimumInteritemSpacing = 0.0
@@ -65,13 +68,8 @@ final class PlaceTableViewCell: UITableViewCell {
     var categories: [Categories]? {
         didSet {
             collectionView.register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: CategoryCollectionViewCell.cellIdentifier)
-            collectionView.rx.setDelegate(CategoriesViewDelegate(collectionView).self).disposed(by: disposeBag)
-            CategoriesViewModel(categories: categories ?? []).categories
-                .bind(to: collectionView.rx.items(cellIdentifier: CategoryCollectionViewCell.cellIdentifier,
-                                                  cellType: CategoryCollectionViewCell.self)) { (_, category, cell) in
-                                                    cell.color = category.color
-                                                    cell.title = category.title
-            }.disposed(by: disposeBag)
+            collectionDataSource = CategoriesViewDataSource(collectionView, categories ?? [])
+            collectionDelegate = CategoriesViewDelegate(collectionView)
         }
     }
     
@@ -100,10 +98,10 @@ final class PlaceTableViewCell: UITableViewCell {
         }
         
         collectionView.snp.makeConstraints { (make) in
-            make.bottom.equalTo(imageCell.snp.bottom)
+            make.bottom.equalTo(mainView).offset(-10.0)
             make.left.equalTo(imageCell.snp.right).offset(10.0)
-            make.right.equalToSuperview().offset(-10.0)
-            make.height.equalTo(40.0)
+            make.right.equalTo(titleLabel)
+            make.height.equalTo(30.0)
         }
     }
     
@@ -117,6 +115,7 @@ final class PlaceTableViewCell: UITableViewCell {
         mainView.addSubview(imageCell)
         mainView.addSubview(titleLabel)
         mainView.addSubview(collectionView)
+        
         updateConstraints()
     }
     

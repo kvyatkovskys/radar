@@ -23,7 +23,7 @@ protocol HasPlaceViewModel {
 }
 
 /// container dependecies injection's for main tab controller
-struct MainViewDependecies: HasRouter, HasKingfisher, HasPlaceViewModel {
+struct PlacesViewDependecies: HasRouter, HasKingfisher, HasPlaceViewModel {
     let router: Router
     let kingfisherOptions: KingfisherOptionsInfo
     let viewModel: PlaceViewModel

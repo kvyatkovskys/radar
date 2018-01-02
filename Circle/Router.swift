@@ -20,11 +20,17 @@ final class Router {
     }
     
     func showMainTabController() -> UITabBarController {
-        let mainViewController = MainViewController(MainViewDependecies(self, optionKingfisher, PlaceViewModel(PlaceService())))
+        let placesViewController = PlacesViewController(PlacesViewDependecies(self, optionKingfisher, PlaceViewModel(PlaceService())))
         let locationImage = UIImage(named: "ic_my_location")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
-        mainViewController.navigationItem.title = "Around here"
-        mainViewController.tabBarItem = UITabBarItem(title: "My location", image: locationImage, tag: 1)
-        mainViewController.navigationController?.navigationBar.isTranslucent = true
+        placesViewController.navigationItem.title = "Around here"
+        placesViewController.tabBarItem = UITabBarItem(title: "My location", image: locationImage, tag: 1)
+        placesViewController.navigationController?.navigationBar.isTranslucent = true
+        if #available(iOS 11.0, *) {
+            placesViewController.navigationController?.navigationBar.largeTitleTextAttributes = [
+                NSAttributedStringKey.foregroundColor: UIColor.white,
+                NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 28)]
+            placesViewController.navigationController?.navigationItem.largeTitleDisplayMode = .automatic
+        }
         
         let settingsController = SettingsViewController(SettingsViewDependecies(self))
         let settingsImage = UIImage(named: "ic_settings")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
@@ -32,7 +38,7 @@ final class Router {
         settingsController.tabBarItem = UITabBarItem(title: "Settings", image: settingsImage, tag: 2)
         
         let tabBar = UITabBarController()
-        tabBar.viewControllers = [mainViewController, settingsController].map({ UINavigationController(rootViewController: $0) })
+        tabBar.viewControllers = [placesViewController, settingsController].map({ UINavigationController(rootViewController: $0) })
         return tabBar
     }
 }

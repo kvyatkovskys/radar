@@ -9,7 +9,7 @@
 import UIKit
 
 final class CategoriesViewDataSource: NSObject {
-    fileprivate let categories: [Categories]
+    var categories: [Categories]
     
     init(_ collectionView: UICollectionView, _ items: [Categories]) {
         self.categories = items

@@ -22,6 +22,7 @@ final class CategoryCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.textColor = .white
         label.font = .systemFont(ofSize: 12.0)
+        label.textAlignment = .center
         return label
     }()
     
@@ -41,7 +42,8 @@ final class CategoryCollectionViewCell: UICollectionViewCell {
         super.updateConstraints()
         
         mainView.snp.makeConstraints { (make) in
-            make.top.bottom.equalToSuperview().inset(5.0)
+            make.top.equalToSuperview().offset(5.0)
+            make.height.equalTo(20.0)
             make.left.right.equalToSuperview().inset(10.0)
         }
         

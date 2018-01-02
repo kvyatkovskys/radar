@@ -9,8 +9,19 @@
 import Foundation
 import RxSwift
 
+struct PlacesSections {
+    let sections: [[Categories]]
+    let places: [[PlaceModel]]
+    
+    init(_ places: [[PlaceModel]], _ sections: [[Categories]]) {
+        self.places = places
+        self.sections = sections
+    }
+}
+
 struct PlaceViewModel {
     fileprivate let placeService: PlaceService
+    fileprivate let items: [PlacesSections] = []
     
     init(_ service: PlaceService) {
         self.placeService = service
@@ -19,9 +30,26 @@ struct PlaceViewModel {
     /// get info about for current location
     func getInfoPlace(location: CLLocation,
                       categories: [Categories] = [.arts, .education, .fitness, .food, .hotel, .medical, .shopping, .travel],
-                      distance: CLLocationDistance = 1000) -> Observable<[PlaceModel]> {
-        return placeService.getInfoAboutPlace(location, categories, distance).asObservable().flatMap { (model) -> Observable<[PlaceModel]> in
-            return Observable.just(model)
+                      distance: CLLocationDistance = 1000) -> Observable<PlacesSections> {
+        return placeService.getInfoAboutPlace(location, categories, distance).asObservable().flatMap { (model) -> Observable<PlacesSections> in
+            let sections = model.map({ $0.categories })
+            let uniqueSections = sections.reduce([], { (acc: [[Categories]], element) in
+                var unique: [[Categories]]
+                let contains = acc.contains(where: { $0 == (element ?? []) })
+                if contains {
+                    unique = acc
+                } else {
+                    unique = acc + [(element ?? [])]
+                }
+                return unique
+            })
+            
+            var placesFilter: [[PlaceModel]] = []
+            uniqueSections.forEach({ (section) in
+                let places = model.filter({ ($0.categories ?? []) == section })
+                placesFilter += [places]
+            })
+            return Observable.just(PlacesSections(placesFilter, uniqueSections))
         }
     }
 }

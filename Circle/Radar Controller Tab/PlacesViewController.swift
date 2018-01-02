@@ -1,5 +1,5 @@
 //
-//  MainViewController.swift
+//  PlacesViewController.swift
 //  Circle
 //
 //  Created by Kviatkovskii on 08/12/2017.
@@ -15,7 +15,7 @@ import Kingfisher
 
 let heightHeader: CGFloat = 100.0
 
-final class MainViewController: UIViewController, LocationServiceDelegate {    
+final class PlacesViewController: UIViewController, LocationServiceDelegate {    
     typealias Dependecies = HasRouter & HasKingfisher & HasPlaceViewModel
     
     // для работы с геопозиции
@@ -27,6 +27,9 @@ final class MainViewController: UIViewController, LocationServiceDelegate {
     fileprivate let viewModel: PlaceViewModel
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
     fileprivate let disposeBag = DisposeBag()
+    fileprivate var tableDataSource: PlacesTableViewDataSource?
+    //swiftlint:disable weak_delegate
+    fileprivate var tableDelegate: PlacesTableViewDelegate?
     
     fileprivate lazy var tableView: UITableView = {
         let table = UITableView()
@@ -86,12 +89,6 @@ final class MainViewController: UIViewController, LocationServiceDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if #available(iOS 11.0, *) {
-            navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white,
-                                                                            NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 28)]
-            navigationController?.navigationItem.largeTitleDisplayMode = .automatic
-        }
-        
         view.backgroundColor = .white
         headerView.addSubview(mapView)
         view.addSubview(tableView)
@@ -100,19 +97,9 @@ final class MainViewController: UIViewController, LocationServiceDelegate {
         updateConstraints()
         startDetectLocation()
         
-        tableView.rx.setDelegate(self).disposed(by: disposeBag)
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
-        tableView.rx.modelSelected(PlaceModel.self)
-            .subscribe(onNext: { (place) in
-                print(place)
-            }, onError: { (error) in
-                print(error)
-            }).disposed(by: disposeBag)
-        
-        tableView.rx.itemSelected
-            .subscribe(onNext: { [unowned self] (indexPath) in
-                self.tableView.deselectRow(at: indexPath, animated: true)
-            }).disposed(by: disposeBag)
+        tableDataSource = PlacesTableViewDataSource(tableView, placesSections: nil, kingfisherOptions: kingfisherOptions)
+        tableDelegate = PlacesTableViewDelegate(tableView, placesSections: nil)
     }
     
     // MARK: LocationManagerDelegate
@@ -149,31 +136,25 @@ final class MainViewController: UIViewController, LocationServiceDelegate {
     func locationService(currentLocation: CLLocation?) {
         if let location = currentLocation {
             centerMapOnLocation(location)
-            
-            viewModel.getInfoPlace(location: location)
-                .bind(to: tableView.rx.items(cellIdentifier: PlaceTableViewCell.cellIndetifier,
-                                             cellType: PlaceTableViewCell.self)) { [unowned self] (_, model: PlaceModel, cell) in
-                                                cell.title = model.name
-                                                cell.categories = model.categories
-                                                cell.imageCell.kf.indicatorType = .activity
-                                                cell.imageCell.kf.setImage(with: model.coverPhoto?.url,
-                                                                           placeholder: nil,
-                                                                           options: self.kingfisherOptions,
-                                                                           progressBlock: nil,
-                                                                           completionHandler: nil)
-                }.disposed(by: disposeBag)
+            loadInfoAboutLocation(location)
         }
     }
     
-    func centerMapOnLocation(_ location: CLLocation) {
+    fileprivate func loadInfoAboutLocation(_ location: CLLocation) {
+        viewModel.getInfoPlace(location: location).asObservable()
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { [unowned self] (model) in
+                self.tableDataSource?.placesSections = model
+                self.tableDelegate?.placesSections = model
+                self.tableView.reloadData()
+                }, onError: { (error) in
+                    print(error)
+            }).disposed(by: disposeBag)
+    }
+    
+    fileprivate func centerMapOnLocation(_ location: CLLocation) {
         let regionRadius: CLLocationDistance = 1000
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius, regionRadius)
         mapView.setRegion(coordinateRegion, animated: true)
-    }
-}
-
-extension MainViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 170.0
     }
 }

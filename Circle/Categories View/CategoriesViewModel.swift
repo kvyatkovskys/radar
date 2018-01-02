@@ -12,7 +12,7 @@ import RxSwift
 struct CategoriesViewModel {
     let categories: Observable<[Categories]>
     
-    init(categories: [Categories]) {
+    init(_ categories: [Categories]) {
         self.categories = Observable.just(categories)
     }
 }
