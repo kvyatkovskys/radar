@@ -21,7 +21,7 @@ final class PlaceTableViewCell: UITableViewCell {
     
     fileprivate let disposeBag = DisposeBag()
     fileprivate var collectionDataSource: CategoriesViewDataSource?
-    fileprivate var collectionDelegate: CategoriesViewDelegate?
+    fileprivate weak var collectionDelegate: CategoriesViewDelegate?
     
     fileprivate let mainView: UIView = {
         let view = UIView()
@@ -52,6 +52,14 @@ final class PlaceTableViewCell: UITableViewCell {
         return label
     }()
     
+    fileprivate let aboutLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.textColor = .gray
+        label.font = .systemFont(ofSize: 13.0)
+        return label
+    }()
+    
     fileprivate lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: 90.0, height: 20.0)
@@ -67,6 +75,7 @@ final class PlaceTableViewCell: UITableViewCell {
     
     var categories: [Categories]? {
         didSet {
+            guard (categories ?? []).count > 1 else { return }
             collectionView.register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: CategoryCollectionViewCell.cellIdentifier)
             collectionDataSource = CategoriesViewDataSource(collectionView, categories ?? [])
             collectionDelegate = CategoriesViewDelegate(collectionView)
@@ -76,6 +85,12 @@ final class PlaceTableViewCell: UITableViewCell {
     var title: String? {
         didSet {
             titleLabel.text = title
+        }
+    }
+    
+    var about: String? {
+        didSet {
+            aboutLabel.text = about
         }
     }
     
@@ -93,8 +108,15 @@ final class PlaceTableViewCell: UITableViewCell {
         
         titleLabel.snp.makeConstraints { (make) in
             make.left.equalTo(imageCell.snp.right).offset(10.0)
-            make.top.right.equalToSuperview().inset(10.0)
-            make.height.greaterThanOrEqualTo(60.0)
+            make.top.equalToSuperview().offset(10.0)
+            make.right.equalToSuperview().inset(10.0)
+            make.height.lessThanOrEqualTo(50.0)
+        }
+        
+        aboutLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(titleLabel.snp.bottom).offset(5.0)
+            make.left.right.equalTo(titleLabel)
+            make.height.lessThanOrEqualTo(60.0)
         }
         
         collectionView.snp.makeConstraints { (make) in
@@ -114,6 +136,7 @@ final class PlaceTableViewCell: UITableViewCell {
         addSubview(mainView)
         mainView.addSubview(imageCell)
         mainView.addSubview(titleLabel)
+        mainView.addSubview(aboutLabel)
         mainView.addSubview(collectionView)
         
         updateConstraints()

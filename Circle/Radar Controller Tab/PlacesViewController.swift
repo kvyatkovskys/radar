@@ -14,17 +14,17 @@ import RxCocoa
 import Kingfisher
 
 let heightHeader: CGFloat = 100.0
+let radius: Double = 800.0
 
-final class PlacesViewController: UIViewController, LocationServiceDelegate {    
-    typealias Dependecies = HasRouter & HasKingfisher & HasPlaceViewModel
+final class PlacesViewController: UIViewController, LocationServiceDelegate, FilterPlacesDelegate {
+    typealias Dependecies = HasKingfisher & HasPlaceViewModel
     
     // для работы с геопозиции
     fileprivate lazy var locationService: LocationService = {
         return LocationService(delegate: self)
     }()
     
-    fileprivate let router: Router
-    fileprivate let viewModel: PlaceViewModel
+    fileprivate var viewModel: PlaceViewModel
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
     fileprivate let disposeBag = DisposeBag()
     fileprivate var tableDataSource: PlacesTableViewDataSource?
@@ -48,17 +48,30 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate {
     fileprivate lazy var mapView: MKMapView = {
         let map = MKMapView()
         map.mapType = .standard
-        map.isZoomEnabled = false
+        map.isZoomEnabled = true
         map.isRotateEnabled = true
-        map.isScrollEnabled = false
+        map.isScrollEnabled = true
         map.showsBuildings = true
         map.showsCompass = true
         map.showsPointsOfInterest = true
         map.showsUserLocation = true
         map.showsScale = false
         map.contentMode = .scaleAspectFill
-        map.isUserInteractionEnabled = false
         return map
+    }()
+    
+    fileprivate lazy var leftBarButton: UIBarButtonItem = {
+        let categoriesImage = UIImage(named: "ic_list")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        let button = UIBarButtonItem(image: categoriesImage, style: .done, target: self, action: nil)
+        button.tintColor = .white
+        return button
+    }()
+    
+    lazy var rightBarButton: UIBarButtonItem = {
+        let categoriesImage = UIImage(named: "ic_filter_list")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        let button = UIBarButtonItem(image: categoriesImage, style: .done, target: self, action: #selector(openFilter))
+        button.tintColor = .white
+        return button
     }()
     
     fileprivate func updateConstraints() {
@@ -76,12 +89,11 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate {
     }
     
     init(_ dependencies: Dependecies) {
-        self.router = dependencies.router
         self.kingfisherOptions = dependencies.kingfisherOptions
         self.viewModel = dependencies.viewModel
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -93,6 +105,8 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate {
         headerView.addSubview(mapView)
         view.addSubview(tableView)
         tableView.tableHeaderView = headerView
+        navigationItem.leftBarButtonItem = leftBarButton
+        navigationItem.rightBarButtonItem = rightBarButton
         
         updateConstraints()
         startDetectLocation()
@@ -102,7 +116,7 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate {
         tableDelegate = PlacesTableViewDelegate(tableView, placesSections: nil)
     }
     
-    // MARK: LocationManagerDelegate
+    // MARK: LocationServiceDelegate
     func startDetectLocation() {
         locationService.start { [unowned self] (start) in
             if !start {
@@ -140,20 +154,52 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate {
         }
     }
     
-    fileprivate func loadInfoAboutLocation(_ location: CLLocation) {
-        viewModel.getInfoPlace(location: location).asObservable()
+    // MARK: PlaceViewModel
+    @objc func openFilter() {
+        viewModel.openFilter!(self)
+    }
+    
+    // MARK: FilterPlacesDelegate
+    func selectDistance(value: Double) {
+        if let location = locationService.userLocation {
+            loadInfoAboutLocation(location, distance: value)
+        }
+    }
+    
+    // MARK: Current class func
+    fileprivate func loadInfoAboutLocation(_ location: CLLocation, distance: Double = FilterDistanceViewModel().defaultDistance) {
+        viewModel.getInfoPlace(location: location, distance: distance).asObservable()
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] (model) in
                 self.tableDataSource?.placesSections = model
                 self.tableDelegate?.placesSections = model
                 self.tableView.reloadData()
+                self.addPointOnMap(placesSections: model)
                 }, onError: { (error) in
                     print(error)
             }).disposed(by: disposeBag)
     }
     
+    fileprivate func addPointOnMap(placesSections: PlacesSections) {
+        mapView.removeAnnotations(mapView.annotations)
+        
+        var locations: [CLLocationCoordinate2D] = []
+        placesSections.places.forEach({ (place) in
+            locations += place.map({ CLLocationCoordinate2D(latitude: $0.location?.latitude ?? 0,
+                                                            longitude: $0.location?.longitude ?? 0) })
+        })
+        
+        locations.forEach { (location) in
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = location
+            DispatchQueue.main.async { [unowned self] in
+                self.mapView.addAnnotation(annotation)
+            }
+        }
+    }
+    
     fileprivate func centerMapOnLocation(_ location: CLLocation) {
-        let regionRadius: CLLocationDistance = 1000
+        let regionRadius: CLLocationDistance = radius
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius, regionRadius)
         mapView.setRegion(coordinateRegion, animated: true)
     }

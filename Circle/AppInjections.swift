@@ -23,13 +23,11 @@ protocol HasPlaceViewModel {
 }
 
 /// container dependecies injection's for main tab controller
-struct PlacesViewDependecies: HasRouter, HasKingfisher, HasPlaceViewModel {
-    let router: Router
+struct PlacesViewDependecies: HasKingfisher, HasPlaceViewModel {
     let kingfisherOptions: KingfisherOptionsInfo
     let viewModel: PlaceViewModel
     
-    init(_ router: Router, _ kingfisherOptions: KingfisherOptionsInfo, _ viewModel: PlaceViewModel) {
-        self.router = router
+    init(_ kingfisherOptions: KingfisherOptionsInfo, _ viewModel: PlaceViewModel) {
         self.kingfisherOptions = kingfisherOptions
         self.viewModel = viewModel
     }
@@ -56,5 +54,24 @@ struct CategoriesViewDependecies: HasGategoriesViewModel {
     
     init(_ viewModel: CategoriesViewModel) {
         self.viewModel = viewModel
+    }
+}
+
+protocol HasFilterPlacesViewModel {
+    var viewModel: FilterDistanceViewModel { get }
+}
+
+//swiftlint:disable class_delegate_protocol
+protocol HasFilterPlacesDelegate {
+    weak var delegate: FilterPlacesDelegate? { get }
+}
+
+struct FilterPlacesDependecies: HasFilterPlacesViewModel, HasFilterPlacesDelegate {
+    let viewModel: FilterDistanceViewModel
+    weak var delegate: FilterPlacesDelegate?
+    
+    init(_ viewModel: FilterDistanceViewModel, _ delegate: FilterPlacesDelegate?) {
+        self.viewModel = viewModel
+        self.delegate = delegate
     }
 }

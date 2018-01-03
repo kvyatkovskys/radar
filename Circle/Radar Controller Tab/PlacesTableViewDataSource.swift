@@ -42,6 +42,7 @@ extension PlacesTableViewDataSource: UITableViewDataSource {
         cell.title = place.name
         cell.categories = place.categories
         cell.imageCell.kf.indicatorType = .activity
+        cell.about = place.about
         cell.imageCell.kf.setImage(with: place.coverPhoto?.url,
                                    placeholder: nil,
                                    options: self.kingfisherOptions,

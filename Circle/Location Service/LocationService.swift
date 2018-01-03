@@ -24,6 +24,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
         manager.requestWhenInUseAuthorization()
         return manager
     }()
+    var userLocation: CLLocation?
     
     fileprivate let geocoder: CLGeocoder = {
         return CLGeocoder()
@@ -66,6 +67,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let currentLocation = locations.first {
             locationManager.stopUpdatingLocation()
+            userLocation = currentLocation
             delegate?.locationService(currentLocation: currentLocation)
         } else {
             delegate?.locationService(currentLocation: nil)
