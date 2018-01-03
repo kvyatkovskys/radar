@@ -28,10 +28,14 @@ final class Router {
     func showMainTabController() -> UITabBarController {
         var placesViewController = UIViewController()
         var viewModel = PlaceViewModel(PlaceService())
+        
         viewModel.openFilter = { [unowned self] delegate in
             let dependecies = FilterPlacesDependecies(FilterDistanceViewModel(), delegate)
             self.openFilterPlaces(fromController: placesViewController as! PlacesViewController,
                                   toController: FilterPlacesViewController(dependecies))
+        }
+        viewModel.openCategories = {
+            
         }
         
         placesViewController = PlacesViewController(PlacesViewDependecies(optionKingfisher, viewModel))
@@ -64,7 +68,7 @@ final class Router {
         navigation.modalPresentationStyle = UIModalPresentationStyle.popover
         navigation.isNavigationBarHidden = true
         let popover = navigation.popoverPresentationController
-        toController.preferredContentSize = CGSize(width: 220.0, height: 180.0)
+        toController.preferredContentSize = CGSize(width: 250.0, height: 200.0)
         popover?.delegate = fromController
         popover?.barButtonItem = fromController.rightBarButton
         popover?.permittedArrowDirections = UIPopoverArrowDirection.any

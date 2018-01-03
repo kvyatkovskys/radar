@@ -57,6 +57,7 @@ struct CategoriesViewDependecies: HasGategoriesViewModel {
     }
 }
 
+// MARK: FilterPlacesViewController
 protocol HasFilterPlacesViewModel {
     var viewModel: FilterDistanceViewModel { get }
 }
@@ -66,6 +67,7 @@ protocol HasFilterPlacesDelegate {
     weak var delegate: FilterPlacesDelegate? { get }
 }
 
+/// container dependecies injection's for filter view
 struct FilterPlacesDependecies: HasFilterPlacesViewModel, HasFilterPlacesDelegate {
     let viewModel: FilterDistanceViewModel
     weak var delegate: FilterPlacesDelegate?

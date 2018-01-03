@@ -21,7 +21,11 @@ struct PlacesSections {
 
 struct PlaceViewModel {
     fileprivate let placeService: PlaceService
+    /// open filter controller
     var openFilter: ((_ delegate: FilterPlacesDelegate) -> Void)?
+    
+    /// open choose categories controller
+    var openCategories: (() -> Void)?
     
     init(_ service: PlaceService) {
         self.placeService = service

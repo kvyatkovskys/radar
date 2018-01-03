@@ -62,7 +62,7 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     
     fileprivate lazy var leftBarButton: UIBarButtonItem = {
         let categoriesImage = UIImage(named: "ic_list")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
-        let button = UIBarButtonItem(image: categoriesImage, style: .done, target: self, action: nil)
+        let button = UIBarButtonItem(image: categoriesImage, style: .done, target: self, action: #selector(openCategories))
         button.tintColor = .white
         return button
     }()
@@ -72,6 +72,15 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         let button = UIBarButtonItem(image: categoriesImage, style: .done, target: self, action: #selector(openFilter))
         button.tintColor = .white
         return button
+    }()
+    
+    fileprivate lazy var indicatorView: ActivityIndicatorView = {
+        return ActivityIndicatorView(container: self.view)
+    }()
+    
+    fileprivate lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        return refreshControl
     }()
     
     fileprivate func updateConstraints() {
@@ -105,6 +114,7 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         headerView.addSubview(mapView)
         view.addSubview(tableView)
         tableView.tableHeaderView = headerView
+        tableView.addSubview(refreshControl)
         navigationItem.leftBarButtonItem = leftBarButton
         navigationItem.rightBarButtonItem = rightBarButton
         
@@ -114,6 +124,14 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
         tableDataSource = PlacesTableViewDataSource(tableView, placesSections: nil, kingfisherOptions: kingfisherOptions)
         tableDelegate = PlacesTableViewDelegate(tableView, placesSections: nil)
+        
+        refreshControl.rx.controlEvent(.valueChanged).asObservable()
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { [unowned self] _ in
+                if let location = self.locationService.userLocation {
+                    self.loadInfoAboutLocation(location)
+                }
+            }).disposed(by: disposeBag)
     }
     
     // MARK: LocationServiceDelegate
@@ -159,6 +177,10 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         viewModel.openFilter!(self)
     }
     
+    @objc func openCategories() {
+        viewModel.openCategories!()
+    }
+    
     // MARK: FilterPlacesDelegate
     func selectDistance(value: Double) {
         if let location = locationService.userLocation {
@@ -168,6 +190,7 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     
     // MARK: Current class func
     fileprivate func loadInfoAboutLocation(_ location: CLLocation, distance: Double = FilterDistanceViewModel().defaultDistance) {
+        indicatorView.showIndicator()
         viewModel.getInfoPlace(location: location, distance: distance).asObservable()
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] (model) in
@@ -175,6 +198,11 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
                 self.tableDelegate?.placesSections = model
                 self.tableView.reloadData()
                 self.addPointOnMap(placesSections: model)
+                
+                self.indicatorView.hideIndicator()
+                if self.refreshControl.isRefreshing {
+                    self.refreshControl.endRefreshing()
+                }
                 }, onError: { (error) in
                     print(error)
             }).disposed(by: disposeBag)
