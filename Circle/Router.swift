@@ -30,7 +30,7 @@ final class Router {
         var viewModel = PlaceViewModel(PlaceService())
         
         viewModel.openFilter = { [unowned self] delegate in
-            let dependecies = FilterPlacesDependecies(FilterDistanceViewModel(), delegate)
+            let dependecies = FilterPlacesDependecies(FilterViewModel(), FilterDistanceViewModel(), delegate)
             self.openFilterPlaces(fromController: placesViewController as! PlacesViewController,
                                   toController: FilterPlacesViewController(dependecies))
         }
@@ -48,7 +48,7 @@ final class Router {
             placesViewController.navigationController?.navigationBar.largeTitleTextAttributes = [
                 NSAttributedStringKey.foregroundColor: UIColor.white,
                 NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 28)]
-            placesViewController.navigationController?.navigationItem.largeTitleDisplayMode = .automatic
+            placesViewController.navigationController?.navigationItem.largeTitleDisplayMode = .always
         }
         
         let settingsController = SettingsViewController(SettingsViewDependecies(self))

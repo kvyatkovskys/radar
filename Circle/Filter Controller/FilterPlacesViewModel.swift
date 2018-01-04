@@ -8,6 +8,14 @@
 
 import Foundation
 
+enum TypeFilter: Int {
+    case distance, categories
+}
+
+struct FilterViewModel {
+    let items: [FilterModel] = ["Distance", "Categories"].map({ FilterModel(title: $0) })
+}
+
 struct FilterDistanceViewModel {
     let defaultDistance: Double = UserDefaults.standard.double(forKey: "FilterDistance") == 0.0 ? 1000.0 : UserDefaults.standard.double(forKey: "FilterDistance")
     let items: [FilterDistanceModel] = [FilterDistanceModel(title: "500 meters", value: 500.0),

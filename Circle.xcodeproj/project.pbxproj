@@ -23,11 +23,6 @@
 		8B41156B1FDC83AF00C6614C /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B41156A1FDC83AF00C6614C /* Router.swift */; };
 		8B41156D1FDC845B00C6614C /* AppInjections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B41156C1FDC845B00C6614C /* AppInjections.swift */; };
 		8B41770A1FFD5785002A963A /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4177091FFD5785002A963A /* ActivityIndicatorView.swift */; };
-		8B4177121FFD637F002A963A /* MenuTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B41770D1FFD637E002A963A /* MenuTableViewDelegate.swift */; };
-		8B4177131FFD637F002A963A /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B41770E1FFD637E002A963A /* MenuViewController.swift */; };
-		8B4177141FFD637F002A963A /* MenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B41770F1FFD637F002A963A /* MenuTableViewCell.swift */; };
-		8B4177151FFD637F002A963A /* MenuViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4177101FFD637F002A963A /* MenuViewModel.swift */; };
-		8B4177161FFD637F002A963A /* MenuTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4177111FFD637F002A963A /* MenuTableViewDataSource.swift */; };
 		8B4177191FFD670B002A963A /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4177181FFD670B002A963A /* DeviceType.swift */; };
 		8B44C37D1FEFDFA5003C0754 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B44C37C1FEFDFA5003C0754 /* LocationService.swift */; };
 		8B44C37F1FEFE195003C0754 /* QuickAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B44C37E1FEFE195003C0754 /* QuickAlertController.swift */; };
@@ -82,11 +77,6 @@
 		8B41156A1FDC83AF00C6614C /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		8B41156C1FDC845B00C6614C /* AppInjections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInjections.swift; sourceTree = "<group>"; };
 		8B4177091FFD5785002A963A /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
-		8B41770D1FFD637E002A963A /* MenuTableViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTableViewDelegate.swift; sourceTree = "<group>"; };
-		8B41770E1FFD637E002A963A /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
-		8B41770F1FFD637F002A963A /* MenuTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTableViewCell.swift; sourceTree = "<group>"; };
-		8B4177101FFD637F002A963A /* MenuViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewModel.swift; sourceTree = "<group>"; };
-		8B4177111FFD637F002A963A /* MenuTableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTableViewDataSource.swift; sourceTree = "<group>"; };
 		8B4177181FFD670B002A963A /* DeviceType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceType.swift; sourceTree = "<group>"; };
 		8B44C37C1FEFDFA5003C0754 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		8B44C37E1FEFE195003C0754 /* QuickAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAlertController.swift; sourceTree = "<group>"; };
@@ -209,7 +199,6 @@
 				8B41154A1FDB2CEF00C6614C /* AppDelegate.swift */,
 				8B41156A1FDC83AF00C6614C /* Router.swift */,
 				8B41156C1FDC845B00C6614C /* AppInjections.swift */,
-				8B4177171FFD63AD002A963A /* Categories Menu */,
 				8B44C3841FF012E1003C0754 /* Setting Controller Tab */,
 				8B44C3811FF012A2003C0754 /* Radar Controller Tab */,
 				8B1A80AC1FFAE4640039C39A /* Categories View */,
@@ -242,18 +231,6 @@
 				8BE208A41FFD25CB0048D690 /* FilterPlacesViewModel.swift */,
 			);
 			path = "Filter Controller";
-			sourceTree = "<group>";
-		};
-		8B4177171FFD63AD002A963A /* Categories Menu */ = {
-			isa = PBXGroup;
-			children = (
-				8B41770E1FFD637E002A963A /* MenuViewController.swift */,
-				8B4177101FFD637F002A963A /* MenuViewModel.swift */,
-				8B4177111FFD637F002A963A /* MenuTableViewDataSource.swift */,
-				8B41770D1FFD637E002A963A /* MenuTableViewDelegate.swift */,
-				8B41770F1FFD637F002A963A /* MenuTableViewCell.swift */,
-			);
-			path = "Categories Menu";
 			sourceTree = "<group>";
 		};
 		8B44C3801FF00F58003C0754 /* Project Settings */ = {
@@ -550,21 +527,16 @@
 				8B41154D1FDB2CEF00C6614C /* PlacesViewController.swift in Sources */,
 				8B1A80A91FFADAED0039C39A /* CategoryCollectionViewCell.swift in Sources */,
 				8B41156D1FDC845B00C6614C /* AppInjections.swift in Sources */,
-				8B4177151FFD637F002A963A /* MenuViewModel.swift in Sources */,
-				8B4177131FFD637F002A963A /* MenuViewController.swift in Sources */,
 				8BE208A11FFD1D300048D690 /* ControllerExtension.swift in Sources */,
 				8B1A80AE1FFAE4DE0039C39A /* CategoriesViewDelegate.swift in Sources */,
 				8BEB4DF31FFAD285008AD1AB /* PlaceSetting.swift in Sources */,
-				8B4177121FFD637F002A963A /* MenuTableViewDelegate.swift in Sources */,
 				8B3F5D871FFAE67E00B1F88D /* CategoriesViewDataSource.swift in Sources */,
 				8B4177191FFD670B002A963A /* DeviceType.swift in Sources */,
-				8B4177141FFD637F002A963A /* MenuTableViewCell.swift in Sources */,
 				8B44C3831FF012C8003C0754 /* SettingsViewController.swift in Sources */,
 				8B44C37D1FEFDFA5003C0754 /* LocationService.swift in Sources */,
 				8B1A80AB1FFADC910039C39A /* CategoriesViewModel.swift in Sources */,
 				8BE2089F1FFD17470048D690 /* FilterPlacesViewController.swift in Sources */,
 				8B6D4E1F1FFBA0CD007904D4 /* PlacesTableViewDataSource.swift in Sources */,
-				8B4177161FFD637F002A963A /* MenuTableViewDataSource.swift in Sources */,
 				8B18BFD81FFACC6F00C7906D /* PlaceViewModel.swift in Sources */,
 				8B5F71571FF93C9700E628F9 /* PlaceTableViewCell.swift in Sources */,
 				8B5F71511FF916B300E628F9 /* PlaceService.swift in Sources */,

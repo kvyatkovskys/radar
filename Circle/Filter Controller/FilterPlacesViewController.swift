@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RxSwift
 
 protocol FilterPlacesDelegate: class {
     func selectDistance(value: Double)
@@ -15,52 +16,41 @@ protocol FilterPlacesDelegate: class {
 final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     typealias Dependecies = HasFilterPlacesViewModel & HasFilterPlacesDelegate
     
+    fileprivate let disposeBag = DisposeBag()
     fileprivate let viewModelDistance: FilterDistanceViewModel
+    fileprivate let viewModel: FilterViewModel
     fileprivate weak var delegate: FilterPlacesDelegate?
-    fileprivate let segmentedControl: UISegmentedControl = {
-        let segmented = UISegmentedControl(items: ["Distance"])
-        segmented.frame = CGRect(x: 0.0, y: 20.0, width: 40.0, height: 22.0)
+    
+    fileprivate lazy var segmentedControl: UISegmentedControl = {
+        let segmented = UISegmentedControl(items: viewModel.items.map({ $0.title }))
         segmented.selectedSegmentIndex = 0
         return segmented
-    }()
-    
-    fileprivate lazy var toolBar: UIToolbar = {
-        let toolBar = UIToolbar()
-        toolBar.barStyle = .default
-        toolBar.isTranslucent = true
-        toolBar.isUserInteractionEnabled = true
-        toolBar.sizeToFit()
-        
-        let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let segmentedControl = UIBarButtonItem(customView: self.segmentedControl)
-        
-        toolBar.setItems([segmentedControl], animated: true)
-        
-        return toolBar
     }()
     
     fileprivate lazy var pickerView: UIPickerView = {
         let picker = UIPickerView()
         picker.delegate = self
         picker.dataSource = self
-        picker.addSubview(self.toolBar)
         return picker
     }()
     
     override func updateViewConstraints() {
         super.updateViewConstraints()
         
-        pickerView.snp.makeConstraints { (make) in
-            make.top.left.bottom.right.equalToSuperview()
+        segmentedControl.snp.makeConstraints { (make) in
+            make.top.equalToSuperview().offset(10.0)
+            make.left.right.equalToSuperview().inset(15.0)
         }
         
-        toolBar.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview()
+        pickerView.snp.makeConstraints { (make) in
+            make.top.equalTo(segmentedControl.snp.bottom).offset(5.0)
+            make.left.bottom.right.equalToSuperview()
         }
     }
     
     init(_ dependecies: Dependecies) {
-        self.viewModelDistance = dependecies.viewModel
+        self.viewModel = dependecies.viewModel
+        self.viewModelDistance = dependecies.viewModelDistance
         self.delegate = dependecies.delegate
         super.init(nibName: nil, bundle: nil)
     }
@@ -72,12 +62,19 @@ final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.addSubview(segmentedControl)
         view.addSubview(pickerView)
         updateViewConstraints()
         
         if let index = viewModelDistance.items.index(where: { $0.value == viewModelDistance.defaultDistance }) {
             pickerView.selectRow(index, inComponent: 0, animated: true)
         }
+        
+        segmentedControl.rx.selectedSegmentIndex.subscribe(onNext: { (index) in
+            print(index)
+        }, onError: { (error) in
+            print(error)
+        }).disposed(by: disposeBag)
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {

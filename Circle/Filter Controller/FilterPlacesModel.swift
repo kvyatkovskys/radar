@@ -8,6 +8,10 @@
 
 import Foundation
 
+struct FilterModel {
+    let title: String
+}
+
 struct FilterDistanceModel {
     let title: String
     let value: Double
