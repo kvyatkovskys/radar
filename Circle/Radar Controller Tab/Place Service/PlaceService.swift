@@ -1,5 +1,5 @@
 //
-//  PlaceManager.swift
+//  PlaceService.swift
 //  Circle
 //
 //  Created by Kviatkovskii on 31/12/2017.
@@ -10,27 +10,14 @@ import Foundation
 import RxSwift
 import Unbox
 
-enum Categories: String {
-    case arts = "ARTS_ENTERTAINMENT"
-    case education = "EDUCATION"
-    case fitness = "FITNESS_RECREATION"
-    case food = "FOOD_BEVERAGE"
-    case hotel = "HOTEL_LODGING"
-    case medical = "MEDICAL_HEALTH"
-    case shopping = "SHOPPING_RETAIL"
-    case travel = "TRAVEL_TRANSPORTATION"
-}
-
-struct PlaceManager {
+struct PlaceService {
     fileprivate let placeManager: FBSDKPlacesManager
 
     init() {
         self.placeManager = FBSDKPlacesManager()
     }
-    //results: @escaping ([PlaceModel]) -> Void)
-    func getInfoAboutPlace(location: CLLocation,
-                           categories: [Categories] = [.arts, .education, .fitness, .food, .hotel, .medical, .shopping, .travel],
-                           distance: CLLocationDistance = 1000) -> Observable<[PlaceModel]> {
+
+    func getInfoAboutPlace(_ location: CLLocation, _ categories: [Categories], _ distance: CLLocationDistance) -> Observable<[PlaceModel]> {
         let request = placeManager.placeSearchRequest(for: location,
                                                       searchTerm: nil,
                                                       categories: categories.map({ $0.rawValue }),
@@ -64,7 +51,6 @@ struct PlaceManager {
                 
                 if let data = result as? [String: Any], let model: PlaceDataModel = try? unbox(dictionary: data) {
                     observable.on(.next(model.data))
-                    observable.on(.completed)
                 }
             })
             return Disposables.create()

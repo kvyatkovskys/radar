@@ -52,12 +52,14 @@ extension PlaceModel: Unboxable {
 
 struct LocationPlace {
     let coordinate: CLLocation
+    let latitude: Double
+    let longitude: Double
 }
 
 extension LocationPlace: Unboxable {
     init(unboxer: Unboxer) throws {
-        let latitude: Double = try unboxer.unbox(key: "latitude")
-        let longitude: Double = try unboxer.unbox(key: "longitude")
+        self.latitude = try unboxer.unbox(key: "latitude")
+        self.longitude = try unboxer.unbox(key: "longitude")
         self.coordinate = CLLocation(latitude: latitude, longitude: longitude)
     }
 }

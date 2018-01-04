@@ -1,5 +1,5 @@
 //
-//  LocationManager.swift
+//  LocationService.swift
 //  Circle
 //
 //  Created by Kviatkovskii on 24/12/2017.
@@ -9,13 +9,13 @@
 import Foundation
 import CoreLocation
 
-protocol LocationManagerDelegate: class {
-    func locationManager(didFailWithError error: Error)
-    func locationManager(currentLocation: CLLocation?)
+protocol LocationServiceDelegate: class {
+    func locationService(didFailWithError error: Error)
+    func locationService(currentLocation: CLLocation?)
 }
 
-final class LocationManager: NSObject, CLLocationManagerDelegate {
-    fileprivate weak var delegate: LocationManagerDelegate?
+final class LocationService: NSObject, CLLocationManagerDelegate {
+    fileprivate weak var delegate: LocationServiceDelegate?
     // для работы с геопозиции
     fileprivate lazy var locationManager: CLLocationManager = {
         let manager = CLLocationManager()
@@ -24,12 +24,13 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
         manager.requestWhenInUseAuthorization()
         return manager
     }()
+    var userLocation: CLLocation?
     
     fileprivate let geocoder: CLGeocoder = {
         return CLGeocoder()
     }()
     
-    init(delegate: LocationManagerDelegate) {
+    init(delegate: LocationServiceDelegate) {
         self.delegate = delegate
         super.init()
     }
@@ -59,16 +60,17 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        delegate?.locationManager(didFailWithError: error)
+        delegate?.locationService(didFailWithError: error)
         geocoder.cancelGeocode()
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let currentLocation = locations.first {
             locationManager.stopUpdatingLocation()
-            delegate?.locationManager(currentLocation: currentLocation)
+            userLocation = currentLocation
+            delegate?.locationService(currentLocation: currentLocation)
         } else {
-            delegate?.locationManager(currentLocation: nil)
+            delegate?.locationService(currentLocation: nil)
         }
     }
 }
