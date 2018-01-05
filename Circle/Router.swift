@@ -68,7 +68,6 @@ final class Router {
         navigation.modalPresentationStyle = UIModalPresentationStyle.popover
         navigation.isNavigationBarHidden = true
         let popover = navigation.popoverPresentationController
-        toController.preferredContentSize = CGSize(width: 250.0, height: 200.0)
         popover?.delegate = fromController
         popover?.barButtonItem = fromController.rightBarButton
         popover?.permittedArrowDirections = UIPopoverArrowDirection.any

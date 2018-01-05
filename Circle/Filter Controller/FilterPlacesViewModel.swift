@@ -14,6 +14,7 @@ enum TypeFilter: Int {
 
 struct FilterViewModel {
     let items: [FilterModel] = ["Distance", "Categories"].map({ FilterModel(title: $0) })
+    var chooseFilter: (() -> Void)?
 }
 
 struct FilterDistanceViewModel {

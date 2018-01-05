@@ -24,6 +24,8 @@
 		8B41156D1FDC845B00C6614C /* AppInjections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B41156C1FDC845B00C6614C /* AppInjections.swift */; };
 		8B41770A1FFD5785002A963A /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4177091FFD5785002A963A /* ActivityIndicatorView.swift */; };
 		8B4177191FFD670B002A963A /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4177181FFD670B002A963A /* DeviceType.swift */; };
+		8B41771B1FFF6491002A963A /* DistancePickerViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B41771A1FFF6491002A963A /* DistancePickerViewDataSource.swift */; };
+		8B41771D1FFF64A7002A963A /* DistancePickerViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B41771C1FFF64A7002A963A /* DistancePickerViewDelegate.swift */; };
 		8B44C37D1FEFDFA5003C0754 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B44C37C1FEFDFA5003C0754 /* LocationService.swift */; };
 		8B44C37F1FEFE195003C0754 /* QuickAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B44C37E1FEFE195003C0754 /* QuickAlertController.swift */; };
 		8B44C3831FF012C8003C0754 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B44C3821FF012C8003C0754 /* SettingsViewController.swift */; };
@@ -78,6 +80,8 @@
 		8B41156C1FDC845B00C6614C /* AppInjections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInjections.swift; sourceTree = "<group>"; };
 		8B4177091FFD5785002A963A /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
 		8B4177181FFD670B002A963A /* DeviceType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceType.swift; sourceTree = "<group>"; };
+		8B41771A1FFF6491002A963A /* DistancePickerViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistancePickerViewDataSource.swift; sourceTree = "<group>"; };
+		8B41771C1FFF64A7002A963A /* DistancePickerViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistancePickerViewDelegate.swift; sourceTree = "<group>"; };
 		8B44C37C1FEFDFA5003C0754 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		8B44C37E1FEFE195003C0754 /* QuickAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAlertController.swift; sourceTree = "<group>"; };
 		8B44C3821FF012C8003C0754 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -229,8 +233,18 @@
 				8BE2089E1FFD17470048D690 /* FilterPlacesViewController.swift */,
 				8BE208A21FFD25750048D690 /* FilterPlacesModel.swift */,
 				8BE208A41FFD25CB0048D690 /* FilterPlacesViewModel.swift */,
+				8B41771E1FFF69BF002A963A /* Picker View */,
 			);
 			path = "Filter Controller";
+			sourceTree = "<group>";
+		};
+		8B41771E1FFF69BF002A963A /* Picker View */ = {
+			isa = PBXGroup;
+			children = (
+				8B41771A1FFF6491002A963A /* DistancePickerViewDataSource.swift */,
+				8B41771C1FFF64A7002A963A /* DistancePickerViewDelegate.swift */,
+			);
+			path = "Picker View";
 			sourceTree = "<group>";
 		};
 		8B44C3801FF00F58003C0754 /* Project Settings */ = {
@@ -525,6 +539,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B41154D1FDB2CEF00C6614C /* PlacesViewController.swift in Sources */,
+				8B41771B1FFF6491002A963A /* DistancePickerViewDataSource.swift in Sources */,
 				8B1A80A91FFADAED0039C39A /* CategoryCollectionViewCell.swift in Sources */,
 				8B41156D1FDC845B00C6614C /* AppInjections.swift in Sources */,
 				8BE208A11FFD1D300048D690 /* ControllerExtension.swift in Sources */,
@@ -543,6 +558,7 @@
 				8B41156B1FDC83AF00C6614C /* Router.swift in Sources */,
 				8B41770A1FFD5785002A963A /* ActivityIndicatorView.swift in Sources */,
 				8BE208A51FFD25CB0048D690 /* FilterPlacesViewModel.swift in Sources */,
+				8B41771D1FFF64A7002A963A /* DistancePickerViewDelegate.swift in Sources */,
 				8B5F71531FF923A700E628F9 /* PlaceModel.swift in Sources */,
 				8B44C37F1FEFE195003C0754 /* QuickAlertController.swift in Sources */,
 				8B18BFD61FFA594D00C7906D /* ColorExtension.swift in Sources */,
