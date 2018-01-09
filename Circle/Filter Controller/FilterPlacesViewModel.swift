@@ -25,3 +25,14 @@ struct FilterDistanceViewModel {
                                         FilterDistanceModel(title: "2000 meters", value: 2000.0),
                                         FilterDistanceModel(title: "2500 meters", value: 2500.0)]
 }
+
+struct FilterCategoriesViewModel {
+    fileprivate let sortedItems: [FilterCategoriesModel] = [.arts, .education, .fitness, .food, .hotel, .shopping, .medical, .travel].map({ FilterCategoriesModel(category: $0) })
+    let items: [FilterCategoriesModel]
+    
+    init() {
+        self.items = sortedItems.sorted(by: { (first, second) -> Bool in
+            return first.category.title < second.category.title
+        })
+    }
+}

@@ -9,14 +9,14 @@
 import UIKit
 
 final class DistancePickerViewDataSource: NSObject {
-    fileprivate let model: [FilterDistanceModel]
+    fileprivate let items: [FilterDistanceModel]
     
     init(_ pickerView: UIPickerView, _ viewModel: FilterDistanceViewModel) {
-        self.model = viewModel.items
+        self.items = viewModel.items
         super.init()
         pickerView.dataSource = self
         
-        if let index = model.index(where: { $0.value == viewModel.defaultDistance }) {
+        if let index = items.index(where: { $0.value == viewModel.defaultDistance }) {
             pickerView.selectRow(index, inComponent: 0, animated: true)
         }
     }
@@ -28,6 +28,6 @@ extension DistancePickerViewDataSource: UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return model.count
+        return items.count
     }
 }

@@ -61,6 +61,7 @@ struct CategoriesViewDependecies: HasGategoriesViewModel {
 protocol HasFilterPlacesViewModel {
     var viewModel: FilterViewModel { get }
     var viewModelDistance: FilterDistanceViewModel { get }
+    var viewModelCategories: FilterCategoriesViewModel { get }
 }
 
 //swiftlint:disable class_delegate_protocol
@@ -72,11 +73,14 @@ protocol HasFilterPlacesDelegate {
 struct FilterPlacesDependecies: HasFilterPlacesViewModel, HasFilterPlacesDelegate {
     let viewModel: FilterViewModel
     let viewModelDistance: FilterDistanceViewModel
+    let viewModelCategories: FilterCategoriesViewModel
+    
     weak var delegate: FilterPlacesDelegate?
     
-    init(_ viewModel: FilterViewModel, _ viewModelDistance: FilterDistanceViewModel, _ delegate: FilterPlacesDelegate?) {
+    init(_ viewModel: FilterViewModel, _ viewModelDistance: FilterDistanceViewModel, _ viewModelCategories: FilterCategoriesViewModel, _ delegate: FilterPlacesDelegate?) {
         self.viewModel = viewModel
         self.viewModelDistance = viewModelDistance
+        self.viewModelCategories = viewModelCategories
         self.delegate = delegate
     }
 }

@@ -45,6 +45,9 @@
 		8BEA04441FF829A2001DFF7E /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BEA043F1FF829A2001DFF7E /* FBSDKCoreKit.framework */; };
 		8BEA04451FF829A2001DFF7E /* FBSDKPlacesKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BEA04401FF829A2001DFF7E /* FBSDKPlacesKit.framework */; };
 		8BEB4DF31FFAD285008AD1AB /* PlaceSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEB4DF21FFAD285008AD1AB /* PlaceSetting.swift */; };
+		8BFBF57B200517B000CE2C8B /* CategoriesTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFBF57A200517B000CE2C8B /* CategoriesTableViewDataSource.swift */; };
+		8BFBF57D200517D000CE2C8B /* CategoriesTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFBF57C200517D000CE2C8B /* CategoriesTableViewDelegate.swift */; };
+		8BFBF57F2005187100CE2C8B /* CategoriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFBF57E2005187100CE2C8B /* CategoriesTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +105,9 @@
 		8BEA043F1FF829A2001DFF7E /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		8BEA04401FF829A2001DFF7E /* FBSDKPlacesKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKPlacesKit.framework; sourceTree = "<group>"; };
 		8BEB4DF21FFAD285008AD1AB /* PlaceSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceSetting.swift; sourceTree = "<group>"; };
+		8BFBF57A200517B000CE2C8B /* CategoriesTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesTableViewDataSource.swift; sourceTree = "<group>"; };
+		8BFBF57C200517D000CE2C8B /* CategoriesTableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesTableViewDelegate.swift; sourceTree = "<group>"; };
+		8BFBF57E2005187100CE2C8B /* CategoriesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesTableViewCell.swift; sourceTree = "<group>"; };
 		B0DF7CDED56C3712288ED366 /* Pods-CircleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CircleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CircleTests/Pods-CircleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C1D7303EAE4F5F8B3765FDDF /* Pods_CircleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CircleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8A689D0A03FBE0C3621184D /* Pods-CircleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CircleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CircleTests/Pods-CircleTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -233,6 +239,7 @@
 				8BE2089E1FFD17470048D690 /* FilterPlacesViewController.swift */,
 				8BE208A21FFD25750048D690 /* FilterPlacesModel.swift */,
 				8BE208A41FFD25CB0048D690 /* FilterPlacesViewModel.swift */,
+				8BFBF58020051C3C00CE2C8B /* Table View */,
 				8B41771E1FFF69BF002A963A /* Picker View */,
 			);
 			path = "Filter Controller";
@@ -303,6 +310,16 @@
 				8B44C37C1FEFDFA5003C0754 /* LocationService.swift */,
 			);
 			path = "Location Service";
+			sourceTree = "<group>";
+		};
+		8BFBF58020051C3C00CE2C8B /* Table View */ = {
+			isa = PBXGroup;
+			children = (
+				8BFBF57A200517B000CE2C8B /* CategoriesTableViewDataSource.swift */,
+				8BFBF57C200517D000CE2C8B /* CategoriesTableViewDelegate.swift */,
+				8BFBF57E2005187100CE2C8B /* CategoriesTableViewCell.swift */,
+			);
+			path = "Table View";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -419,6 +436,8 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Circle/Pods-Circle-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
@@ -427,6 +446,8 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
@@ -549,16 +570,19 @@
 				8B4177191FFD670B002A963A /* DeviceType.swift in Sources */,
 				8B44C3831FF012C8003C0754 /* SettingsViewController.swift in Sources */,
 				8B44C37D1FEFDFA5003C0754 /* LocationService.swift in Sources */,
+				8BFBF57F2005187100CE2C8B /* CategoriesTableViewCell.swift in Sources */,
 				8B1A80AB1FFADC910039C39A /* CategoriesViewModel.swift in Sources */,
 				8BE2089F1FFD17470048D690 /* FilterPlacesViewController.swift in Sources */,
 				8B6D4E1F1FFBA0CD007904D4 /* PlacesTableViewDataSource.swift in Sources */,
 				8B18BFD81FFACC6F00C7906D /* PlaceViewModel.swift in Sources */,
 				8B5F71571FF93C9700E628F9 /* PlaceTableViewCell.swift in Sources */,
+				8BFBF57B200517B000CE2C8B /* CategoriesTableViewDataSource.swift in Sources */,
 				8B5F71511FF916B300E628F9 /* PlaceService.swift in Sources */,
 				8B41156B1FDC83AF00C6614C /* Router.swift in Sources */,
 				8B41770A1FFD5785002A963A /* ActivityIndicatorView.swift in Sources */,
 				8BE208A51FFD25CB0048D690 /* FilterPlacesViewModel.swift in Sources */,
 				8B41771D1FFF64A7002A963A /* DistancePickerViewDelegate.swift in Sources */,
+				8BFBF57D200517D000CE2C8B /* CategoriesTableViewDelegate.swift in Sources */,
 				8B5F71531FF923A700E628F9 /* PlaceModel.swift in Sources */,
 				8B44C37F1FEFE195003C0754 /* QuickAlertController.swift in Sources */,
 				8B18BFD61FFA594D00C7906D /* ColorExtension.swift in Sources */,

@@ -30,7 +30,7 @@ final class Router {
         var viewModel = PlaceViewModel(PlaceService())
         
         viewModel.openFilter = { [unowned self] delegate in
-            let dependecies = FilterPlacesDependecies(FilterViewModel(), FilterDistanceViewModel(), delegate)
+            let dependecies = FilterPlacesDependecies(FilterViewModel(), FilterDistanceViewModel(), FilterCategoriesViewModel(), delegate)
             self.openFilterPlaces(fromController: placesViewController as! PlacesViewController,
                                   toController: FilterPlacesViewController(dependecies))
         }

@@ -12,6 +12,10 @@ struct FilterModel {
     let title: String
 }
 
+struct FilterCategoriesModel {
+    let category: Categories
+}
+
 struct FilterDistanceModel {
     let title: String
     let value: Double

@@ -11,10 +11,10 @@ import RxSwift
 
 final class DistancePickerViewDelegate: NSObject {
     let selectValue = PublishSubject<Double>()
-    fileprivate let model: [FilterDistanceModel]
+    fileprivate let items: [FilterDistanceModel]
     
-    init(_ pickerView: UIPickerView, _ model: [FilterDistanceModel]) {
-        self.model = model
+    init(_ pickerView: UIPickerView, _ items: [FilterDistanceModel]) {
+        self.items = items
         super.init()
         pickerView.delegate = self
     }
@@ -26,11 +26,11 @@ extension DistancePickerViewDelegate: UIPickerViewDelegate {
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        selectValue.onNext(model[row].value)
+        selectValue.onNext(items[row].value)
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return model[row].title
+        return items[row].title
     }
 
 }
