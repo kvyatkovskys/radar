@@ -12,6 +12,7 @@ import MapKit
 import RxSwift
 import RxCocoa
 import Kingfisher
+import RealmSwift
 
 let heightHeader: CGFloat = 100.0
 let radius: Double = 800.0
@@ -24,6 +25,7 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         return LocationService(delegate: self)
     }()
     
+    fileprivate var notificationToken: NotificationToken?
     fileprivate var viewModel: PlaceViewModel
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
     fileprivate let disposeBag = DisposeBag()
@@ -109,6 +111,7 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(Realm.Configuration.defaultConfiguration.fileURL as Any)
         
         view.backgroundColor = .white
         headerView.addSubview(mapView)
@@ -132,6 +135,29 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
                     self.loadInfoAboutLocation(location)
                 }
             }).disposed(by: disposeBag)
+        
+        do {
+            let realm = try Realm()
+            let results = realm.objects(FilterSelectedCategory.self)
+            notificationToken = results.observe { [unowned self] (changes: RealmCollectionChange) in
+                switch changes {
+                case .initial:
+                    break
+                case .update:
+                    if let location = self.locationService.userLocation {
+                        self.loadInfoAboutLocation(location)
+                    }
+                case .error(let error):
+                    fatalError("\(error)")
+                }
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
+    deinit {
+        notificationToken?.invalidate()
     }
     
     // MARK: LocationServiceDelegate

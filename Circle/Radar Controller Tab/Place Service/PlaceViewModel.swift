@@ -8,6 +8,7 @@
 
 import Foundation
 import RxSwift
+import RealmSwift
 
 struct PlacesSections {
     let sections: [[Categories]]
@@ -32,10 +33,19 @@ struct PlaceViewModel {
     }
     
     /// get info about for current location
-    func getInfoPlace(location: CLLocation,
-                      categories: [Categories] = [.arts, .education, .fitness, .food, .hotel, .medical, .shopping, .travel],
-                      distance: CLLocationDistance) -> Observable<PlacesSections> {
-        return placeService.getInfoAboutPlace(location, categories, distance)
+    func getInfoPlace(location: CLLocation, distance: CLLocationDistance) -> Observable<PlacesSections> {
+        var selected: [Categories] = [.arts, .education, .fitness, .food, .hotel, .medical, .shopping, .travel]
+        do {
+            let realm = try Realm()
+            let selectedCategories = realm.objects(FilterSelectedCategory.self)
+            if !selectedCategories.isEmpty {
+                selected = selectedCategories.map({ Categories(rawValue: $0.category)! })
+            }
+        } catch {
+            print(error)
+        }
+        
+        return placeService.getInfoAboutPlace(location, selected, distance)
             .asObservable().flatMap { (model) -> Observable<PlacesSections> in
                 let sections = model.map({ $0.categories })
                 let uniqueSections = sections.reduce([], { (acc: [[Categories]], element) in
@@ -47,6 +57,8 @@ struct PlaceViewModel {
                         unique = acc + [(element ?? [])]
                     }
                     return unique
+                }).sorted(by: { (itemOne, itemTwo) -> Bool in
+                    return (itemOne.first?.title ?? "") < (itemTwo.first?.title ?? "")
                 })
                 
                 var placesFilter: [[PlaceModel]] = []

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 // color for navigation bar
 fileprivate extension UIColor {
@@ -24,6 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupNavigationBar()
         initialAuthViewController()
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        migrations(shema: 7)
         
         return true
     }
@@ -51,6 +53,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().titleTextAttributes = navBarAttributes
         UINavigationBar.appearance().barTintColor = UIColor.navBarColor
         UINavigationBar.appearance().tintColor = UIColor.white
+    }
+    
+    fileprivate func migrations(shema: UInt64) {
+        let config = Realm.Configuration(
+            schemaVersion: shema,
+            migrationBlock: { _, oldSchemaVersion in
+                if oldSchemaVersion < shema {}
+        })
+        Realm.Configuration.defaultConfiguration = config
+        
+        do {
+            _ = try Realm()
+        } catch {
+            print(error)
+        }
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

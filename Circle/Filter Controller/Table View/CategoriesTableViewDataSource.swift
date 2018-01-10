@@ -9,10 +9,12 @@
 import UIKit
 
 final class CategoriesTableViewDataSource: NSObject {
+    fileprivate let selectIndex: NSMutableIndexSet
     fileprivate let items: [FilterCategoriesModel]
     
-    init(_ tableView: UITableView, _ items: [FilterCategoriesModel]) {
-        self.items = items
+    init(_ tableView: UITableView, _ viewModel: FilterCategoriesViewModel) {
+        self.selectIndex = viewModel.selectIndexes
+        self.items = viewModel.items
         super.init()
         tableView.dataSource = self
         tableView.separatorInset.left = 0.0
@@ -30,7 +32,7 @@ extension CategoriesTableViewDataSource: UITableViewDataSource {
         
         cell.title = items[indexPath.row].category.title
         cell.type = items[indexPath.row].category
-        cell.select = false
+        cell.select = selectIndex.contains(indexPath.row)
         
         return cell
     }

@@ -22,6 +22,7 @@ final class FilterPlacesViewController: UIViewController {
     fileprivate let viewModel: FilterViewModel
     fileprivate weak var delegate: FilterPlacesDelegate?
     fileprivate var pickerDataSource: DistancePickerViewDataSource?
+    //swiftlint:disable weak_delegate
     fileprivate var pickerDelegate: DistancePickerViewDelegate?
     fileprivate var tableDataSource: CategoriesTableViewDataSource?
     fileprivate var tableDelegate: CategoriesTableViewDelegate?
@@ -62,7 +63,7 @@ final class FilterPlacesViewController: UIViewController {
         
         if view.subviews.contains(tableView) {
             tableView.snp.makeConstraints { (make) in
-                make.top.equalTo(segmentedControl.snp.bottom).offset(5.0)
+                make.top.equalTo(segmentedControl.snp.bottom).offset(10.0)
                 make.left.bottom.right.equalToSuperview()
             }
         }
@@ -89,8 +90,8 @@ final class FilterPlacesViewController: UIViewController {
         pickerDelegate = DistancePickerViewDelegate(pickerView, viewModelDistance.items)
         
         tableView.register(CategoriesTableViewCell.self, forCellReuseIdentifier: CategoriesTableViewCell.cellIdentifier)
-        tableDataSource = CategoriesTableViewDataSource(tableView, viewModelCategories.items)
-        tableDelegate = CategoriesTableViewDelegate(tableView)
+        tableDataSource = CategoriesTableViewDataSource(tableView, viewModelCategories)
+        tableDelegate = CategoriesTableViewDelegate(tableView, viewModelCategories)
         
         pickerDelegate?.selectValue.asObserver().subscribe(onNext: { [weak delegate = self.delegate] (value) in
             UserDefaults.standard.set(value, forKey: "FilterDistance")
@@ -103,13 +104,13 @@ final class FilterPlacesViewController: UIViewController {
             let type = TypeFilter(rawValue: index)
             switch type {
             case .distance?:
-                self.navigationController?.preferredContentSize = CGSize(width: 250.0, height: 200.0)
+                self.navigationController?.preferredContentSize = CGSize(width: 230.0, height: 200.0)
                 self.view.subviews.filter({ $0 is UITableView }).forEach({ $0.removeFromSuperview() })
                 self.view.addSubview(self.pickerView)
                 self.updateViewConstraints()
             case .categories?:
-                self.navigationController?.preferredContentSize = CGSize(width: 250.0,
-                                                                         height: Double(self.viewModelCategories.items.count + 1) * 53.0)
+                self.navigationController?.preferredContentSize = CGSize(width: 230.0,
+                                                                         height: Double(self.viewModelCategories.items.count) * 61.0)
                 self.view.subviews.filter({ $0 is UIPickerView }).forEach({ $0.removeFromSuperview() })
                 self.view.addSubview(self.tableView)
                 self.updateViewConstraints()
