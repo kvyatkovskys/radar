@@ -6,6 +6,7 @@ def pods
   pod 'SnapKit'
   pod 'Unbox'
   pod 'Kingfisher'
+  pod 'RealmSwift'
 end
 
 target 'Circle' do

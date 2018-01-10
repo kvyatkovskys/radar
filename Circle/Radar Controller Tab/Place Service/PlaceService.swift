@@ -43,7 +43,7 @@ struct PlaceService {
                                                       cursor: nil)
         
         return Observable.create({ observable in
-            request?.start(completionHandler: { (_, result, error) in
+            _ = request?.start(completionHandler: { (_, result, error) in
                 guard error == nil else {
                     observable.on(.error(error!))
                     return

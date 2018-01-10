@@ -30,7 +30,7 @@ final class Router {
         var viewModel = PlaceViewModel(PlaceService())
         
         viewModel.openFilter = { [unowned self] delegate in
-            let dependecies = FilterPlacesDependecies(FilterDistanceViewModel(), delegate)
+            let dependecies = FilterPlacesDependecies(FilterViewModel(), FilterDistanceViewModel(), FilterCategoriesViewModel(), delegate)
             self.openFilterPlaces(fromController: placesViewController as! PlacesViewController,
                                   toController: FilterPlacesViewController(dependecies))
         }
@@ -48,7 +48,7 @@ final class Router {
             placesViewController.navigationController?.navigationBar.largeTitleTextAttributes = [
                 NSAttributedStringKey.foregroundColor: UIColor.white,
                 NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 28)]
-            placesViewController.navigationController?.navigationItem.largeTitleDisplayMode = .automatic
+            placesViewController.navigationController?.navigationItem.largeTitleDisplayMode = .always
         }
         
         let settingsController = SettingsViewController(SettingsViewDependecies(self))
@@ -68,7 +68,6 @@ final class Router {
         navigation.modalPresentationStyle = UIModalPresentationStyle.popover
         navigation.isNavigationBarHidden = true
         let popover = navigation.popoverPresentationController
-        toController.preferredContentSize = CGSize(width: 250.0, height: 200.0)
         popover?.delegate = fromController
         popover?.barButtonItem = fromController.rightBarButton
         popover?.permittedArrowDirections = UIPopoverArrowDirection.any

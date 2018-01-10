@@ -7,60 +7,72 @@
 //
 
 import UIKit
+import RxSwift
 
 protocol FilterPlacesDelegate: class {
     func selectDistance(value: Double)
 }
 
-final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+final class FilterPlacesViewController: UIViewController {
     typealias Dependecies = HasFilterPlacesViewModel & HasFilterPlacesDelegate
     
+    fileprivate let disposeBag = DisposeBag()
+    fileprivate let viewModelCategories: FilterCategoriesViewModel
     fileprivate let viewModelDistance: FilterDistanceViewModel
+    fileprivate let viewModel: FilterViewModel
     fileprivate weak var delegate: FilterPlacesDelegate?
-    fileprivate let segmentedControl: UISegmentedControl = {
-        let segmented = UISegmentedControl(items: ["Distance"])
-        segmented.frame = CGRect(x: 0.0, y: 20.0, width: 40.0, height: 22.0)
+    fileprivate var pickerDataSource: DistancePickerViewDataSource?
+    //swiftlint:disable weak_delegate
+    fileprivate var pickerDelegate: DistancePickerViewDelegate?
+    fileprivate var tableDataSource: CategoriesTableViewDataSource?
+    fileprivate var tableDelegate: CategoriesTableViewDelegate?
+    
+    fileprivate lazy var segmentedControl: UISegmentedControl = {
+        let segmented = UISegmentedControl(items: viewModel.items.map({ $0.title }))
         segmented.selectedSegmentIndex = 0
         return segmented
     }()
     
-    fileprivate lazy var toolBar: UIToolbar = {
-        let toolBar = UIToolbar()
-        toolBar.barStyle = .default
-        toolBar.isTranslucent = true
-        toolBar.isUserInteractionEnabled = true
-        toolBar.sizeToFit()
-        
-        let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let segmentedControl = UIBarButtonItem(customView: self.segmentedControl)
-        
-        toolBar.setItems([segmentedControl], animated: true)
-        
-        return toolBar
-    }()
-    
     fileprivate lazy var pickerView: UIPickerView = {
         let picker = UIPickerView()
-        picker.delegate = self
-        picker.dataSource = self
-        picker.addSubview(self.toolBar)
         return picker
+    }()
+    
+    fileprivate lazy var tableView: UITableView = {
+        let table = UITableView()
+        table.tableFooterView = UIView(frame: CGRect.zero)
+        table.backgroundColor = .clear
+        return table
     }()
     
     override func updateViewConstraints() {
         super.updateViewConstraints()
         
-        pickerView.snp.makeConstraints { (make) in
-            make.top.left.bottom.right.equalToSuperview()
+        segmentedControl.snp.makeConstraints { (make) in
+            make.top.equalToSuperview().offset(10.0)
+            make.left.right.equalToSuperview().inset(15.0)
+            make.height.equalTo(25.0)
         }
         
-        toolBar.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview()
+        if view.subviews.contains(pickerView) {
+            pickerView.snp.makeConstraints { (make) in
+                make.top.equalTo(segmentedControl.snp.bottom).offset(5.0)
+                make.left.bottom.right.equalToSuperview()
+            }
+        }
+        
+        if view.subviews.contains(tableView) {
+            tableView.snp.makeConstraints { (make) in
+                make.top.equalTo(segmentedControl.snp.bottom).offset(10.0)
+                make.left.bottom.right.equalToSuperview()
+            }
         }
     }
     
     init(_ dependecies: Dependecies) {
-        self.viewModelDistance = dependecies.viewModel
+        self.viewModel = dependecies.viewModel
+        self.viewModelDistance = dependecies.viewModelDistance
+        self.viewModelCategories = dependecies.viewModelCategories
         self.delegate = dependecies.delegate
         super.init(nibName: nil, bundle: nil)
     }
@@ -72,32 +84,41 @@ final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.addSubview(pickerView)
-        updateViewConstraints()
+        view.addSubview(segmentedControl)
         
-        if let index = viewModelDistance.items.index(where: { $0.value == viewModelDistance.defaultDistance }) {
-            pickerView.selectRow(index, inComponent: 0, animated: true)
-        }
-    }
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return viewModelDistance.items.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return viewModelDistance.items[row].title
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
-        return 40.0
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        UserDefaults.standard.set(viewModelDistance.items[row].value, forKey: "FilterDistance")
-        delegate?.selectDistance(value: viewModelDistance.items[row].value)
+        pickerDataSource = DistancePickerViewDataSource(pickerView, viewModelDistance)
+        pickerDelegate = DistancePickerViewDelegate(pickerView, viewModelDistance.items)
+        
+        tableView.register(CategoriesTableViewCell.self, forCellReuseIdentifier: CategoriesTableViewCell.cellIdentifier)
+        tableDataSource = CategoriesTableViewDataSource(tableView, viewModelCategories)
+        tableDelegate = CategoriesTableViewDelegate(tableView, viewModelCategories)
+        
+        pickerDelegate?.selectValue.asObserver().subscribe(onNext: { [weak delegate = self.delegate] (value) in
+            UserDefaults.standard.set(value, forKey: "FilterDistance")
+            delegate?.selectDistance(value: value)
+        }, onError: { (error) in
+            print(error)
+        }).disposed(by: disposeBag)
+        
+        segmentedControl.rx.selectedSegmentIndex.subscribe(onNext: { [unowned self] (index) in
+            let type = TypeFilter(rawValue: index)
+            switch type {
+            case .distance?:
+                self.navigationController?.preferredContentSize = CGSize(width: 230.0, height: 200.0)
+                self.view.subviews.filter({ $0 is UITableView }).forEach({ $0.removeFromSuperview() })
+                self.view.addSubview(self.pickerView)
+                self.updateViewConstraints()
+            case .categories?:
+                self.navigationController?.preferredContentSize = CGSize(width: 230.0,
+                                                                         height: Double(self.viewModelCategories.items.count) * 61.0)
+                self.view.subviews.filter({ $0 is UIPickerView }).forEach({ $0.removeFromSuperview() })
+                self.view.addSubview(self.tableView)
+                self.updateViewConstraints()
+            case .none:
+                break
+            }
+        }, onError: { (error) in
+            print(error)
+        }).disposed(by: disposeBag)
     }
 }
