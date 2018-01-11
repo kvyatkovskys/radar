@@ -17,6 +17,13 @@ import RealmSwift
 let heightHeader: CGFloat = 100.0
 let radius: Double = 800.0
 
+// color for hide map view
+fileprivate extension UIColor {
+    static var arrowButton: UIColor {
+        return UIColor(withHex: 0x34495e, alpha: 1.0)
+    }
+}
+
 final class PlacesViewController: UIViewController, LocationServiceDelegate, FilterPlacesDelegate {
     typealias Dependecies = HasKingfisher & HasPlaceViewModel
     
@@ -49,9 +56,13 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         return view
     }()
     
-    fileprivate let tapViewOnMap: UIView = {
+    fileprivate lazy var tapViewOnMap: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
+        
+        let tapOnMap = UITapGestureRecognizer(target: self, action: #selector(showMap))
+        view.addGestureRecognizer(tapOnMap)
+        
         return view
     }()
     
@@ -65,17 +76,18 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         map.showsCompass = true
         map.showsPointsOfInterest = true
         map.showsUserLocation = true
-        map.showsScale = false
+        map.showsScale = true
         map.contentMode = .scaleAspectFill
         return map
     }()
     
     fileprivate lazy var hideMapButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Hide", for: .normal)
-        button.setTitleColor(.black, for: .normal)
+        let arrowImage = UIImage(named: "ic_arrow_up")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        button.setImage(arrowImage, for: .normal)
+        button.tintColor = UIColor.arrowButton
         button.isHidden = true
-        button.addTarget(self, action: #selector(hideMapTable), for: .touchUpInside)
+        button.addTarget(self, action: #selector(hideMap), for: .touchUpInside)
         return button
     }()
     
@@ -177,40 +189,38 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         } catch {
             print(error)
         }
-        
-        let tapOnMap = UITapGestureRecognizer(target: self, action: #selector(tapOnMapTable))
-        tapViewOnMap.addGestureRecognizer(tapOnMap)
     }
     
     deinit {
         notificationToken?.invalidate()
     }
     
-    @objc func tapOnMapTable() {
+    @objc func showMap() {
         var frame = headerView.frame
         frame.size.height = view.frame.height - 150.0
         heightMap?.update(offset: view.frame.height - 200.0)
         heightButton?.update(offset: 30.0)
-        view.layoutIfNeeded()
         tapViewOnMap.isHidden = true
-        hideMapButton.isHidden = false
+        view.layoutIfNeeded()
         
-        UIView.animate(withDuration: 0.5) { [unowned self] in
+        UIView.animate(withDuration: 0.2, animations: { [unowned self] in
             self.headerView.frame = frame
             self.tableView.tableHeaderView = self.headerView
-        }
+        }, completion: { [unowned self] _ in
+            self.hideMapButton.isHidden = false
+        })
     }
     
-    @objc func hideMapTable() {
+    @objc func hideMap() {
         var frame = headerView.frame
         frame.size.height = heightHeader
         heightMap?.update(offset: heightHeader)
         heightButton?.update(offset: 0.0)
-        view.layoutIfNeeded()
         tapViewOnMap.isHidden = false
         hideMapButton.isHidden = true
+        view.layoutIfNeeded()
         
-        UIView.animate(withDuration: 0.5) { [unowned self] in
+        UIView.animate(withDuration: 0.3) { [unowned self] in
             self.headerView.frame = frame
             self.tableView.tableHeaderView = self.headerView
         }
