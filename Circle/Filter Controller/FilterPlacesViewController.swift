@@ -9,6 +9,13 @@
 import UIKit
 import RxSwift
 
+// color for segmented control
+fileprivate extension UIColor {
+    static var segmentedColor: UIColor {
+        return UIColor(withHex: 0x34495e, alpha: 1.0)
+    }
+}
+
 protocol FilterPlacesDelegate: class {
     func selectDistance(value: Double)
 }
@@ -30,6 +37,7 @@ final class FilterPlacesViewController: UIViewController {
     fileprivate lazy var segmentedControl: UISegmentedControl = {
         let segmented = UISegmentedControl(items: viewModel.items.map({ $0.title }))
         segmented.selectedSegmentIndex = 0
+        segmented.tintColor = UIColor.segmentedColor
         return segmented
     }()
     

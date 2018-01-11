@@ -25,6 +25,8 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         return LocationService(delegate: self)
     }()
     
+    fileprivate var heightMap: Constraint?
+    fileprivate var heightButton: Constraint?
     fileprivate var notificationToken: NotificationToken?
     fileprivate var viewModel: PlaceViewModel
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
@@ -47,6 +49,12 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         return view
     }()
     
+    fileprivate let tapViewOnMap: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
     fileprivate lazy var mapView: MKMapView = {
         let map = MKMapView()
         map.mapType = .standard
@@ -62,10 +70,12 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         return map
     }()
     
-    fileprivate lazy var leftBarButton: UIBarButtonItem = {
-        let categoriesImage = UIImage(named: "ic_list")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
-        let button = UIBarButtonItem(image: categoriesImage, style: .done, target: self, action: #selector(openCategories))
-        button.tintColor = .white
+    fileprivate lazy var hideMapButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Hide", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.isHidden = true
+        button.addTarget(self, action: #selector(hideMapTable), for: .touchUpInside)
         return button
     }()
     
@@ -91,9 +101,21 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
             make.bottom.left.right.equalToSuperview()
         }
         
-        mapView.snp.makeConstraints { (make) in
+        tapViewOnMap.snp.makeConstraints { (make) in
             make.height.equalTo(heightHeader)
-            make.left.bottom.right.equalToSuperview()
+            make.left.top.right.equalToSuperview()
+        }
+        
+        mapView.snp.makeConstraints { (make) in
+            heightMap = make.height.equalTo(heightHeader).constraint
+            make.left.top.right.equalToSuperview()
+        }
+        
+        hideMapButton.snp.makeConstraints { (make) in
+            make.width.equalTo(100.0)
+            make.top.equalTo(mapView.snp.bottom).offset(10.0)
+            make.centerX.equalToSuperview()
+            heightButton = make.height.equalTo(0.0).constraint
         }
         
         super.updateViewConstraints()
@@ -115,10 +137,11 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         
         view.backgroundColor = .white
         headerView.addSubview(mapView)
+        headerView.addSubview(tapViewOnMap)
+        headerView.addSubview(hideMapButton)
         view.addSubview(tableView)
         tableView.tableHeaderView = headerView
         tableView.addSubview(refreshControl)
-        navigationItem.leftBarButtonItem = leftBarButton
         navigationItem.rightBarButtonItem = rightBarButton
         
         updateConstraints()
@@ -154,10 +177,43 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         } catch {
             print(error)
         }
+        
+        let tapOnMap = UITapGestureRecognizer(target: self, action: #selector(tapOnMapTable))
+        tapViewOnMap.addGestureRecognizer(tapOnMap)
     }
     
     deinit {
         notificationToken?.invalidate()
+    }
+    
+    @objc func tapOnMapTable() {
+        var frame = headerView.frame
+        frame.size.height = view.frame.height - 150.0
+        heightMap?.update(offset: view.frame.height - 200.0)
+        heightButton?.update(offset: 30.0)
+        view.layoutIfNeeded()
+        tapViewOnMap.isHidden = true
+        hideMapButton.isHidden = false
+        
+        UIView.animate(withDuration: 0.5) { [unowned self] in
+            self.headerView.frame = frame
+            self.tableView.tableHeaderView = self.headerView
+        }
+    }
+    
+    @objc func hideMapTable() {
+        var frame = headerView.frame
+        frame.size.height = heightHeader
+        heightMap?.update(offset: heightHeader)
+        heightButton?.update(offset: 0.0)
+        view.layoutIfNeeded()
+        tapViewOnMap.isHidden = false
+        hideMapButton.isHidden = true
+        
+        UIView.animate(withDuration: 0.5) { [unowned self] in
+            self.headerView.frame = frame
+            self.tableView.tableHeaderView = self.headerView
+        }
     }
     
     // MARK: LocationServiceDelegate

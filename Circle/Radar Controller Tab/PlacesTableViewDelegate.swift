@@ -12,7 +12,7 @@ final class PlacesTableViewDelegate: NSObject {
     var placesSections: PlacesSections
     
     init(_ tableView: UITableView, placesSections: PlacesSections?) {
-        self.placesSections = placesSections ?? PlacesSections([], [])
+        self.placesSections = placesSections ?? PlacesSections([], [], [], [])
         super.init()
         tableView.delegate = self
     }
