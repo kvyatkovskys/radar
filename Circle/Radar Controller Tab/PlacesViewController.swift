@@ -156,14 +156,14 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
             let results = realm.objects(FilterSelectedCategory.self)
             notificationToken = results.observe { [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
-                case .initial:
-                    break
                 case .update:
                     if let location = self.locationService.userLocation {
                         self.loadInfoAboutLocation(location)
                     }
                 case .error(let error):
                     fatalError("\(error)")
+                case .initial:
+                    break
                 }
             }
         } catch {

@@ -177,6 +177,14 @@
 			path = "Project Extension";
 			sourceTree = "<group>";
 		};
+		8B18FE0B20092C1600E637C7 /* Rating View */ = {
+			isa = PBXGroup;
+			children = (
+				8B18FE092009113F00E637C7 /* RatingPlacesView.swift */,
+			);
+			path = "Rating View";
+			sourceTree = "<group>";
+		};
 		8B1A80AC1FFAE4640039C39A /* Categories View */ = {
 			isa = PBXGroup;
 			children = (
@@ -244,7 +252,7 @@
 				8BE2089E1FFD17470048D690 /* FilterPlacesViewController.swift */,
 				8BE208A21FFD25750048D690 /* FilterPlacesModel.swift */,
 				8BE208A41FFD25CB0048D690 /* FilterPlacesViewModel.swift */,
-				8B18FE092009113F00E637C7 /* RatingPlacesView.swift */,
+				8B18FE0B20092C1600E637C7 /* Rating View */,
 				8BFBF58020051C3C00CE2C8B /* Table View */,
 				8B41771E1FFF69BF002A963A /* Picker View */,
 			);

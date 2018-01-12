@@ -22,6 +22,10 @@ class FilterSelectedCategory: Object {
     @objc dynamic var index: Int = 0
 }
 
+class FilterSelectedRating: Object {
+    @objc dynamic var rating: Int = 0
+}
+
 struct FilterDistanceModel {
     let title: String
     let value: Double

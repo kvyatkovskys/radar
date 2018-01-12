@@ -8,6 +8,7 @@
 
 import UIKit
 import RxSwift
+import RealmSwift
 
 // color for segmented control
 fileprivate extension UIColor {
@@ -113,37 +114,60 @@ final class FilterPlacesViewController: UIViewController {
         tableDataSource = CategoriesTableViewDataSource(tableView, viewModelCategories)
         tableDelegate = CategoriesTableViewDelegate(tableView, viewModelCategories)
         
-        pickerDelegate?.selectValue.asObserver().subscribe(onNext: { [weak delegate = self.delegate] (value) in
-            UserDefaults.standard.set(value, forKey: "FilterDistance")
-            delegate?.selectDistance(value: value)
-        }, onError: { (error) in
-            print(error)
-        }).disposed(by: disposeBag)
+        pickerDelegate?.selectValue.asObserver()
+            .subscribe(onNext: { [weak delegate = self.delegate] (value) in
+                UserDefaults.standard.set(value, forKey: "FilterDistance")
+                delegate?.selectDistance(value: value)
+                }, onError: { (error) in
+                    print(error)
+            }).disposed(by: disposeBag)
         
-        segmentedControl.rx.selectedSegmentIndex.subscribe(onNext: { [unowned self] (index) in
-            let type = TypeFilter(rawValue: index)
-            switch type {
-            case .distance?:
-                self.navigationController?.preferredContentSize = CGSize(width: 250.0, height: 200.0)
-                self.view.subviews.filter({ $0 is UITableView || $0 is RatingPlacesView }).forEach({ $0.removeFromSuperview() })
-                self.view.addSubview(self.pickerView)
-                self.updateViewConstraints()
-            case .categories?:
-                self.navigationController?.preferredContentSize = CGSize(width: 250.0,
-                                                                         height: Double(self.viewModelCategories.items.count) * 61.0)
-                self.view.subviews.filter({ $0 is UIPickerView || $0 is RatingPlacesView }).forEach({ $0.removeFromSuperview() })
-                self.view.addSubview(self.tableView)
-                self.updateViewConstraints()
-            case .rating?:
-                self.navigationController?.preferredContentSize = CGSize(width: 250.0, height: 200.0)
-                self.view.subviews.filter({ $0 is UIPickerView || $0 is UITableView }).forEach({ $0.removeFromSuperview() })
-                self.view.addSubview(self.ratingView)
-                self.updateViewConstraints()
-            case .none:
-                break
-            }
-        }, onError: { (error) in
-            print(error)
-        }).disposed(by: disposeBag)
+        segmentedControl.rx.selectedSegmentIndex
+            .subscribe(onNext: { [unowned self] (index) in
+                let type = TypeFilter(rawValue: index)
+                switch type {
+                case .distance?:
+                    self.navigationController?.preferredContentSize = CGSize(width: 250.0, height: 200.0)
+                    self.view.subviews.filter({ $0 is UITableView || $0 is RatingPlacesView }).forEach({ $0.removeFromSuperview() })
+                    self.view.addSubview(self.pickerView)
+                    self.updateViewConstraints()
+                case .categories?:
+                    self.navigationController?.preferredContentSize = CGSize(width: 250.0,
+                                                                             height: Double(self.viewModelCategories.items.count) * 61.0)
+                    self.view.subviews.filter({ $0 is UIPickerView || $0 is RatingPlacesView }).forEach({ $0.removeFromSuperview() })
+                    self.view.addSubview(self.tableView)
+                    self.updateViewConstraints()
+                case .rating?:
+                    self.navigationController?.preferredContentSize = CGSize(width: 250.0, height: 200.0)
+                    self.view.subviews.filter({ $0 is UIPickerView || $0 is UITableView }).forEach({ $0.removeFromSuperview() })
+                    self.view.addSubview(self.ratingView)
+                    self.updateViewConstraints()
+                case .none:
+                    break
+                }
+                }, onError: { (error) in
+                    print(error)
+            }).disposed(by: disposeBag)
+        
+        ratingView.chooseRating.asObserver()
+            .subscribe(onNext: { (type) in
+                do {
+                    let realm = try Realm()
+                    let oldType = realm.objects(FilterSelectedRating.self).first
+                    try realm.write {
+                        guard let oldType = oldType else {
+                            let selectedRating = FilterSelectedRating()
+                            selectedRating.rating = type.rawValue
+                            realm.add(selectedRating)
+                            return
+                        }
+                        oldType.rating = type.rawValue
+                    }
+                } catch {
+                    print(error)
+                }
+            }, onError: { (error) in
+                print(error)
+            }).disposed(by: disposeBag)
     }
 }
