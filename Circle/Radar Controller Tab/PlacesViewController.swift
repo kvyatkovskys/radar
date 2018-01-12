@@ -32,8 +32,6 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         return LocationService(delegate: self)
     }()
     
-    fileprivate var heightMap: Constraint?
-    fileprivate var heightButton: Constraint?
     fileprivate var notificationToken: NotificationToken?
     fileprivate var viewModel: PlaceViewModel
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
@@ -81,16 +79,6 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         return map
     }()
     
-    fileprivate lazy var hideMapButton: UIButton = {
-        let button = UIButton()
-        let arrowImage = UIImage(named: "ic_arrow_up")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
-        button.setImage(arrowImage, for: .normal)
-        button.tintColor = UIColor.arrowButton
-        button.isHidden = true
-        button.addTarget(self, action: #selector(hideMap), for: .touchUpInside)
-        return button
-    }()
-    
     lazy var rightBarButton: UIBarButtonItem = {
         let categoriesImage = UIImage(named: "ic_filter_list")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         let button = UIBarButtonItem(image: categoriesImage, style: .done, target: self, action: #selector(openFilter))
@@ -119,15 +107,8 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         }
         
         mapView.snp.makeConstraints { (make) in
-            heightMap = make.height.equalTo(heightHeader).constraint
+            make.height.equalTo(heightHeader)
             make.left.top.right.equalToSuperview()
-        }
-        
-        hideMapButton.snp.makeConstraints { (make) in
-            make.width.equalTo(100.0)
-            make.top.equalTo(mapView.snp.bottom).offset(10.0)
-            make.centerX.equalToSuperview()
-            heightButton = make.height.equalTo(0.0).constraint
         }
         
         super.updateViewConstraints()
@@ -150,7 +131,6 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         view.backgroundColor = .white
         headerView.addSubview(mapView)
         headerView.addSubview(tapViewOnMap)
-        headerView.addSubview(hideMapButton)
         view.addSubview(tableView)
         tableView.tableHeaderView = headerView
         tableView.addSubview(refreshControl)
@@ -196,34 +176,7 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     }
     
     @objc func showMap() {
-        var frame = headerView.frame
-        frame.size.height = view.frame.height - 150.0
-        heightMap?.update(offset: view.frame.height - 200.0)
-        heightButton?.update(offset: 30.0)
-        tapViewOnMap.isHidden = true
-        view.layoutIfNeeded()
         
-        UIView.animate(withDuration: 0.2, animations: { [unowned self] in
-            self.headerView.frame = frame
-            self.tableView.tableHeaderView = self.headerView
-        }, completion: { [unowned self] _ in
-            self.hideMapButton.isHidden = false
-        })
-    }
-    
-    @objc func hideMap() {
-        var frame = headerView.frame
-        frame.size.height = heightHeader
-        heightMap?.update(offset: heightHeader)
-        heightButton?.update(offset: 0.0)
-        tapViewOnMap.isHidden = false
-        hideMapButton.isHidden = true
-        view.layoutIfNeeded()
-        
-        UIView.animate(withDuration: 0.3) { [unowned self] in
-            self.headerView.frame = frame
-            self.tableView.tableHeaderView = self.headerView
-        }
     }
     
     // MARK: LocationServiceDelegate
@@ -321,6 +274,8 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     fileprivate func centerMapOnLocation(_ location: CLLocation) {
         let regionRadius: CLLocationDistance = radius
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius, regionRadius)
-        mapView.setRegion(coordinateRegion, animated: true)
+        DispatchQueue.main.async {
+            self.mapView.setRegion(coordinateRegion, animated: false)
+        }
     }
 }

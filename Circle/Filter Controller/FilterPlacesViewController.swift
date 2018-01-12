@@ -53,12 +53,16 @@ final class FilterPlacesViewController: UIViewController {
         return table
     }()
     
+    fileprivate let ratingView: RatingPlacesView = {
+        return RatingPlacesView()
+    }()
+    
     override func updateViewConstraints() {
         super.updateViewConstraints()
         
         segmentedControl.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(10.0)
-            make.left.right.equalToSuperview().inset(15.0)
+            make.left.right.equalToSuperview().inset(10.0)
             make.height.equalTo(25.0)
         }
         
@@ -73,6 +77,14 @@ final class FilterPlacesViewController: UIViewController {
             tableView.snp.makeConstraints { (make) in
                 make.top.equalTo(segmentedControl.snp.bottom).offset(10.0)
                 make.left.bottom.right.equalToSuperview()
+            }
+        }
+        
+        if view.subviews.contains(ratingView) {
+            ratingView.snp.makeConstraints { (make) in
+                make.top.equalTo(segmentedControl.snp.bottom).offset(10.0)
+                make.left.right.equalToSuperview()
+                make.bottom.equalToSuperview().offset(-10.0)
             }
         }
     }
@@ -112,15 +124,20 @@ final class FilterPlacesViewController: UIViewController {
             let type = TypeFilter(rawValue: index)
             switch type {
             case .distance?:
-                self.navigationController?.preferredContentSize = CGSize(width: 230.0, height: 200.0)
-                self.view.subviews.filter({ $0 is UITableView }).forEach({ $0.removeFromSuperview() })
+                self.navigationController?.preferredContentSize = CGSize(width: 250.0, height: 200.0)
+                self.view.subviews.filter({ $0 is UITableView || $0 is RatingPlacesView }).forEach({ $0.removeFromSuperview() })
                 self.view.addSubview(self.pickerView)
                 self.updateViewConstraints()
             case .categories?:
-                self.navigationController?.preferredContentSize = CGSize(width: 230.0,
+                self.navigationController?.preferredContentSize = CGSize(width: 250.0,
                                                                          height: Double(self.viewModelCategories.items.count) * 61.0)
-                self.view.subviews.filter({ $0 is UIPickerView }).forEach({ $0.removeFromSuperview() })
+                self.view.subviews.filter({ $0 is UIPickerView || $0 is RatingPlacesView }).forEach({ $0.removeFromSuperview() })
                 self.view.addSubview(self.tableView)
+                self.updateViewConstraints()
+            case .rating?:
+                self.navigationController?.preferredContentSize = CGSize(width: 250.0, height: 200.0)
+                self.view.subviews.filter({ $0 is UIPickerView || $0 is UITableView }).forEach({ $0.removeFromSuperview() })
+                self.view.addSubview(self.ratingView)
                 self.updateViewConstraints()
             case .none:
                 break

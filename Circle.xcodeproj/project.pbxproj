@@ -12,6 +12,7 @@
 		8B18BFD61FFA594D00C7906D /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18BFD51FFA594D00C7906D /* Color+Extension.swift */; };
 		8B18BFD81FFACC6F00C7906D /* PlaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18BFD71FFACC6F00C7906D /* PlaceViewModel.swift */; };
 		8B18FE082007F8E000E637C7 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18FE072007F8E000E637C7 /* View+Extension.swift */; };
+		8B18FE0A2009113F00E637C7 /* RatingPlacesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18FE092009113F00E637C7 /* RatingPlacesView.swift */; };
 		8B1A80A91FFADAED0039C39A /* CategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1A80A81FFADAED0039C39A /* CategoryCollectionViewCell.swift */; };
 		8B1A80AB1FFADC910039C39A /* CategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1A80AA1FFADC910039C39A /* CategoriesViewModel.swift */; };
 		8B1A80AE1FFAE4DE0039C39A /* CategoriesViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1A80AD1FFAE4DE0039C39A /* CategoriesViewDelegate.swift */; };
@@ -68,6 +69,7 @@
 		8B18BFD51FFA594D00C7906D /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 		8B18BFD71FFACC6F00C7906D /* PlaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceViewModel.swift; sourceTree = "<group>"; };
 		8B18FE072007F8E000E637C7 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
+		8B18FE092009113F00E637C7 /* RatingPlacesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingPlacesView.swift; sourceTree = "<group>"; };
 		8B1A80A81FFADAED0039C39A /* CategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		8B1A80AA1FFADC910039C39A /* CategoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewModel.swift; sourceTree = "<group>"; };
 		8B1A80AD1FFAE4DE0039C39A /* CategoriesViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewDelegate.swift; sourceTree = "<group>"; };
@@ -242,6 +244,7 @@
 				8BE2089E1FFD17470048D690 /* FilterPlacesViewController.swift */,
 				8BE208A21FFD25750048D690 /* FilterPlacesModel.swift */,
 				8BE208A41FFD25CB0048D690 /* FilterPlacesViewModel.swift */,
+				8B18FE092009113F00E637C7 /* RatingPlacesView.swift */,
 				8BFBF58020051C3C00CE2C8B /* Table View */,
 				8B41771E1FFF69BF002A963A /* Picker View */,
 			);
@@ -588,6 +591,7 @@
 				8B41771D1FFF64A7002A963A /* DistancePickerViewDelegate.swift in Sources */,
 				8BFBF57D200517D000CE2C8B /* CategoriesTableViewDelegate.swift in Sources */,
 				8B5F71531FF923A700E628F9 /* PlaceModel.swift in Sources */,
+				8B18FE0A2009113F00E637C7 /* RatingPlacesView.swift in Sources */,
 				8B44C37F1FEFE195003C0754 /* QuickAlertController.swift in Sources */,
 				8B18BFD61FFA594D00C7906D /* Color+Extension.swift in Sources */,
 				8B6D4E211FFBA0DC007904D4 /* PlacesTableViewDelegate.swift in Sources */,
