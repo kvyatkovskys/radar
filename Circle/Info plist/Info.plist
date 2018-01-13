@@ -43,11 +43,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>"This app uses your location in the background to recommend places nearby."</string>
+	<string>This app uses your location in the background to recommend places nearby.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>"This app uses your location in the background to recommend places nearby."</string>
+	<string>This app uses your location in the background to recommend places nearby.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>"This app uses your location in the foreground to recommend places nearby."</string>
+	<string>This app uses your location in the foreground to recommend places nearby.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

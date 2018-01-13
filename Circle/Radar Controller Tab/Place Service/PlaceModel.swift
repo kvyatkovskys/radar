@@ -23,7 +23,8 @@ struct PlaceModel {
     let id: Int
     let name: String
     let phone: Int?
-    let rating: Float?
+    let ratingStar: Float?
+    let ratingCount: Int?
     let address: String?
     let website: String?
     let categories: [Categories]?
@@ -38,7 +39,8 @@ extension PlaceModel: Unboxable {
         self.id = try unboxer.unbox(key: "id")
         self.name = try unboxer.unbox(key: "name")
         self.phone = unboxer.unbox(key: "phone")
-        self.rating = unboxer.unbox(key: "overall_star_rating")
+        self.ratingStar = unboxer.unbox(key: "overall_star_rating")
+        self.ratingCount = unboxer.unbox(key: "rating_count")
         self.address = unboxer.unbox(key: "single_line_address")
         self.website = unboxer.unbox(key: "website")
         let categories: [String] = try unboxer.unbox(key: "matched_categories")

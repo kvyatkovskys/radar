@@ -9,8 +9,14 @@
 /* Begin PBXBuildFile section */
 		0C09101538FFD3248E65345B /* Pods_CircleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1D7303EAE4F5F8B3765FDDF /* Pods_CircleTests.framework */; };
 		2CE34B24D65E94C397FD1B43 /* Pods_Circle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E0022E72D06AC70840D3662 /* Pods_Circle.framework */; };
-		8B18BFD61FFA594D00C7906D /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18BFD51FFA594D00C7906D /* ColorExtension.swift */; };
+		8B18BFD61FFA594D00C7906D /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18BFD51FFA594D00C7906D /* Color+Extension.swift */; };
 		8B18BFD81FFACC6F00C7906D /* PlaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18BFD71FFACC6F00C7906D /* PlaceViewModel.swift */; };
+		8B18FE082007F8E000E637C7 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18FE072007F8E000E637C7 /* View+Extension.swift */; };
+		8B18FE0A2009113F00E637C7 /* RatingPlacesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18FE092009113F00E637C7 /* RatingPlacesView.swift */; };
+		8B18FE0D200A1F1800E637C7 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18FE0C200A1F1800E637C7 /* MapViewController.swift */; };
+		8B18FE10200A782D00E637C7 /* DetailPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18FE0F200A782D00E637C7 /* DetailPlaceViewController.swift */; };
+		8B18FE12200A8FFA00E637C7 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18FE11200A8FFA00E637C7 /* SettingsViewModel.swift */; };
+		8B18FE14200A994F00E637C7 /* FCButtonLoginTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18FE13200A994F00E637C7 /* FCButtonLoginTableViewCell.swift */; };
 		8B1A80A91FFADAED0039C39A /* CategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1A80A81FFADAED0039C39A /* CategoryCollectionViewCell.swift */; };
 		8B1A80AB1FFADC910039C39A /* CategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1A80AA1FFADC910039C39A /* CategoriesViewModel.swift */; };
 		8B1A80AE1FFAE4DE0039C39A /* CategoriesViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1A80AD1FFAE4DE0039C39A /* CategoriesViewDelegate.swift */; };
@@ -36,7 +42,7 @@
 		8B6D4E211FFBA0DC007904D4 /* PlacesTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6D4E201FFBA0DC007904D4 /* PlacesTableViewDelegate.swift */; };
 		8BE2089D1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2089C1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift */; };
 		8BE2089F1FFD17470048D690 /* FilterPlacesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2089E1FFD17470048D690 /* FilterPlacesViewController.swift */; };
-		8BE208A11FFD1D300048D690 /* ControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE208A01FFD1D300048D690 /* ControllerExtension.swift */; };
+		8BE208A11FFD1D300048D690 /* Controller+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE208A01FFD1D300048D690 /* Controller+Extension.swift */; };
 		8BE208A31FFD25750048D690 /* FilterPlacesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE208A21FFD25750048D690 /* FilterPlacesModel.swift */; };
 		8BE208A51FFD25CB0048D690 /* FilterPlacesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE208A41FFD25CB0048D690 /* FilterPlacesViewModel.swift */; };
 		8BEA04411FF829A2001DFF7E /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BEA043C1FF829A0001DFF7E /* FBSDKShareKit.framework */; };
@@ -64,8 +70,14 @@
 		65187D40B7A35C90F17F99D7 /* Pods-Circle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Circle.release.xcconfig"; path = "Pods/Target Support Files/Pods-Circle/Pods-Circle.release.xcconfig"; sourceTree = "<group>"; };
 		6E0022E72D06AC70840D3662 /* Pods_Circle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Circle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C60842BBC33FD63E648DBC6 /* Pods-Circle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Circle.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Circle/Pods-Circle.debug.xcconfig"; sourceTree = "<group>"; };
-		8B18BFD51FFA594D00C7906D /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
+		8B18BFD51FFA594D00C7906D /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 		8B18BFD71FFACC6F00C7906D /* PlaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceViewModel.swift; sourceTree = "<group>"; };
+		8B18FE072007F8E000E637C7 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
+		8B18FE092009113F00E637C7 /* RatingPlacesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingPlacesView.swift; sourceTree = "<group>"; };
+		8B18FE0C200A1F1800E637C7 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		8B18FE0F200A782D00E637C7 /* DetailPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPlaceViewController.swift; sourceTree = "<group>"; };
+		8B18FE11200A8FFA00E637C7 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		8B18FE13200A994F00E637C7 /* FCButtonLoginTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FCButtonLoginTableViewCell.swift; sourceTree = "<group>"; };
 		8B1A80A81FFADAED0039C39A /* CategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		8B1A80AA1FFADC910039C39A /* CategoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewModel.swift; sourceTree = "<group>"; };
 		8B1A80AD1FFAE4DE0039C39A /* CategoriesViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewDelegate.swift; sourceTree = "<group>"; };
@@ -96,7 +108,7 @@
 		8B6D4E201FFBA0DC007904D4 /* PlacesTableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesTableViewDelegate.swift; sourceTree = "<group>"; };
 		8BE2089C1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		8BE2089E1FFD17470048D690 /* FilterPlacesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterPlacesViewController.swift; sourceTree = "<group>"; };
-		8BE208A01FFD1D300048D690 /* ControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerExtension.swift; sourceTree = "<group>"; };
+		8BE208A01FFD1D300048D690 /* Controller+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Controller+Extension.swift"; sourceTree = "<group>"; };
 		8BE208A21FFD25750048D690 /* FilterPlacesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterPlacesModel.swift; sourceTree = "<group>"; };
 		8BE208A41FFD25CB0048D690 /* FilterPlacesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterPlacesViewModel.swift; sourceTree = "<group>"; };
 		8BEA043C1FF829A0001DFF7E /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
@@ -166,10 +178,27 @@
 		8B18BFD91FFACE0100C7906D /* Project Extension */ = {
 			isa = PBXGroup;
 			children = (
-				8B18BFD51FFA594D00C7906D /* ColorExtension.swift */,
-				8BE208A01FFD1D300048D690 /* ControllerExtension.swift */,
+				8B18BFD51FFA594D00C7906D /* Color+Extension.swift */,
+				8BE208A01FFD1D300048D690 /* Controller+Extension.swift */,
+				8B18FE072007F8E000E637C7 /* View+Extension.swift */,
 			);
 			path = "Project Extension";
+			sourceTree = "<group>";
+		};
+		8B18FE0B20092C1600E637C7 /* Rating View */ = {
+			isa = PBXGroup;
+			children = (
+				8B18FE092009113F00E637C7 /* RatingPlacesView.swift */,
+			);
+			path = "Rating View";
+			sourceTree = "<group>";
+		};
+		8B18FE0E200A24C200E637C7 /* Map View */ = {
+			isa = PBXGroup;
+			children = (
+				8B18FE0C200A1F1800E637C7 /* MapViewController.swift */,
+			);
+			path = "Map View";
 			sourceTree = "<group>";
 		};
 		8B1A80AC1FFAE4640039C39A /* Categories View */ = {
@@ -212,6 +241,7 @@
 				8B44C3841FF012E1003C0754 /* Setting Controller Tab */,
 				8B44C3811FF012A2003C0754 /* Radar Controller Tab */,
 				8B1A80AC1FFAE4640039C39A /* Categories View */,
+				8B18FE0E200A24C200E637C7 /* Map View */,
 				8B5F71551FF933BB00E628F9 /* Location Service */,
 				8B4177081FFD3D2B002A963A /* Filter Controller */,
 				8B44C3801FF00F58003C0754 /* Project Settings */,
@@ -239,6 +269,7 @@
 				8BE2089E1FFD17470048D690 /* FilterPlacesViewController.swift */,
 				8BE208A21FFD25750048D690 /* FilterPlacesModel.swift */,
 				8BE208A41FFD25CB0048D690 /* FilterPlacesViewModel.swift */,
+				8B18FE0B20092C1600E637C7 /* Rating View */,
 				8BFBF58020051C3C00CE2C8B /* Table View */,
 				8B41771E1FFF69BF002A963A /* Picker View */,
 			);
@@ -273,6 +304,7 @@
 				8B6D4E201FFBA0DC007904D4 /* PlacesTableViewDelegate.swift */,
 				8B5F71561FF93C9700E628F9 /* PlaceTableViewCell.swift */,
 				8BE2089C1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift */,
+				8B18FE0F200A782D00E637C7 /* DetailPlaceViewController.swift */,
 			);
 			path = "Radar Controller Tab";
 			sourceTree = "<group>";
@@ -281,6 +313,8 @@
 			isa = PBXGroup;
 			children = (
 				8B44C3821FF012C8003C0754 /* SettingsViewController.swift */,
+				8B18FE11200A8FFA00E637C7 /* SettingsViewModel.swift */,
+				8B18FE13200A994F00E637C7 /* FCButtonLoginTableViewCell.swift */,
 			);
 			path = "Setting Controller Tab";
 			sourceTree = "<group>";
@@ -563,7 +597,9 @@
 				8B41771B1FFF6491002A963A /* DistancePickerViewDataSource.swift in Sources */,
 				8B1A80A91FFADAED0039C39A /* CategoryCollectionViewCell.swift in Sources */,
 				8B41156D1FDC845B00C6614C /* AppInjections.swift in Sources */,
-				8BE208A11FFD1D300048D690 /* ControllerExtension.swift in Sources */,
+				8B18FE14200A994F00E637C7 /* FCButtonLoginTableViewCell.swift in Sources */,
+				8B18FE10200A782D00E637C7 /* DetailPlaceViewController.swift in Sources */,
+				8BE208A11FFD1D300048D690 /* Controller+Extension.swift in Sources */,
 				8B1A80AE1FFAE4DE0039C39A /* CategoriesViewDelegate.swift in Sources */,
 				8BEB4DF31FFAD285008AD1AB /* PlaceSetting.swift in Sources */,
 				8B3F5D871FFAE67E00B1F88D /* CategoriesViewDataSource.swift in Sources */,
@@ -577,6 +613,7 @@
 				8B18BFD81FFACC6F00C7906D /* PlaceViewModel.swift in Sources */,
 				8B5F71571FF93C9700E628F9 /* PlaceTableViewCell.swift in Sources */,
 				8BFBF57B200517B000CE2C8B /* CategoriesTableViewDataSource.swift in Sources */,
+				8B18FE082007F8E000E637C7 /* View+Extension.swift in Sources */,
 				8B5F71511FF916B300E628F9 /* PlaceService.swift in Sources */,
 				8B41156B1FDC83AF00C6614C /* Router.swift in Sources */,
 				8B41770A1FFD5785002A963A /* ActivityIndicatorView.swift in Sources */,
@@ -584,12 +621,15 @@
 				8B41771D1FFF64A7002A963A /* DistancePickerViewDelegate.swift in Sources */,
 				8BFBF57D200517D000CE2C8B /* CategoriesTableViewDelegate.swift in Sources */,
 				8B5F71531FF923A700E628F9 /* PlaceModel.swift in Sources */,
+				8B18FE0A2009113F00E637C7 /* RatingPlacesView.swift in Sources */,
 				8B44C37F1FEFE195003C0754 /* QuickAlertController.swift in Sources */,
-				8B18BFD61FFA594D00C7906D /* ColorExtension.swift in Sources */,
+				8B18BFD61FFA594D00C7906D /* Color+Extension.swift in Sources */,
 				8B6D4E211FFBA0DC007904D4 /* PlacesTableViewDelegate.swift in Sources */,
 				8BE2089D1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift in Sources */,
 				8BE208A31FFD25750048D690 /* FilterPlacesModel.swift in Sources */,
 				8B41154B1FDB2CEF00C6614C /* AppDelegate.swift in Sources */,
+				8B18FE0D200A1F1800E637C7 /* MapViewController.swift in Sources */,
+				8B18FE12200A8FFA00E637C7 /* SettingsViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

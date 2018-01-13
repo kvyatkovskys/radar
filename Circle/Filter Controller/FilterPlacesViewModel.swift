@@ -16,11 +16,11 @@ protocol CategoriesProtocol {
 }
 
 enum TypeFilter: Int {
-    case distance, categories
+    case distance, categories, rating
 }
 
 struct FilterViewModel {
-    let items: [FilterModel] = ["Distance", "Categories"].map({ FilterModel(title: $0) })
+    let items: [FilterModel] = ["Distance", "Categories", "Rating"].map({ FilterModel(title: $0) })
     var chooseFilter: (() -> Void)?
 }
 

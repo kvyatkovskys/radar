@@ -1,5 +1,5 @@
 //
-//  ColorExtension.swift
+//  Color+Extension.swift
 //  Circle
 //
 //  Created by Kviatkovskii on 01/01/2018.

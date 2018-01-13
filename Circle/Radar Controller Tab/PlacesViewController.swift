@@ -17,15 +17,23 @@ import RealmSwift
 let heightHeader: CGFloat = 100.0
 let radius: Double = 800.0
 
+// color for hide map view
+fileprivate extension UIColor {
+    static var arrowButton: UIColor {
+        return UIColor(withHex: 0x34495e, alpha: 1.0)
+    }
+}
+
 final class PlacesViewController: UIViewController, LocationServiceDelegate, FilterPlacesDelegate {
     typealias Dependecies = HasKingfisher & HasPlaceViewModel
     
     // для работы с геопозиции
     fileprivate lazy var locationService: LocationService = {
-        return LocationService(delegate: self)
+        return LocationService(delegate: self, controller: self)
     }()
     
-    fileprivate var notificationToken: NotificationToken?
+    fileprivate var notificationTokenCategories: NotificationToken?
+    fileprivate var notificationTokenRating: NotificationToken?
     fileprivate var viewModel: PlaceViewModel
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
     fileprivate let disposeBag = DisposeBag()
@@ -47,6 +55,16 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         return view
     }()
     
+    fileprivate lazy var tapViewOnMap: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        
+        let tapOnMap = UITapGestureRecognizer(target: self, action: #selector(showMap))
+        view.addGestureRecognizer(tapOnMap)
+        
+        return view
+    }()
+    
     fileprivate lazy var mapView: MKMapView = {
         let map = MKMapView()
         map.mapType = .standard
@@ -57,16 +75,9 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         map.showsCompass = true
         map.showsPointsOfInterest = true
         map.showsUserLocation = true
-        map.showsScale = false
+        map.showsScale = true
         map.contentMode = .scaleAspectFill
         return map
-    }()
-    
-    fileprivate lazy var leftBarButton: UIBarButtonItem = {
-        let categoriesImage = UIImage(named: "ic_list")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
-        let button = UIBarButtonItem(image: categoriesImage, style: .done, target: self, action: #selector(openCategories))
-        button.tintColor = .white
-        return button
     }()
     
     lazy var rightBarButton: UIBarButtonItem = {
@@ -91,9 +102,14 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
             make.bottom.left.right.equalToSuperview()
         }
         
+        tapViewOnMap.snp.makeConstraints { (make) in
+            make.height.equalTo(heightHeader)
+            make.left.top.right.equalToSuperview()
+        }
+        
         mapView.snp.makeConstraints { (make) in
             make.height.equalTo(heightHeader)
-            make.left.bottom.right.equalToSuperview()
+            make.left.top.right.equalToSuperview()
         }
         
         super.updateViewConstraints()
@@ -115,76 +131,76 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         
         view.backgroundColor = .white
         headerView.addSubview(mapView)
+        headerView.addSubview(tapViewOnMap)
         view.addSubview(tableView)
         tableView.tableHeaderView = headerView
         tableView.addSubview(refreshControl)
-        navigationItem.leftBarButtonItem = leftBarButton
         navigationItem.rightBarButtonItem = rightBarButton
         
         updateConstraints()
-        startDetectLocation()
         
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
-        tableDataSource = PlacesTableViewDataSource(tableView, placesSections: nil, kingfisherOptions: kingfisherOptions)
-        tableDelegate = PlacesTableViewDelegate(tableView, placesSections: nil)
+        tableDataSource = PlacesTableViewDataSource(tableView,
+                                                    placesSections: PlacesSections([], [], [], []),
+                                                    kingfisherOptions: kingfisherOptions)
+        tableDelegate = PlacesTableViewDelegate(tableView,
+                                                placesSections: PlacesSections([], [], [], []),
+                                                viewModel: viewModel)
         
         refreshControl.rx.controlEvent(.valueChanged).asObservable()
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] _ in
-                if let location = self.locationService.userLocation {
-                    self.loadInfoAboutLocation(location)
-                }
+                self.startDetectLocation()
             }).disposed(by: disposeBag)
         
         do {
             let realm = try Realm()
-            let results = realm.objects(FilterSelectedCategory.self)
-            notificationToken = results.observe { [unowned self] (changes: RealmCollectionChange) in
+            let selectedCategories = realm.objects(FilterSelectedCategory.self)
+            notificationTokenCategories = selectedCategories.observe { [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
-                case .initial:
-                    break
                 case .update:
-                    if let location = self.locationService.userLocation {
-                        self.loadInfoAboutLocation(location)
-                    }
+                    self.startDetectLocation()
                 case .error(let error):
                     fatalError("\(error)")
+                case .initial:
+                    break
                 }
             }
+            
+            let selectedRating = realm.objects(FilterSelectedRating.self)
+            notificationTokenRating = selectedRating.observe({ [unowned self] (changes: RealmCollectionChange) in
+                switch changes {
+                case .update:
+                    self.startDetectLocation()
+                case .error(let error):
+                    fatalError("\(error)")
+                case .initial:
+                    break
+                }
+            })
         } catch {
             print(error)
         }
     }
     
     deinit {
-        notificationToken?.invalidate()
+        notificationTokenCategories?.invalidate()
+        notificationTokenRating?.invalidate()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        startDetectLocation()
+    }
+    
+    @objc func showMap() {
+        viewModel.openMap(tableDataSource?.placesSections, locationService.userLocation, tapViewOnMap.frame)
     }
     
     // MARK: LocationServiceDelegate
     func startDetectLocation() {
-        locationService.start { [unowned self] (start) in
-            if !start {
-                let alertController = UIAlertController(
-                    title: "Access to the location is disabled.",
-                    message: "To locate the location automatically, open the setting for this application and set i to 'When using the application' or 'Always usage'.",
-                    preferredStyle: .alert)
-                
-                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-                alertController.addAction(cancelAction)
-                
-                let openAction = UIAlertAction(title: "Open settings", style: .default) { _ in
-                    if let url = URL(string: UIApplicationOpenSettingsURLString) {
-                        UIApplication.shared.open(url,
-                                                  options: [:],
-                                                  completionHandler: { (handler) in
-                                                    print(handler)
-                        })                    }
-                }
-                alertController.addAction(openAction)
-                
-                self.present(alertController, animated: true, completion: nil)
-            }
-        }
+        locationService.start()
     }
     
     func locationService(didFailWithError error: Error) {
@@ -200,11 +216,7 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     
     // MARK: PlaceViewModel
     @objc func openFilter() {
-        viewModel.openFilter!(self)
-    }
-    
-    @objc func openCategories() {
-        viewModel.openCategories!()
+        viewModel.openFilter(self)
     }
     
     // MARK: FilterPlacesDelegate
@@ -255,6 +267,6 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     fileprivate func centerMapOnLocation(_ location: CLLocation) {
         let regionRadius: CLLocationDistance = radius
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius, regionRadius)
-        mapView.setRegion(coordinateRegion, animated: true)
+        mapView.setRegion(coordinateRegion, animated: false)
     }
 }

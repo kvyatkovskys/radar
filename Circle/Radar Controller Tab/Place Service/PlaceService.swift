@@ -32,6 +32,7 @@ struct PlaceService {
                                                                FBSDKPlacesFieldKeyIsAlwaysOpen,
                                                                FBSDKPlacesFieldKeyIsPermanentlyClosed,
                                                                FBSDKPlacesFieldKeyOverallStarRating,
+                                                               FBSDKPlacesFieldKeyRatingCount,
                                                                FBSDKPlacesFieldKeyParking,
                                                                FBSDKPlacesFieldKeyRestaurantServices,
                                                                FBSDKPlacesFieldKeyRestaurantSpecialties,
@@ -48,7 +49,7 @@ struct PlaceService {
                     observable.on(.error(error!))
                     return
                 }
-                
+
                 if let data = result as? [String: Any], let model: PlaceDataModel = try? unbox(dictionary: data) {
                     observable.on(.next(model.data))
                 }

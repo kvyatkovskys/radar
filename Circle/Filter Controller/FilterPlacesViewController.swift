@@ -8,6 +8,14 @@
 
 import UIKit
 import RxSwift
+import RealmSwift
+
+// color for segmented control
+fileprivate extension UIColor {
+    static var segmentedColor: UIColor {
+        return UIColor(withHex: 0x34495e, alpha: 1.0)
+    }
+}
 
 protocol FilterPlacesDelegate: class {
     func selectDistance(value: Double)
@@ -30,6 +38,7 @@ final class FilterPlacesViewController: UIViewController {
     fileprivate lazy var segmentedControl: UISegmentedControl = {
         let segmented = UISegmentedControl(items: viewModel.items.map({ $0.title }))
         segmented.selectedSegmentIndex = 0
+        segmented.tintColor = UIColor.segmentedColor
         return segmented
     }()
     
@@ -45,12 +54,16 @@ final class FilterPlacesViewController: UIViewController {
         return table
     }()
     
+    fileprivate let ratingView: RatingPlacesView = {
+        return RatingPlacesView()
+    }()
+    
     override func updateViewConstraints() {
         super.updateViewConstraints()
         
         segmentedControl.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(10.0)
-            make.left.right.equalToSuperview().inset(15.0)
+            make.left.right.equalToSuperview().inset(10.0)
             make.height.equalTo(25.0)
         }
         
@@ -65,6 +78,14 @@ final class FilterPlacesViewController: UIViewController {
             tableView.snp.makeConstraints { (make) in
                 make.top.equalTo(segmentedControl.snp.bottom).offset(10.0)
                 make.left.bottom.right.equalToSuperview()
+            }
+        }
+        
+        if view.subviews.contains(ratingView) {
+            ratingView.snp.makeConstraints { (make) in
+                make.top.equalTo(segmentedControl.snp.bottom).offset(10.0)
+                make.left.right.equalToSuperview()
+                make.bottom.equalToSuperview().offset(-10.0)
             }
         }
     }
@@ -93,32 +114,60 @@ final class FilterPlacesViewController: UIViewController {
         tableDataSource = CategoriesTableViewDataSource(tableView, viewModelCategories)
         tableDelegate = CategoriesTableViewDelegate(tableView, viewModelCategories)
         
-        pickerDelegate?.selectValue.asObserver().subscribe(onNext: { [weak delegate = self.delegate] (value) in
-            UserDefaults.standard.set(value, forKey: "FilterDistance")
-            delegate?.selectDistance(value: value)
-        }, onError: { (error) in
-            print(error)
-        }).disposed(by: disposeBag)
+        pickerDelegate?.selectValue.asObserver()
+            .subscribe(onNext: { [weak delegate = self.delegate] (value) in
+                UserDefaults.standard.set(value, forKey: "FilterDistance")
+                delegate?.selectDistance(value: value)
+                }, onError: { (error) in
+                    print(error)
+            }).disposed(by: disposeBag)
         
-        segmentedControl.rx.selectedSegmentIndex.subscribe(onNext: { [unowned self] (index) in
-            let type = TypeFilter(rawValue: index)
-            switch type {
-            case .distance?:
-                self.navigationController?.preferredContentSize = CGSize(width: 230.0, height: 200.0)
-                self.view.subviews.filter({ $0 is UITableView }).forEach({ $0.removeFromSuperview() })
-                self.view.addSubview(self.pickerView)
-                self.updateViewConstraints()
-            case .categories?:
-                self.navigationController?.preferredContentSize = CGSize(width: 230.0,
-                                                                         height: Double(self.viewModelCategories.items.count) * 61.0)
-                self.view.subviews.filter({ $0 is UIPickerView }).forEach({ $0.removeFromSuperview() })
-                self.view.addSubview(self.tableView)
-                self.updateViewConstraints()
-            case .none:
-                break
-            }
-        }, onError: { (error) in
-            print(error)
-        }).disposed(by: disposeBag)
+        segmentedControl.rx.selectedSegmentIndex
+            .subscribe(onNext: { [unowned self] (index) in
+                let type = TypeFilter(rawValue: index)
+                switch type {
+                case .distance?:
+                    self.navigationController?.preferredContentSize = CGSize(width: 250.0, height: 200.0)
+                    self.view.subviews.filter({ $0 is UITableView || $0 is RatingPlacesView }).forEach({ $0.removeFromSuperview() })
+                    self.view.addSubview(self.pickerView)
+                    self.updateViewConstraints()
+                case .categories?:
+                    self.navigationController?.preferredContentSize = CGSize(width: 250.0,
+                                                                             height: Double(self.viewModelCategories.items.count) * 61.0)
+                    self.view.subviews.filter({ $0 is UIPickerView || $0 is RatingPlacesView }).forEach({ $0.removeFromSuperview() })
+                    self.view.addSubview(self.tableView)
+                    self.updateViewConstraints()
+                case .rating?:
+                    self.navigationController?.preferredContentSize = CGSize(width: 250.0, height: 200.0)
+                    self.view.subviews.filter({ $0 is UIPickerView || $0 is UITableView }).forEach({ $0.removeFromSuperview() })
+                    self.view.addSubview(self.ratingView)
+                    self.updateViewConstraints()
+                case .none:
+                    break
+                }
+                }, onError: { (error) in
+                    print(error)
+            }).disposed(by: disposeBag)
+        
+        ratingView.chooseRating.asObserver()
+            .subscribe(onNext: { (type) in
+                do {
+                    let realm = try Realm()
+                    let oldType = realm.objects(FilterSelectedRating.self).first
+                    try realm.write {
+                        guard let oldType = oldType else {
+                            let selectedRating = FilterSelectedRating()
+                            selectedRating.rating = type.rawValue
+                            realm.add(selectedRating)
+                            return
+                        }
+                        oldType.rating = type.rawValue
+                    }
+                } catch {
+                    print(error)
+                }
+            }, onError: { (error) in
+                print(error)
+            }).disposed(by: disposeBag)
     }
 }
