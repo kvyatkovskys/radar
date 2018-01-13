@@ -195,7 +195,7 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     }
     
     @objc func showMap() {
-        viewModel.openMap!(tableDataSource?.placesSections, locationService.userLocation, tapViewOnMap.frame)
+        viewModel.openMap(tableDataSource?.placesSections, locationService.userLocation, tapViewOnMap.frame)
     }
     
     // MARK: LocationServiceDelegate
@@ -216,7 +216,7 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     
     // MARK: PlaceViewModel
     @objc func openFilter() {
-        viewModel.openFilter!(self)
+        viewModel.openFilter(self)
     }
     
     // MARK: FilterPlacesDelegate

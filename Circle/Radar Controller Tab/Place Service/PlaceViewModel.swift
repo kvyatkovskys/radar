@@ -29,13 +29,13 @@ struct PlacesSections {
 struct PlaceViewModel {
     fileprivate let placeService: PlaceService
     /// open filter controller
-    var openFilter: ((_ delegate: FilterPlacesDelegate) -> Void)?
+    var openFilter: ((_ delegate: FilterPlacesDelegate) -> Void) = {_ in }
     
     /// open map controller
-    var openMap: ((_ places: PlacesSections?, _ location: CLLocation?, _ sourceRect: CGRect) -> Void)?
+    var openMap: ((_ places: PlacesSections?, _ location: CLLocation?, _ sourceRect: CGRect) -> Void) = {_,_,_ in }
     
     /// open detail place controller
-    var openDetailPlace: ((_ place: PlaceModel) -> Void)?
+    var openDetailPlace: ((_ place: PlaceModel) -> Void) = {_ in }
     
     init(_ service: PlaceService) {
         self.placeService = service

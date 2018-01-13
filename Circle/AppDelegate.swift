@@ -42,8 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.backgroundColor = UIColor.white
         window?.makeKeyAndVisible()
         
-        let rootVC = UINavigationController()
-        let router = Router(rootViewController: rootVC)        
+        let router = Router()
         window?.rootViewController = router.showMainTabController()
     }
     

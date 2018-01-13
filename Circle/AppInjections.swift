@@ -34,12 +34,15 @@ struct PlacesViewDependecies: HasKingfisher, HasPlaceViewModel {
 }
 
 // MARK: SettingsViewController
+protocol HasSettingsViewModel {
+    var viewModel: SettingsViewModel { get }
+}
 /// container dependecies injection's for settings tab controller
-struct SettingsViewDependecies: HasRouter {
-    let router: Router
+struct SettingsViewDependecies: HasSettingsViewModel {
+    let viewModel: SettingsViewModel
     
-    init(_ router: Router) {
-        self.router = router
+    init(_ viewModel: SettingsViewModel) {
+        self.viewModel = viewModel
     }
 }
 
