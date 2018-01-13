@@ -26,6 +26,7 @@ final class Router {
     }
     
     func showMainTabController() -> UITabBarController {
+        //swiftlint:disable force_cast
         var placesViewController = UIViewController()
         var viewModel = PlaceViewModel(PlaceService())
         
@@ -34,8 +35,11 @@ final class Router {
             self.openFilterPlaces(fromController: placesViewController as! PlacesViewController,
                                   toController: FilterPlacesViewController(dependecies))
         }
-        viewModel.openCategories = {
-            
+        viewModel.openMap = { [unowned self] (places: PlacesSections?, location: CLLocation?, sourceRect: CGRect) in
+            let dependecies = MapDependecies(places, location)
+            self.openMap(fromController: placesViewController as! PlacesViewController,
+                         toController: MapViewController(dependecies),
+                         sourceRect: sourceRect)
         }
         
         placesViewController = PlacesViewController(PlacesViewDependecies(optionKingfisher, viewModel))
@@ -72,6 +76,23 @@ final class Router {
         popover?.barButtonItem = fromController.rightBarButton
         popover?.permittedArrowDirections = UIPopoverArrowDirection.any
         
+        fromController.present(navigation, animated: true, completion: nil)
+    }
+    
+    func openMap(fromController: PlacesViewController, toController: UIViewController, sourceRect: CGRect) {
+        let navigation = UINavigationController(rootViewController: toController)
+        navigation.modalPresentationStyle = UIModalPresentationStyle.popover
+        navigation.isNavigationBarHidden = true
+        
+        let popover = navigation.popoverPresentationController
+        popover?.delegate = fromController
+        popover?.sourceRect = sourceRect
+        popover?.sourceView = fromController.view
+        
+        let width = fromController.view.frame.size.width
+        let height = fromController.view.frame.size.height - 200.0
+        toController.preferredContentSize = CGSize(width: width, height: height)
+    
         fromController.present(navigation, animated: true, completion: nil)
     }
 }

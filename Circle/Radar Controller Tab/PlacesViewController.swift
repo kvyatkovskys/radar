@@ -29,10 +29,11 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     
     // для работы с геопозиции
     fileprivate lazy var locationService: LocationService = {
-        return LocationService(delegate: self)
+        return LocationService(delegate: self, controller: self)
     }()
     
-    fileprivate var notificationToken: NotificationToken?
+    fileprivate var notificationTokenCategories: NotificationToken?
+    fileprivate var notificationTokenRating: NotificationToken?
     fileprivate var viewModel: PlaceViewModel
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
     fileprivate let disposeBag = DisposeBag()
@@ -137,7 +138,6 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         navigationItem.rightBarButtonItem = rightBarButton
         
         updateConstraints()
-        startDetectLocation()
         
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
         tableDataSource = PlacesTableViewDataSource(tableView, placesSections: nil, kingfisherOptions: kingfisherOptions)
@@ -146,64 +146,57 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         refreshControl.rx.controlEvent(.valueChanged).asObservable()
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] _ in
-                if let location = self.locationService.userLocation {
-                    self.loadInfoAboutLocation(location)
-                }
+                self.startDetectLocation()
             }).disposed(by: disposeBag)
         
         do {
             let realm = try Realm()
-            let results = realm.objects(FilterSelectedCategory.self)
-            notificationToken = results.observe { [unowned self] (changes: RealmCollectionChange) in
+            let selectedCategories = realm.objects(FilterSelectedCategory.self)
+            notificationTokenCategories = selectedCategories.observe { [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
                 case .update:
-                    if let location = self.locationService.userLocation {
-                        self.loadInfoAboutLocation(location)
-                    }
+                    self.startDetectLocation()
                 case .error(let error):
                     fatalError("\(error)")
                 case .initial:
                     break
                 }
             }
+            
+            let selectedRating = realm.objects(FilterSelectedRating.self)
+            notificationTokenRating = selectedRating.observe({ [unowned self] (changes: RealmCollectionChange) in
+                switch changes {
+                case .update:
+                    self.startDetectLocation()
+                case .error(let error):
+                    fatalError("\(error)")
+                case .initial:
+                    break
+                }
+            })
         } catch {
             print(error)
         }
     }
     
     deinit {
-        notificationToken?.invalidate()
+        notificationTokenCategories?.invalidate()
+        notificationTokenRating?.invalidate()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        startDetectLocation()
     }
     
     @objc func showMap() {
-        
+        viewModel.openMap!(tableDataSource?.placesSections, locationService.userLocation, tapViewOnMap.frame)
     }
     
     // MARK: LocationServiceDelegate
     func startDetectLocation() {
-        locationService.start { [unowned self] (start) in
-            if !start {
-                let alertController = UIAlertController(
-                    title: "Access to the location is disabled.",
-                    message: "To locate the location automatically, open the setting for this application and set i to 'When using the application' or 'Always usage'.",
-                    preferredStyle: .alert)
-                
-                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-                alertController.addAction(cancelAction)
-                
-                let openAction = UIAlertAction(title: "Open settings", style: .default) { _ in
-                    if let url = URL(string: UIApplicationOpenSettingsURLString) {
-                        UIApplication.shared.open(url,
-                                                  options: [:],
-                                                  completionHandler: { (handler) in
-                                                    print(handler)
-                        })                    }
-                }
-                alertController.addAction(openAction)
-                
-                self.present(alertController, animated: true, completion: nil)
-            }
-        }
+        locationService.start()
     }
     
     func locationService(didFailWithError error: Error) {
@@ -220,10 +213,6 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     // MARK: PlaceViewModel
     @objc func openFilter() {
         viewModel.openFilter!(self)
-    }
-    
-    @objc func openCategories() {
-        viewModel.openCategories!()
     }
     
     // MARK: FilterPlacesDelegate
@@ -274,8 +263,6 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     fileprivate func centerMapOnLocation(_ location: CLLocation) {
         let regionRadius: CLLocationDistance = radius
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius, regionRadius)
-        DispatchQueue.main.async {
-            self.mapView.setRegion(coordinateRegion, animated: false)
-        }
+        mapView.setRegion(coordinateRegion, animated: false)
     }
 }

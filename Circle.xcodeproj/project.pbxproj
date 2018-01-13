@@ -13,6 +13,7 @@
 		8B18BFD81FFACC6F00C7906D /* PlaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18BFD71FFACC6F00C7906D /* PlaceViewModel.swift */; };
 		8B18FE082007F8E000E637C7 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18FE072007F8E000E637C7 /* View+Extension.swift */; };
 		8B18FE0A2009113F00E637C7 /* RatingPlacesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18FE092009113F00E637C7 /* RatingPlacesView.swift */; };
+		8B18FE0D200A1F1800E637C7 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18FE0C200A1F1800E637C7 /* MapViewController.swift */; };
 		8B1A80A91FFADAED0039C39A /* CategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1A80A81FFADAED0039C39A /* CategoryCollectionViewCell.swift */; };
 		8B1A80AB1FFADC910039C39A /* CategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1A80AA1FFADC910039C39A /* CategoriesViewModel.swift */; };
 		8B1A80AE1FFAE4DE0039C39A /* CategoriesViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1A80AD1FFAE4DE0039C39A /* CategoriesViewDelegate.swift */; };
@@ -70,6 +71,7 @@
 		8B18BFD71FFACC6F00C7906D /* PlaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceViewModel.swift; sourceTree = "<group>"; };
 		8B18FE072007F8E000E637C7 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 		8B18FE092009113F00E637C7 /* RatingPlacesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingPlacesView.swift; sourceTree = "<group>"; };
+		8B18FE0C200A1F1800E637C7 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		8B1A80A81FFADAED0039C39A /* CategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		8B1A80AA1FFADC910039C39A /* CategoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewModel.swift; sourceTree = "<group>"; };
 		8B1A80AD1FFAE4DE0039C39A /* CategoriesViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewDelegate.swift; sourceTree = "<group>"; };
@@ -185,6 +187,14 @@
 			path = "Rating View";
 			sourceTree = "<group>";
 		};
+		8B18FE0E200A24C200E637C7 /* Map View */ = {
+			isa = PBXGroup;
+			children = (
+				8B18FE0C200A1F1800E637C7 /* MapViewController.swift */,
+			);
+			path = "Map View";
+			sourceTree = "<group>";
+		};
 		8B1A80AC1FFAE4640039C39A /* Categories View */ = {
 			isa = PBXGroup;
 			children = (
@@ -225,6 +235,7 @@
 				8B44C3841FF012E1003C0754 /* Setting Controller Tab */,
 				8B44C3811FF012A2003C0754 /* Radar Controller Tab */,
 				8B1A80AC1FFAE4640039C39A /* Categories View */,
+				8B18FE0E200A24C200E637C7 /* Map View */,
 				8B5F71551FF933BB00E628F9 /* Location Service */,
 				8B4177081FFD3D2B002A963A /* Filter Controller */,
 				8B44C3801FF00F58003C0754 /* Project Settings */,
@@ -606,6 +617,7 @@
 				8BE2089D1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift in Sources */,
 				8BE208A31FFD25750048D690 /* FilterPlacesModel.swift in Sources */,
 				8B41154B1FDB2CEF00C6614C /* AppDelegate.swift in Sources */,
+				8B18FE0D200A1F1800E637C7 /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

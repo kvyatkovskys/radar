@@ -84,3 +84,18 @@ struct FilterPlacesDependecies: HasFilterPlacesViewModel, HasFilterPlacesDelegat
         self.delegate = delegate
     }
 }
+
+protocol HasMapModel {
+    var placesSections: PlacesSections? { get }
+    var location: CLLocation? { get }
+}
+
+struct MapDependecies: HasMapModel {
+    let placesSections: PlacesSections?
+    let location: CLLocation?
+    
+    init(_ placesSections: PlacesSections?, _ location: CLLocation?) {
+        self.placesSections = placesSections
+        self.location = location
+    }
+}
