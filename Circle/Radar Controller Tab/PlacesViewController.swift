@@ -140,8 +140,12 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         updateConstraints()
         
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
-        tableDataSource = PlacesTableViewDataSource(tableView, placesSections: nil, kingfisherOptions: kingfisherOptions)
-        tableDelegate = PlacesTableViewDelegate(tableView, placesSections: nil)
+        tableDataSource = PlacesTableViewDataSource(tableView,
+                                                    placesSections: PlacesSections([], [], [], []),
+                                                    kingfisherOptions: kingfisherOptions)
+        tableDelegate = PlacesTableViewDelegate(tableView,
+                                                placesSections: PlacesSections([], [], [], []),
+                                                viewModel: viewModel)
         
         refreshControl.rx.controlEvent(.valueChanged).asObservable()
             .observeOn(MainScheduler.instance)

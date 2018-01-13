@@ -34,6 +34,9 @@ struct PlaceViewModel {
     /// open map controller
     var openMap: ((_ places: PlacesSections?, _ location: CLLocation?, _ sourceRect: CGRect) -> Void)?
     
+    /// open detail place controller
+    var openDetailPlace: ((_ place: PlaceModel) -> Void)?
+    
     init(_ service: PlaceService) {
         self.placeService = service
     }

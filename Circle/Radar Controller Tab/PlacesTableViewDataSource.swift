@@ -13,8 +13,8 @@ final class PlacesTableViewDataSource: NSObject {
     var placesSections: PlacesSections
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
     
-    init(_ tableView: UITableView, placesSections: PlacesSections?, kingfisherOptions: KingfisherOptionsInfo) {
-        self.placesSections = placesSections ?? PlacesSections([], [], [], [])
+    init(_ tableView: UITableView, placesSections: PlacesSections, kingfisherOptions: KingfisherOptionsInfo) {
+        self.placesSections = placesSections
         self.kingfisherOptions = kingfisherOptions
         super.init()
         tableView.dataSource = self

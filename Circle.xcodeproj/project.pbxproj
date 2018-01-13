@@ -14,6 +14,7 @@
 		8B18FE082007F8E000E637C7 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18FE072007F8E000E637C7 /* View+Extension.swift */; };
 		8B18FE0A2009113F00E637C7 /* RatingPlacesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18FE092009113F00E637C7 /* RatingPlacesView.swift */; };
 		8B18FE0D200A1F1800E637C7 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18FE0C200A1F1800E637C7 /* MapViewController.swift */; };
+		8B18FE10200A782D00E637C7 /* DetailPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18FE0F200A782D00E637C7 /* DetailPlaceViewController.swift */; };
 		8B1A80A91FFADAED0039C39A /* CategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1A80A81FFADAED0039C39A /* CategoryCollectionViewCell.swift */; };
 		8B1A80AB1FFADC910039C39A /* CategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1A80AA1FFADC910039C39A /* CategoriesViewModel.swift */; };
 		8B1A80AE1FFAE4DE0039C39A /* CategoriesViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1A80AD1FFAE4DE0039C39A /* CategoriesViewDelegate.swift */; };
@@ -72,6 +73,7 @@
 		8B18FE072007F8E000E637C7 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 		8B18FE092009113F00E637C7 /* RatingPlacesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingPlacesView.swift; sourceTree = "<group>"; };
 		8B18FE0C200A1F1800E637C7 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		8B18FE0F200A782D00E637C7 /* DetailPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPlaceViewController.swift; sourceTree = "<group>"; };
 		8B1A80A81FFADAED0039C39A /* CategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		8B1A80AA1FFADC910039C39A /* CategoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewModel.swift; sourceTree = "<group>"; };
 		8B1A80AD1FFAE4DE0039C39A /* CategoriesViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewDelegate.swift; sourceTree = "<group>"; };
@@ -298,6 +300,7 @@
 				8B6D4E201FFBA0DC007904D4 /* PlacesTableViewDelegate.swift */,
 				8B5F71561FF93C9700E628F9 /* PlaceTableViewCell.swift */,
 				8BE2089C1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift */,
+				8B18FE0F200A782D00E637C7 /* DetailPlaceViewController.swift */,
 			);
 			path = "Radar Controller Tab";
 			sourceTree = "<group>";
@@ -588,6 +591,7 @@
 				8B41771B1FFF6491002A963A /* DistancePickerViewDataSource.swift in Sources */,
 				8B1A80A91FFADAED0039C39A /* CategoryCollectionViewCell.swift in Sources */,
 				8B41156D1FDC845B00C6614C /* AppInjections.swift in Sources */,
+				8B18FE10200A782D00E637C7 /* DetailPlaceViewController.swift in Sources */,
 				8BE208A11FFD1D300048D690 /* Controller+Extension.swift in Sources */,
 				8B1A80AE1FFAE4DE0039C39A /* CategoriesViewDelegate.swift in Sources */,
 				8BEB4DF31FFAD285008AD1AB /* PlaceSetting.swift in Sources */,

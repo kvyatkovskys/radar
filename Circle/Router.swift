@@ -35,11 +35,16 @@ final class Router {
             self.openFilterPlaces(fromController: placesViewController as! PlacesViewController,
                                   toController: FilterPlacesViewController(dependecies))
         }
+        
         viewModel.openMap = { [unowned self] (places: PlacesSections?, location: CLLocation?, sourceRect: CGRect) in
             let dependecies = MapDependecies(places, location)
             self.openMap(fromController: placesViewController as! PlacesViewController,
                          toController: MapViewController(dependecies),
                          sourceRect: sourceRect)
+        }
+        
+        viewModel.openDetailPlace = { [unowned self] place in
+            self.openDetailPlace(place, placesViewController)
         }
         
         placesViewController = PlacesViewController(PlacesViewDependecies(optionKingfisher, viewModel))
@@ -66,8 +71,15 @@ final class Router {
         return tabController
     }
     
+    fileprivate func openDetailPlace(_ place: PlaceModel, _ fromController: UIViewController) {
+        let dependecies = DetailPlaceDependecies(place)
+        let detailPlaceController = DetailPlaceViewController(dependecies)
+        detailPlaceController.hidesBottomBarWhenPushed = true
+        fromController.navigationController?.pushViewController(detailPlaceController, animated: true)
+    }
+    
     /// open filter controller
-    func openFilterPlaces(fromController: PlacesViewController, toController: UIViewController) {
+    fileprivate func openFilterPlaces(fromController: PlacesViewController, toController: UIViewController) {
         let navigation = UINavigationController(rootViewController: toController)
         navigation.modalPresentationStyle = UIModalPresentationStyle.popover
         navigation.isNavigationBarHidden = true
@@ -79,7 +91,8 @@ final class Router {
         fromController.present(navigation, animated: true, completion: nil)
     }
     
-    func openMap(fromController: PlacesViewController, toController: UIViewController, sourceRect: CGRect) {
+    /// open map controller
+    fileprivate func openMap(fromController: PlacesViewController, toController: UIViewController, sourceRect: CGRect) {
         let navigation = UINavigationController(rootViewController: toController)
         navigation.modalPresentationStyle = UIModalPresentationStyle.popover
         navigation.isNavigationBarHidden = true

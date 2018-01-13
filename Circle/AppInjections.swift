@@ -90,6 +90,7 @@ protocol HasMapModel {
     var location: CLLocation? { get }
 }
 
+/// container dependecies injection's for map controller
 struct MapDependecies: HasMapModel {
     let placesSections: PlacesSections?
     let location: CLLocation?
@@ -97,5 +98,19 @@ struct MapDependecies: HasMapModel {
     init(_ placesSections: PlacesSections?, _ location: CLLocation?) {
         self.placesSections = placesSections
         self.location = location
+    }
+}
+
+// MARK: DetailPlaceViewController
+protocol HasDetailPlaceModel {
+    var place: PlaceModel { get }
+}
+
+/// container dependecies injection's for detail place controller
+struct DetailPlaceDependecies: HasDetailPlaceModel {
+    let place: PlaceModel
+    
+    init(_ place: PlaceModel) {
+        self.place = place
     }
 }
