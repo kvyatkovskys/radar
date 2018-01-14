@@ -110,10 +110,12 @@ protocol HasDetailPlaceModel {
 }
 
 /// container dependecies injection's for detail place controller
-struct DetailPlaceDependecies: HasDetailPlaceModel {
+struct DetailPlaceDependecies: HasDetailPlaceModel, HasKingfisher {
     let place: PlaceModel
+    let kingfisherOptions: KingfisherOptionsInfo
     
-    init(_ place: PlaceModel) {
+    init(_ place: PlaceModel, _ kingfisherOptions: KingfisherOptionsInfo) {
         self.place = place
+        self.kingfisherOptions = kingfisherOptions
     }
 }

@@ -201,6 +201,14 @@
 			path = "Map View";
 			sourceTree = "<group>";
 		};
+		8B18FE15200B5D6C00E637C7 /* Detail Place View */ = {
+			isa = PBXGroup;
+			children = (
+				8B18FE0F200A782D00E637C7 /* DetailPlaceViewController.swift */,
+			);
+			path = "Detail Place View";
+			sourceTree = "<group>";
+		};
 		8B1A80AC1FFAE4640039C39A /* Categories View */ = {
 			isa = PBXGroup;
 			children = (
@@ -304,7 +312,7 @@
 				8B6D4E201FFBA0DC007904D4 /* PlacesTableViewDelegate.swift */,
 				8B5F71561FF93C9700E628F9 /* PlaceTableViewCell.swift */,
 				8BE2089C1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift */,
-				8B18FE0F200A782D00E637C7 /* DetailPlaceViewController.swift */,
+				8B18FE15200B5D6C00E637C7 /* Detail Place View */,
 			);
 			path = "Radar Controller Tab";
 			sourceTree = "<group>";
