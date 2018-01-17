@@ -127,9 +127,12 @@ extension DetailPlaceViewController: UITableViewDataSource {
             cell.textDescription = text
             
             return cell
-        case .phoneAndSite:
+        case .phoneAndSite(let phone, let website):
             let cell = tableView.dequeueReusableCell(withIdentifier: DeatilPhoneWebsiteTableViewCell.cellIdentifier,
                                                      for: indexPath) as? DeatilPhoneWebsiteTableViewCell ?? DeatilPhoneWebsiteTableViewCell()
+            
+            cell.phone = phone
+            cell.site = website
             
             return cell
         }

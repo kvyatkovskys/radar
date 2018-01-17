@@ -7,21 +7,39 @@
 //
 
 import UIKit
+import SnapKit
+
+fileprivate extension UIColor {
+    static var blueButton: UIColor {
+        return UIColor(withHex: 0x3498db, alpha: 1.0)
+    }
+}
 
 final class DeatilPhoneWebsiteTableViewCell: UITableViewCell {
     static let cellIdentifier = "DeatilPhoneWebsiteTableViewCell"
     
-    fileprivate let phoneButton: UIButton = {
+    fileprivate var centerXPhone: Constraint?
+    fileprivate var centerXSite: Constraint?
+    
+    fileprivate lazy var phoneButton: UIButton = {
         let button = UIButton()
         button.setTitle("Call", for: .normal)
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 15.0)
+        button.backgroundColor = UIColor.blueButton
+        button.layer.cornerRadius = 15.0
+        button.addTarget(self, action: #selector(callPhone), for: .touchUpInside)
         return button
     }()
     
-    fileprivate let websiteButton: UIButton = {
+    fileprivate lazy var websiteButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Open website", for: .normal)
-        button.setTitleColor(.black, for: .normal)
+        button.setTitle("Website", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 15.0)
+        button.backgroundColor = UIColor.blueButton
+        button.layer.cornerRadius = 15.0
+        button.addTarget(self, action: #selector(openSite), for: .touchUpInside)
         return button
     }()
     
@@ -30,14 +48,36 @@ final class DeatilPhoneWebsiteTableViewCell: UITableViewCell {
         
         phoneButton.snp.makeConstraints { (make) in
             make.width.equalTo(100.0)
-            make.top.bottom.equalToSuperview().inset(10.0)
-            make.right.equalTo(self.snp.centerX).offset(-60.0)
+            make.top.bottom.equalToSuperview().inset(15.0)
+            centerXPhone = make.centerX.equalTo(self.snp.centerX).offset(-80.0).constraint
         }
         
         websiteButton.snp.makeConstraints { (make) in
             make.width.equalTo(100.0)
-            make.top.bottom.equalToSuperview().inset(10.0)
-            make.left.equalTo(self.snp.centerX).offset(60.0)
+            make.top.bottom.equalToSuperview().inset(15.0)
+            centerXSite = make.centerX.equalTo(self.snp.centerX).offset(80.0).constraint
+        }
+    }
+    
+    var phone: Int? {
+        didSet {
+            guard phone != nil else {
+                phoneButton.isHidden = true
+                centerXSite?.update(offset: 0)
+                layoutIfNeeded()
+                return
+            }
+        }
+    }
+    
+    var site: String? {
+        didSet {
+            guard site != nil else {
+                websiteButton.isHidden = true
+                centerXPhone?.update(offset: 0)
+                layoutIfNeeded()
+                return
+            }
         }
     }
     
@@ -52,5 +92,17 @@ final class DeatilPhoneWebsiteTableViewCell: UITableViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc func callPhone() {
+        if let url = URL(string: "tel://\(phone ?? 0)"), UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
+    
+    @objc func openSite() {
+        if let url = URL(string: "\(site ?? "")"), UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
     }
 }
