@@ -99,6 +99,10 @@ final class DetailPlaceViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.title = viewModel.place.info.categories?.reduce("", { (acc, item) -> String in
+            return "\(acc) " + "\(item.title)"
+        })
+        
         headerView.addSubview(imageHeader)
         headerView.addSubview(titlePlace)
         headerView.addSubview(ratingLabel)
@@ -108,6 +112,7 @@ final class DetailPlaceViewController: UIViewController {
         
         tableView.register(DetailDescriptionTableViewCell.self, forCellReuseIdentifier: DetailDescriptionTableViewCell.cellIdentifier)
         tableView.register(DeatilPhoneWebsiteTableViewCell.self, forCellReuseIdentifier: DeatilPhoneWebsiteTableViewCell.cellIdentifier)
+        tableView.register(DetailAddressTableViewCell.self, forCellReuseIdentifier: DetailAddressTableViewCell.cellIdentifier)
     }
 }
 
@@ -135,6 +140,13 @@ extension DetailPlaceViewController: UITableViewDataSource {
             cell.site = website
             
             return cell
+        case .address(let address, _):
+            let cell = tableView.dequeueReusableCell(withIdentifier: DetailAddressTableViewCell.cellIdentifier,
+                                                     for: indexPath) as? DetailAddressTableViewCell ?? DetailAddressTableViewCell()
+            
+            cell.address = address
+            
+            return cell
         }
     }
 }
@@ -148,12 +160,16 @@ extension DetailPlaceViewController: UITableViewDelegate {
             return height
         case .phoneAndSite:
             return 60.0
+        case .address(_, let height):
+            return height
         }
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard scrollView.contentOffset.y > -23.0 else {
-            navigationItem.title = ""
+            navigationItem.title = viewModel.place.info.categories?.reduce("", { (acc, item) -> String in
+                return "\(acc) " + "\(item.title)"
+            })
             return
         }
         

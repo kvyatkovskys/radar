@@ -11,6 +11,7 @@ import Foundation
 enum TypeDetailCell {
     case description(String, CGFloat)
     case phoneAndSite(Int?, String?)
+    case address(String, CGFloat)
 }
 
 struct DetailPlaceViewModel {
@@ -19,11 +20,21 @@ struct DetailPlaceViewModel {
     
     init(_ place: Place) {
         self.place = place
-        print(place.info.phone, place.info.website)
+        print(place.info.categories)
         var items: [TypeDetailCell] = []
         
         if (place.info.phone != nil) || (place.info.website != nil) {
             let type = TypeDetailCell.phoneAndSite(place.info.phone, place.info.website)
+            items.append(type)
+        }
+        
+        if let address = place.info.address {
+            let rect = address.boundingRect(with: CGSize(width: ScreenSize.SCREEN_WIDTH, height: CGFloat.greatestFiniteMagnitude),
+                                            options: .usesLineFragmentOrigin,
+                                            attributes: [.font: UIFont.boldSystemFont(ofSize: 15.0)],
+                                            context: nil)
+            
+            let type = TypeDetailCell.address(address, rect.height + 80.0)
             items.append(type)
         }
         
