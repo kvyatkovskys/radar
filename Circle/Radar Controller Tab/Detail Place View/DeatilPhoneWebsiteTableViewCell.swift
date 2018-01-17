@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SnapKit
 
 fileprivate extension UIColor {
     static var blueButton: UIColor {
@@ -17,10 +16,7 @@ fileprivate extension UIColor {
 
 final class DeatilPhoneWebsiteTableViewCell: UITableViewCell {
     static let cellIdentifier = "DeatilPhoneWebsiteTableViewCell"
-    
-    fileprivate var centerXPhone: Constraint?
-    fileprivate var centerXSite: Constraint?
-    
+
     fileprivate lazy var phoneButton: UIButton = {
         let button = UIButton()
         button.setTitle("Call", for: .normal)
@@ -46,16 +42,24 @@ final class DeatilPhoneWebsiteTableViewCell: UITableViewCell {
     override func updateConstraints() {
         super.updateConstraints()
         
-        phoneButton.snp.makeConstraints { (make) in
+        phoneButton.snp.remakeConstraints { (make) in
             make.width.equalTo(100.0)
             make.top.bottom.equalToSuperview().inset(15.0)
-            centerXPhone = make.centerX.equalTo(self.snp.centerX).offset(-80.0).constraint
+            if site == nil {
+                make.centerX.equalTo(self.snp.centerX)
+            } else {
+                make.right.equalTo(self.snp.centerX).offset(-30.0)
+            }
         }
         
-        websiteButton.snp.makeConstraints { (make) in
+        websiteButton.snp.remakeConstraints { (make) in
             make.width.equalTo(100.0)
             make.top.bottom.equalToSuperview().inset(15.0)
-            centerXSite = make.centerX.equalTo(self.snp.centerX).offset(80.0).constraint
+            if phone == nil {
+                 make.centerX.equalTo(self.snp.centerX)
+            } else {
+                 make.left.equalTo(self.snp.centerX).offset(30.0)
+            }
         }
     }
     
@@ -63,8 +67,6 @@ final class DeatilPhoneWebsiteTableViewCell: UITableViewCell {
         didSet {
             guard phone != nil else {
                 phoneButton.isHidden = true
-                centerXSite?.update(offset: 0)
-                layoutIfNeeded()
                 return
             }
         }
@@ -74,8 +76,6 @@ final class DeatilPhoneWebsiteTableViewCell: UITableViewCell {
         didSet {
             guard site != nil else {
                 websiteButton.isHidden = true
-                centerXPhone?.update(offset: 0)
-                layoutIfNeeded()
                 return
             }
         }

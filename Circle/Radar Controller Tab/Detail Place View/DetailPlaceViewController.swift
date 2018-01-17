@@ -62,24 +62,24 @@ final class DetailPlaceViewController: UIViewController {
     override func updateViewConstraints() {
         super.updateViewConstraints()
         
-        tableView.snp.makeConstraints { (make) in
+        tableView.snp.remakeConstraints { (make) in
             make.top.left.bottom.right.equalToSuperview()
         }
         
-        imageHeader.snp.makeConstraints { (make) in
+        imageHeader.snp.remakeConstraints { (make) in
             make.top.left.equalTo(headerView).offset(10.0)
             make.width.equalTo(100.0)
             make.height.equalTo(130.0)
         }
         
-        titlePlace.snp.makeConstraints { (make) in
+        titlePlace.snp.remakeConstraints { (make) in
             make.top.equalTo(imageHeader)
             make.left.equalTo(imageHeader.snp.right).offset(10.0)
             make.right.equalTo(headerView).offset(-10.0)
             make.bottom.equalTo(ratingLabel.snp.top).offset(-10.0)
         }
         
-        ratingLabel.snp.makeConstraints { (make) in
+        ratingLabel.snp.remakeConstraints { (make) in
             make.bottom.equalTo(imageHeader)
             make.left.equalTo(titlePlace)
             make.height.equalTo(15.0)
