@@ -37,6 +37,8 @@ extension PlacesTableViewDelegate: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let place = placesSections.places[indexPath.section][indexPath.row]
-        viewModel.openDetailPlace(place)
+        let title = placesSections.titles[indexPath.section][indexPath.row]
+        let rating = placesSections.ratings[indexPath.section][indexPath.row]
+        viewModel.openDetailPlace(Place(info: place, title: title, rating: rating))
     }
 }

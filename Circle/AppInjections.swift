@@ -105,17 +105,17 @@ struct MapDependecies: HasMapModel {
 }
 
 // MARK: DetailPlaceViewController
-protocol HasDetailPlaceModel {
-    var place: PlaceModel { get }
+protocol HasDetailPlaceViewModel {
+    var viewModel: DetailPlaceViewModel { get }
 }
 
 /// container dependecies injection's for detail place controller
-struct DetailPlaceDependecies: HasDetailPlaceModel, HasKingfisher {
-    let place: PlaceModel
+struct DetailPlaceDependecies: HasDetailPlaceViewModel, HasKingfisher {
+    let viewModel: DetailPlaceViewModel
     let kingfisherOptions: KingfisherOptionsInfo
     
-    init(_ place: PlaceModel, _ kingfisherOptions: KingfisherOptionsInfo) {
-        self.place = place
+    init(_ viewModel: DetailPlaceViewModel, _ kingfisherOptions: KingfisherOptionsInfo) {
+        self.viewModel = viewModel
         self.kingfisherOptions = kingfisherOptions
     }
 }

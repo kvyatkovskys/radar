@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 import RealmSwift
 
-typealias SettingAttributes = (font: UIFont, colorText: UIColor)
+typealias Place = (info: PlaceModel, title: NSMutableAttributedString?, rating: NSMutableAttributedString?)
 
 struct PlacesSections {
     let sections: [[Categories]]
@@ -35,7 +35,7 @@ struct PlaceViewModel {
     var openMap: ((_ places: PlacesSections?, _ location: CLLocation?, _ sourceRect: CGRect) -> Void) = {_, _, _ in }
     
     /// open detail place controller
-    var openDetailPlace: ((_ place: PlaceModel) -> Void) = {_ in }
+    var openDetailPlace: ((_ place: Place) -> Void) = {_ in }
     
     init(_ service: PlaceService) {
         self.placeService = service

@@ -9,12 +9,12 @@
 import UIKit
 import Kingfisher
 
-let heightHeaderTable: CGFloat = 200.0
+let heightHeaderTable: CGFloat = 150.0
 
 final class DetailPlaceViewController: UIViewController {
-    typealias Dependecies = HasDetailPlaceModel & HasKingfisher
+    typealias Dependecies = HasDetailPlaceViewModel & HasKingfisher
     
-    fileprivate let place: PlaceModel
+    fileprivate let viewModel: DetailPlaceViewModel
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
     
     fileprivate lazy var headerView: UIView = {
@@ -25,9 +25,11 @@ final class DetailPlaceViewController: UIViewController {
     
     fileprivate lazy var imageHeader: UIImageView = {
         let image = UIImageView()
-        image.contentMode = .scaleAspectFit
+        image.layer.cornerRadius = 5.0
+        image.contentMode = .scaleAspectFill
+        image.layer.masksToBounds = true
         image.kf.indicatorType = .activity
-        image.kf.setImage(with: place.coverPhoto?.url,
+        image.kf.setImage(with: viewModel.place.info.coverPhoto?.url,
                                 placeholder: nil,
                                 options: self.kingfisherOptions,
                                 progressBlock: nil,
@@ -35,8 +37,24 @@ final class DetailPlaceViewController: UIViewController {
         return image
     }()
     
+    fileprivate lazy var titlePlace: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.font = .boldSystemFont(ofSize: 17.0)
+        label.attributedText = self.viewModel.place.title
+        return label
+    }()
+    
+    fileprivate lazy var ratingLabel: UILabel = {
+        let label = UILabel()
+        label.attributedText = self.viewModel.place.rating
+        return label
+    }()
+    
     fileprivate lazy var tableView: UITableView = {
         let table = UITableView()
+        table.delegate = self
+        table.dataSource = self
         table.tableFooterView = UIView(frame: CGRect.zero)
         return table
     }()
@@ -49,12 +67,27 @@ final class DetailPlaceViewController: UIViewController {
         }
         
         imageHeader.snp.makeConstraints { (make) in
-            make.left.right.top.bottom.equalToSuperview()
+            make.top.left.equalTo(headerView).offset(10.0)
+            make.width.equalTo(100.0)
+            make.height.equalTo(130.0)
+        }
+        
+        titlePlace.snp.makeConstraints { (make) in
+            make.top.equalTo(imageHeader)
+            make.left.equalTo(imageHeader.snp.right).offset(10.0)
+            make.right.equalTo(headerView).offset(-10.0)
+            make.bottom.equalTo(ratingLabel.snp.top).offset(-10.0)
+        }
+        
+        ratingLabel.snp.makeConstraints { (make) in
+            make.bottom.equalTo(imageHeader)
+            make.left.equalTo(titlePlace)
+            make.height.equalTo(15.0)
         }
     }
     
     init(_ dependecies: Dependecies) {
-        self.place = dependecies.place
+        self.viewModel = dependecies.viewModel
         self.kingfisherOptions = dependecies.kingfisherOptions
         super.init(nibName: nil, bundle: nil)
     }
@@ -67,8 +100,60 @@ final class DetailPlaceViewController: UIViewController {
         super.viewDidLoad()
         
         headerView.addSubview(imageHeader)
+        headerView.addSubview(titlePlace)
+        headerView.addSubview(ratingLabel)
         tableView.tableHeaderView = headerView
         view.addSubview(tableView)
         updateViewConstraints()
+        
+        tableView.register(DetailDescriptionTableViewCell.self, forCellReuseIdentifier: DetailDescriptionTableViewCell.cellIdentifier)
+        tableView.register(DeatilPhoneWebsiteTableViewCell.self, forCellReuseIdentifier: DeatilPhoneWebsiteTableViewCell.cellIdentifier)
+    }
+}
+
+extension DetailPlaceViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.dataSource.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let type = viewModel.dataSource[indexPath.row]
+        
+        switch type {
+        case .description(let text, _):
+            let cell = tableView.dequeueReusableCell(withIdentifier: DetailDescriptionTableViewCell.cellIdentifier,
+                                                     for: indexPath) as? DetailDescriptionTableViewCell ?? DetailDescriptionTableViewCell()
+            
+            cell.textDescription = text
+            
+            return cell
+        case .phoneAndSite:
+            let cell = tableView.dequeueReusableCell(withIdentifier: DeatilPhoneWebsiteTableViewCell.cellIdentifier,
+                                                     for: indexPath) as? DeatilPhoneWebsiteTableViewCell ?? DeatilPhoneWebsiteTableViewCell()
+            
+            return cell
+        }
+    }
+}
+
+extension DetailPlaceViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let type = viewModel.dataSource[indexPath.row]
+        
+        switch type {
+        case .description(_, let height):
+            return height
+        case .phoneAndSite:
+            return 60.0
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard scrollView.contentOffset.y > -23.0 else {
+            navigationItem.title = ""
+            return
+        }
+        
+        navigationItem.title = viewModel.place.info.name
     }
 }

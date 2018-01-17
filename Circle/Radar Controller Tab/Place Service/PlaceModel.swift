@@ -25,6 +25,9 @@ struct PlaceModel {
     let phone: Int?
     let ratingStar: Float?
     let ratingCount: Int?
+    let hours: [String: String]?
+    let isAlwaysOpen: Bool?
+    let isClosed: Bool?
     let address: String?
     let website: String?
     let categories: [Categories]?
@@ -41,6 +44,9 @@ extension PlaceModel: Unboxable {
         self.phone = unboxer.unbox(key: "phone")
         self.ratingStar = unboxer.unbox(key: "overall_star_rating")
         self.ratingCount = unboxer.unbox(key: "rating_count")
+        self.hours = unboxer.unbox(key: "hours")
+        self.isAlwaysOpen = unboxer.unbox(key: "is_always_open")
+        self.isClosed = unboxer.unbox(key: "is_permanently_closed")
         self.address = unboxer.unbox(key: "single_line_address")
         self.website = unboxer.unbox(key: "website")
         let categories: [String] = try unboxer.unbox(key: "matched_categories")

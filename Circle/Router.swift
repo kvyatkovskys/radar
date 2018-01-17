@@ -16,7 +16,6 @@ fileprivate extension UIColor {
 }
 
 struct Router {
-
     func showMainTabController() -> UITabBarController {
         //swiftlint:disable force_cast
         var placesViewController = UIViewController()
@@ -67,8 +66,8 @@ struct Router {
         return tabController
     }
     
-    fileprivate func openDetailPlace(_ place: PlaceModel, _ kingfisherOptions: KingfisherOptionsInfo, _ fromController: UIViewController) {
-        let dependecies = DetailPlaceDependecies(place, kingfisherOptions)
+    fileprivate func openDetailPlace(_ place: Place, _ kingfisherOptions: KingfisherOptionsInfo, _ fromController: UIViewController) {
+        let dependecies = DetailPlaceDependecies(DetailPlaceViewModel(place), kingfisherOptions)
         let detailPlaceController = DetailPlaceViewController(dependecies)
         detailPlaceController.hidesBottomBarWhenPushed = true
         fromController.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)

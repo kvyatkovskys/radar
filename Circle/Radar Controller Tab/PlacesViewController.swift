@@ -138,6 +138,7 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         navigationItem.rightBarButtonItem = rightBarButton
         
         updateConstraints()
+        startDetectLocation()
         
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
         tableDataSource = PlacesTableViewDataSource(tableView,
@@ -186,12 +187,6 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     deinit {
         notificationTokenCategories?.invalidate()
         notificationTokenRating?.invalidate()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        startDetectLocation()
     }
     
     @objc func showMap() {
