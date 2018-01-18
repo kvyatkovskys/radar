@@ -11,7 +11,7 @@ import Foundation
 enum TypeDetailCell {
     case description(String, CGFloat)
     case phoneAndSite(Int?, String?)
-    case address(String, CGFloat)
+    case address(String, LocationPlace?, CGFloat)
     
     var title: String {
         switch self {
@@ -50,7 +50,7 @@ struct DetailPlaceViewModel {
                                             attributes: [.font: UIFont.boldSystemFont(ofSize: 15.0)],
                                             context: nil)
             
-            let type = TypeDetailCell.address(address, rect.height + 80.0)
+            let type = TypeDetailCell.address(address, place.info.location, rect.height + 80.0)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         

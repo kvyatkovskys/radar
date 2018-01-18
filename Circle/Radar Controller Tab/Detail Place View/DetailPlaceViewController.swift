@@ -145,11 +145,12 @@ extension DetailPlaceViewController: UITableViewDataSource {
             cell.site = website
             
             return cell
-        case .address(let address, _):
+        case .address(let address, let location, _):
             let cell = tableView.dequeueReusableCell(withIdentifier: DetailAddressTableViewCell.cellIdentifier,
                                                      for: indexPath) as? DetailAddressTableViewCell ?? DetailAddressTableViewCell()
             
             cell.address = address
+            cell.location = location
             
             return cell
         }
@@ -169,7 +170,7 @@ extension DetailPlaceViewController: UITableViewDelegate {
             return height
         case .phoneAndSite:
             return 60.0
-        case .address(_, let height):
+        case .address(_, _, let height):
             return height
         }
     }

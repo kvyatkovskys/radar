@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MapKit
 
 fileprivate extension UIColor {
     static var blueButton: UIColor {
@@ -31,6 +32,7 @@ final class DetailAddressTableViewCell: UITableViewCell {
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor.blueButton
         button.layer.cornerRadius = 15.0
+        button.addTarget(self, action: #selector(openMap), for: .touchUpInside)
         return button
     }()
     
@@ -58,6 +60,8 @@ final class DetailAddressTableViewCell: UITableViewCell {
         }
     }
     
+    var location: LocationPlace?
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -69,5 +73,20 @@ final class DetailAddressTableViewCell: UITableViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc func openMap() {
+        let latitude: CLLocationDegrees = location?.latitude ?? 0
+        let longitude: CLLocationDegrees = location?.longitude ?? 0
+        
+        let regionDistance: CLLocationDistance = 1000
+        let coordinates = CLLocationCoordinate2DMake(latitude, longitude)
+        let regionSpan = MKCoordinateRegionMakeWithDistance(coordinates, regionDistance, regionDistance)
+        let options = [MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center),
+                       MKLaunchOptionsMapSpanKey: NSValue(mkCoordinateSpan: regionSpan.span)]
+        let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
+        let mapItem = MKMapItem(placemark: placemark)
+        mapItem.name = address
+        mapItem.openInMaps(launchOptions: options)
     }
 }
