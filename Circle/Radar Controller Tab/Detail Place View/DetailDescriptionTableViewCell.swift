@@ -24,7 +24,7 @@ final class DetailDescriptionTableViewCell: UITableViewCell {
         
         descriptionLabel.snp.makeConstraints { (make) in
             make.top.bottom.equalToSuperview()
-            make.left.right.equalToSuperview().inset(10.0)
+            make.left.right.equalToSuperview().inset(15.0)
         }
     }
     

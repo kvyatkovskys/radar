@@ -12,20 +12,36 @@ enum TypeDetailCell {
     case description(String, CGFloat)
     case phoneAndSite(Int?, String?)
     case address(String, CGFloat)
+    
+    var title: String {
+        switch self {
+        case .description:
+            return "Description"
+        case .phoneAndSite:
+            return "Contacts"
+        case .address:
+            return "Address"
+        }
+    }
+}
+
+struct DetailSectionObjects {
+    var sectionName: String
+    var sectionObjects: [TypeDetailCell]
 }
 
 struct DetailPlaceViewModel {
     let place: Place
-    var dataSource: [TypeDetailCell]
+    var dataSource: [DetailSectionObjects]
     
     init(_ place: Place) {
         self.place = place
         print(place.info.categories)
-        var items: [TypeDetailCell] = []
+        var items: [DetailSectionObjects] = []
         
         if (place.info.phone != nil) || (place.info.website != nil) {
             let type = TypeDetailCell.phoneAndSite(place.info.phone, place.info.website)
-            items.append(type)
+            items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         
         if let address = place.info.address {
@@ -35,7 +51,7 @@ struct DetailPlaceViewModel {
                                             context: nil)
             
             let type = TypeDetailCell.address(address, rect.height + 80.0)
-            items.append(type)
+            items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         
         if let description = place.info.description {
@@ -45,7 +61,7 @@ struct DetailPlaceViewModel {
                                                 context: nil)
             
             let type = TypeDetailCell.description(description, rect.height + 20.0)
-            items.append(type)
+            items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         
         self.dataSource = items

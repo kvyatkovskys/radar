@@ -27,10 +27,10 @@ final class DetailAddressTableViewCell: UITableViewCell {
     fileprivate lazy var mapButton: UIButton = {
         let button = UIButton()
         button.setTitle("Open map", for: .normal)
-        button.titleLabel?.font = .boldSystemFont(ofSize: 20.0)
+        button.titleLabel?.font = .systemFont(ofSize: 15.0)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor.blueButton
-        button.layer.cornerRadius = 10.0
+        button.layer.cornerRadius = 15.0
         return button
     }()
     
@@ -39,15 +39,15 @@ final class DetailAddressTableViewCell: UITableViewCell {
         
         addressLabel.snp.remakeConstraints { (make) in
             make.top.equalToSuperview()
-            make.left.equalToSuperview().offset(10.0)
-            make.right.equalToSuperview().offset(-10.0)
+            make.left.equalToSuperview().offset(15.0)
+            make.right.equalToSuperview().offset(-15.0)
             make.bottom.equalTo(mapButton.snp.top).offset(-10.0)
         }
         
         mapButton.snp.remakeConstraints { (make) in
-            make.height.equalTo(40.0)
+            make.height.equalTo(30.0)
             make.centerX.equalToSuperview()
-            make.width.equalTo(200.0)
+            make.width.equalTo(100.0)
             make.bottom.equalToSuperview().offset(-10.0)
         }
     }

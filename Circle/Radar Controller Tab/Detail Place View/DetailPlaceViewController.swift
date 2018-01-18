@@ -56,6 +56,7 @@ final class DetailPlaceViewController: UIViewController {
         table.delegate = self
         table.dataSource = self
         table.tableFooterView = UIView(frame: CGRect.zero)
+        table.separatorColor = .clear
         return table
     }()
     
@@ -117,12 +118,16 @@ final class DetailPlaceViewController: UIViewController {
 }
 
 extension DetailPlaceViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.dataSource.count
     }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.dataSource[section].sectionObjects.count
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let type = viewModel.dataSource[indexPath.row]
+        let type = viewModel.dataSource[indexPath.section].sectionObjects[indexPath.row]
         
         switch type {
         case .description(let text, _):
@@ -152,8 +157,12 @@ extension DetailPlaceViewController: UITableViewDataSource {
 }
 
 extension DetailPlaceViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return viewModel.dataSource[section].sectionName
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let type = viewModel.dataSource[indexPath.row]
+        let type = viewModel.dataSource[indexPath.section].sectionObjects[indexPath.row]
         
         switch type {
         case .description(_, let height):
