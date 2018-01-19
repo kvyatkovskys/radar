@@ -12,8 +12,7 @@ import MapKit
 final class MapViewController: UIViewController {
     typealias Dependecies = HasMapModel
     
-    fileprivate let places: PlacesSections?
-    
+    fileprivate let places: Places?
     fileprivate let location: CLLocation?
     
     fileprivate lazy var mapView: MKMapView = {
@@ -40,7 +39,7 @@ final class MapViewController: UIViewController {
     }
     
     init(_ dependecies: Dependecies) {
-        self.places = dependecies.placesSections
+        self.places = dependecies.places
         self.location = dependecies.location
         super.init(nibName: nil, bundle: nil)
     }
@@ -57,18 +56,14 @@ final class MapViewController: UIViewController {
         
         if let location = location, let places = places {
             centerMapOnLocation(location)
-            addPointOnMap(placesSections: places)
+            addPointOnMap(places: places)
         }
     }
     
-    fileprivate func addPointOnMap(placesSections: PlacesSections) {
+    fileprivate func addPointOnMap(places: Places) {
         mapView.removeAnnotations(mapView.annotations)
-        
-        var locations: [CLLocationCoordinate2D] = []
-        placesSections.places.forEach({ (place) in
-            locations += place.map({ CLLocationCoordinate2D(latitude: $0.location?.latitude ?? 0,
-                                                            longitude: $0.location?.longitude ?? 0) })
-        })
+        let locations = places.items.map({ CLLocationCoordinate2D(latitude: $0.location?.latitude ?? 0,
+                                                                   longitude: $0.location?.longitude ?? 0) })
         
         locations.forEach { (location) in
             let annotation = MKPointAnnotation()

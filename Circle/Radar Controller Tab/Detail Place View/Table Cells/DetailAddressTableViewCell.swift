@@ -41,8 +41,8 @@ final class DetailAddressTableViewCell: UITableViewCell {
         
         addressLabel.snp.remakeConstraints { (make) in
             make.top.equalToSuperview()
-            make.left.equalToSuperview().offset(15.0)
-            make.right.equalToSuperview().offset(-15.0)
+            make.left.equalToSuperview().offset(10.0)
+            make.right.equalToSuperview().offset(-10.0)
             make.bottom.equalTo(mapButton.snp.top).offset(-10.0)
         }
         

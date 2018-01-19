@@ -89,17 +89,17 @@ struct FilterPlacesDependecies: HasFilterPlacesViewModel, HasFilterPlacesDelegat
 }
 
 protocol HasMapModel {
-    var placesSections: PlacesSections? { get }
+    var places: Places? { get }
     var location: CLLocation? { get }
 }
 
 /// container dependecies injection's for map controller
 struct MapDependecies: HasMapModel {
-    let placesSections: PlacesSections?
+    let places: Places?
     let location: CLLocation?
     
-    init(_ placesSections: PlacesSections?, _ location: CLLocation?) {
-        self.placesSections = placesSections
+    init(_ places: Places?, _ location: CLLocation?) {
+        self.places = places
         self.location = location
     }
 }

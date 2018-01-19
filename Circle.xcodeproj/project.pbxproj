@@ -25,6 +25,7 @@
 		8B3398D0200F7597002966ED /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3398CF200F7597002966ED /* String+Extension.swift */; };
 		8B3398D2200F77E4002966ED /* DeatilPhoneWebsiteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3398D1200F77E4002966ED /* DeatilPhoneWebsiteTableViewCell.swift */; };
 		8B3398D4200FE5E2002966ED /* DetailAddressTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3398D3200FE5E2002966ED /* DetailAddressTableViewCell.swift */; };
+		8B3398D620127670002966ED /* DetailSectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3398D520127670002966ED /* DetailSectionTableViewCell.swift */; };
 		8B3F5D871FFAE67E00B1F88D /* CategoriesViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F5D861FFAE67E00B1F88D /* CategoriesViewDataSource.swift */; };
 		8B41154B1FDB2CEF00C6614C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B41154A1FDB2CEF00C6614C /* AppDelegate.swift */; };
 		8B41154D1FDB2CEF00C6614C /* PlacesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B41154C1FDB2CEF00C6614C /* PlacesViewController.swift */; };
@@ -91,6 +92,7 @@
 		8B3398CF200F7597002966ED /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		8B3398D1200F77E4002966ED /* DeatilPhoneWebsiteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeatilPhoneWebsiteTableViewCell.swift; sourceTree = "<group>"; };
 		8B3398D3200FE5E2002966ED /* DetailAddressTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAddressTableViewCell.swift; sourceTree = "<group>"; };
+		8B3398D520127670002966ED /* DetailSectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailSectionTableViewCell.swift; sourceTree = "<group>"; };
 		8B3F5D861FFAE67E00B1F88D /* CategoriesViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewDataSource.swift; sourceTree = "<group>"; };
 		8B4115471FDB2CEF00C6614C /* Circle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Circle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B41154A1FDB2CEF00C6614C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -217,9 +219,7 @@
 			children = (
 				8B18FE0F200A782D00E637C7 /* DetailPlaceViewController.swift */,
 				8B3398CB200F61E6002966ED /* DetailPlaceViewModel.swift */,
-				8B3398CD200F66B5002966ED /* DetailDescriptionTableViewCell.swift */,
-				8B3398D1200F77E4002966ED /* DeatilPhoneWebsiteTableViewCell.swift */,
-				8B3398D3200FE5E2002966ED /* DetailAddressTableViewCell.swift */,
+				8B3398D72012770C002966ED /* Table Cells */,
 			);
 			path = "Detail Place View";
 			sourceTree = "<group>";
@@ -233,6 +233,17 @@
 				8B1A80A81FFADAED0039C39A /* CategoryCollectionViewCell.swift */,
 			);
 			path = "Categories View";
+			sourceTree = "<group>";
+		};
+		8B3398D72012770C002966ED /* Table Cells */ = {
+			isa = PBXGroup;
+			children = (
+				8B3398CD200F66B5002966ED /* DetailDescriptionTableViewCell.swift */,
+				8B3398D1200F77E4002966ED /* DeatilPhoneWebsiteTableViewCell.swift */,
+				8B3398D3200FE5E2002966ED /* DetailAddressTableViewCell.swift */,
+				8B3398D520127670002966ED /* DetailSectionTableViewCell.swift */,
+			);
+			path = "Table Cells";
 			sourceTree = "<group>";
 		};
 		8B41153E1FDB2CEF00C6614C = {
@@ -623,6 +634,7 @@
 				8B1A80A91FFADAED0039C39A /* CategoryCollectionViewCell.swift in Sources */,
 				8B41156D1FDC845B00C6614C /* AppInjections.swift in Sources */,
 				8B18FE14200A994F00E637C7 /* FCButtonLoginTableViewCell.swift in Sources */,
+				8B3398D620127670002966ED /* DetailSectionTableViewCell.swift in Sources */,
 				8B18FE10200A782D00E637C7 /* DetailPlaceViewController.swift in Sources */,
 				8BE208A11FFD1D300048D690 /* Controller+Extension.swift in Sources */,
 				8B3398D0200F7597002966ED /* String+Extension.swift in Sources */,

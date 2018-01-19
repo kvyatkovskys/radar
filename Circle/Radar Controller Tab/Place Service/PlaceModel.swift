@@ -11,11 +11,23 @@ import Unbox
 
 struct PlaceDataModel {
     let data: [PlaceModel]
+    let next: PlaceNext
 }
 
 extension PlaceDataModel: Unboxable {
     init(unboxer: Unboxer) throws {
         self.data = try unboxer.unbox(key: "data")
+        self.next = try unboxer.unbox(key: "paging")
+    }
+}
+
+struct PlaceNext {
+    let url: URL?
+}
+
+extension PlaceNext: Unboxable {
+    init(unboxer: Unboxer) throws {
+        self.url = URL(string: try unboxer.unbox(key: "next"))
     }
 }
 

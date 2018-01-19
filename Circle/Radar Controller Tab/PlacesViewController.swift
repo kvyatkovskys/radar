@@ -142,10 +142,10 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
         tableDataSource = PlacesTableViewDataSource(tableView,
-                                                    placesSections: PlacesSections([], [], [], []),
+                                                    places: Places(),
                                                     kingfisherOptions: kingfisherOptions)
         tableDelegate = PlacesTableViewDelegate(tableView,
-                                                placesSections: PlacesSections([], [], [], []),
+                                                places: Places(),
                                                 viewModel: viewModel)
         
         refreshControl.rx.controlEvent(.valueChanged).asObservable()
@@ -190,7 +190,7 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     }
     
     @objc func showMap() {
-        viewModel.openMap(tableDataSource?.placesSections, locationService.userLocation, tapViewOnMap.frame)
+        viewModel.openMap(tableDataSource?.places, locationService.userLocation, tapViewOnMap.frame)
     }
     
     // MARK: LocationServiceDelegate
@@ -227,28 +227,28 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         viewModel.getInfoPlace(location: location, distance: distance).asObservable()
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] (model) in
-                self.tableDataSource?.placesSections = model
-                self.tableDelegate?.placesSections = model
+                self.tableDataSource?.places = model
+                self.tableDelegate?.places = model
                 self.tableView.reloadData()
-                self.addPointOnMap(placesSections: model)
+                self.addPointOnMap(places: model)
                 
                 self.indicatorView.hideIndicator()
                 if self.refreshControl.isRefreshing {
                     self.refreshControl.endRefreshing()
                 }
-                }, onError: { (error) in
+                }, onError: { [unowned self] (error) in
                     print(error)
+                    self.indicatorView.hideIndicator()
+                    if self.refreshControl.isRefreshing {
+                        self.refreshControl.endRefreshing()
+                    }
             }).disposed(by: disposeBag)
     }
     
-    fileprivate func addPointOnMap(placesSections: PlacesSections) {
+    fileprivate func addPointOnMap(places: Places) {
         mapView.removeAnnotations(mapView.annotations)
-        
-        var locations: [CLLocationCoordinate2D] = []
-        placesSections.places.forEach({ (place) in
-            locations += place.map({ CLLocationCoordinate2D(latitude: $0.location?.latitude ?? 0,
-                                                            longitude: $0.location?.longitude ?? 0) })
-        })
+        let locations = places.items.map({ CLLocationCoordinate2D(latitude: $0.location?.latitude ?? 0,
+                                                                   longitude: $0.location?.longitude ?? 0) })
         
         locations.forEach { (location) in
             let annotation = MKPointAnnotation()

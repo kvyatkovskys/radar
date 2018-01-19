@@ -31,7 +31,7 @@ struct Router {
                                   toController: FilterPlacesViewController(dependecies))
         }
         
-        viewModel.openMap = { (places: PlacesSections?, location: CLLocation?, sourceRect: CGRect) in
+        viewModel.openMap = { (places: Places?, location: CLLocation?, sourceRect: CGRect) in
             let dependecies = MapDependecies(places, location)
             self.openMap(fromController: placesViewController as! PlacesViewController,
                          toController: MapViewController(dependecies),
@@ -47,13 +47,6 @@ struct Router {
         placesViewController.navigationItem.title = "Around here"
         placesViewController.tabBarItem = UITabBarItem(title: "My location", image: locationImage, tag: 1)
         placesViewController.navigationController?.navigationBar.isTranslucent = true
-        
-        if #available(iOS 11.0, *) {
-            placesViewController.navigationController?.navigationBar.largeTitleTextAttributes = [
-                NSAttributedStringKey.foregroundColor: UIColor.white,
-                NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 28)]
-            placesViewController.navigationController?.navigationItem.largeTitleDisplayMode = .always
-        }
         
         let settingsController = SettingsViewController(SettingsViewDependecies(SettingsViewModel()))
         let settingsImage = UIImage(named: "ic_settings")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)

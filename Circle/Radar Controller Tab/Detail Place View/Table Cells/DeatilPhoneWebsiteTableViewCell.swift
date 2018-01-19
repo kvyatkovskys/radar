@@ -44,21 +44,21 @@ final class DeatilPhoneWebsiteTableViewCell: UITableViewCell {
         
         phoneButton.snp.remakeConstraints { (make) in
             make.width.equalTo(100.0)
-            make.top.bottom.equalToSuperview().inset(15.0)
+            make.top.bottom.equalToSuperview().inset(5.0)
             if site == nil {
                 make.centerX.equalTo(self.snp.centerX)
             } else {
-                make.right.equalTo(self.snp.centerX).offset(-30.0)
+                make.right.equalTo(self.snp.centerX).offset(-20.0)
             }
         }
         
         websiteButton.snp.remakeConstraints { (make) in
             make.width.equalTo(100.0)
-            make.top.bottom.equalToSuperview().inset(15.0)
+            make.top.bottom.equalToSuperview().inset(5.0)
             if phone == nil {
                  make.centerX.equalTo(self.snp.centerX)
             } else {
-                 make.left.equalTo(self.snp.centerX).offset(30.0)
+                 make.left.equalTo(self.snp.centerX).offset(20.0)
             }
         }
     }

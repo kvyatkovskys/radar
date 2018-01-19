@@ -51,6 +51,12 @@ final class DetailPlaceViewController: UIViewController {
         return label
     }()
     
+    fileprivate let lineView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .gray
+        return view
+    }()
+    
     fileprivate lazy var tableView: UITableView = {
         let table = UITableView()
         table.delegate = self
@@ -85,6 +91,12 @@ final class DetailPlaceViewController: UIViewController {
             make.left.equalTo(titlePlace)
             make.height.equalTo(15.0)
         }
+        
+        lineView.snp.remakeConstraints { (make) in
+            make.bottom.equalToSuperview()
+            make.left.right.equalToSuperview()
+            make.height.equalTo(0.5)
+        }
     }
     
     init(_ dependecies: Dependecies) {
@@ -107,6 +119,7 @@ final class DetailPlaceViewController: UIViewController {
         headerView.addSubview(imageHeader)
         headerView.addSubview(titlePlace)
         headerView.addSubview(ratingLabel)
+        headerView.addSubview(lineView)
         tableView.tableHeaderView = headerView
         view.addSubview(tableView)
         updateViewConstraints()
@@ -158,8 +171,11 @@ extension DetailPlaceViewController: UITableViewDataSource {
 }
 
 extension DetailPlaceViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return viewModel.dataSource[section].sectionName
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = tableView.dequeueReusableCell(withIdentifier: DetailSectionTableViewCell.cellIdentifier) as? DetailSectionTableViewCell ?? DetailSectionTableViewCell()
+        
+        header.title = viewModel.dataSource[section].sectionName
+        return header
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -169,7 +185,7 @@ extension DetailPlaceViewController: UITableViewDelegate {
         case .description(_, let height):
             return height
         case .phoneAndSite:
-            return 60.0
+            return 40.0
         case .address(_, _, let height):
             return height
         }
@@ -182,7 +198,6 @@ extension DetailPlaceViewController: UITableViewDelegate {
             })
             return
         }
-        
         navigationItem.title = viewModel.place.info.name
     }
 }

@@ -9,11 +9,11 @@
 import UIKit
 
 final class PlacesTableViewDelegate: NSObject {
-    var placesSections: PlacesSections
+    var places: Places
     fileprivate let viewModel: PlaceViewModel
     
-    init(_ tableView: UITableView, placesSections: PlacesSections, viewModel: PlaceViewModel) {
-        self.placesSections = placesSections
+    init(_ tableView: UITableView, places: Places, viewModel: PlaceViewModel) {
+        self.places = places
         self.viewModel = viewModel
         super.init()
         tableView.delegate = self
@@ -25,20 +25,11 @@ extension PlacesTableViewDelegate: UITableViewDelegate {
         return 170.0
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = tableView.dequeueReusableCell(withIdentifier: PlaceHeaderTableViewCell.cellIdentifier) as? PlaceHeaderTableViewCell ?? PlaceHeaderTableViewCell()
-        
-        header.color = placesSections.sections[section].first?.color
-        header.title = placesSections.sections[section].first?.title
-        
-        return header
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let place = placesSections.places[indexPath.section][indexPath.row]
-        let title = placesSections.titles[indexPath.section][indexPath.row]
-        let rating = placesSections.ratings[indexPath.section][indexPath.row]
+        let place = places.items[indexPath.row]
+        let title = places.titles[indexPath.row]
+        let rating = places.ratings[indexPath.row]
         viewModel.openDetailPlace(Place(info: place, title: title, rating: rating))
     }
 }

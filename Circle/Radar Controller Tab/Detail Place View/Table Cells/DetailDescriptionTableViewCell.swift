@@ -14,7 +14,7 @@ final class DetailDescriptionTableViewCell: UITableViewCell {
     fileprivate let descriptionLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.textColor = .gray
+        label.textColor = .black
         label.font = .systemFont(ofSize: 13.0)
         return label
     }()
@@ -24,7 +24,7 @@ final class DetailDescriptionTableViewCell: UITableViewCell {
         
         descriptionLabel.snp.makeConstraints { (make) in
             make.top.bottom.equalToSuperview()
-            make.left.right.equalToSuperview().inset(15.0)
+            make.left.right.equalToSuperview().inset(10.0)
         }
     }
     

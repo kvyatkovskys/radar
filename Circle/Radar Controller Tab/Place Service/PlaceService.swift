@@ -12,34 +12,18 @@ import Unbox
 
 struct PlaceService {
     fileprivate let placeManager: FBSDKPlacesManager
-
+    fileprivate var setting: PlaceSetting
+    
     init() {
         self.placeManager = FBSDKPlacesManager()
+        self.setting = PlaceSetting()
     }
 
-    func getInfoAboutPlace(_ location: CLLocation, _ categories: [Categories], _ distance: CLLocationDistance) -> Observable<[PlaceModel]> {
+    func getInfoAboutPlace(_ location: CLLocation, _ categories: [Categories], _ distance: CLLocationDistance) -> Observable<PlaceDataModel> {
         let request = placeManager.placeSearchRequest(for: location,
                                                       searchTerm: nil,
                                                       categories: categories.map({ $0.rawValue }),
-                                                      fields: [FBSDKPlacesFieldKeyPlaceID,
-                                                               FBSDKPlacesFieldKeyName,
-                                                               FBSDKPlacesFieldKeyAbout,
-                                                               FBSDKPlacesFieldKeyDescription,
-                                                               FBSDKPlacesFieldKeyCoverPhoto,
-                                                               FBSDKPlacesFieldKeyPhone,
-                                                               FBSDKPlacesFieldKeyPaymentOptions,
-                                                               FBSDKPlacesFieldKeyHours,
-                                                               FBSDKPlacesFieldKeyIsAlwaysOpen,
-                                                               FBSDKPlacesFieldKeyIsPermanentlyClosed,
-                                                               FBSDKPlacesFieldKeyOverallStarRating,
-                                                               FBSDKPlacesFieldKeyRatingCount,
-                                                               FBSDKPlacesFieldKeyParking,
-                                                               FBSDKPlacesFieldKeyRestaurantServices,
-                                                               FBSDKPlacesFieldKeyRestaurantSpecialties,
-                                                               FBSDKPlacesFieldKeySingleLineAddress,
-                                                               FBSDKPlacesFieldKeyWebsite,
-                                                               FBSDKPlacesResponseKeyMatchedCategories,
-                                                               FBSDKPlacesFieldKeyLocation],
+                                                      fields: setting.getFields(),
                                                       distance: distance,
                                                       cursor: nil)
         
@@ -51,7 +35,7 @@ struct PlaceService {
                 }
 
                 if let data = result as? [String: Any], let model: PlaceDataModel = try? unbox(dictionary: data) {
-                    observable.on(.next(model.data))
+                    observable.on(.next(model))
                 }
             })
             return Disposables.create()
