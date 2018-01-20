@@ -8,16 +8,22 @@
 
 import Foundation
 
+enum ContactType: String {
+    case phone, website, facebook
+}
+
+typealias Contact = (type: ContactType, value: Any?)
+
 enum TypeDetailCell {
     case description(String, CGFloat)
-    case phoneAndSite(Int?, String?)
+    case contact([Contact]) //Int?, String?, URL?
     case address(String, LocationPlace?, CGFloat)
     
     var title: String {
         switch self {
         case .description:
             return "Description"
-        case .phoneAndSite:
+        case .contact:
             return "Contacts"
         case .address:
             return "Address"
@@ -36,11 +42,13 @@ struct DetailPlaceViewModel {
     
     init(_ place: Place) {
         self.place = place
-        print(place.info.subCategories)
         var items: [DetailSectionObjects] = []
         
-        if (place.info.phone != nil) || (place.info.website != nil) {
-            let type = TypeDetailCell.phoneAndSite(place.info.phone, place.info.website)
+        if (place.info.phone != nil) || (place.info.website != nil) || (place.info.appLink != nil) {
+            let itemsContact = [Contact(type: ContactType.phone, value: place.info.phone),
+                                Contact(type: ContactType.website, value: place.info.website),
+                                Contact(type: ContactType.facebook, value: place.info.appLink)]
+            let type = TypeDetailCell.contact(itemsContact)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         

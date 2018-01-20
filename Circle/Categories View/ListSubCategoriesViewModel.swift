@@ -17,6 +17,5 @@ struct ListSubCategoriesViewModel {
         self.width = subCategories.map({ $0.width(font: .systemFont(ofSize: 12.0), height: 20.0) + 15.0 })
         self.items = subCategories
         self.color = color ?? UIColor.clear
-        print(width)
     }
 }

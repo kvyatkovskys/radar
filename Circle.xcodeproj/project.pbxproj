@@ -46,6 +46,9 @@
 		8B82C38620133A0200E0CA89 /* Error+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C38520133A0200E0CA89 /* Error+Extension.swift */; };
 		8B82C38820136D6400E0CA89 /* ListCategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C38720136D6400E0CA89 /* ListCategoriesViewController.swift */; };
 		8B82C38A20137A0500E0CA89 /* ListSubCategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C38920137A0500E0CA89 /* ListSubCategoriesViewModel.swift */; };
+		8B82C38C2013999B00E0CA89 /* ListButtonsCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C38B2013999B00E0CA89 /* ListButtonsCollectionDataSource.swift */; };
+		8B82C38E201399B500E0CA89 /* ListButtonsCollectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C38D201399B500E0CA89 /* ListButtonsCollectionDelegate.swift */; };
+		8B82C39020139C9F00E0CA89 /* ListButtonCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C38F20139C9F00E0CA89 /* ListButtonCollectionViewCell.swift */; };
 		8BE2089D1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2089C1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift */; };
 		8BE2089F1FFD17470048D690 /* FilterPlacesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2089E1FFD17470048D690 /* FilterPlacesViewController.swift */; };
 		8BE208A11FFD1D300048D690 /* Controller+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE208A01FFD1D300048D690 /* Controller+Extension.swift */; };
@@ -118,6 +121,9 @@
 		8B82C38520133A0200E0CA89 /* Error+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extension.swift"; sourceTree = "<group>"; };
 		8B82C38720136D6400E0CA89 /* ListCategoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCategoriesViewController.swift; sourceTree = "<group>"; };
 		8B82C38920137A0500E0CA89 /* ListSubCategoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListSubCategoriesViewModel.swift; sourceTree = "<group>"; };
+		8B82C38B2013999B00E0CA89 /* ListButtonsCollectionDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListButtonsCollectionDataSource.swift; sourceTree = "<group>"; };
+		8B82C38D201399B500E0CA89 /* ListButtonsCollectionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListButtonsCollectionDelegate.swift; sourceTree = "<group>"; };
+		8B82C38F20139C9F00E0CA89 /* ListButtonCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListButtonCollectionViewCell.swift; sourceTree = "<group>"; };
 		8BE2089C1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		8BE2089E1FFD17470048D690 /* FilterPlacesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterPlacesViewController.swift; sourceTree = "<group>"; };
 		8BE208A01FFD1D300048D690 /* Controller+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Controller+Extension.swift"; sourceTree = "<group>"; };
@@ -274,6 +280,7 @@
 				8B41156C1FDC845B00C6614C /* AppInjections.swift */,
 				8B44C3841FF012E1003C0754 /* Setting Controller Tab */,
 				8B44C3811FF012A2003C0754 /* Radar Controller Tab */,
+				8B82C39120139F2D00E0CA89 /* Contact Buttons */,
 				8B1A80AC1FFAE4640039C39A /* Categories View */,
 				8B18FE0E200A24C200E637C7 /* Map View */,
 				8B5F71551FF933BB00E628F9 /* Location Service */,
@@ -378,6 +385,16 @@
 				8B44C37C1FEFDFA5003C0754 /* LocationService.swift */,
 			);
 			path = "Location Service";
+			sourceTree = "<group>";
+		};
+		8B82C39120139F2D00E0CA89 /* Contact Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				8B82C38B2013999B00E0CA89 /* ListButtonsCollectionDataSource.swift */,
+				8B82C38D201399B500E0CA89 /* ListButtonsCollectionDelegate.swift */,
+				8B82C38F20139C9F00E0CA89 /* ListButtonCollectionViewCell.swift */,
+			);
+			path = "Contact Buttons";
 			sourceTree = "<group>";
 		};
 		8BFBF58020051C3C00CE2C8B /* Table View */ = {
@@ -641,6 +658,7 @@
 				8BE208A11FFD1D300048D690 /* Controller+Extension.swift in Sources */,
 				8B3398D0200F7597002966ED /* String+Extension.swift in Sources */,
 				8BEB4DF31FFAD285008AD1AB /* PlaceSetting.swift in Sources */,
+				8B82C38C2013999B00E0CA89 /* ListButtonsCollectionDataSource.swift in Sources */,
 				8B4177191FFD670B002A963A /* DeviceType.swift in Sources */,
 				8B44C3831FF012C8003C0754 /* SettingsViewController.swift in Sources */,
 				8B44C37D1FEFDFA5003C0754 /* LocationService.swift in Sources */,
@@ -653,8 +671,10 @@
 				8BFBF57B200517B000CE2C8B /* CategoriesTableViewDataSource.swift in Sources */,
 				8B18FE082007F8E000E637C7 /* View+Extension.swift in Sources */,
 				8B5F71511FF916B300E628F9 /* PlaceService.swift in Sources */,
+				8B82C38E201399B500E0CA89 /* ListButtonsCollectionDelegate.swift in Sources */,
 				8B41156B1FDC83AF00C6614C /* Router.swift in Sources */,
 				8B41770A1FFD5785002A963A /* ActivityIndicatorView.swift in Sources */,
+				8B82C39020139C9F00E0CA89 /* ListButtonCollectionViewCell.swift in Sources */,
 				8BE208A51FFD25CB0048D690 /* FilterPlacesViewModel.swift in Sources */,
 				8B41771D1FFF64A7002A963A /* DistancePickerViewDelegate.swift in Sources */,
 				8BFBF57D200517D000CE2C8B /* CategoriesTableViewDelegate.swift in Sources */,

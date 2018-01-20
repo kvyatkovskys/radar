@@ -10,7 +10,7 @@ import UIKit
 
 fileprivate extension UIColor {
     static var headerColor: UIColor {
-        return UIColor(withHex: 0xfdfdfb, alpha: 1.0)
+        return UIColor(withHex: 0xf6f6f6, alpha: 1.0)
     }
 }
 

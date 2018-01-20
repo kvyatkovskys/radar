@@ -8,76 +8,37 @@
 
 import UIKit
 
-fileprivate extension UIColor {
-    static var blueButton: UIColor {
-        return UIColor(withHex: 0x3498db, alpha: 1.0)
-    }
-}
-
 final class DeatilPhoneWebsiteTableViewCell: UITableViewCell {
     static let cellIdentifier = "DeatilPhoneWebsiteTableViewCell"
 
-    fileprivate lazy var phoneButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Call", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 15.0)
-        button.backgroundColor = UIColor.blueButton
-        button.layer.cornerRadius = 15.0
-        button.addTarget(self, action: #selector(callPhone), for: .touchUpInside)
-        return button
-    }()
+    fileprivate var collectionDataSource: ListButtonsCollectionDataSource?
+    //swiftlint:disable weak_delegate
+    fileprivate var collectionDelegate: ListButtonsCollectionDelegate?
     
-    fileprivate lazy var websiteButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Website", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 15.0)
-        button.backgroundColor = UIColor.blueButton
-        button.layer.cornerRadius = 15.0
-        button.addTarget(self, action: #selector(openSite), for: .touchUpInside)
-        return button
+    fileprivate lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = UICollectionViewScrollDirection.horizontal
+        layout.itemSize = CGSize(width: 100.0, height: 50.0)
+        layout.sectionInset = UIEdgeInsets(top: 5.0, left: 2.0, bottom: 5.0, right: 2.0)
+        
+        let collection = UICollectionView(frame: self.frame, collectionViewLayout: layout)
+        collection.backgroundColor = UIColor.clear
+        return collection
     }()
     
     override func updateConstraints() {
         super.updateConstraints()
         
-        phoneButton.snp.remakeConstraints { (make) in
-            make.width.equalTo(100.0)
-            make.top.bottom.equalToSuperview().inset(5.0)
-            if site == nil {
-                make.centerX.equalTo(self.snp.centerX)
-            } else {
-                make.right.equalTo(self.snp.centerX).offset(-20.0)
-            }
-        }
-        
-        websiteButton.snp.remakeConstraints { (make) in
-            make.width.equalTo(100.0)
-            make.top.bottom.equalToSuperview().inset(5.0)
-            if phone == nil {
-                 make.centerX.equalTo(self.snp.centerX)
-            } else {
-                 make.left.equalTo(self.snp.centerX).offset(20.0)
-            }
+        collectionView.snp.remakeConstraints { (make) in
+            make.top.bottom.left.right.equalToSuperview()
         }
     }
     
-    var phone: Int? {
+    var contacts: [Contact] = [] {
         didSet {
-            guard phone != nil else {
-                phoneButton.isHidden = true
-                return
-            }
-        }
-    }
-    
-    var site: String? {
-        didSet {
-            guard site != nil else {
-                websiteButton.isHidden = true
-                return
-            }
+            collectionView.register(ListButtonCollectionViewCell.self, forCellWithReuseIdentifier: ListButtonCollectionViewCell.cellIdentifier)
+            collectionDataSource = ListButtonsCollectionDataSource(collectionView: collectionView, contacts.filter({ $0.value != nil }))
+            collectionDelegate = ListButtonsCollectionDelegate(collectionView: collectionView, contacts.filter({ $0.value != nil }))
         }
     }
     
@@ -85,24 +46,11 @@ final class DeatilPhoneWebsiteTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         selectionStyle = .none
-        addSubview(phoneButton)
-        addSubview(websiteButton)
+        addSubview(collectionView)
         updateConstraints()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    @objc func callPhone() {
-        if let url = URL(string: "tel://\(phone ?? 0)"), UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
-    }
-    
-    @objc func openSite() {
-        if let url = URL(string: "\(site ?? "")"), UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
     }
 }
