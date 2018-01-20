@@ -51,6 +51,12 @@ final class DetailPlaceViewController: UIViewController {
         return label
     }()
     
+    fileprivate let listSubCategoriesView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
     fileprivate let lineView: UIView = {
         let view = UIView()
         view.backgroundColor = .gray
@@ -92,6 +98,13 @@ final class DetailPlaceViewController: UIViewController {
             make.height.equalTo(15.0)
         }
         
+        listSubCategoriesView.snp.remakeConstraints { (make) in
+            make.bottom.equalToSuperview()
+            make.right.equalTo(titlePlace)
+            make.left.equalTo(ratingLabel.snp.right).offset(10.0)
+            make.top.equalTo(titlePlace.snp.bottom)
+        }
+        
         lineView.snp.remakeConstraints { (make) in
             make.bottom.equalToSuperview()
             make.left.right.equalToSuperview()
@@ -119,6 +132,7 @@ final class DetailPlaceViewController: UIViewController {
         headerView.addSubview(imageHeader)
         headerView.addSubview(titlePlace)
         headerView.addSubview(ratingLabel)
+        headerView.addSubview(listSubCategoriesView)
         headerView.addSubview(lineView)
         tableView.tableHeaderView = headerView
         view.addSubview(tableView)
@@ -127,6 +141,18 @@ final class DetailPlaceViewController: UIViewController {
         tableView.register(DetailDescriptionTableViewCell.self, forCellReuseIdentifier: DetailDescriptionTableViewCell.cellIdentifier)
         tableView.register(DeatilPhoneWebsiteTableViewCell.self, forCellReuseIdentifier: DeatilPhoneWebsiteTableViewCell.cellIdentifier)
         tableView.register(DetailAddressTableViewCell.self, forCellReuseIdentifier: DetailAddressTableViewCell.cellIdentifier)
+        
+        let listCategories = ListCategoriesViewController(ListSubCategoriesViewModel(viewModel.place.info.subCategories ?? [],
+                                                                                     color: viewModel.place.info.categories?.first?.color))
+        
+        var frame = listCategories.view.frame
+        frame.size.height = listSubCategoriesView.frame.height
+        frame.size.width = listSubCategoriesView.frame.width
+        listCategories.view.frame = frame
+        
+        addChildViewController(listCategories)
+        listSubCategoriesView.addSubview(listCategories.view)
+        listCategories.didMove(toParentViewController: listCategories)
     }
 }
 

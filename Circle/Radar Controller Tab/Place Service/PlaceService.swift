@@ -53,7 +53,7 @@ struct PlaceService {
                     observable.on(.error(error!))
                     return
                 }
-                print(result)
+
                 if let data = result as? [String: Any], let model: PlaceDataModel = try? unbox(dictionary: data) {
                     observable.on(.next(model))
                 }

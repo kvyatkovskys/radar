@@ -66,7 +66,6 @@ struct PlaceViewModel {
         return placeService.getInfoAboutPlaces(location, selected, distance)
             .asObservable().flatMap { (model) -> Observable<Places> in
                 let (places, ratings, titles) = self.updateResults(model: model)
-                print(places.last)
                 return Observable.just(Places(places, ratings, titles, model.next))
         }
     }

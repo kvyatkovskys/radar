@@ -21,4 +21,18 @@ extension String {
             return nil
         }
     }
+    
+    func width(font: UIFont, height: CGFloat) -> CGFloat {
+        return self.boundingRect(with: CGSize(width: .greatestFiniteMagnitude, height: height),
+                                 options: .usesLineFragmentOrigin,
+                                 attributes: [.font: font],
+                                 context: nil).width
+    }
+    
+    func height(font: UIFont, width: CGFloat) -> CGFloat {
+        return self.boundingRect(with: CGSize(width: width, height: .greatestFiniteMagnitude),
+                                 options: .usesLineFragmentOrigin,
+                                 attributes: [.font: font],
+                                 context: nil).height
+    }
 }

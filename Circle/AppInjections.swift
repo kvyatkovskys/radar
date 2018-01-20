@@ -46,20 +46,6 @@ struct SettingsViewDependecies: HasSettingsViewModel {
     }
 }
 
-// MARK: CategoriesViewController
-protocol HasGategoriesViewModel {
-    var viewModel: CategoriesViewModel { get }
-}
-
-/// container dependecies injection's for categories view
-struct CategoriesViewDependecies: HasGategoriesViewModel {
-    let viewModel: CategoriesViewModel
-    
-    init(_ viewModel: CategoriesViewModel) {
-        self.viewModel = viewModel
-    }
-}
-
 // MARK: FilterPlacesViewController
 protocol HasFilterPlacesViewModel {
     var viewModel: FilterViewModel { get }

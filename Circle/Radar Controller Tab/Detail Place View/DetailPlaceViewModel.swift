@@ -36,7 +36,7 @@ struct DetailPlaceViewModel {
     
     init(_ place: Place) {
         self.place = place
-        print(place.info.categories)
+        print(place.info.subCategories)
         var items: [DetailSectionObjects] = []
         
         if (place.info.phone != nil) || (place.info.website != nil) {
@@ -45,22 +45,16 @@ struct DetailPlaceViewModel {
         }
         
         if let address = place.info.address {
-            let rect = address.boundingRect(with: CGSize(width: ScreenSize.SCREEN_WIDTH, height: CGFloat.greatestFiniteMagnitude),
-                                            options: .usesLineFragmentOrigin,
-                                            attributes: [.font: UIFont.boldSystemFont(ofSize: 15.0)],
-                                            context: nil)
-            
-            let type = TypeDetailCell.address(address, place.info.location, rect.height + 80.0)
+            let height = address.height(font: .boldSystemFont(ofSize: 15.0),
+                                        width: ScreenSize.SCREEN_WIDTH) + 80.0
+            let type = TypeDetailCell.address(address, place.info.location, height)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         
         if let description = place.info.description {
-            let rect = description.boundingRect(with: CGSize(width: ScreenSize.SCREEN_WIDTH, height: CGFloat.greatestFiniteMagnitude),
-                                                options: .usesLineFragmentOrigin,
-                                                attributes: [.font: UIFont.systemFont(ofSize: 14.0)],
-                                                context: nil)
-            
-            let type = TypeDetailCell.description(description, rect.height + 20.0)
+            let height = description.height(font: .systemFont(ofSize: 14.0),
+                                            width: ScreenSize.SCREEN_WIDTH) + 20.0
+            let type = TypeDetailCell.description(description, height)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         
