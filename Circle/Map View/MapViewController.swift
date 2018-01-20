@@ -12,7 +12,7 @@ import MapKit
 final class MapViewController: UIViewController {
     typealias Dependecies = HasMapModel
     
-    fileprivate let places: Places?
+    fileprivate let places: [Places]
     fileprivate let location: CLLocation?
     
     fileprivate lazy var mapView: MKMapView = {
@@ -54,16 +54,19 @@ final class MapViewController: UIViewController {
         view.addSubview(mapView)
         updateViewConstraints()
         
-        if let location = location, let places = places {
+        if let location = location {
             centerMapOnLocation(location)
             addPointOnMap(places: places)
         }
     }
     
-    fileprivate func addPointOnMap(places: Places) {
+    fileprivate func addPointOnMap(places: [Places]) {
         mapView.removeAnnotations(mapView.annotations)
-        let locations = places.items.map({ CLLocationCoordinate2D(latitude: $0.location?.latitude ?? 0,
-                                                                   longitude: $0.location?.longitude ?? 0) })
+        var locations: [CLLocationCoordinate2D] = []
+        places.forEach { (item) in
+            locations += item.items.map({ CLLocationCoordinate2D(latitude: $0.location?.latitude ?? 0,
+                                                                 longitude: $0.location?.longitude ?? 0) })
+        }
         
         locations.forEach { (location) in
             let annotation = MKPointAnnotation()

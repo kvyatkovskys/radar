@@ -31,7 +31,7 @@ struct Router {
                                   toController: FilterPlacesViewController(dependecies))
         }
         
-        viewModel.openMap = { (places: Places?, location: CLLocation?, sourceRect: CGRect) in
+        viewModel.openMap = { (places: [Places], location: CLLocation?, sourceRect: CGRect) in
             let dependecies = MapDependecies(places, location)
             self.openMap(fromController: placesViewController as! PlacesViewController,
                          toController: MapViewController(dependecies),

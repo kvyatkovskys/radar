@@ -32,7 +32,7 @@ struct PlaceViewModel {
     var openFilter: ((_ delegate: FilterPlacesDelegate) -> Void) = {_ in }
     
     /// open map controller
-    var openMap: ((_ places: Places?, _ location: CLLocation?, _ sourceRect: CGRect) -> Void) = {_, _, _ in }
+    var openMap: ((_ places: [Places], _ location: CLLocation?, _ sourceRect: CGRect) -> Void) = {_, _, _ in }
     
     /// open detail place controller
     var openDetailPlace: ((_ place: Place) -> Void) = {_ in }
@@ -41,10 +41,17 @@ struct PlaceViewModel {
         self.placeService = service
     }
     
+    func loadMoreInfoPlaces(url: URL) -> Observable<Places> {
+        return placeService.loadMorePlaces(url: url).asObservable()
+            .flatMap({ (model) -> Observable<Places> in
+                let (places, ratings, titles) = self.updateResults(model: model)
+                return Observable.just(Places(places, ratings, titles, model.next))
+            })
+    }
+    
     /// get info about for current location
-    func getInfoPlace(location: CLLocation, distance: CLLocationDistance) -> Observable<Places> {
+    func getInfoPlaces(location: CLLocation, distance: CLLocationDistance) -> Observable<Places> {
         var selected: [Categories] = [.arts, .education, .fitness, .food, .hotel, .medical, .shopping, .travel]
-        var rating: TypeRating? = TypeRating.none
         
         do {
             let realm = try Realm()
@@ -52,51 +59,15 @@ struct PlaceViewModel {
             if !selectedCategories.isEmpty {
                 selected = selectedCategories.map({ Categories(rawValue: $0.category)! })
             }
-            
-            let selectedRating = realm.objects(FilterSelectedRating.self).first
-            if let type = selectedRating {
-                rating = TypeRating(rawValue: type.rating)
-            }
         } catch {
             print(error)
         }
         
-        return placeService.getInfoAboutPlace(location, selected, distance)
+        return placeService.getInfoAboutPlaces(location, selected, distance)
             .asObservable().flatMap { (model) -> Observable<Places> in
-                let places = model.data.sorted(by: { (itemOne, itemTwo) -> Bool in
-                    guard rating != TypeRating.none else { return false }
-                    guard rating == TypeRating.up else {
-                        return (itemOne.ratingStar ?? 0) < (itemTwo.ratingStar ?? 0)
-                    }
-                    return (itemOne.ratingStar ?? 0) > (itemTwo.ratingStar ?? 0)
-                })
-                
-                let ratings = places.map({ (place) -> NSMutableAttributedString? in
-                    let ratingStar = NSAttributedString(string: "\(place.ratingStar ?? 0)",
-                        attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 17.0),
-                                     NSAttributedStringKey.foregroundColor: self.colorForRating(place.ratingStar ?? 0)])
-                    let ratingCount = NSAttributedString(string: " \(place.ratingCount ?? 0)",
-                        attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 12.0),
-                                     NSAttributedStringKey.foregroundColor: UIColor.gray])
-                    
-                    let result = NSMutableAttributedString(attributedString: ratingStar)
-                    result.append(ratingCount)
-                    return result
-                })
-                
-                let titles = places.map({ (place) -> NSMutableAttributedString? in
-                    let title = NSAttributedString(string: "\(place.name)",
-                        attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 17.0),
-                                     NSAttributedStringKey.foregroundColor: UIColor.black])
-                    let about = NSAttributedString(string: "\n\n\(place.about ?? "")",
-                        attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 13.0),
-                                     NSAttributedStringKey.foregroundColor: UIColor.gray])
-                    
-                    let result = NSMutableAttributedString(attributedString: title)
-                    result.append(about)
-                    return result
-                })
-                return Observable.just(Places(places, ratings, titles, model.next.url))
+                let (places, ratings, titles) = self.updateResults(model: model)
+                print(places.last)
+                return Observable.just(Places(places, ratings, titles, model.next))
         }
     }
     
@@ -111,5 +82,55 @@ struct PlaceViewModel {
             color = UIColor(withHex: 0xc0392b, alpha: 1.0)
         }
         return color
+    }
+    
+    //swiftlint:disable large_tuple
+    fileprivate func updateResults(model: PlaceDataModel) -> ([PlaceModel], [NSMutableAttributedString?], [NSMutableAttributedString?]) {
+        var rating: TypeRating? = TypeRating.none
+        
+        do {
+            let realm = try Realm()
+            let selectedRating = realm.objects(FilterSelectedRating.self).first
+            if let type = selectedRating {
+                rating = TypeRating(rawValue: type.rating)
+            }
+        } catch {
+            print(error)
+        }
+        
+        let places = model.data.sorted(by: { (itemOne, itemTwo) -> Bool in
+            guard rating != TypeRating.none else { return false }
+            guard rating == TypeRating.up else {
+                return (itemOne.ratingStar ?? 0) < (itemTwo.ratingStar ?? 0)
+            }
+            return (itemOne.ratingStar ?? 0) > (itemTwo.ratingStar ?? 0)
+        })
+        
+        let ratings = places.map({ (place) -> NSMutableAttributedString? in
+            let ratingStar = NSAttributedString(string: "\(place.ratingStar ?? 0)",
+                attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 17.0),
+                             NSAttributedStringKey.foregroundColor: self.colorForRating(place.ratingStar ?? 0)])
+            let ratingCount = NSAttributedString(string: " \(place.ratingCount ?? 0)",
+                attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 12.0),
+                             NSAttributedStringKey.foregroundColor: UIColor.gray])
+            
+            let result = NSMutableAttributedString(attributedString: ratingStar)
+            result.append(ratingCount)
+            return result
+        })
+        
+        let titles = places.map({ (place) -> NSMutableAttributedString? in
+            let title = NSAttributedString(string: "\(place.name)",
+                attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 17.0),
+                             NSAttributedStringKey.foregroundColor: UIColor.black])
+            let about = NSAttributedString(string: "\n\n\(place.about ?? "")",
+                attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 13.0),
+                             NSAttributedStringKey.foregroundColor: UIColor.gray])
+            
+            let result = NSMutableAttributedString(attributedString: title)
+            result.append(about)
+            return result
+        })
+        return (places, ratings, titles)
     }
 }

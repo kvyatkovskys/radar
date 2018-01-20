@@ -11,23 +11,13 @@ import Unbox
 
 struct PlaceDataModel {
     let data: [PlaceModel]
-    let next: PlaceNext
+    let next: URL?
 }
 
 extension PlaceDataModel: Unboxable {
     init(unboxer: Unboxer) throws {
         self.data = try unboxer.unbox(key: "data")
-        self.next = try unboxer.unbox(key: "paging")
-    }
-}
-
-struct PlaceNext {
-    let url: URL?
-}
-
-extension PlaceNext: Unboxable {
-    init(unboxer: Unboxer) throws {
-        self.url = URL(string: try unboxer.unbox(key: "next"))
+        self.next = URL(string: try unboxer.unbox(keyPath: "paging.next"))
     }
 }
 
@@ -43,10 +33,13 @@ struct PlaceModel {
     let address: String?
     let website: String?
     let categories: [Categories]?
+    let subCategories: [String]?
     let description: String?
-    let coverPhoto: CoverPhotoPlace?
+    let coverPhoto: URL?
     let about: String?
     let location: LocationPlace?
+    let context: String?
+    let appLink: URL?
 }
 
 extension PlaceModel: Unboxable {
@@ -63,10 +56,15 @@ extension PlaceModel: Unboxable {
         self.website = unboxer.unbox(key: "website")
         let categories: [String] = try unboxer.unbox(key: "matched_categories")
         self.categories = categories.map({ Categories(rawValue: $0)! })
+        let subCategories: [[String: Any]] = try unboxer.unbox(key: "category_list")
+        self.subCategories = subCategories.map({ $0["name"] }) as? [String]
         self.description = unboxer.unbox(key: "description")
-        self.coverPhoto = unboxer.unbox(key: "cover")
+        self.coverPhoto = URL(string: try unboxer.unbox(keyPath: "cover.source"))
         self.about = unboxer.unbox(key: "about")
         self.location = unboxer.unbox(key: "location")
+        self.context = unboxer.unbox(keyPath: "context.id")
+        let appLinks: [[String: Any]] = try unboxer.unbox(keyPath: "app_links.ios")
+        self.appLink = URL(string: appLinks.filter({ "\($0["app_name"] ?? "")" == "Facebook" }).first?["url"] as? String ?? "")
     }
 }
 
@@ -81,15 +79,5 @@ extension LocationPlace: Unboxable {
         self.latitude = try unboxer.unbox(key: "latitude")
         self.longitude = try unboxer.unbox(key: "longitude")
         self.coordinate = CLLocation(latitude: latitude, longitude: longitude)
-    }
-}
-
-struct CoverPhotoPlace {
-    let url: URL?
-}
-
-extension CoverPhotoPlace: Unboxable {
-    init(unboxer: Unboxer) throws {
-        self.url = URL(string: try unboxer.unbox(key: "source"))
     }
 }

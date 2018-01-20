@@ -29,7 +29,7 @@ final class DetailPlaceViewController: UIViewController {
         image.contentMode = .scaleAspectFill
         image.layer.masksToBounds = true
         image.kf.indicatorType = .activity
-        image.kf.setImage(with: viewModel.place.info.coverPhoto?.url,
+        image.kf.setImage(with: viewModel.place.info.coverPhoto,
                                 placeholder: nil,
                                 options: self.kingfisherOptions,
                                 progressBlock: nil,

@@ -55,6 +55,16 @@ final class PlaceTableViewCell: UITableViewCell {
         return label
     }()
     
+    fileprivate let categoryLabel: UILabel = {
+        let label = UILabel()
+        label.layer.cornerRadius = 8.0
+        label.layer.masksToBounds = true
+        label.textAlignment = .center
+        label.font = .systemFont(ofSize: 11.0)
+        label.textColor = .white
+        return label
+    }()
+    
     var title: NSMutableAttributedString? {
         didSet {
             titleLabel.attributedText = title
@@ -64,6 +74,18 @@ final class PlaceTableViewCell: UITableViewCell {
     var rating: NSMutableAttributedString? {
         didSet {
             ratingLabel.attributedText = rating
+        }
+    }
+    
+    var colorCategory: UIColor? {
+        didSet {
+            categoryLabel.backgroundColor = colorCategory
+        }
+    }
+    
+    var titleCategory: String? {
+        didSet {
+            categoryLabel.text = titleCategory
         }
     }
     
@@ -92,6 +114,13 @@ final class PlaceTableViewCell: UITableViewCell {
             make.width.lessThanOrEqualTo(60.0)
             make.height.equalTo(15.0)
         }
+        
+        categoryLabel.snp.makeConstraints { (make) in
+            make.bottom.equalTo(ratingLabel)
+            make.width.equalTo(70.0)
+            make.right.equalToSuperview().inset(10.0)
+            make.height.equalTo(ratingLabel)
+        }
     }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -104,6 +133,7 @@ final class PlaceTableViewCell: UITableViewCell {
         mainView.addSubview(imageCell)
         mainView.addSubview(titleLabel)
         mainView.addSubview(ratingLabel)
+        mainView.addSubview(categoryLabel)
         
         updateConstraints()
     }

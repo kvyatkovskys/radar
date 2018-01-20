@@ -141,17 +141,20 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         startDetectLocation()
         
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
-        tableDataSource = PlacesTableViewDataSource(tableView,
-                                                    places: Places(),
-                                                    kingfisherOptions: kingfisherOptions)
-        tableDelegate = PlacesTableViewDelegate(tableView,
-                                                places: Places(),
-                                                viewModel: viewModel)
+        tableDataSource = PlacesTableViewDataSource(tableView, kingfisherOptions: kingfisherOptions)
+        tableDelegate = PlacesTableViewDelegate(tableView, viewModel: viewModel)
         
         refreshControl.rx.controlEvent(.valueChanged).asObservable()
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] _ in
                 self.startDetectLocation()
+            }).disposed(by: disposeBag)
+        
+        tableDelegate?.nextUrl.asObserver()
+            .subscribe(onNext: { [unowned self] (url) in
+                self.loadMoreInfoAboutLocation(url: url)
+            }, onError: { (error) in
+                print(error)
             }).disposed(by: disposeBag)
         
         do {
@@ -190,7 +193,7 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     }
     
     @objc func showMap() {
-        viewModel.openMap(tableDataSource?.places, locationService.userLocation, tapViewOnMap.frame)
+        viewModel.openMap(tableDataSource?.places ?? [], locationService.userLocation, tapViewOnMap.frame)
     }
     
     // MARK: LocationServiceDelegate
@@ -222,13 +225,26 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     }
     
     // MARK: Current class func
-    fileprivate func loadInfoAboutLocation(_ location: CLLocation, distance: Double = FilterDistanceViewModel().defaultDistance) {
-        indicatorView.showIndicator()
-        viewModel.getInfoPlace(location: location, distance: distance).asObservable()
+    fileprivate func loadMoreInfoAboutLocation(url: URL) {
+        viewModel.loadMoreInfoPlaces(url: url).asObservable()
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] (model) in
-                self.tableDataSource?.places = model
-                self.tableDelegate?.places = model
+                self.tableDataSource?.places += [model]
+                self.tableDelegate?.places += [model]
+                self.tableView.reloadData()
+                self.addPointOnMap(places: model, removeOldAnnotations: false)
+            }, onError: { (error) in
+                print(error)
+            }).disposed(by: disposeBag)
+    }
+    
+    fileprivate func loadInfoAboutLocation(_ location: CLLocation, distance: Double = FilterDistanceViewModel().defaultDistance) {
+        indicatorView.showIndicator()
+        viewModel.getInfoPlaces(location: location, distance: distance).asObservable()
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { [unowned self] (model) in
+                self.tableDataSource?.places = [model]
+                self.tableDelegate?.places = [model]
                 self.tableView.reloadData()
                 self.addPointOnMap(places: model)
                 
@@ -245,8 +261,10 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
             }).disposed(by: disposeBag)
     }
     
-    fileprivate func addPointOnMap(places: Places) {
-        mapView.removeAnnotations(mapView.annotations)
+    fileprivate func addPointOnMap(places: Places, removeOldAnnotations: Bool = true) {
+        if removeOldAnnotations {
+            mapView.removeAnnotations(mapView.annotations)
+        }
         let locations = places.items.map({ CLLocationCoordinate2D(latitude: $0.location?.latitude ?? 0,
                                                                    longitude: $0.location?.longitude ?? 0) })
         
