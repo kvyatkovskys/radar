@@ -52,6 +52,8 @@
 		8B82C3932014843E00E0CA89 /* OpenGraphService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C3922014843E00E0CA89 /* OpenGraphService.swift */; };
 		8B82C3952014B72500E0CA89 /* FriendsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C3942014B72500E0CA89 /* FriendsModel.swift */; };
 		8B82C3982014C95000E0CA89 /* DetailWorkDaysTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C3972014C95000E0CA89 /* DetailWorkDaysTableViewCell.swift */; };
+		8B82C39A20150AD000E0CA89 /* WorkDaysCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C39920150AD000E0CA89 /* WorkDaysCollectionDataSource.swift */; };
+		8B82C39E20150BE600E0CA89 /* WorkDaysCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C39D20150BE500E0CA89 /* WorkDaysCollectionViewCell.swift */; };
 		8BE2089D1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2089C1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift */; };
 		8BE2089F1FFD17470048D690 /* FilterPlacesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2089E1FFD17470048D690 /* FilterPlacesViewController.swift */; };
 		8BE208A11FFD1D300048D690 /* Controller+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE208A01FFD1D300048D690 /* Controller+Extension.swift */; };
@@ -130,6 +132,8 @@
 		8B82C3922014843E00E0CA89 /* OpenGraphService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenGraphService.swift; sourceTree = "<group>"; };
 		8B82C3942014B72500E0CA89 /* FriendsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsModel.swift; sourceTree = "<group>"; };
 		8B82C3972014C95000E0CA89 /* DetailWorkDaysTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailWorkDaysTableViewCell.swift; sourceTree = "<group>"; };
+		8B82C39920150AD000E0CA89 /* WorkDaysCollectionDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkDaysCollectionDataSource.swift; sourceTree = "<group>"; };
+		8B82C39D20150BE500E0CA89 /* WorkDaysCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkDaysCollectionViewCell.swift; sourceTree = "<group>"; };
 		8BE2089C1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		8BE2089E1FFD17470048D690 /* FilterPlacesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterPlacesViewController.swift; sourceTree = "<group>"; };
 		8BE208A01FFD1D300048D690 /* Controller+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Controller+Extension.swift"; sourceTree = "<group>"; };
@@ -285,6 +289,8 @@
 				8B41154A1FDB2CEF00C6614C /* AppDelegate.swift */,
 				8B41156A1FDC83AF00C6614C /* Router.swift */,
 				8B41156C1FDC845B00C6614C /* AppInjections.swift */,
+				8B82C39920150AD000E0CA89 /* WorkDaysCollectionDataSource.swift */,
+				8B82C39D20150BE500E0CA89 /* WorkDaysCollectionViewCell.swift */,
 				8B44C3841FF012E1003C0754 /* Setting Controller Tab */,
 				8B44C3811FF012A2003C0754 /* Radar Controller Tab */,
 				8B82C39120139F2D00E0CA89 /* Contact Buttons */,
@@ -689,6 +695,7 @@
 				8B3398D4200FE5E2002966ED /* DetailAddressTableViewCell.swift in Sources */,
 				8BFBF57B200517B000CE2C8B /* CategoriesTableViewDataSource.swift in Sources */,
 				8B18FE082007F8E000E637C7 /* View+Extension.swift in Sources */,
+				8B82C39A20150AD000E0CA89 /* WorkDaysCollectionDataSource.swift in Sources */,
 				8B5F71511FF916B300E628F9 /* PlaceService.swift in Sources */,
 				8B82C38E201399B500E0CA89 /* ListButtonsCollectionDelegate.swift in Sources */,
 				8B41156B1FDC83AF00C6614C /* Router.swift in Sources */,
@@ -708,6 +715,7 @@
 				8BE2089D1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift in Sources */,
 				8BE208A31FFD25750048D690 /* FilterPlacesModel.swift in Sources */,
 				8B41154B1FDB2CEF00C6614C /* AppDelegate.swift in Sources */,
+				8B82C39E20150BE600E0CA89 /* WorkDaysCollectionViewCell.swift in Sources */,
 				8B18FE0D200A1F1800E637C7 /* MapViewController.swift in Sources */,
 				8B18FE12200A8FFA00E637C7 /* SettingsViewModel.swift in Sources */,
 			);

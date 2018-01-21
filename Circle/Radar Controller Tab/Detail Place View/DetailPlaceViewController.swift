@@ -187,14 +187,12 @@ extension DetailPlaceViewController: UITableViewDataSource {
                                                      for: indexPath) as? DetailDescriptionTableViewCell ?? DetailDescriptionTableViewCell()
             
             cell.textDescription = text
-            
             return cell
         case .contact(let contacts):
             let cell = tableView.dequeueReusableCell(withIdentifier: DeatilPhoneWebsiteTableViewCell.cellIdentifier,
                                                      for: indexPath) as? DeatilPhoneWebsiteTableViewCell ?? DeatilPhoneWebsiteTableViewCell()
             
             cell.contacts = contacts
-            
             return cell
         case .address(let address, let location, _):
             let cell = tableView.dequeueReusableCell(withIdentifier: DetailAddressTableViewCell.cellIdentifier,
@@ -202,12 +200,11 @@ extension DetailPlaceViewController: UITableViewDataSource {
             
             cell.address = address
             cell.location = location
-            
             return cell
         case .workDays(let workDays):
             let cell = tableView.dequeueReusableCell(withIdentifier: DetailWorkDaysTableViewCell.cellIdentifier,
                                                      for: indexPath) as? DetailWorkDaysTableViewCell ?? DetailWorkDaysTableViewCell()
-            print(workDays)
+            cell.workDays = workDays
             return cell
         }
     }
@@ -232,7 +229,7 @@ extension DetailPlaceViewController: UITableViewDelegate {
         case .address(_, _, let height):
             return height
         case .workDays:
-            return 80.0
+            return 70.0
         }
     }
     
