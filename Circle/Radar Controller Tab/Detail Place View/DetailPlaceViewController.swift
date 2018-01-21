@@ -11,11 +11,18 @@ import Kingfisher
 
 let heightHeaderTable: CGFloat = 150.0
 
+fileprivate extension UIColor {
+    static var shadowGray: UIColor {
+        return UIColor(withHex: 0xecf0f1, alpha: 1.0)
+    }
+}
+
 final class DetailPlaceViewController: UIViewController {
-    typealias Dependecies = HasDetailPlaceViewModel & HasKingfisher
+    typealias Dependecies = HasDetailPlaceViewModel & HasKingfisher & HasOpenGraphService
     
     fileprivate let viewModel: DetailPlaceViewModel
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
+    fileprivate let sevice: OpenGraphService
     
     fileprivate lazy var headerView: UIView = {
         let view = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: heightHeaderTable))
@@ -28,6 +35,7 @@ final class DetailPlaceViewController: UIViewController {
         image.layer.cornerRadius = 5.0
         image.contentMode = .scaleAspectFill
         image.layer.masksToBounds = true
+        image.backgroundColor = .shadowGray
         image.kf.indicatorType = .activity
         image.kf.setImage(with: viewModel.place.info.coverPhoto,
                                 placeholder: nil,
@@ -51,9 +59,22 @@ final class DetailPlaceViewController: UIViewController {
         return label
     }()
     
-    fileprivate let listSubCategoriesView: UIView = {
+    fileprivate lazy var listSubCategoriesView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
+        
+        let listCategories = ListCategoriesViewController(ListSubCategoriesViewModel(self.viewModel.place.info.subCategories ?? [],
+                                                                                     color: self.viewModel.place.info.categories?.first?.color))
+        
+        var frame = listCategories.view.frame
+        frame.size.height = view.frame.height
+        frame.size.width = view.frame.width
+        listCategories.view.frame = frame
+        
+        addChildViewController(listCategories)
+        view.addSubview(listCategories.view)
+        listCategories.didMove(toParentViewController: listCategories)
+        
         return view
     }()
     
@@ -115,6 +136,7 @@ final class DetailPlaceViewController: UIViewController {
     init(_ dependecies: Dependecies) {
         self.viewModel = dependecies.viewModel
         self.kingfisherOptions = dependecies.kingfisherOptions
+        self.sevice = dependecies.service
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -142,17 +164,7 @@ final class DetailPlaceViewController: UIViewController {
         tableView.register(DeatilPhoneWebsiteTableViewCell.self, forCellReuseIdentifier: DeatilPhoneWebsiteTableViewCell.cellIdentifier)
         tableView.register(DetailAddressTableViewCell.self, forCellReuseIdentifier: DetailAddressTableViewCell.cellIdentifier)
         
-        let listCategories = ListCategoriesViewController(ListSubCategoriesViewModel(viewModel.place.info.subCategories ?? [],
-                                                                                     color: viewModel.place.info.categories?.first?.color))
-        
-        var frame = listCategories.view.frame
-        frame.size.height = listSubCategoriesView.frame.height
-        frame.size.width = listSubCategoriesView.frame.width
-        listCategories.view.frame = frame
-        
-        addChildViewController(listCategories)
-        listSubCategoriesView.addSubview(listCategories.view)
-        listCategories.didMove(toParentViewController: listCategories)
+        sevice.loadListLikes(id: viewModel.place.info.context ?? "")
     }
 }
 

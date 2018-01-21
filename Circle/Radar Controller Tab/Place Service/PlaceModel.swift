@@ -17,7 +17,8 @@ struct PlaceDataModel {
 extension PlaceDataModel: Unboxable {
     init(unboxer: Unboxer) throws {
         self.data = try unboxer.unbox(key: "data")
-        self.next = URL(string: try unboxer.unbox(keyPath: "paging.next"))
+        let paging: [String: Any]? = unboxer.unbox(keyPath: "paging")
+        self.next = paging != nil ? URL(string: paging!["next"] as? String ?? "") : nil
     }
 }
 
@@ -59,7 +60,8 @@ extension PlaceModel: Unboxable {
         let subCategories: [[String: Any]] = try unboxer.unbox(key: "category_list")
         self.subCategories = subCategories.map({ $0["name"] }) as? [String]
         self.description = unboxer.unbox(key: "description")
-        self.coverPhoto = URL(string: try unboxer.unbox(keyPath: "cover.source"))
+        let photo: String? = unboxer.unbox(keyPath: "cover.source")
+        self.coverPhoto = photo != nil ? URL(string: photo ?? "") : nil
         self.about = unboxer.unbox(key: "about")
         self.location = unboxer.unbox(key: "location")
         self.context = unboxer.unbox(keyPath: "context.id")

@@ -9,8 +9,8 @@
 import Foundation
 import Kingfisher
 
-protocol HasRouter {
-    var router: Router { get }
+protocol HasOpenGraphService {
+    var service: OpenGraphService { get }
 }
 
 protocol HasKingfisher {
@@ -96,12 +96,14 @@ protocol HasDetailPlaceViewModel {
 }
 
 /// container dependecies injection's for detail place controller
-struct DetailPlaceDependecies: HasDetailPlaceViewModel, HasKingfisher {
+struct DetailPlaceDependecies: HasDetailPlaceViewModel, HasKingfisher, HasOpenGraphService {
     let viewModel: DetailPlaceViewModel
     let kingfisherOptions: KingfisherOptionsInfo
+    let service: OpenGraphService
     
-    init(_ viewModel: DetailPlaceViewModel, _ kingfisherOptions: KingfisherOptionsInfo) {
+    init(_ viewModel: DetailPlaceViewModel, _ kingfisherOptions: KingfisherOptionsInfo, _ service: OpenGraphService) {
         self.viewModel = viewModel
         self.kingfisherOptions = kingfisherOptions
+        self.service = service
     }
 }

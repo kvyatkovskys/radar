@@ -27,7 +27,7 @@ final class ListButtonCollectionViewCell: UICollectionViewCell {
     fileprivate let imageView: UIImageView = {
         let image = UIImageView()
         image.tintColor = UIColor.blueImage
-        image.contentMode = .scaleToFill
+        image.contentMode = .scaleAspectFit
         return image
     }()
     

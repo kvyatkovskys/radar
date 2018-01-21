@@ -26,14 +26,14 @@ struct PlaceService {
         return URLSession.shared.rx.response(request: request).asObservable()
             .flatMap({ (response, data) -> Observable<PlaceDataModel> in
                 guard 200 == response.statusCode else {
-                    let error = NSError(type: .other, info: "Пришёл неизвестный ответ, точно не 200 в getNews")
+                    let error = NSError(type: .other, info: "Recieved a response not 200")
                     return Observable.error(error)
                 }
                 
                 if let model: PlaceDataModel = try? unbox(data: data) {
                     return Observable.just(model)
                 } else {
-                    let error = NSError(type: .other, info: "JSON по новостям не распарсился")
+                    let error = NSError(type: .other, info: "Parsing error")
                     return Observable.error(error)
                 }
             })

@@ -60,7 +60,7 @@ struct Router {
     }
     
     fileprivate func openDetailPlace(_ place: Place, _ kingfisherOptions: KingfisherOptionsInfo, _ fromController: UIViewController) {
-        let dependecies = DetailPlaceDependecies(DetailPlaceViewModel(place), kingfisherOptions)
+        let dependecies = DetailPlaceDependecies(DetailPlaceViewModel(place), kingfisherOptions, OpenGraphService())
         let detailPlaceController = DetailPlaceViewController(dependecies)
         detailPlaceController.hidesBottomBarWhenPushed = true
         fromController.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
