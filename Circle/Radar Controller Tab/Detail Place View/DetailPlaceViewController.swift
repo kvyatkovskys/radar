@@ -165,13 +165,7 @@ final class DetailPlaceViewController: UIViewController {
         tableView.register(DetailDescriptionTableViewCell.self, forCellReuseIdentifier: DetailDescriptionTableViewCell.cellIdentifier)
         tableView.register(DeatilPhoneWebsiteTableViewCell.self, forCellReuseIdentifier: DeatilPhoneWebsiteTableViewCell.cellIdentifier)
         tableView.register(DetailAddressTableViewCell.self, forCellReuseIdentifier: DetailAddressTableViewCell.cellIdentifier)
-        
-        sevice.loadListLikes(id: viewModel.place.info.context ?? "").asObservable()
-            .subscribe(onNext: { (model) in
-                print(model)
-            }, onError: { (error) in
-                print(error)
-            }).disposed(by: disposeBag)
+        tableView.register(DetailWorkDaysTableViewCell.self, forCellReuseIdentifier: DetailWorkDaysTableViewCell.cellIdentifier)
     }
 }
 
@@ -210,6 +204,11 @@ extension DetailPlaceViewController: UITableViewDataSource {
             cell.location = location
             
             return cell
+        case .workDays(let workDays):
+            let cell = tableView.dequeueReusableCell(withIdentifier: DetailWorkDaysTableViewCell.cellIdentifier,
+                                                     for: indexPath) as? DetailWorkDaysTableViewCell ?? DetailWorkDaysTableViewCell()
+            print(workDays)
+            return cell
         }
     }
 }
@@ -232,6 +231,8 @@ extension DetailPlaceViewController: UITableViewDelegate {
             return 80.0
         case .address(_, _, let height):
             return height
+        case .workDays:
+            return 80.0
         }
     }
     

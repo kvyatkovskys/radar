@@ -51,6 +51,7 @@
 		8B82C39020139C9F00E0CA89 /* ListButtonCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C38F20139C9F00E0CA89 /* ListButtonCollectionViewCell.swift */; };
 		8B82C3932014843E00E0CA89 /* OpenGraphService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C3922014843E00E0CA89 /* OpenGraphService.swift */; };
 		8B82C3952014B72500E0CA89 /* FriendsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C3942014B72500E0CA89 /* FriendsModel.swift */; };
+		8B82C3982014C95000E0CA89 /* DetailWorkDaysTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C3972014C95000E0CA89 /* DetailWorkDaysTableViewCell.swift */; };
 		8BE2089D1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2089C1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift */; };
 		8BE2089F1FFD17470048D690 /* FilterPlacesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2089E1FFD17470048D690 /* FilterPlacesViewController.swift */; };
 		8BE208A11FFD1D300048D690 /* Controller+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE208A01FFD1D300048D690 /* Controller+Extension.swift */; };
@@ -128,6 +129,7 @@
 		8B82C38F20139C9F00E0CA89 /* ListButtonCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListButtonCollectionViewCell.swift; sourceTree = "<group>"; };
 		8B82C3922014843E00E0CA89 /* OpenGraphService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenGraphService.swift; sourceTree = "<group>"; };
 		8B82C3942014B72500E0CA89 /* FriendsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsModel.swift; sourceTree = "<group>"; };
+		8B82C3972014C95000E0CA89 /* DetailWorkDaysTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailWorkDaysTableViewCell.swift; sourceTree = "<group>"; };
 		8BE2089C1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		8BE2089E1FFD17470048D690 /* FilterPlacesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterPlacesViewController.swift; sourceTree = "<group>"; };
 		8BE208A01FFD1D300048D690 /* Controller+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Controller+Extension.swift"; sourceTree = "<group>"; };
@@ -252,6 +254,7 @@
 				8B3398D1200F77E4002966ED /* DeatilPhoneWebsiteTableViewCell.swift */,
 				8B3398D3200FE5E2002966ED /* DetailAddressTableViewCell.swift */,
 				8B3398D520127670002966ED /* DetailSectionTableViewCell.swift */,
+				8B82C3972014C95000E0CA89 /* DetailWorkDaysTableViewCell.swift */,
 			);
 			path = "Table Cells";
 			sourceTree = "<group>";
@@ -282,13 +285,12 @@
 				8B41154A1FDB2CEF00C6614C /* AppDelegate.swift */,
 				8B41156A1FDC83AF00C6614C /* Router.swift */,
 				8B41156C1FDC845B00C6614C /* AppInjections.swift */,
-				8B82C3922014843E00E0CA89 /* OpenGraphService.swift */,
-				8B82C3942014B72500E0CA89 /* FriendsModel.swift */,
 				8B44C3841FF012E1003C0754 /* Setting Controller Tab */,
 				8B44C3811FF012A2003C0754 /* Radar Controller Tab */,
 				8B82C39120139F2D00E0CA89 /* Contact Buttons */,
 				8B1A80AC1FFAE4640039C39A /* Categories View */,
 				8B18FE0E200A24C200E637C7 /* Map View */,
+				8B82C3962014BC7300E0CA89 /* Open Graph Service */,
 				8B5F71551FF933BB00E628F9 /* Location Service */,
 				8B4177081FFD3D2B002A963A /* Filter Controller */,
 				8B44C3801FF00F58003C0754 /* Project Settings */,
@@ -401,6 +403,15 @@
 				8B82C38F20139C9F00E0CA89 /* ListButtonCollectionViewCell.swift */,
 			);
 			path = "Contact Buttons";
+			sourceTree = "<group>";
+		};
+		8B82C3962014BC7300E0CA89 /* Open Graph Service */ = {
+			isa = PBXGroup;
+			children = (
+				8B82C3922014843E00E0CA89 /* OpenGraphService.swift */,
+				8B82C3942014B72500E0CA89 /* FriendsModel.swift */,
+			);
+			path = "Open Graph Service";
 			sourceTree = "<group>";
 		};
 		8BFBF58020051C3C00CE2C8B /* Table View */ = {
@@ -691,6 +702,7 @@
 				8B82C38820136D6400E0CA89 /* ListCategoriesViewController.swift in Sources */,
 				8B44C37F1FEFE195003C0754 /* QuickAlertController.swift in Sources */,
 				8B18BFD61FFA594D00C7906D /* Color+Extension.swift in Sources */,
+				8B82C3982014C95000E0CA89 /* DetailWorkDaysTableViewCell.swift in Sources */,
 				8B3398CC200F61E6002966ED /* DetailPlaceViewModel.swift in Sources */,
 				8B6D4E211FFBA0DC007904D4 /* PlacesTableViewDelegate.swift in Sources */,
 				8BE2089D1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift in Sources */,

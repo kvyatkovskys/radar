@@ -14,19 +14,55 @@ enum ContactType: String {
 
 typealias Contact = (type: ContactType, value: Any?)
 
+enum DaysType: String {
+    case monday = "Monday"
+    case tuesday = "Tuesday"
+    case wednesday = "Wednesday"
+    case thursday = "Thursday"
+    case friday = "Friday"
+    case saturday = "Saturday"
+    case sunday = "Sunday"
+    
+    var shortName: String {
+        switch self {
+        case .monday: return "mon"
+        case .tuesday: return "tue"
+        case .wednesday: return "wed"
+        case .thursday: return "thu"
+        case .friday: return "fri"
+        case .saturday: return "sat"
+        case .sunday: return "sun"
+        }
+    }
+    
+    var sortIndex: Int {
+        switch self {
+        case .monday: return 0
+        case .tuesday: return 1
+        case .wednesday: return 2
+        case .thursday: return 3
+        case .friday: return 4
+        case .saturday: return 5
+        case .sunday: return 6
+        }
+    }
+}
+
+typealias Days = (day: DaysType, hour: String)
+typealias WorkDays = (closed: [Days], opened: [Days])
+
 enum TypeDetailCell {
     case description(String, CGFloat)
-    case contact([Contact]) //Int?, String?, URL?
+    case contact([Contact])
     case address(String, LocationPlace?, CGFloat)
+    case workDays(WorkDays)
     
     var title: String {
         switch self {
-        case .description:
-            return "Description"
-        case .contact:
-            return "Contacts"
-        case .address:
-            return "Address"
+        case .workDays: return "Openig hours"
+        case .description: return "Description"
+        case .contact: return "Contacts"
+        case .address: return "Address"
         }
     }
 }
@@ -49,6 +85,64 @@ struct DetailPlaceViewModel {
                                 Contact(type: ContactType.website, value: place.info.website),
                                 Contact(type: ContactType.facebook, value: place.info.appLink)]
             let type = TypeDetailCell.contact(itemsContact)
+            items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
+        }
+        
+        if let hours = place.info.hours {
+            var closedDays: [Days] = []
+            var openedDays: [Days] = []
+            
+            hours.forEach({ (key, value) in
+                switch key {
+                case _ where key.contains(DaysType.monday.shortName):
+                    guard key.contains("close") else {
+                        openedDays.append(Days(day: DaysType.monday, hour: value))
+                        return
+                    }
+                    closedDays.append(Days(day: DaysType.monday, hour: value))
+                case _ where key.contains(DaysType.tuesday.shortName):
+                    guard key.contains("close") else {
+                        openedDays.append(Days(day: DaysType.tuesday, hour: value))
+                        return
+                    }
+                    closedDays.append(Days(day: DaysType.tuesday, hour: value))
+                case _ where key.contains(DaysType.wednesday.shortName):
+                    guard key.contains("close") else {
+                        openedDays.append(Days(day: DaysType.wednesday, hour: value))
+                        return
+                    }
+                    closedDays.append(Days(day: DaysType.wednesday, hour: value))
+                case _ where key.contains(DaysType.thursday.shortName):
+                    guard key.contains("close") else {
+                        openedDays.append(Days(day: DaysType.thursday, hour: value))
+                        return
+                    }
+                    closedDays.append(Days(day: DaysType.thursday, hour: value))
+                case _ where key.contains(DaysType.friday.shortName):
+                    guard key.contains("close") else {
+                        openedDays.append(Days(day: DaysType.friday, hour: value))
+                        return
+                    }
+                    closedDays.append(Days(day: DaysType.friday, hour: value))
+                case _ where key.contains(DaysType.saturday.shortName):
+                    guard key.contains("close") else {
+                        openedDays.append(Days(day: DaysType.saturday, hour: value))
+                        return
+                    }
+                    closedDays.append(Days(day: DaysType.saturday, hour: value))
+                case _ where key.contains(DaysType.sunday.shortName):
+                    guard key.contains("close") else {
+                        openedDays.append(Days(day: DaysType.sunday, hour: value))
+                        return
+                    }
+                    closedDays.append(Days(day: DaysType.sunday, hour: value))
+                default:
+                    break
+                }
+            })
+            
+            let type = TypeDetailCell.workDays((closed: Array(closedDays).sorted(by: { $0.day.sortIndex < $1.day.sortIndex }),
+                                                opened: Array(openedDays).sorted(by: { $0.day.sortIndex < $1.day.sortIndex })))
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         
