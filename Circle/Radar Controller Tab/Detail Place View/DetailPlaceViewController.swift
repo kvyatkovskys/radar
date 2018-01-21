@@ -8,6 +8,7 @@
 
 import UIKit
 import Kingfisher
+import RxSwift
 
 let heightHeaderTable: CGFloat = 150.0
 
@@ -23,6 +24,7 @@ final class DetailPlaceViewController: UIViewController {
     fileprivate let viewModel: DetailPlaceViewModel
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
     fileprivate let sevice: OpenGraphService
+    fileprivate let disposeBag = DisposeBag()
     
     fileprivate lazy var headerView: UIView = {
         let view = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: heightHeaderTable))
@@ -164,7 +166,12 @@ final class DetailPlaceViewController: UIViewController {
         tableView.register(DeatilPhoneWebsiteTableViewCell.self, forCellReuseIdentifier: DeatilPhoneWebsiteTableViewCell.cellIdentifier)
         tableView.register(DetailAddressTableViewCell.self, forCellReuseIdentifier: DetailAddressTableViewCell.cellIdentifier)
         
-        sevice.loadListLikes(id: viewModel.place.info.context ?? "")
+        sevice.loadListLikes(id: viewModel.place.info.context ?? "").asObservable()
+            .subscribe(onNext: { (model) in
+                print(model)
+            }, onError: { (error) in
+                print(error)
+            }).disposed(by: disposeBag)
     }
 }
 

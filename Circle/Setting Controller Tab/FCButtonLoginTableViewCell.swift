@@ -13,7 +13,7 @@ final class FCButtonLoginTableViewCell: UITableViewCell {
     
     fileprivate let loginButton: FBSDKLoginButton = {
         let button = FBSDKLoginButton()
-        button.readPermissions = ["public_profile", "email"]
+        button.readPermissions = ["public_profile", "email", "user_friends"]
         return button
     }()
     

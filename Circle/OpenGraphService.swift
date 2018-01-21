@@ -8,13 +8,28 @@
 
 import Foundation
 import RxSwift
+import Unbox
 
 struct OpenGraphService {
-    func loadListLikes(id: String) {
-        let grapPath = "\(id)?fields=friends_who_like,friends_tagged_at,music_listen_friends,id,video_watch_friends"
-        let request = FBSDKGraphRequest(graphPath: grapPath, parameters: [:], httpMethod: "GET")
-        _ = request?.start(completionHandler: { (_, result, error) in
-            print(result as Any, error as Any)
+    // пока не работает, нужно поменять урл, когда будет больше пользователей,
+    // потому что facebook отдаёт список друзей только, когда юзер установит приложение
+    // пока просто получаю список всех друзей, чтобы обработать модельку
+    func loadListLikes(id: String) -> Observable<FriendsModel> {
+        let grapPath = "/me/taggable_friends"
+        let request = FBSDKGraphRequest(graphPath: grapPath, parameters: ["fields": "id,name,picture.width(200).height(200)"], httpMethod: "GET")
+        
+        return Observable.create({ (observable) in
+            _ = request?.start(completionHandler: { (_, result, error) in
+                guard error == nil else {
+                    observable.on(.error(error!))
+                    return
+                }
+                
+                if let data = result as? [String: Any], let model: FriendsModel = try? unbox(dictionary: data) {
+                    observable.on(.next(model))
+                }
+            })
+            return Disposables.create()
         })
     }
 }
