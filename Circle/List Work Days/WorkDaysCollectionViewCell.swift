@@ -26,6 +26,13 @@ final class WorkDaysCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    fileprivate let lineView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        view.layer.cornerRadius = 1.0
+        return view
+    }()
+    
     override func updateConstraints() {
         super.updateConstraints()
         
@@ -37,7 +44,13 @@ final class WorkDaysCollectionViewCell: UICollectionViewCell {
         valueLabel.snp.makeConstraints { (make) in
             make.top.equalTo(titleLabel.snp.bottom)
             make.right.left.equalTo(titleLabel)
+            make.bottom.equalTo(lineView.snp.top)
+        }
+        
+        lineView.snp.makeConstraints { (make) in
+            make.left.right.equalToSuperview().inset(3.0)
             make.bottom.equalToSuperview()
+            make.height.equalTo(2.0)
         }
     }
     
@@ -53,11 +66,18 @@ final class WorkDaysCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    var colorCurrentDay: UIColor? {
+        didSet {
+            lineView.backgroundColor = colorCurrentDay
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         addSubview(titleLabel)
         addSubview(valueLabel)
+        addSubview(lineView)
         updateConstraints()
     }
     

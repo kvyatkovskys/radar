@@ -15,6 +15,11 @@ final class WorkDaysCollectionDataSource: NSObject {
         self.workDays = workDays
         super.init()
         collectionView.dataSource = self
+        
+        let indexPath = IndexPath(row: workDays.currentDay.index ?? 0, section: 0)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .left)
+        }
     }
 }
 
@@ -35,6 +40,12 @@ extension WorkDaysCollectionDataSource: UICollectionViewDataSource {
         
         cell.day = day
         cell.hours = hours
+        cell.colorCurrentDay = nil
+        
+        if workDays.currentDay.index == indexPath.row {
+            cell.colorCurrentDay = workDays.currentDay.color
+        }
+        
         return cell
     }
 }

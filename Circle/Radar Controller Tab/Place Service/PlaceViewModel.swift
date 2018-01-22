@@ -85,27 +85,7 @@ struct PlaceViewModel {
     
     //swiftlint:disable large_tuple
     fileprivate func updateResults(model: PlaceDataModel) -> ([PlaceModel], [NSMutableAttributedString?], [NSMutableAttributedString?]) {
-        var rating: TypeRating? = TypeRating.none
-        
-        do {
-            let realm = try Realm()
-            let selectedRating = realm.objects(FilterSelectedRating.self).first
-            if let type = selectedRating {
-                rating = TypeRating(rawValue: type.rating)
-            }
-        } catch {
-            print(error)
-        }
-        
-        let places = model.data.sorted(by: { (itemOne, itemTwo) -> Bool in
-            guard rating != TypeRating.none else { return false }
-            guard rating == TypeRating.up else {
-                return (itemOne.ratingStar ?? 0) < (itemTwo.ratingStar ?? 0)
-            }
-            return (itemOne.ratingStar ?? 0) > (itemTwo.ratingStar ?? 0)
-        })
-        
-        let ratings = places.map({ (place) -> NSMutableAttributedString? in
+        let ratings = model.data.map({ (place) -> NSMutableAttributedString? in
             let ratingStar = NSAttributedString(string: "\(place.ratingStar ?? 0)",
                 attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 17.0),
                              NSAttributedStringKey.foregroundColor: self.colorForRating(place.ratingStar ?? 0)])
@@ -118,7 +98,7 @@ struct PlaceViewModel {
             return result
         })
         
-        let titles = places.map({ (place) -> NSMutableAttributedString? in
+        let titles = model.data.map({ (place) -> NSMutableAttributedString? in
             let title = NSAttributedString(string: "\(place.name)",
                 attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 17.0),
                              NSAttributedStringKey.foregroundColor: UIColor.black])
@@ -130,6 +110,6 @@ struct PlaceViewModel {
             result.append(about)
             return result
         })
-        return (places, ratings, titles)
+        return (model.data, ratings, titles)
     }
 }

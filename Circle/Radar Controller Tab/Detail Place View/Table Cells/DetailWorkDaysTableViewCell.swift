@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class DetailWorkDaysTableViewCell: UITableViewCell, UICollectionViewDelegate {
+final class DetailWorkDaysTableViewCell: UITableViewCell, UICollectionViewDelegate {    
     static let cellIdentifier = "DetailWorkDaysTableViewCell"
     
     fileprivate var collectionDataSource: WorkDaysCollectionDataSource?

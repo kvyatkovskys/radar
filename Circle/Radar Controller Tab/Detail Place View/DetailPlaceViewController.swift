@@ -64,7 +64,6 @@ final class DetailPlaceViewController: UIViewController {
     fileprivate lazy var listSubCategoriesView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
-        
         let listCategories = ListCategoriesViewController(ListSubCategoriesViewModel(self.viewModel.place.info.subCategories ?? [],
                                                                                      color: self.viewModel.place.info.categories?.first?.color))
         
@@ -76,7 +75,6 @@ final class DetailPlaceViewController: UIViewController {
         addChildViewController(listCategories)
         view.addSubview(listCategories.view)
         listCategories.didMove(toParentViewController: listCategories)
-        
         return view
     }()
     
@@ -93,6 +91,11 @@ final class DetailPlaceViewController: UIViewController {
         table.tableFooterView = UIView(frame: CGRect.zero)
         table.separatorColor = .clear
         return table
+    }()
+    
+    fileprivate lazy var shareButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.action, target: self, action: #selector(sharePlace))
+        return button
     }()
     
     override func updateViewConstraints() {
@@ -152,6 +155,7 @@ final class DetailPlaceViewController: UIViewController {
         navigationItem.title = viewModel.place.info.categories?.reduce("", { (acc, item) -> String in
             return "\(acc) " + "\(item.title)"
         })
+        navigationItem.rightBarButtonItem = shareButton
         
         headerView.addSubview(imageHeader)
         headerView.addSubview(titlePlace)
@@ -166,6 +170,14 @@ final class DetailPlaceViewController: UIViewController {
         tableView.register(DeatilPhoneWebsiteTableViewCell.self, forCellReuseIdentifier: DeatilPhoneWebsiteTableViewCell.cellIdentifier)
         tableView.register(DetailAddressTableViewCell.self, forCellReuseIdentifier: DetailAddressTableViewCell.cellIdentifier)
         tableView.register(DetailWorkDaysTableViewCell.self, forCellReuseIdentifier: DetailWorkDaysTableViewCell.cellIdentifier)
+    }
+    
+    @objc func sharePlace() {
+        if let text = viewModel.place.title?.string, let image = imageHeader.image {
+            let shareController = UIActivityViewController(activityItems: [image, text],
+                                                           applicationActivities: nil)
+            present(shareController, animated: true, completion: nil)
+        }
     }
 }
 

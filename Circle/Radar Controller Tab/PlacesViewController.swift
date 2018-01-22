@@ -33,7 +33,6 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     }()
     
     fileprivate var notificationTokenCategories: NotificationToken?
-    fileprivate var notificationTokenRating: NotificationToken?
     fileprivate var viewModel: PlaceViewModel
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
     fileprivate let disposeBag = DisposeBag()
@@ -170,18 +169,6 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
                     break
                 }
             }
-            
-            let selectedRating = realm.objects(FilterSelectedRating.self)
-            notificationTokenRating = selectedRating.observe({ [unowned self] (changes: RealmCollectionChange) in
-                switch changes {
-                case .update:
-                    self.startDetectLocation()
-                case .error(let error):
-                    fatalError("\(error)")
-                case .initial:
-                    break
-                }
-            })
         } catch {
             print(error)
         }
@@ -189,7 +176,6 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     
     deinit {
         notificationTokenCategories?.invalidate()
-        notificationTokenRating?.invalidate()
     }
     
     @objc func showMap() {

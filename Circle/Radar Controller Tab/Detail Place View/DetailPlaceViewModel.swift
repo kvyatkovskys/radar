@@ -49,7 +49,8 @@ enum DaysType: String {
 }
 
 typealias Days = (day: DaysType, hour: String)
-typealias WorkDays = (closed: [Days], opened: [Days])
+typealias CurrentDay = (index: Int?, color: UIColor?)
+typealias WorkDays = (closed: [Days], opened: [Days], currentDay: CurrentDay)
 
 enum TypeDetailCell {
     case description(String, CGFloat)
@@ -141,8 +142,18 @@ struct DetailPlaceViewModel {
                 }
             })
             
-            let type = TypeDetailCell.workDays((closed: Array(closedDays).sorted(by: { $0.day.sortIndex < $1.day.sortIndex }),
-                                                opened: Array(openedDays).sorted(by: { $0.day.sortIndex < $1.day.sortIndex })))
+            let sortedOpenedDays = Array(openedDays).sorted(by: { $0.day.sortIndex < $1.day.sortIndex })
+            let sortedClosedDays = Array(closedDays).sorted(by: { $0.day.sortIndex < $1.day.sortIndex })
+            
+            let date = Date()
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat  = "EEEE"
+            let dayInWeek = dateFormatter.string(from: date)
+            let index = sortedOpenedDays.index(where: { $0.day.rawValue == dayInWeek })
+            
+            let type = TypeDetailCell.workDays((closed: sortedClosedDays,
+                                                opened: sortedOpenedDays,
+                                                currentDay: CurrentDay(index, place.info.categories?.first?.color)))
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         

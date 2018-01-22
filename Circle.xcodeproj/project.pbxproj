@@ -251,6 +251,15 @@
 			path = "Categories View";
 			sourceTree = "<group>";
 		};
+		8B21F30720162F980013E11C /* List Work Days */ = {
+			isa = PBXGroup;
+			children = (
+				8B82C39920150AD000E0CA89 /* WorkDaysCollectionDataSource.swift */,
+				8B82C39D20150BE500E0CA89 /* WorkDaysCollectionViewCell.swift */,
+			);
+			path = "List Work Days";
+			sourceTree = "<group>";
+		};
 		8B3398D72012770C002966ED /* Table Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -289,11 +298,10 @@
 				8B41154A1FDB2CEF00C6614C /* AppDelegate.swift */,
 				8B41156A1FDC83AF00C6614C /* Router.swift */,
 				8B41156C1FDC845B00C6614C /* AppInjections.swift */,
-				8B82C39920150AD000E0CA89 /* WorkDaysCollectionDataSource.swift */,
-				8B82C39D20150BE500E0CA89 /* WorkDaysCollectionViewCell.swift */,
 				8B44C3841FF012E1003C0754 /* Setting Controller Tab */,
 				8B44C3811FF012A2003C0754 /* Radar Controller Tab */,
 				8B82C39120139F2D00E0CA89 /* Contact Buttons */,
+				8B21F30720162F980013E11C /* List Work Days */,
 				8B1A80AC1FFAE4640039C39A /* Categories View */,
 				8B18FE0E200A24C200E637C7 /* Map View */,
 				8B82C3962014BC7300E0CA89 /* Open Graph Service */,

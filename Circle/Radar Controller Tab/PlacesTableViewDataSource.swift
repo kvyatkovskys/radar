@@ -8,11 +8,13 @@
 
 import UIKit
 import Kingfisher
+import RealmSwift
 
 final class PlacesTableViewDataSource: NSObject {
     var places: [Places]
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
-    
+    fileprivate var notificationTokenRating: NotificationToken?
+
     init(_ tableView: UITableView, places: [Places] = [], kingfisherOptions: KingfisherOptionsInfo) {
         self.places = places
         self.kingfisherOptions = kingfisherOptions
