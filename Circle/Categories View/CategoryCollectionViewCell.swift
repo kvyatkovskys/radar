@@ -42,13 +42,14 @@ final class CategoryCollectionViewCell: UICollectionViewCell {
         super.updateConstraints()
         
         mainView.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(5.0)
-            make.height.equalTo(20.0)
-            make.left.right.equalToSuperview().inset(10.0)
+            make.top.equalToSuperview().offset(7.0)
+            make.bottom.equalToSuperview().offset(-7.0)
+            make.left.right.equalToSuperview().inset(2.0)
         }
         
         titleLabel.snp.makeConstraints { (make) in
-            make.top.left.bottom.right.equalToSuperview()
+            make.top.bottom.equalToSuperview()
+            make.left.right.equalToSuperview().inset(5.0)
         }
     }
     

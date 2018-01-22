@@ -9,8 +9,8 @@
 import Foundation
 import Kingfisher
 
-protocol HasRouter {
-    var router: Router { get }
+protocol HasOpenGraphService {
+    var service: OpenGraphService { get }
 }
 
 protocol HasKingfisher {
@@ -46,20 +46,6 @@ struct SettingsViewDependecies: HasSettingsViewModel {
     }
 }
 
-// MARK: CategoriesViewController
-protocol HasGategoriesViewModel {
-    var viewModel: CategoriesViewModel { get }
-}
-
-/// container dependecies injection's for categories view
-struct CategoriesViewDependecies: HasGategoriesViewModel {
-    let viewModel: CategoriesViewModel
-    
-    init(_ viewModel: CategoriesViewModel) {
-        self.viewModel = viewModel
-    }
-}
-
 // MARK: FilterPlacesViewController
 protocol HasFilterPlacesViewModel {
     var viewModel: FilterViewModel { get }
@@ -89,31 +75,35 @@ struct FilterPlacesDependecies: HasFilterPlacesViewModel, HasFilterPlacesDelegat
 }
 
 protocol HasMapModel {
-    var placesSections: PlacesSections? { get }
+    var places: [Places] { get }
     var location: CLLocation? { get }
 }
 
 /// container dependecies injection's for map controller
 struct MapDependecies: HasMapModel {
-    let placesSections: PlacesSections?
+    let places: [Places]
     let location: CLLocation?
     
-    init(_ placesSections: PlacesSections?, _ location: CLLocation?) {
-        self.placesSections = placesSections
+    init(_ places: [Places], _ location: CLLocation?) {
+        self.places = places
         self.location = location
     }
 }
 
 // MARK: DetailPlaceViewController
-protocol HasDetailPlaceModel {
-    var place: PlaceModel { get }
+protocol HasDetailPlaceViewModel {
+    var viewModel: DetailPlaceViewModel { get }
 }
 
 /// container dependecies injection's for detail place controller
-struct DetailPlaceDependecies: HasDetailPlaceModel {
-    let place: PlaceModel
+struct DetailPlaceDependecies: HasDetailPlaceViewModel, HasKingfisher, HasOpenGraphService {
+    let viewModel: DetailPlaceViewModel
+    let kingfisherOptions: KingfisherOptionsInfo
+    let service: OpenGraphService
     
-    init(_ place: PlaceModel) {
-        self.place = place
+    init(_ viewModel: DetailPlaceViewModel, _ kingfisherOptions: KingfisherOptionsInfo, _ service: OpenGraphService) {
+        self.viewModel = viewModel
+        self.kingfisherOptions = kingfisherOptions
+        self.service = service
     }
 }

@@ -33,7 +33,6 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     }()
     
     fileprivate var notificationTokenCategories: NotificationToken?
-    fileprivate var notificationTokenRating: NotificationToken?
     fileprivate var viewModel: PlaceViewModel
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
     fileprivate let disposeBag = DisposeBag()
@@ -138,19 +137,23 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         navigationItem.rightBarButtonItem = rightBarButton
         
         updateConstraints()
+        startDetectLocation()
         
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
-        tableDataSource = PlacesTableViewDataSource(tableView,
-                                                    placesSections: PlacesSections([], [], [], []),
-                                                    kingfisherOptions: kingfisherOptions)
-        tableDelegate = PlacesTableViewDelegate(tableView,
-                                                placesSections: PlacesSections([], [], [], []),
-                                                viewModel: viewModel)
+        tableDataSource = PlacesTableViewDataSource(tableView, kingfisherOptions: kingfisherOptions)
+        tableDelegate = PlacesTableViewDelegate(tableView, viewModel: viewModel)
         
         refreshControl.rx.controlEvent(.valueChanged).asObservable()
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] _ in
                 self.startDetectLocation()
+            }).disposed(by: disposeBag)
+        
+        tableDelegate?.nextUrl.asObserver()
+            .subscribe(onNext: { [unowned self] (url) in
+                self.loadMoreInfoAboutLocation(url: url)
+            }, onError: { (error) in
+                print(error)
             }).disposed(by: disposeBag)
         
         do {
@@ -166,18 +169,6 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
                     break
                 }
             }
-            
-            let selectedRating = realm.objects(FilterSelectedRating.self)
-            notificationTokenRating = selectedRating.observe({ [unowned self] (changes: RealmCollectionChange) in
-                switch changes {
-                case .update:
-                    self.startDetectLocation()
-                case .error(let error):
-                    fatalError("\(error)")
-                case .initial:
-                    break
-                }
-            })
         } catch {
             print(error)
         }
@@ -185,17 +176,10 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     
     deinit {
         notificationTokenCategories?.invalidate()
-        notificationTokenRating?.invalidate()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        startDetectLocation()
     }
     
     @objc func showMap() {
-        viewModel.openMap(tableDataSource?.placesSections, locationService.userLocation, tapViewOnMap.frame)
+        viewModel.openMap(tableDataSource?.places ?? [], locationService.userLocation, tapViewOnMap.frame)
     }
     
     // MARK: LocationServiceDelegate
@@ -227,33 +211,48 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     }
     
     // MARK: Current class func
-    fileprivate func loadInfoAboutLocation(_ location: CLLocation, distance: Double = FilterDistanceViewModel().defaultDistance) {
-        indicatorView.showIndicator()
-        viewModel.getInfoPlace(location: location, distance: distance).asObservable()
+    fileprivate func loadMoreInfoAboutLocation(url: URL) {
+        viewModel.loadMoreInfoPlaces(url: url).asObservable()
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] (model) in
-                self.tableDataSource?.placesSections = model
-                self.tableDelegate?.placesSections = model
+                self.tableDataSource?.places += [model]
+                self.tableDelegate?.places += [model]
                 self.tableView.reloadData()
-                self.addPointOnMap(placesSections: model)
+                self.addPointOnMap(places: model, removeOldAnnotations: false)
+            }, onError: { (error) in
+                print(error)
+            }).disposed(by: disposeBag)
+    }
+    
+    fileprivate func loadInfoAboutLocation(_ location: CLLocation, distance: Double = FilterDistanceViewModel().defaultDistance) {
+        indicatorView.showIndicator()
+        viewModel.getInfoPlaces(location: location, distance: distance).asObservable()
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { [unowned self] (model) in
+                self.tableDataSource?.places = [model]
+                self.tableDelegate?.places = [model]
+                self.tableView.reloadData()
+                self.addPointOnMap(places: model)
                 
                 self.indicatorView.hideIndicator()
                 if self.refreshControl.isRefreshing {
                     self.refreshControl.endRefreshing()
                 }
-                }, onError: { (error) in
+                }, onError: { [unowned self] (error) in
                     print(error)
+                    self.indicatorView.hideIndicator()
+                    if self.refreshControl.isRefreshing {
+                        self.refreshControl.endRefreshing()
+                    }
             }).disposed(by: disposeBag)
     }
     
-    fileprivate func addPointOnMap(placesSections: PlacesSections) {
-        mapView.removeAnnotations(mapView.annotations)
-        
-        var locations: [CLLocationCoordinate2D] = []
-        placesSections.places.forEach({ (place) in
-            locations += place.map({ CLLocationCoordinate2D(latitude: $0.location?.latitude ?? 0,
-                                                            longitude: $0.location?.longitude ?? 0) })
-        })
+    fileprivate func addPointOnMap(places: Places, removeOldAnnotations: Bool = true) {
+        if removeOldAnnotations {
+            mapView.removeAnnotations(mapView.annotations)
+        }
+        let locations = places.items.map({ CLLocationCoordinate2D(latitude: $0.location?.latitude ?? 0,
+                                                                   longitude: $0.location?.longitude ?? 0) })
         
         locations.forEach { (location) in
             let annotation = MKPointAnnotation()

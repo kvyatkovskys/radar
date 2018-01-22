@@ -8,6 +8,49 @@
 
 import Foundation
 
+class PlaceSetting {
+    fileprivate var fileds: [String]
+    
+    init() {
+        self.fileds = [FBSDKPlacesFieldKeyPlaceID,
+                       FBSDKPlacesFieldKeyName,
+                       FBSDKPlacesFieldKeyAbout,
+                       FBSDKPlacesFieldKeyDescription,
+                       FBSDKPlacesFieldKeyCoverPhoto,
+                       FBSDKPlacesFieldKeyPhone,
+                       FBSDKPlacesFieldKeyPaymentOptions,
+                       FBSDKPlacesFieldKeyHours,
+                       FBSDKPlacesFieldKeyIsAlwaysOpen,
+                       FBSDKPlacesFieldKeyIsPermanentlyClosed,
+                       FBSDKPlacesFieldKeyOverallStarRating,
+                       FBSDKPlacesFieldKeyRatingCount,
+                       FBSDKPlacesFieldKeyParking,
+                       FBSDKPlacesFieldKeyRestaurantServices,
+                       FBSDKPlacesFieldKeyRestaurantSpecialties,
+                       FBSDKPlacesFieldKeySingleLineAddress,
+                       FBSDKPlacesFieldKeyWebsite,
+                       FBSDKPlacesResponseKeyMatchedCategories,
+                       FBSDKPlacesFieldKeyLocation,
+                       FBSDKPlacesSummaryKeyTracking,
+                       FBSDKPlacesFieldKeyCategories,
+                       FBSDKPlacesFieldKeyAppLinks]
+    }
+    
+    func getFields() -> [String] {
+        guard FBSDKAccessToken.current() != nil else { return fileds }
+        /**
+         Field Key for the OpenGraphContext of the place, including friends who were at this
+         place, or who liked to its page. This field requires authentication with a user token.
+         An error will be thrown if this field is requested using a client token.
+         */
+        guard fileds.contains(FBSDKPlacesFieldKeyContext) else {
+            fileds.append(FBSDKPlacesFieldKeyContext)
+            return fileds
+        }
+        return fileds
+    }
+}
+
 enum Categories: String {
     case arts = "ARTS_ENTERTAINMENT"
     case education = "EDUCATION"

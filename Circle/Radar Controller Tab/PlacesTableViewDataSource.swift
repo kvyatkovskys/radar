@@ -8,13 +8,15 @@
 
 import UIKit
 import Kingfisher
+import RealmSwift
 
 final class PlacesTableViewDataSource: NSObject {
-    var placesSections: PlacesSections
+    var places: [Places]
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
-    
-    init(_ tableView: UITableView, placesSections: PlacesSections, kingfisherOptions: KingfisherOptionsInfo) {
-        self.placesSections = placesSections
+    fileprivate var notificationTokenRating: NotificationToken?
+
+    init(_ tableView: UITableView, places: [Places] = [], kingfisherOptions: KingfisherOptionsInfo) {
+        self.places = places
         self.kingfisherOptions = kingfisherOptions
         super.init()
         tableView.dataSource = self
@@ -23,24 +25,26 @@ final class PlacesTableViewDataSource: NSObject {
 
 extension PlacesTableViewDataSource: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return placesSections.sections.count
+        return places.count
     }
-        
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return placesSections.places[section].count
+        return places[section].items.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let place = placesSections.places[indexPath.section][indexPath.row]
-        let rating = placesSections.ratings[indexPath.section][indexPath.row]
-        let title = placesSections.titles[indexPath.section][indexPath.row]
+        let place = places[indexPath.section].items[indexPath.row]
+        let rating = places[indexPath.section].ratings[indexPath.row]
+        let title = places[indexPath.section].titles[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: PlaceTableViewCell.cellIndetifier,
                                                  for: indexPath) as? PlaceTableViewCell ?? PlaceTableViewCell()
         
         cell.rating = rating
         cell.title = title
+        cell.titleCategory = place.categories?.first?.title
+        cell.colorCategory = place.categories?.first?.color
         cell.imageCell.kf.indicatorType = .activity
-        cell.imageCell.kf.setImage(with: place.coverPhoto?.url,
+        cell.imageCell.kf.setImage(with: place.coverPhoto,
                                    placeholder: nil,
                                    options: self.kingfisherOptions,
                                    progressBlock: nil,

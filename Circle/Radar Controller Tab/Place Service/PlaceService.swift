@@ -12,34 +12,38 @@ import Unbox
 
 struct PlaceService {
     fileprivate let placeManager: FBSDKPlacesManager
-
+    fileprivate var setting: PlaceSetting
+    
     init() {
         self.placeManager = FBSDKPlacesManager()
+        self.setting = PlaceSetting()
     }
 
-    func getInfoAboutPlace(_ location: CLLocation, _ categories: [Categories], _ distance: CLLocationDistance) -> Observable<[PlaceModel]> {
+    func loadMorePlaces(url: URL) -> Observable<PlaceDataModel> {
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        return URLSession.shared.rx.response(request: request).asObservable()
+            .flatMap({ (response, data) -> Observable<PlaceDataModel> in
+                guard 200 == response.statusCode else {
+                    let error = NSError(type: .other, info: "Recieved a response not 200")
+                    return Observable.error(error)
+                }
+                
+                if let model: PlaceDataModel = try? unbox(data: data) {
+                    return Observable.just(model)
+                } else {
+                    let error = NSError(type: .other, info: "Parsing error")
+                    return Observable.error(error)
+                }
+            })
+    }
+    
+    func getInfoAboutPlaces(_ location: CLLocation, _ categories: [Categories], _ distance: CLLocationDistance) -> Observable<PlaceDataModel> {
         let request = placeManager.placeSearchRequest(for: location,
                                                       searchTerm: nil,
                                                       categories: categories.map({ $0.rawValue }),
-                                                      fields: [FBSDKPlacesFieldKeyPlaceID,
-                                                               FBSDKPlacesFieldKeyName,
-                                                               FBSDKPlacesFieldKeyAbout,
-                                                               FBSDKPlacesFieldKeyDescription,
-                                                               FBSDKPlacesFieldKeyCoverPhoto,
-                                                               FBSDKPlacesFieldKeyPhone,
-                                                               FBSDKPlacesFieldKeyPaymentOptions,
-                                                               FBSDKPlacesFieldKeyHours,
-                                                               FBSDKPlacesFieldKeyIsAlwaysOpen,
-                                                               FBSDKPlacesFieldKeyIsPermanentlyClosed,
-                                                               FBSDKPlacesFieldKeyOverallStarRating,
-                                                               FBSDKPlacesFieldKeyRatingCount,
-                                                               FBSDKPlacesFieldKeyParking,
-                                                               FBSDKPlacesFieldKeyRestaurantServices,
-                                                               FBSDKPlacesFieldKeyRestaurantSpecialties,
-                                                               FBSDKPlacesFieldKeySingleLineAddress,
-                                                               FBSDKPlacesFieldKeyWebsite,
-                                                               FBSDKPlacesResponseKeyMatchedCategories,
-                                                               FBSDKPlacesFieldKeyLocation],
+                                                      fields: setting.getFields(),
                                                       distance: distance,
                                                       cursor: nil)
         
@@ -51,7 +55,7 @@ struct PlaceService {
                 }
 
                 if let data = result as? [String: Any], let model: PlaceDataModel = try? unbox(dictionary: data) {
-                    observable.on(.next(model.data))
+                    observable.on(.next(model))
                 }
             })
             return Disposables.create()

@@ -16,7 +16,6 @@ fileprivate extension UIColor {
 }
 
 struct Router {
-
     func showMainTabController() -> UITabBarController {
         //swiftlint:disable force_cast
         var placesViewController = UIViewController()
@@ -32,7 +31,7 @@ struct Router {
                                   toController: FilterPlacesViewController(dependecies))
         }
         
-        viewModel.openMap = { (places: PlacesSections?, location: CLLocation?, sourceRect: CGRect) in
+        viewModel.openMap = { (places: [Places], location: CLLocation?, sourceRect: CGRect) in
             let dependecies = MapDependecies(places, location)
             self.openMap(fromController: placesViewController as! PlacesViewController,
                          toController: MapViewController(dependecies),
@@ -40,7 +39,7 @@ struct Router {
         }
         
         viewModel.openDetailPlace = { place in
-            self.openDetailPlace(place, placesViewController)
+            self.openDetailPlace(place, optionKingfisher, placesViewController)
         }
         
         placesViewController = PlacesViewController(PlacesViewDependecies(optionKingfisher, viewModel))
@@ -48,13 +47,6 @@ struct Router {
         placesViewController.navigationItem.title = "Around here"
         placesViewController.tabBarItem = UITabBarItem(title: "My location", image: locationImage, tag: 1)
         placesViewController.navigationController?.navigationBar.isTranslucent = true
-        
-        if #available(iOS 11.0, *) {
-            placesViewController.navigationController?.navigationBar.largeTitleTextAttributes = [
-                NSAttributedStringKey.foregroundColor: UIColor.white,
-                NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 28)]
-            placesViewController.navigationController?.navigationItem.largeTitleDisplayMode = .always
-        }
         
         let settingsController = SettingsViewController(SettingsViewDependecies(SettingsViewModel()))
         let settingsImage = UIImage(named: "ic_settings")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
@@ -67,10 +59,11 @@ struct Router {
         return tabController
     }
     
-    fileprivate func openDetailPlace(_ place: PlaceModel, _ fromController: UIViewController) {
-        let dependecies = DetailPlaceDependecies(place)
+    fileprivate func openDetailPlace(_ place: Place, _ kingfisherOptions: KingfisherOptionsInfo, _ fromController: UIViewController) {
+        let dependecies = DetailPlaceDependecies(DetailPlaceViewModel(place), kingfisherOptions, OpenGraphService())
         let detailPlaceController = DetailPlaceViewController(dependecies)
         detailPlaceController.hidesBottomBarWhenPushed = true
+        fromController.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
         fromController.navigationController?.pushViewController(detailPlaceController, animated: true)
     }
     
