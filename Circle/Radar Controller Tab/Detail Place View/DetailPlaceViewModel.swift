@@ -79,6 +79,7 @@ struct DetailPlaceViewModel {
     
     init(_ place: Place) {
         self.place = place
+        print(place.info)
         var items: [DetailSectionObjects] = []
         
         if (place.info.phone != nil) || (place.info.website != nil) || (place.info.appLink != nil) {
