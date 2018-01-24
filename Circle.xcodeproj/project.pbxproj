@@ -19,6 +19,8 @@
 		8B18FE14200A994F00E637C7 /* FCButtonLoginTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18FE13200A994F00E637C7 /* FCButtonLoginTableViewCell.swift */; };
 		8B1A80A91FFADAED0039C39A /* CategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1A80A81FFADAED0039C39A /* CategoryCollectionViewCell.swift */; };
 		8B21F30920187DE90013E11C /* DetailPaymentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B21F30820187DE90013E11C /* DetailPaymentTableViewCell.swift */; };
+		8B2940B02018AE94004CB9AD /* ListPaymentsCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2940AF2018AE94004CB9AD /* ListPaymentsCollectionDataSource.swift */; };
+		8B2940B22018B160004CB9AD /* DetailPlaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2940B12018B160004CB9AD /* DetailPlaceModel.swift */; };
 		8B3398CC200F61E6002966ED /* DetailPlaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3398CB200F61E6002966ED /* DetailPlaceViewModel.swift */; };
 		8B3398CE200F66B5002966ED /* DetailDescriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3398CD200F66B5002966ED /* DetailDescriptionTableViewCell.swift */; };
 		8B3398D0200F7597002966ED /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3398CF200F7597002966ED /* String+Extension.swift */; };
@@ -47,9 +49,9 @@
 		8B82C38620133A0200E0CA89 /* Error+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C38520133A0200E0CA89 /* Error+Extension.swift */; };
 		8B82C38820136D6400E0CA89 /* ListCategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C38720136D6400E0CA89 /* ListCategoriesViewController.swift */; };
 		8B82C38A20137A0500E0CA89 /* ListSubCategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C38920137A0500E0CA89 /* ListSubCategoriesViewModel.swift */; };
-		8B82C38C2013999B00E0CA89 /* ListButtonsCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C38B2013999B00E0CA89 /* ListButtonsCollectionDataSource.swift */; };
+		8B82C38C2013999B00E0CA89 /* ListItemsCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C38B2013999B00E0CA89 /* ListItemsCollectionDataSource.swift */; };
 		8B82C38E201399B500E0CA89 /* ListButtonsCollectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C38D201399B500E0CA89 /* ListButtonsCollectionDelegate.swift */; };
-		8B82C39020139C9F00E0CA89 /* ListButtonCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C38F20139C9F00E0CA89 /* ListButtonCollectionViewCell.swift */; };
+		8B82C39020139C9F00E0CA89 /* ListItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C38F20139C9F00E0CA89 /* ListItemCollectionViewCell.swift */; };
 		8B82C3932014843E00E0CA89 /* OpenGraphService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C3922014843E00E0CA89 /* OpenGraphService.swift */; };
 		8B82C3952014B72500E0CA89 /* FriendsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C3942014B72500E0CA89 /* FriendsModel.swift */; };
 		8B82C3982014C95000E0CA89 /* DetailWorkDaysTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C3972014C95000E0CA89 /* DetailWorkDaysTableViewCell.swift */; };
@@ -95,6 +97,8 @@
 		8B18FE13200A994F00E637C7 /* FCButtonLoginTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FCButtonLoginTableViewCell.swift; sourceTree = "<group>"; };
 		8B1A80A81FFADAED0039C39A /* CategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		8B21F30820187DE90013E11C /* DetailPaymentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPaymentTableViewCell.swift; sourceTree = "<group>"; };
+		8B2940AF2018AE94004CB9AD /* ListPaymentsCollectionDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListPaymentsCollectionDataSource.swift; sourceTree = "<group>"; };
+		8B2940B12018B160004CB9AD /* DetailPlaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPlaceModel.swift; sourceTree = "<group>"; };
 		8B3398CB200F61E6002966ED /* DetailPlaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPlaceViewModel.swift; sourceTree = "<group>"; };
 		8B3398CD200F66B5002966ED /* DetailDescriptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailDescriptionTableViewCell.swift; sourceTree = "<group>"; };
 		8B3398CF200F7597002966ED /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
@@ -128,9 +132,9 @@
 		8B82C38520133A0200E0CA89 /* Error+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extension.swift"; sourceTree = "<group>"; };
 		8B82C38720136D6400E0CA89 /* ListCategoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCategoriesViewController.swift; sourceTree = "<group>"; };
 		8B82C38920137A0500E0CA89 /* ListSubCategoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListSubCategoriesViewModel.swift; sourceTree = "<group>"; };
-		8B82C38B2013999B00E0CA89 /* ListButtonsCollectionDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListButtonsCollectionDataSource.swift; sourceTree = "<group>"; };
+		8B82C38B2013999B00E0CA89 /* ListItemsCollectionDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemsCollectionDataSource.swift; sourceTree = "<group>"; };
 		8B82C38D201399B500E0CA89 /* ListButtonsCollectionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListButtonsCollectionDelegate.swift; sourceTree = "<group>"; };
-		8B82C38F20139C9F00E0CA89 /* ListButtonCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListButtonCollectionViewCell.swift; sourceTree = "<group>"; };
+		8B82C38F20139C9F00E0CA89 /* ListItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemCollectionViewCell.swift; sourceTree = "<group>"; };
 		8B82C3922014843E00E0CA89 /* OpenGraphService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenGraphService.swift; sourceTree = "<group>"; };
 		8B82C3942014B72500E0CA89 /* FriendsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsModel.swift; sourceTree = "<group>"; };
 		8B82C3972014C95000E0CA89 /* DetailWorkDaysTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailWorkDaysTableViewCell.swift; sourceTree = "<group>"; };
@@ -238,6 +242,7 @@
 			children = (
 				8B18FE0F200A782D00E637C7 /* DetailPlaceViewController.swift */,
 				8B3398CB200F61E6002966ED /* DetailPlaceViewModel.swift */,
+				8B2940B12018B160004CB9AD /* DetailPlaceModel.swift */,
 				8B3398D72012770C002966ED /* Table Cells */,
 			);
 			path = "Detail Place View";
@@ -265,10 +270,10 @@
 		8B3398D72012770C002966ED /* Table Cells */ = {
 			isa = PBXGroup;
 			children = (
+				8B3398D520127670002966ED /* DetailSectionTableViewCell.swift */,
 				8B3398CD200F66B5002966ED /* DetailDescriptionTableViewCell.swift */,
 				8B3398D1200F77E4002966ED /* DeatilPhoneWebsiteTableViewCell.swift */,
 				8B3398D3200FE5E2002966ED /* DetailAddressTableViewCell.swift */,
-				8B3398D520127670002966ED /* DetailSectionTableViewCell.swift */,
 				8B82C3972014C95000E0CA89 /* DetailWorkDaysTableViewCell.swift */,
 				8B21F30820187DE90013E11C /* DetailPaymentTableViewCell.swift */,
 			);
@@ -301,6 +306,7 @@
 				8B41154A1FDB2CEF00C6614C /* AppDelegate.swift */,
 				8B41156A1FDC83AF00C6614C /* Router.swift */,
 				8B41156C1FDC845B00C6614C /* AppInjections.swift */,
+				8B2940AF2018AE94004CB9AD /* ListPaymentsCollectionDataSource.swift */,
 				8B44C3841FF012E1003C0754 /* Setting Controller Tab */,
 				8B44C3811FF012A2003C0754 /* Radar Controller Tab */,
 				8B82C39120139F2D00E0CA89 /* Contact Buttons */,
@@ -415,9 +421,9 @@
 		8B82C39120139F2D00E0CA89 /* Contact Buttons */ = {
 			isa = PBXGroup;
 			children = (
-				8B82C38B2013999B00E0CA89 /* ListButtonsCollectionDataSource.swift */,
+				8B82C38B2013999B00E0CA89 /* ListItemsCollectionDataSource.swift */,
 				8B82C38D201399B500E0CA89 /* ListButtonsCollectionDelegate.swift */,
-				8B82C38F20139C9F00E0CA89 /* ListButtonCollectionViewCell.swift */,
+				8B82C38F20139C9F00E0CA89 /* ListItemCollectionViewCell.swift */,
 			);
 			path = "Contact Buttons";
 			sourceTree = "<group>";
@@ -688,13 +694,14 @@
 				8B41156D1FDC845B00C6614C /* AppInjections.swift in Sources */,
 				8B82C38A20137A0500E0CA89 /* ListSubCategoriesViewModel.swift in Sources */,
 				8B82C3952014B72500E0CA89 /* FriendsModel.swift in Sources */,
+				8B2940B22018B160004CB9AD /* DetailPlaceModel.swift in Sources */,
 				8B18FE14200A994F00E637C7 /* FCButtonLoginTableViewCell.swift in Sources */,
 				8B3398D620127670002966ED /* DetailSectionTableViewCell.swift in Sources */,
 				8B18FE10200A782D00E637C7 /* DetailPlaceViewController.swift in Sources */,
 				8BE208A11FFD1D300048D690 /* Controller+Extension.swift in Sources */,
 				8B3398D0200F7597002966ED /* String+Extension.swift in Sources */,
 				8BEB4DF31FFAD285008AD1AB /* PlaceSetting.swift in Sources */,
-				8B82C38C2013999B00E0CA89 /* ListButtonsCollectionDataSource.swift in Sources */,
+				8B82C38C2013999B00E0CA89 /* ListItemsCollectionDataSource.swift in Sources */,
 				8B4177191FFD670B002A963A /* DeviceType.swift in Sources */,
 				8B44C3831FF012C8003C0754 /* SettingsViewController.swift in Sources */,
 				8B44C37D1FEFDFA5003C0754 /* LocationService.swift in Sources */,
@@ -711,7 +718,7 @@
 				8B82C38E201399B500E0CA89 /* ListButtonsCollectionDelegate.swift in Sources */,
 				8B41156B1FDC83AF00C6614C /* Router.swift in Sources */,
 				8B41770A1FFD5785002A963A /* ActivityIndicatorView.swift in Sources */,
-				8B82C39020139C9F00E0CA89 /* ListButtonCollectionViewCell.swift in Sources */,
+				8B82C39020139C9F00E0CA89 /* ListItemCollectionViewCell.swift in Sources */,
 				8B21F30920187DE90013E11C /* DetailPaymentTableViewCell.swift in Sources */,
 				8BE208A51FFD25CB0048D690 /* FilterPlacesViewModel.swift in Sources */,
 				8B41771D1FFF64A7002A963A /* DistancePickerViewDelegate.swift in Sources */,
@@ -722,6 +729,7 @@
 				8B44C37F1FEFE195003C0754 /* QuickAlertController.swift in Sources */,
 				8B18BFD61FFA594D00C7906D /* Color+Extension.swift in Sources */,
 				8B82C3982014C95000E0CA89 /* DetailWorkDaysTableViewCell.swift in Sources */,
+				8B2940B02018AE94004CB9AD /* ListPaymentsCollectionDataSource.swift in Sources */,
 				8B3398CC200F61E6002966ED /* DetailPlaceViewModel.swift in Sources */,
 				8B6D4E211FFBA0DC007904D4 /* PlacesTableViewDelegate.swift in Sources */,
 				8BE2089D1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift in Sources */,

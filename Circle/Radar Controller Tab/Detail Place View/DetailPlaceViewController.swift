@@ -80,7 +80,7 @@ final class DetailPlaceViewController: UIViewController {
     
     fileprivate let lineView: UIView = {
         let view = UIView()
-        view.backgroundColor = .gray
+        view.backgroundColor = .clear
         return view
     }()
     
@@ -217,12 +217,14 @@ extension DetailPlaceViewController: UITableViewDataSource {
         case .workDays(let workDays, _):
             let cell = tableView.dequeueReusableCell(withIdentifier: DetailWorkDaysTableViewCell.cellIdentifier,
                                                      for: indexPath) as? DetailWorkDaysTableViewCell ?? DetailWorkDaysTableViewCell()
+            
             cell.workDays = workDays
             return cell
         case .payment(let payments, _):
             let cell = tableView.dequeueReusableCell(withIdentifier: DetailPaymentTableViewCell.cellIdentifier,
                                                      for: indexPath) as? DetailPaymentTableViewCell ?? DetailPaymentTableViewCell()
-            print(payments)
+            
+            cell.payments = payments
             return cell
         }
     }
@@ -234,6 +236,10 @@ extension DetailPlaceViewController: UITableViewDelegate {
         
         header.title = viewModel.dataSource[section].sectionName
         return header
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 40.0
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

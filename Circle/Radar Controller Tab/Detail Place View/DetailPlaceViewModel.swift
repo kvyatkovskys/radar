@@ -8,82 +8,6 @@
 
 import Foundation
 
-enum PaymentType: String {
-    case cash = "cash_only", amex, visa, mastercard, discover
-    
-    var title: String {
-        switch self {
-        case .amex: return "AMEX"
-        case .visa: return "VISA"
-        case .cash: return "Cash"
-        case .discover: return "Discover"
-        case .mastercard: return "Mastercard"
-        }
-    }
-}
-
-enum ContactType: String {
-    case phone, website, facebook
-}
-
-typealias Contact = (type: ContactType, value: Any?)
-
-enum DaysType: String {
-    case monday = "Monday"
-    case tuesday = "Tuesday"
-    case wednesday = "Wednesday"
-    case thursday = "Thursday"
-    case friday = "Friday"
-    case saturday = "Saturday"
-    case sunday = "Sunday"
-    
-    var shortName: String {
-        switch self {
-        case .monday: return "mon"
-        case .tuesday: return "tue"
-        case .wednesday: return "wed"
-        case .thursday: return "thu"
-        case .friday: return "fri"
-        case .saturday: return "sat"
-        case .sunday: return "sun"
-        }
-    }
-    
-    var sortIndex: Int {
-        switch self {
-        case .monday: return 0
-        case .tuesday: return 1
-        case .wednesday: return 2
-        case .thursday: return 3
-        case .friday: return 4
-        case .saturday: return 5
-        case .sunday: return 6
-        }
-    }
-}
-
-typealias Days = (day: DaysType, hour: String)
-typealias CurrentDay = (index: Int?, color: UIColor?)
-typealias WorkDays = (closed: [Days], opened: [Days], currentDay: CurrentDay)
-
-enum TypeDetailCell {
-    case description(String, CGFloat)
-    case contact([Contact], CGFloat)
-    case address(String, LocationPlace?, CGFloat)
-    case workDays(WorkDays, CGFloat)
-    case payment([PaymentType?], CGFloat)
-    
-    var title: String {
-        switch self {
-        case .workDays: return "Openig hours"
-        case .description: return "Description"
-        case .contact: return "Contacts"
-        case .address: return "Address"
-        case .payment: return "Payment"
-        }
-    }
-}
-
 struct DetailSectionObjects {
     var sectionName: String
     var sectionObjects: [TypeDetailCell]
@@ -102,7 +26,7 @@ struct DetailPlaceViewModel {
             let itemsContact = [Contact(type: ContactType.phone, value: place.info.phone),
                                 Contact(type: ContactType.website, value: place.info.website),
                                 Contact(type: ContactType.facebook, value: place.info.appLink)]
-            let type = TypeDetailCell.contact(itemsContact, 80.0)
+            let type = TypeDetailCell.contact(itemsContact, 90.0)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         
@@ -171,7 +95,7 @@ struct DetailPlaceViewModel {
             let type = TypeDetailCell.workDays((closed: sortedClosedDays,
                                                 opened: sortedOpenedDays,
                                                 currentDay: CurrentDay(index, place.info.categories?.first?.color)),
-                                               70.0)
+                                               90.0)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         

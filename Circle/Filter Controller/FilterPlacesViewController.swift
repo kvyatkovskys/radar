@@ -21,7 +21,7 @@ protocol FilterPlacesDelegate: class {
     func selectDistance(value: Double)
 }
 
-final class FilterPlacesViewController: UIViewController {
+final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
     typealias Dependecies = HasFilterPlacesViewModel & HasFilterPlacesDelegate
     
     fileprivate let disposeBag = DisposeBag()

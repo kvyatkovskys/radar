@@ -1,5 +1,5 @@
 //
-//  ListButtonCollectionViewCell.swift
+//  ListitemCollectionViewCell.swift
 //  Circle
 //
 //  Created by Kviatkovskii on 20/01/2018.
@@ -14,8 +14,8 @@ fileprivate extension UIColor {
     }
 }
 
-final class ListButtonCollectionViewCell: UICollectionViewCell {
-    static let cellIdentifier = "ListButtonCollectionViewCell"
+final class ListItemCollectionViewCell: UICollectionViewCell {
+    static let cellIdentifier = "ListItemCollectionViewCell"
     
     fileprivate let titleLabel: UILabel = {
         let label = UILabel()
@@ -26,7 +26,6 @@ final class ListButtonCollectionViewCell: UICollectionViewCell {
     
     fileprivate let imageView: UIImageView = {
         let image = UIImageView()
-        image.tintColor = UIColor.blueImage
         image.contentMode = .scaleAspectFit
         return image
     }()
@@ -37,34 +36,30 @@ final class ListButtonCollectionViewCell: UICollectionViewCell {
         imageView.snp.makeConstraints { (make) in
             make.top.equalToSuperview()
             make.centerX.equalToSuperview()
-            make.size.equalTo(CGSize(width: 35.0, height: 35.0))
+            make.bottom.equalTo(titleLabel.snp.top)
+            make.width.equalTo(35.0)
         }
         
         titleLabel.snp.makeConstraints { (make) in
             make.top.equalTo(imageView.snp.bottom)
             make.height.equalTo(15.0)
+            make.bottom.equalToSuperview()
             make.left.right.bottom.equalToSuperview()
         }
     }
     
     var contact: Contact? {
         didSet {
-            switch contact?.type {
-            case .phone?:
-                let phoneImage = UIImage(named: "ic_phone")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
-                imageView.image = phoneImage
-                titleLabel.text = "Call to phone"
-            case .website?:
-                let browserImage = UIImage(named: "ic_open_in_browser")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
-                imageView.image = browserImage
-                titleLabel.text = "Open website"
-            case .facebook?:
-                let facebookImage = UIImage(named: "ic_facebook")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
-                imageView.image = facebookImage
-                titleLabel.text = "Open Facebook"
-            case .none:
-                break
-            }
+            imageView.tintColor = UIColor.blueImage
+            imageView.image = contact?.type.image
+            titleLabel.text = contact?.type.title
+        }
+    }
+    
+    var payment: PaymentType? {
+        didSet {
+            imageView.image = payment?.image
+            titleLabel.text = payment?.title
         }
     }
     
