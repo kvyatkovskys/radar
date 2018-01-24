@@ -8,6 +8,20 @@
 
 import Foundation
 
+enum PaymentType: String {
+    case cash = "cash_only", amex, visa, mastercard, discover
+    
+    var title: String {
+        switch self {
+        case .amex: return "AMEX"
+        case .visa: return "VISA"
+        case .cash: return "Cash"
+        case .discover: return "Discover"
+        case .mastercard: return "Mastercard"
+        }
+    }
+}
+
 enum ContactType: String {
     case phone, website, facebook
 }
@@ -54,9 +68,10 @@ typealias WorkDays = (closed: [Days], opened: [Days], currentDay: CurrentDay)
 
 enum TypeDetailCell {
     case description(String, CGFloat)
-    case contact([Contact])
+    case contact([Contact], CGFloat)
     case address(String, LocationPlace?, CGFloat)
-    case workDays(WorkDays)
+    case workDays(WorkDays, CGFloat)
+    case payment([PaymentType?], CGFloat)
     
     var title: String {
         switch self {
@@ -64,6 +79,7 @@ enum TypeDetailCell {
         case .description: return "Description"
         case .contact: return "Contacts"
         case .address: return "Address"
+        case .payment: return "Payment"
         }
     }
 }
@@ -79,14 +95,14 @@ struct DetailPlaceViewModel {
     
     init(_ place: Place) {
         self.place = place
-        print(place.info)
+        print(place.info.paymentOptions)
         var items: [DetailSectionObjects] = []
         
         if (place.info.phone != nil) || (place.info.website != nil) || (place.info.appLink != nil) {
             let itemsContact = [Contact(type: ContactType.phone, value: place.info.phone),
                                 Contact(type: ContactType.website, value: place.info.website),
                                 Contact(type: ContactType.facebook, value: place.info.appLink)]
-            let type = TypeDetailCell.contact(itemsContact)
+            let type = TypeDetailCell.contact(itemsContact, 80.0)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         
@@ -154,7 +170,8 @@ struct DetailPlaceViewModel {
             
             let type = TypeDetailCell.workDays((closed: sortedClosedDays,
                                                 opened: sortedOpenedDays,
-                                                currentDay: CurrentDay(index, place.info.categories?.first?.color)))
+                                                currentDay: CurrentDay(index, place.info.categories?.first?.color)),
+                                               70.0)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         
@@ -162,6 +179,12 @@ struct DetailPlaceViewModel {
             let height = address.height(font: .boldSystemFont(ofSize: 15.0),
                                         width: ScreenSize.SCREEN_WIDTH) + 80.0
             let type = TypeDetailCell.address(address, place.info.location, height)
+            items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
+        }
+        
+        if let payments = place.info.paymentOptions {
+            let paymentsType = payments.filter({ $0.value == true }).map({ PaymentType(rawValue: $0.key) })
+            let type = TypeDetailCell.payment(paymentsType, 70.0)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         

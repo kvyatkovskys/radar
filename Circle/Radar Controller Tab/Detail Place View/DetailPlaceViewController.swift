@@ -170,6 +170,7 @@ final class DetailPlaceViewController: UIViewController {
         tableView.register(DeatilPhoneWebsiteTableViewCell.self, forCellReuseIdentifier: DeatilPhoneWebsiteTableViewCell.cellIdentifier)
         tableView.register(DetailAddressTableViewCell.self, forCellReuseIdentifier: DetailAddressTableViewCell.cellIdentifier)
         tableView.register(DetailWorkDaysTableViewCell.self, forCellReuseIdentifier: DetailWorkDaysTableViewCell.cellIdentifier)
+        tableView.register(DetailPaymentTableViewCell.self, forCellReuseIdentifier: DetailPaymentTableViewCell.cellIdentifier)
     }
     
     @objc func sharePlace() {
@@ -200,7 +201,7 @@ extension DetailPlaceViewController: UITableViewDataSource {
             
             cell.textDescription = text
             return cell
-        case .contact(let contacts):
+        case .contact(let contacts, _):
             let cell = tableView.dequeueReusableCell(withIdentifier: DeatilPhoneWebsiteTableViewCell.cellIdentifier,
                                                      for: indexPath) as? DeatilPhoneWebsiteTableViewCell ?? DeatilPhoneWebsiteTableViewCell()
             
@@ -213,10 +214,15 @@ extension DetailPlaceViewController: UITableViewDataSource {
             cell.address = address
             cell.location = location
             return cell
-        case .workDays(let workDays):
+        case .workDays(let workDays, _):
             let cell = tableView.dequeueReusableCell(withIdentifier: DetailWorkDaysTableViewCell.cellIdentifier,
                                                      for: indexPath) as? DetailWorkDaysTableViewCell ?? DetailWorkDaysTableViewCell()
             cell.workDays = workDays
+            return cell
+        case .payment(let payments, _):
+            let cell = tableView.dequeueReusableCell(withIdentifier: DetailPaymentTableViewCell.cellIdentifier,
+                                                     for: indexPath) as? DetailPaymentTableViewCell ?? DetailPaymentTableViewCell()
+            print(payments)
             return cell
         }
     }
@@ -234,14 +240,11 @@ extension DetailPlaceViewController: UITableViewDelegate {
         let type = viewModel.dataSource[indexPath.section].sectionObjects[indexPath.row]
         
         switch type {
-        case .description(_, let height):
-            return height
-        case .contact:
-            return 80.0
-        case .address(_, _, let height):
-            return height
-        case .workDays:
-            return 70.0
+        case .description(_, let height): return height
+        case .contact(_, let height): return height
+        case .address(_, _, let height): return height
+        case .workDays(_, let height): return height
+        case .payment(_, let height): return height
         }
     }
     
