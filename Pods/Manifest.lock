@@ -1,13 +1,13 @@
 PODS:
   - Kingfisher (4.6.1)
-  - Realm (3.0.2):
-    - Realm/Headers (= 3.0.2)
-  - Realm/Headers (3.0.2)
-  - RealmSwift (3.0.2):
-    - Realm (= 3.0.2)
-  - RxCocoa (4.1.0):
+  - Realm (3.1.0):
+    - Realm/Headers (= 3.1.0)
+  - Realm/Headers (3.1.0)
+  - RealmSwift (3.1.0):
+    - Realm (= 3.1.0)
+  - RxCocoa (4.1.1):
     - RxSwift (~> 4.0)
-  - RxSwift (4.1.0)
+  - RxSwift (4.1.1)
   - SnapKit (4.0.0)
   - Unbox (2.5.0)
 
@@ -21,10 +21,10 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   Kingfisher: 1f9157d9c02b380cbd0b7cc890161195164eb634
-  Realm: 6f23fd1f178a09342eac21bfa7c2bf4312a7a180
-  RealmSwift: 695393add1b8f9d5fa75dd16e6355cf3935f71e2
-  RxCocoa: cc1fec49cdc8fabe645964de7c51c099a36c2aa8
-  RxSwift: 4219941c1244c88002901bd87a69d3aea9ae71f0
+  Realm: 09513d7c054678d65cd02ce09871f805b0d758ac
+  RealmSwift: e868fee9b10e5490ad94b6b6ecd9027944da1824
+  RxCocoa: fd0862fd2df95fa55562ad28ffd2522c25eb4a85
+  RxSwift: c6e3b1c7b325c7d121cd4327e9d98b7ed746b570
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   Unbox: 30e437e6151a6de16139375fd4e8dd9a664cfbf7
 

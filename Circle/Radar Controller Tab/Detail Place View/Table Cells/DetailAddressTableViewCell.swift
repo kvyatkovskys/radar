@@ -21,7 +21,7 @@ final class DetailAddressTableViewCell: UITableViewCell {
     fileprivate let addressLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.font = .boldSystemFont(ofSize: 14.0)
+        label.font = .systemFont(ofSize: 15.0)
         return label
     }()
     

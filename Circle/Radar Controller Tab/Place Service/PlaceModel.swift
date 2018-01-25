@@ -41,6 +41,10 @@ struct PlaceModel {
     let location: LocationPlace?
     let context: String?
     let appLink: URL?
+    let paymentOptions: [String: Bool]?
+    let parking: [String: Bool]?
+    let restaurantServices: [String: Bool]?
+    let restaurantSpecialties: [String: Bool]?
 }
 
 extension PlaceModel: Unboxable {
@@ -67,6 +71,10 @@ extension PlaceModel: Unboxable {
         self.context = unboxer.unbox(keyPath: "context.id")
         let appLinks: [[String: Any]] = try unboxer.unbox(keyPath: "app_links.ios")
         self.appLink = URL(string: appLinks.filter({ "\($0["app_name"] ?? "")" == "Facebook" }).first?["url"] as? String ?? "")
+        self.paymentOptions = unboxer.unbox(key: "payment_options")
+        self.parking = unboxer.unbox(key: "parking")
+        self.restaurantServices = unboxer.unbox(key: "restaurant_services")
+        self.restaurantSpecialties = unboxer.unbox(key: "restaurant_specialties")
     }
 }
 

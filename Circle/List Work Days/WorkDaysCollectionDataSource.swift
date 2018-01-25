@@ -18,7 +18,7 @@ final class WorkDaysCollectionDataSource: NSObject {
         
         let indexPath = IndexPath(row: workDays.currentDay.index ?? 0, section: 0)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .left)
+            collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
         }
     }
 }

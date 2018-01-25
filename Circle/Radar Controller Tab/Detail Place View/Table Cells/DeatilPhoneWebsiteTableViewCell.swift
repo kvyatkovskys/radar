@@ -11,7 +11,7 @@ import UIKit
 final class DeatilPhoneWebsiteTableViewCell: UITableViewCell {
     static let cellIdentifier = "DeatilPhoneWebsiteTableViewCell"
 
-    fileprivate var collectionDataSource: ListButtonsCollectionDataSource?
+    fileprivate var collectionDataSource: ListItemsCollectionDataSource?
     //swiftlint:disable weak_delegate
     fileprivate var collectionDelegate: ListButtonsCollectionDelegate?
     
@@ -36,8 +36,8 @@ final class DeatilPhoneWebsiteTableViewCell: UITableViewCell {
     
     var contacts: [Contact] = [] {
         didSet {
-            collectionView.register(ListButtonCollectionViewCell.self, forCellWithReuseIdentifier: ListButtonCollectionViewCell.cellIdentifier)
-            collectionDataSource = ListButtonsCollectionDataSource(collectionView: collectionView, contacts.filter({ $0.value != nil }))
+            collectionView.register(ListItemCollectionViewCell.self, forCellWithReuseIdentifier: ListItemCollectionViewCell.cellIdentifier)
+            collectionDataSource = ListItemsCollectionDataSource(collectionView: collectionView, contacts.filter({ $0.value != nil }))
             collectionDelegate = ListButtonsCollectionDelegate(collectionView: collectionView, contacts.filter({ $0.value != nil }))
         }
     }

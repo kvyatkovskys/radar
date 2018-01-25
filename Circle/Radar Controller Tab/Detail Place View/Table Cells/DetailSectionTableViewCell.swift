@@ -8,19 +8,13 @@
 
 import UIKit
 
-fileprivate extension UIColor {
-    static var headerColor: UIColor {
-        return UIColor(withHex: 0xf6f6f6, alpha: 1.0)
-    }
-}
-
 final class DetailSectionTableViewCell: UITableViewCell {
     static let cellIdentifier = "DetailSectionTableViewCell"
     
     fileprivate let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 15.0)
-        label.textColor = .gray
+        label.font = .boldSystemFont(ofSize: 20.0)
+        label.textColor = .black
         return label
     }()
 
@@ -34,9 +28,9 @@ final class DetailSectionTableViewCell: UITableViewCell {
         super.updateConstraints()
         
         titleLabel.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(5.0)
+            make.height.equalTo(25.0)
             make.left.equalToSuperview().offset(10.0)
-            make.width.equalTo(150.0)
+            make.width.equalTo(200.0)
             make.bottom.equalToSuperview().offset(-5.0)
         }
     }
@@ -44,7 +38,7 @@ final class DetailSectionTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        backgroundColor = UIColor.headerColor
+        backgroundColor = UIColor.white
         addSubview(titleLabel)
         updateConstraints()
     }

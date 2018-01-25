@@ -1,5 +1,5 @@
 //
-//  ListButtonsCollectionDataSource.swift
+//  ListItemsCollectionDataSource.swift
 //  Circle
 //
 //  Created by Kviatkovskii on 20/01/2018.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class ListButtonsCollectionDataSource: NSObject {
+final class ListItemsCollectionDataSource: NSObject {
     fileprivate let buttons: [Contact]
     
     init(collectionView: UICollectionView, _ buttons: [Contact]) {
@@ -18,7 +18,7 @@ final class ListButtonsCollectionDataSource: NSObject {
     }
 }
 
-extension ListButtonsCollectionDataSource: UICollectionViewDataSource {
+extension ListItemsCollectionDataSource: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -28,8 +28,8 @@ extension ListButtonsCollectionDataSource: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ListButtonCollectionViewCell.cellIdentifier,
-                                                      for: indexPath) as? ListButtonCollectionViewCell ?? ListButtonCollectionViewCell()
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ListItemCollectionViewCell.cellIdentifier,
+                                                      for: indexPath) as? ListItemCollectionViewCell ?? ListItemCollectionViewCell()
         cell.contact = buttons[indexPath.row]
         return cell
     }
