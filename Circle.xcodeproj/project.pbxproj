@@ -306,9 +306,9 @@
 				8B41154A1FDB2CEF00C6614C /* AppDelegate.swift */,
 				8B41156A1FDC83AF00C6614C /* Router.swift */,
 				8B41156C1FDC845B00C6614C /* AppInjections.swift */,
-				8B2940AF2018AE94004CB9AD /* ListPaymentsCollectionDataSource.swift */,
 				8B44C3841FF012E1003C0754 /* Setting Controller Tab */,
 				8B44C3811FF012A2003C0754 /* Radar Controller Tab */,
+				8BC3505A201A6FD900BB375B /* List Payments */,
 				8B82C39120139F2D00E0CA89 /* Contact Buttons */,
 				8B21F30720162F980013E11C /* List Work Days */,
 				8B1A80AC1FFAE4640039C39A /* Categories View */,
@@ -435,6 +435,14 @@
 				8B82C3942014B72500E0CA89 /* FriendsModel.swift */,
 			);
 			path = "Open Graph Service";
+			sourceTree = "<group>";
+		};
+		8BC3505A201A6FD900BB375B /* List Payments */ = {
+			isa = PBXGroup;
+			children = (
+				8B2940AF2018AE94004CB9AD /* ListPaymentsCollectionDataSource.swift */,
+			);
+			path = "List Payments";
 			sourceTree = "<group>";
 		};
 		8BFBF58020051C3C00CE2C8B /* Table View */ = {

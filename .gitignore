@@ -10,3 +10,8 @@ Pods/Pods.xcodeproj/xcuserdata
 *.html
 *.junit
 librealmcore-ios.a
+Bolts.framework
+FBSDKCoreKit.framework
+FBSDKLoginKit.framework
+FBSDKPlacesKit.framework
+FBSDKShareKit.framework
