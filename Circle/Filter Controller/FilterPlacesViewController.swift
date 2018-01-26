@@ -76,7 +76,7 @@ final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
         
         if view.subviews.contains(tableView) {
             tableView.snp.makeConstraints { (make) in
-                make.top.equalTo(segmentedControl.snp.bottom).offset(10.0)
+                make.top.equalTo(segmentedControl.snp.bottom)
                 make.left.bottom.right.equalToSuperview()
             }
         }
@@ -115,8 +115,8 @@ final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
         tableDelegate = CategoriesTableViewDelegate(tableView, viewModelCategories)
         
         pickerDelegate?.selectValue.asObserver()
-            .subscribe(onNext: { [weak delegate = self.delegate] (value) in
-                UserDefaults.standard.set(value, forKey: "FilterDistance")
+            .subscribe(onNext: { [unowned self, weak delegate = self.delegate] (value) in
+                self.viewModelDistance.setNewDistance(value: value)
                 delegate?.selectDistance(value: value)
                 }, onError: { (error) in
                     print(error)
@@ -133,7 +133,7 @@ final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
                     self.updateViewConstraints()
                 case .categories?:
                     self.navigationController?.preferredContentSize = CGSize(width: 250.0,
-                                                                             height: Double(self.viewModelCategories.items.count) * 61.0)
+                                                                             height: self.tableView.contentSize.height)
                     self.view.subviews.filter({ $0 is UIPickerView || $0 is RatingPlacesView }).forEach({ $0.removeFromSuperview() })
                     self.view.addSubview(self.tableView)
                     self.updateViewConstraints()

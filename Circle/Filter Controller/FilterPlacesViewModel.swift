@@ -25,12 +25,41 @@ struct FilterViewModel {
 }
 
 struct FilterDistanceViewModel {
-    let defaultDistance: Double = UserDefaults.standard.double(forKey: "FilterDistance") == 0.0 ? 1000.0 : UserDefaults.standard.double(forKey: "FilterDistance")
+    let defaultDistance: Double
     let items: [FilterDistanceModel] = [FilterDistanceModel(title: "500 meters", value: 500.0),
                                         FilterDistanceModel(title: "1000 meters", value: 1000.0),
                                         FilterDistanceModel(title: "1500 meters", value: 1500.0),
                                         FilterDistanceModel(title: "2000 meters", value: 2000.0),
                                         FilterDistanceModel(title: "2500 meters", value: 2500.0)]
+    
+    init() {
+        var selectedDistance: Double? = 0.0
+        do {
+            let realm = try Realm()
+            selectedDistance = realm.objects(FilterSelectedDistance.self).first?.distance
+        } catch {
+            print(error)
+        }
+        self.defaultDistance = selectedDistance ?? 1000.0
+    }
+    
+    func setNewDistance(value: Double) {
+        do {
+            let realm = try Realm()
+            let oldDistance = realm.objects(FilterSelectedDistance.self).first
+            try realm.write {
+                guard let oldDistance = oldDistance else {
+                    let selectedDistance = FilterSelectedDistance()
+                    selectedDistance.distance = value
+                    realm.add(selectedDistance)
+                    return
+                }
+                oldDistance.distance = value
+            }
+        } catch {
+            print(error)
+        }
+    }
 }
 
 struct FilterCategoriesViewModel: CategoriesProtocol {

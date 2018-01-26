@@ -18,6 +18,12 @@ final class DetailSectionTableViewCell: UITableViewCell {
         return label
     }()
 
+    fileprivate let lineView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lightGray
+        return view
+    }()
+    
     var title: String? {
         didSet {
             titleLabel.text = title
@@ -27,8 +33,14 @@ final class DetailSectionTableViewCell: UITableViewCell {
     override func updateConstraints() {
         super.updateConstraints()
         
+        lineView.snp.makeConstraints { (make) in
+            make.top.equalToSuperview()
+            make.height.equalTo(0.5)
+            make.right.left.equalToSuperview().inset(10.0)
+        }
+        
         titleLabel.snp.makeConstraints { (make) in
-            make.height.equalTo(25.0)
+            make.top.equalTo(lineView)
             make.left.equalToSuperview().offset(10.0)
             make.width.equalTo(200.0)
             make.bottom.equalToSuperview().offset(-5.0)
@@ -39,6 +51,7 @@ final class DetailSectionTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         backgroundColor = UIColor.white
+        addSubview(lineView)
         addSubview(titleLabel)
         updateConstraints()
     }

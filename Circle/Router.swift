@@ -59,6 +59,7 @@ struct Router {
         return tabController
     }
     
+    /// open detail controller about place
     fileprivate func openDetailPlace(_ place: Place, _ kingfisherOptions: KingfisherOptionsInfo, _ fromController: UIViewController) {
         let dependecies = DetailPlaceDependecies(DetailPlaceViewModel(place), kingfisherOptions, OpenGraphService())
         let detailPlaceController = DetailPlaceViewController(dependecies)

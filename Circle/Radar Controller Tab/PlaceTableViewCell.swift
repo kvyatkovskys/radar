@@ -28,7 +28,7 @@ final class PlaceTableViewCell: UITableViewCell {
         view.layer.shadowColor = UIColor.black.cgColor
         view.layer.shadowOpacity = 0.2
         view.layer.shadowOffset = CGSize(width: -1.0, height: 1.0)
-        view.layer.shadowRadius = 8.0
+        view.layer.shadowRadius = 6.0
         view.layer.shouldRasterize = true
         view.layer.rasterizationScale = UIScreen.main.scale
         return view

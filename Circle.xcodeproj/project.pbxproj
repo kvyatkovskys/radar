@@ -342,19 +342,19 @@
 				8BE208A21FFD25750048D690 /* FilterPlacesModel.swift */,
 				8BE208A41FFD25CB0048D690 /* FilterPlacesViewModel.swift */,
 				8B18FE0B20092C1600E637C7 /* Rating View */,
-				8BFBF58020051C3C00CE2C8B /* Table View */,
-				8B41771E1FFF69BF002A963A /* Picker View */,
+				8BFBF58020051C3C00CE2C8B /* Categories View */,
+				8B41771E1FFF69BF002A963A /* Distance View */,
 			);
 			path = "Filter Controller";
 			sourceTree = "<group>";
 		};
-		8B41771E1FFF69BF002A963A /* Picker View */ = {
+		8B41771E1FFF69BF002A963A /* Distance View */ = {
 			isa = PBXGroup;
 			children = (
 				8B41771A1FFF6491002A963A /* DistancePickerViewDataSource.swift */,
 				8B41771C1FFF64A7002A963A /* DistancePickerViewDelegate.swift */,
 			);
-			path = "Picker View";
+			path = "Distance View";
 			sourceTree = "<group>";
 		};
 		8B44C3801FF00F58003C0754 /* Project Settings */ = {
@@ -445,14 +445,14 @@
 			path = "List Payments";
 			sourceTree = "<group>";
 		};
-		8BFBF58020051C3C00CE2C8B /* Table View */ = {
+		8BFBF58020051C3C00CE2C8B /* Categories View */ = {
 			isa = PBXGroup;
 			children = (
 				8BFBF57A200517B000CE2C8B /* CategoriesTableViewDataSource.swift */,
 				8BFBF57C200517D000CE2C8B /* CategoriesTableViewDelegate.swift */,
 				8BFBF57E2005187100CE2C8B /* CategoriesTableViewCell.swift */,
 			);
-			path = "Table View";
+			path = "Categories View";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
