@@ -16,7 +16,7 @@ final class DetailPaymentTableViewCell: UITableViewCell, UICollectionViewDelegat
     fileprivate lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = UICollectionViewScrollDirection.horizontal
-        layout.itemSize = CGSize(width: 70.0, height: 50.0)
+        layout.itemSize = CGSize(width: 70.0, height: 44.0)
         layout.sectionInset = UIEdgeInsets(top: 0, left: 10.0, bottom: 0, right: 10.0)
         
         let collection = UICollectionView(frame: self.frame, collectionViewLayout: layout)

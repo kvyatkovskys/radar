@@ -106,7 +106,7 @@ final class DetailPlaceViewController: UIViewController {
         }
         
         imageHeader.snp.remakeConstraints { (make) in
-            make.top.left.equalTo(headerView).offset(10.0)
+            make.top.left.equalTo(self.tableView).offset(10.0)
             make.width.equalTo(100.0)
             make.height.equalTo(130.0)
         }
@@ -114,7 +114,7 @@ final class DetailPlaceViewController: UIViewController {
         titlePlace.snp.remakeConstraints { (make) in
             make.top.equalTo(imageHeader)
             make.left.equalTo(imageHeader.snp.right).offset(10.0)
-            make.right.equalTo(headerView).offset(-10.0)
+            make.right.equalTo(self.view).offset(-10.0)
             make.bottom.equalTo(ratingLabel.snp.top).offset(-10.0)
         }
         
@@ -232,7 +232,6 @@ extension DetailPlaceViewController: UITableViewDataSource {
                                                      for: indexPath) as? DetailParkingTableViewCell ?? DetailParkingTableViewCell()
             
             cell.parkings = parkings
-            print(parkings)
             return cell
         }
     }

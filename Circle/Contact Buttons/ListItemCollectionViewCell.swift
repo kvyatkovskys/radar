@@ -26,7 +26,7 @@ final class ListItemCollectionViewCell: UICollectionViewCell {
     
     fileprivate let imageView: UIImageView = {
         let image = UIImageView()
-        image.contentMode = .scaleToFill
+        image.contentMode = .scaleAspectFit
         return image
     }()
     
