@@ -63,6 +63,14 @@ final class ListItemCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    var parking: ParkingType? {
+        didSet {
+            imageView.tintColor = UIColor.blueImage
+            imageView.image = parking?.image
+            titleLabel.text = parking?.title
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         

@@ -8,6 +8,26 @@
 
 import Foundation
 
+enum ParkingType: String {
+    case lot, street, valet
+    
+    var title: String {
+        switch self {
+        case .lot: return "Parking lot"
+        case .street: return "On-street"
+        case .valet: return "Valet parking"
+        }
+    }
+    
+    var image: UIImage {
+        switch self {
+        case .lot: return (UIImage(named: "ic_place_parking")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate))!
+        case .street: return (UIImage(named: "ic_parking")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate))!
+        case .valet: return (UIImage(named: "ic_valet_parking")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate))!
+        }
+    }
+}
+
 enum PaymentType: String {
     case cash = "cash_only", amex, visa, mastercard, discover
     
@@ -99,6 +119,7 @@ enum TypeDetailCell {
     case address(String, LocationPlace?, CGFloat)
     case workDays(WorkDays, CGFloat)
     case payment([PaymentType?], CGFloat)
+    case parking([ParkingType?], CGFloat)
     
     var title: String {
         switch self {
@@ -107,6 +128,7 @@ enum TypeDetailCell {
         case .contact: return "Contacts"
         case .address: return "Address"
         case .payment: return "Payment"
+        case .parking: return "Parking"
         }
     }
 }

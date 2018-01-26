@@ -16,10 +16,10 @@ struct DetailSectionObjects {
 struct DetailPlaceViewModel {
     let place: Place
     var dataSource: [DetailSectionObjects]
-    
+
     init(_ place: Place) {
         self.place = place
-        print(place.info.paymentOptions)
+        print(place.info.parking)
         var items: [DetailSectionObjects] = []
         
         if (place.info.phone != nil) || (place.info.website != nil) || (place.info.appLink != nil) {
@@ -110,6 +110,14 @@ struct DetailPlaceViewModel {
             let paymentsType = payments.filter({ $0.value == true }).map({ PaymentType(rawValue: $0.key) })
             let type = TypeDetailCell.payment(paymentsType, 70.0)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
+        }
+        
+        if let parking = place.info.parking {
+            let parkingType = parking.filter({ $0.value == true }).map({ ParkingType(rawValue: $0.key) })
+            if !parkingType.isEmpty {
+                let type = TypeDetailCell.parking(parkingType, 70.0)
+                items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
+            }
         }
         
         if let description = place.info.description {

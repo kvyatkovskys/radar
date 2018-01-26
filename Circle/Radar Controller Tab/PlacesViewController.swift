@@ -15,7 +15,6 @@ import Kingfisher
 import RealmSwift
 
 let heightHeader: CGFloat = 100.0
-let radius: Double = 800.0
 
 // color for hide map view
 fileprivate extension UIColor {
@@ -33,13 +32,14 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     }()
     
     fileprivate var notificationTokenCategories: NotificationToken?
+    fileprivate var notificationTokenDistance: NotificationToken?
     fileprivate var viewModel: PlaceViewModel
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
     fileprivate let disposeBag = DisposeBag()
     fileprivate var tableDataSource: PlacesTableViewDataSource?
     //swiftlint:disable weak_delegate
     fileprivate var tableDelegate: PlacesTableViewDelegate?
-    
+        
     fileprivate lazy var tableView: UITableView = {
         let table = UITableView()
         table.tableFooterView = UIView(frame: CGRect.zero)
@@ -207,6 +207,7 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     func selectDistance(value: Double) {
         if let location = locationService.userLocation {
             loadInfoAboutLocation(location, distance: value)
+            centerMapOnLocation(location, radius: value)
         }
     }
     
@@ -263,7 +264,7 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         }
     }
     
-    fileprivate func centerMapOnLocation(_ location: CLLocation) {
+    fileprivate func centerMapOnLocation(_ location: CLLocation, radius: Double = FilterDistanceViewModel().defaultDistance) {
         let regionRadius: CLLocationDistance = radius
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius, regionRadius)
         mapView.setRegion(coordinateRegion, animated: false)
