@@ -172,6 +172,7 @@ final class DetailPlaceViewController: UIViewController {
         tableView.register(DetailWorkDaysTableViewCell.self, forCellReuseIdentifier: DetailWorkDaysTableViewCell.cellIdentifier)
         tableView.register(DetailPaymentTableViewCell.self, forCellReuseIdentifier: DetailPaymentTableViewCell.cellIdentifier)
         tableView.register(DetailParkingTableViewCell.self, forCellReuseIdentifier: DetailParkingTableViewCell.cellIdentifier)
+        tableView.register(DetailRestaurantServiceTableViewCell.self, forCellReuseIdentifier: DetailRestaurantServiceTableViewCell.cellIdentifier)
     }
     
     @objc func sharePlace() {
@@ -233,6 +234,12 @@ extension DetailPlaceViewController: UITableViewDataSource {
             
             cell.parkings = parkings
             return cell
+        case .restaurantService(let services, _):
+            let cell = tableView.dequeueReusableCell(withIdentifier: DetailRestaurantServiceTableViewCell.cellIdentifier,
+                                                     for: indexPath) as? DetailRestaurantServiceTableViewCell ?? DetailRestaurantServiceTableViewCell()
+            
+            print(services)
+            return cell
         }
     }
 }
@@ -259,6 +266,7 @@ extension DetailPlaceViewController: UITableViewDelegate {
         case .workDays(_, let height): return height
         case .payment(_, let height): return height
         case .parking(_, let height): return height
+        case .restaurantService(_, let height): return height
         }
     }
     

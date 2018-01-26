@@ -120,6 +120,12 @@ struct DetailPlaceViewModel {
             }
         }
         
+        if let restaurantService = place.info.restaurantServices {
+            let serviceType = restaurantService.filter({ $0.value == true }).map({ RestaurantServiceType(rawValue: $0.key) })
+            let type = TypeDetailCell.restaurantService(serviceType, 70.0)
+            items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
+        }
+        
         if let description = place.info.description {
             let height = description.height(font: .systemFont(ofSize: 14.0),
                                             width: ScreenSize.SCREEN_WIDTH) + 20.0

@@ -8,6 +8,10 @@
 
 import Foundation
 
+enum RestaurantServiceType: String {
+    case groups, waiter, delivery, outdoor, kids, reserve, takeout, catering, walkins, pickup
+}
+
 enum ParkingType: String {
     case lot, street, valet
     
@@ -120,6 +124,7 @@ enum TypeDetailCell {
     case workDays(WorkDays, CGFloat)
     case payment([PaymentType?], CGFloat)
     case parking([ParkingType?], CGFloat)
+    case restaurantService([RestaurantServiceType?],CGFloat)
     
     var title: String {
         switch self {
@@ -129,6 +134,7 @@ enum TypeDetailCell {
         case .address: return "Address"
         case .payment: return "Payment"
         case .parking: return "Parking"
+        case .restaurantService: return "Restaurant service"
         }
     }
 }
