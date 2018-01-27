@@ -10,8 +10,12 @@ import UIKit
 import MapKit
 
 fileprivate extension UIColor {
-    static var blueButton: UIColor {
-        return UIColor(withHex: 0x3498db, alpha: 1.0)
+    static var shadowGray: UIColor {
+        return UIColor(withHex: 0xecf0f1, alpha: 1.0)
+    }
+    
+    static var mainColor: UIColor {
+        return UIColor(withHex: 0x2c3e50, alpha: 1.0)
     }
 }
 
@@ -27,11 +31,13 @@ final class DetailAddressTableViewCell: UITableViewCell {
     
     fileprivate lazy var mapButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Open map", for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 15.0)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = UIColor.blueButton
-        button.layer.cornerRadius = 15.0
+        button.setTitle(" Map", for: .normal)
+        button.setImage(UIImage(named: "ic_map")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.tintColor = UIColor.mainColor
+        button.titleLabel?.font = .boldSystemFont(ofSize: 17.0)
+        button.setTitleColor(UIColor.mainColor, for: .normal)
+        button.backgroundColor = UIColor.shadowGray
+        button.layer.cornerRadius = 5.0
         button.addTarget(self, action: #selector(openMap), for: .touchUpInside)
         return button
     }()
@@ -49,7 +55,7 @@ final class DetailAddressTableViewCell: UITableViewCell {
         mapButton.snp.remakeConstraints { (make) in
             make.height.equalTo(30.0)
             make.centerX.equalToSuperview()
-            make.width.equalTo(100.0)
+            make.width.equalTo(120.0)
             make.bottom.equalToSuperview().offset(-10.0)
         }
     }

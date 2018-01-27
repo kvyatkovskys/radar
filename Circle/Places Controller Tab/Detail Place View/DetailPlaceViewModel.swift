@@ -19,14 +19,14 @@ struct DetailPlaceViewModel {
 
     init(_ place: Place) {
         self.place = place
-        print(place.info.restaurantServices)
+        print(place.info)
         var items: [DetailSectionObjects] = []
         
         if (place.info.phone != nil) || (place.info.website != nil) || (place.info.appLink != nil) {
             let itemsContact = [Contact(type: ContactType.phone, value: place.info.phone),
                                 Contact(type: ContactType.website, value: place.info.website),
                                 Contact(type: ContactType.facebook, value: place.info.appLink)]
-            let type = TypeDetailCell.contact(itemsContact, 90.0)
+            let type = TypeDetailCell.contact(itemsContact, 50.0)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         
@@ -108,8 +108,10 @@ struct DetailPlaceViewModel {
         
         if let payments = place.info.paymentOptions {
             let paymentsType = payments.filter({ $0.value == true }).map({ PaymentType(rawValue: $0.key) })
-            let type = TypeDetailCell.payment(paymentsType, 70.0)
-            items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
+            if !paymentsType.isEmpty {
+                let type = TypeDetailCell.payment(paymentsType, 70.0)
+                items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
+            }
         }
         
         if let parking = place.info.parking {
@@ -128,7 +130,7 @@ struct DetailPlaceViewModel {
         
         if let description = place.info.description {
             let height = description.height(font: .systemFont(ofSize: 14.0),
-                                            width: ScreenSize.SCREEN_WIDTH) + 20.0
+                                            width: ScreenSize.SCREEN_WIDTH)
             let type = TypeDetailCell.description(description, height)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }

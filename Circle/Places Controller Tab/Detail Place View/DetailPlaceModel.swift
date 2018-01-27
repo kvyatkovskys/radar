@@ -10,6 +10,25 @@ import Foundation
 
 enum RestaurantServiceType: String {
     case groups, waiter, delivery, outdoor, kids, reserve, takeout, catering, walkins, pickup
+    
+    var title: String {
+        switch self {
+        case .catering: return "Catering"
+        case .groups: return "Groups"
+        case .waiter: return "Waiter"
+        case .delivery: return "Delivery"
+        case .outdoor: return "Outdoor"
+        case .kids: return "Kids"
+        case .reserve: return "Reserve"
+        case .takeout: return "Takeout"
+        case .walkins: return "Walkins"
+        case .pickup: return "Pickup"
+        }
+    }
+    
+    var image: UIImage {
+        return (UIImage(named: "ic_check")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate))!
+    }
 }
 
 enum ParkingType: String {
@@ -62,9 +81,9 @@ enum ContactType: String {
     
     var title: String {
         switch self {
-        case .facebook: return "Open Facebook"
-        case .phone: return "Call to phone"
-        case .website: return "Open website"
+        case .facebook: return "Facebook"
+        case .phone: return "Call"
+        case .website: return "Website"
         }
     }
     
@@ -72,7 +91,7 @@ enum ContactType: String {
         switch self {
         case .facebook: return (UIImage(named: "ic_facebook")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate))!
         case .phone: return (UIImage(named: "ic_phone")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate))!
-        case .website: return (UIImage(named: "ic_open_in_browser")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate))!
+        case .website: return (UIImage(named: "ic_web")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate))!
         }
     }
 }
@@ -124,7 +143,7 @@ enum TypeDetailCell {
     case workDays(WorkDays, CGFloat)
     case payment([PaymentType?], CGFloat)
     case parking([ParkingType?], CGFloat)
-    case restaurantService([RestaurantServiceType?],CGFloat)
+    case restaurantService([RestaurantServiceType?], CGFloat)
     
     var title: String {
         switch self {

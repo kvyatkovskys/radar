@@ -10,11 +10,15 @@ import UIKit
 import Kingfisher
 import RxSwift
 
-let heightHeaderTable: CGFloat = 150.0
+let heightHeaderTable: CGFloat = 220.0
 
 fileprivate extension UIColor {
     static var shadowGray: UIColor {
         return UIColor(withHex: 0xecf0f1, alpha: 1.0)
+    }
+
+    static var mainColor: UIColor {
+        return UIColor(withHex: 0x2c3e50, alpha: 1.0)
     }
 }
 
@@ -78,6 +82,31 @@ final class DetailPlaceViewController: UIViewController {
         return view
     }()
     
+    fileprivate let favoriteButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "ic_favorite")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.tintColor = UIColor.mainColor
+        button.backgroundColor = UIColor.shadowGray
+        button.setTitle(" Add", for: .normal)
+        button.setTitleColor(UIColor.mainColor, for: .normal)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 17.0)
+        button.layer.cornerRadius = 5.0
+        return button
+    }()
+    
+    fileprivate lazy var shareButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "ic_share")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.tintColor = UIColor.mainColor
+        button.backgroundColor = UIColor.shadowGray
+        button.setTitle(" Share", for: .normal)
+        button.setTitleColor(UIColor.mainColor, for: .normal)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 17.0)
+        button.layer.cornerRadius = 5.0
+        button.addTarget(self, action: #selector(sharePlace), for: .touchUpInside)
+        return button
+    }()
+    
     fileprivate let lineView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
@@ -93,22 +122,18 @@ final class DetailPlaceViewController: UIViewController {
         return table
     }()
     
-    fileprivate lazy var shareButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.action, target: self, action: #selector(sharePlace))
-        return button
-    }()
-    
     override func updateViewConstraints() {
         super.updateViewConstraints()
         
         tableView.snp.remakeConstraints { (make) in
-            make.top.left.bottom.right.equalToSuperview()
+            make.top.left.right.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-10.0)
         }
         
         imageHeader.snp.remakeConstraints { (make) in
             make.top.left.equalTo(self.tableView).offset(10.0)
             make.width.equalTo(100.0)
-            make.height.equalTo(130.0)
+            make.height.equalTo(140.0)
         }
         
         titlePlace.snp.remakeConstraints { (make) in
@@ -125,16 +150,28 @@ final class DetailPlaceViewController: UIViewController {
         }
         
         listSubCategoriesView.snp.remakeConstraints { (make) in
-            make.bottom.equalToSuperview()
+            make.bottom.equalTo(lineView)
             make.right.equalTo(titlePlace)
             make.left.equalTo(ratingLabel.snp.right).offset(10.0)
             make.top.equalTo(titlePlace.snp.bottom)
         }
         
         lineView.snp.remakeConstraints { (make) in
-            make.bottom.equalToSuperview()
+            make.bottom.equalTo(favoriteButton.snp.top).offset(-10.0)
             make.left.right.equalToSuperview()
-            make.height.equalTo(0.5)
+            make.height.equalTo(0.1)
+        }
+        
+        favoriteButton.snp.makeConstraints { (make) in
+            make.right.equalTo(headerView.snp.centerX).offset(-20.0)
+            make.bottom.equalToSuperview().offset(-15.0)
+            make.size.equalTo(CGSize(width: 120.0, height: 35.0))
+        }
+        
+        shareButton.snp.makeConstraints { (make) in
+            make.left.equalTo(headerView.snp.centerX).offset(20.0)
+            make.bottom.equalToSuperview().offset(-15.0)
+            make.size.equalTo(CGSize(width: 120.0, height: 35.0))
         }
     }
     
@@ -155,19 +192,20 @@ final class DetailPlaceViewController: UIViewController {
         navigationItem.title = viewModel.place.info.categories?.reduce("", { (acc, item) -> String in
             return "\(acc) " + "\(item.title)"
         })
-        navigationItem.rightBarButtonItem = shareButton
         
         headerView.addSubview(imageHeader)
         headerView.addSubview(titlePlace)
         headerView.addSubview(ratingLabel)
         headerView.addSubview(listSubCategoriesView)
         headerView.addSubview(lineView)
+        headerView.addSubview(favoriteButton)
+        headerView.addSubview(shareButton)
         tableView.tableHeaderView = headerView
         view.addSubview(tableView)
         updateViewConstraints()
         
         tableView.register(DetailDescriptionTableViewCell.self, forCellReuseIdentifier: DetailDescriptionTableViewCell.cellIdentifier)
-        tableView.register(DeatilPhoneWebsiteTableViewCell.self, forCellReuseIdentifier: DeatilPhoneWebsiteTableViewCell.cellIdentifier)
+        tableView.register(DeatilContactsTableViewCell.self, forCellReuseIdentifier: DeatilContactsTableViewCell.cellIdentifier)
         tableView.register(DetailAddressTableViewCell.self, forCellReuseIdentifier: DetailAddressTableViewCell.cellIdentifier)
         tableView.register(DetailWorkDaysTableViewCell.self, forCellReuseIdentifier: DetailWorkDaysTableViewCell.cellIdentifier)
         tableView.register(DetailPaymentTableViewCell.self, forCellReuseIdentifier: DetailPaymentTableViewCell.cellIdentifier)
@@ -204,8 +242,8 @@ extension DetailPlaceViewController: UITableViewDataSource {
             cell.textDescription = text
             return cell
         case .contact(let contacts, _):
-            let cell = tableView.dequeueReusableCell(withIdentifier: DeatilPhoneWebsiteTableViewCell.cellIdentifier,
-                                                     for: indexPath) as? DeatilPhoneWebsiteTableViewCell ?? DeatilPhoneWebsiteTableViewCell()
+            let cell = tableView.dequeueReusableCell(withIdentifier: DeatilContactsTableViewCell.cellIdentifier,
+                                                     for: indexPath) as? DeatilContactsTableViewCell ?? DeatilContactsTableViewCell()
             
             cell.contacts = contacts
             return cell
@@ -238,7 +276,7 @@ extension DetailPlaceViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: DetailRestaurantServiceTableViewCell.cellIdentifier,
                                                      for: indexPath) as? DetailRestaurantServiceTableViewCell ?? DetailRestaurantServiceTableViewCell()
             
-            print(services)
+            cell.services = services
             return cell
         }
     }

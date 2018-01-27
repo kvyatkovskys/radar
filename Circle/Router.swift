@@ -48,14 +48,30 @@ struct Router {
         placesViewController.tabBarItem = UITabBarItem(title: "My location", image: locationImage, tag: 1)
         placesViewController.navigationController?.navigationBar.isTranslucent = true
         
+        let searchViewController = SearchViewController()
+        let searchImage = UIImage(named: "ic_search")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        searchViewController.navigationItem.title = "Search place"
+        searchViewController.tabBarItem = UITabBarItem(title: "Search", image: searchImage, tag: 2)
+        searchViewController.navigationController?.navigationBar.isTranslucent = true
+        
+        let favoritesViewController = FavoritesViewController()
+        let favoriteImage = UIImage(named: "ic_favorite")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        favoritesViewController.navigationItem.title = "Favorites"
+        favoritesViewController.tabBarItem = UITabBarItem(title: "Favorites", image: favoriteImage, tag: 3)
+        favoritesViewController.navigationController?.navigationBar.isTranslucent = true
+        
         let settingsController = SettingsViewController(SettingsViewDependecies(SettingsViewModel()))
         let settingsImage = UIImage(named: "ic_settings")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         settingsController.navigationItem.title = "Settings of app"
-        settingsController.tabBarItem = UITabBarItem(title: "Settings", image: settingsImage, tag: 2)
+        settingsController.tabBarItem = UITabBarItem(title: "Settings", image: settingsImage, tag: 4)
+        settingsController.navigationController?.navigationBar.isTranslucent = true
         
         let tabController = UITabBarController()
         tabController.tabBar.tintColor = UIColor.tabColor
-        tabController.viewControllers = [placesViewController, settingsController].map({ UINavigationController(rootViewController: $0) })
+        tabController.viewControllers = [placesViewController,
+                                         searchViewController,
+                                         favoritesViewController,
+                                         settingsController].map({ UINavigationController(rootViewController: $0) })
         return tabController
     }
     

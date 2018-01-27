@@ -1,28 +1,27 @@
 //
-//  DeatilPhoneWebsiteTableViewCell.swift
+//  DetailRestaurantServiceTableViewCell.swift
 //  Circle
 //
-//  Created by Kviatkovskii on 17/01/2018.
+//  Created by Kviatkovskii on 26/01/2018.
 //  Copyright © 2018 Kviatkovskii. All rights reserved.
 //
 
 import UIKit
 
-final class DeatilPhoneWebsiteTableViewCell: UITableViewCell {
-    static let cellIdentifier = "DeatilPhoneWebsiteTableViewCell"
-
-    fileprivate var collectionDataSource: ListItemsCollectionDataSource?
-    //swiftlint:disable weak_delegate
-    fileprivate var collectionDelegate: ListButtonsCollectionDelegate?
+final class DetailRestaurantServiceTableViewCell: UITableViewCell, UICollectionViewDelegate {
+    static let cellIdentifier = "DetailRestaurantServiceTableViewCell"
+    
+    fileprivate var collectionDataSource: ListRServicesCollectionDataSource?
     
     fileprivate lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = UICollectionViewScrollDirection.horizontal
-        layout.itemSize = CGSize(width: 100.0, height: 50.0)
-        layout.sectionInset = UIEdgeInsets(top: 5.0, left: 2.0, bottom: 5.0, right: 2.0)
+        layout.itemSize = CGSize(width: 70.0, height: 44.0)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 10.0, bottom: 0, right: 10.0)
         
         let collection = UICollectionView(frame: self.frame, collectionViewLayout: layout)
         collection.backgroundColor = UIColor.clear
+        collection.delegate = self
         return collection
     }()
     
@@ -34,11 +33,10 @@ final class DeatilPhoneWebsiteTableViewCell: UITableViewCell {
         }
     }
     
-    var contacts: [Contact] = [] {
+    var services: [RestaurantServiceType?] = [] {
         didSet {
             collectionView.register(ListItemCollectionViewCell.self, forCellWithReuseIdentifier: ListItemCollectionViewCell.cellIdentifier)
-            collectionDataSource = ListItemsCollectionDataSource(collectionView: collectionView, contacts.filter({ $0.value != nil }))
-            collectionDelegate = ListButtonsCollectionDelegate(collectionView: collectionView, contacts.filter({ $0.value != nil }))
+            collectionDataSource = ListRServicesCollectionDataSource(collectionView: collectionView, services)
         }
     }
     
@@ -47,7 +45,6 @@ final class DeatilPhoneWebsiteTableViewCell: UITableViewCell {
         
         selectionStyle = .none
         addSubview(collectionView)
-        updateConstraints()
     }
     
     required init?(coder aDecoder: NSCoder) {

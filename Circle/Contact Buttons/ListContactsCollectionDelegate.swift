@@ -1,5 +1,5 @@
 //
-//  ListButtonsCollectionDelegate.swift
+//  ListContactsCollectionDelegate.swift
 //  Circle
 //
 //  Created by Kviatkovskii on 20/01/2018.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class ListButtonsCollectionDelegate: NSObject {
+final class ListContactsCollectionDelegate: NSObject {
     fileprivate let buttons: [Contact]
     
     init(collectionView: UICollectionView, _ buttons: [Contact]) {
@@ -18,7 +18,17 @@ final class ListButtonsCollectionDelegate: NSObject {
     }
 }
 
-extension ListButtonsCollectionDelegate: UICollectionViewDelegate {
+extension ListContactsCollectionDelegate: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let contact = buttons[indexPath.row]
+        switch contact.type {
+        case .phone:
+            return CGSize(width: 85.0, height: 40.0)
+        case .website, .facebook:
+            return CGSize(width: 120.0, height: 40.0)
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let contact = buttons[indexPath.row]
         switch contact.type {

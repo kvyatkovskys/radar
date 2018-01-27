@@ -178,6 +178,12 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         notificationTokenCategories?.invalidate()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        locationService.checkAuthorized()
+    }
+    
     @objc func showMap() {
         viewModel.openMap(tableDataSource?.places ?? [], locationService.userLocation, tapViewOnMap.frame)
     }

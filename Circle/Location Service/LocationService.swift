@@ -17,13 +17,7 @@ protocol LocationServiceDelegate: class {
 final class LocationService: NSObject, CLLocationManagerDelegate {
     fileprivate weak var delegate: LocationServiceDelegate?
     // для работы с геопозиции
-    fileprivate lazy var locationManager: CLLocationManager = {
-        let manager = CLLocationManager()
-        manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyBest
-        manager.requestAlwaysAuthorization()
-        return manager
-    }()
+    fileprivate let locationManager: CLLocationManager
     var userLocation: CLLocation?
     
     fileprivate let geocoder: CLGeocoder = {
@@ -35,7 +29,12 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
     init(delegate: LocationServiceDelegate, controller: UIViewController) {
         self.delegate = delegate
         self.controller = controller
+        self.locationManager = CLLocationManager()
         super.init()
+        
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestAlwaysAuthorization()
     }
     
     func start() {
@@ -65,6 +64,34 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
             
             controller.present(alertController, animated: true, completion: nil)
             locationManager.stopUpdatingLocation()
+        }
+    }
+    
+    func checkAuthorized() {
+        switch CLLocationManager.authorizationStatus() {
+        case .restricted, .denied:
+            let alertController = UIAlertController(
+                title: "Access to the location is disabled.",
+                message: "To locate the location automatically, open the setting for this application and set i to 'When using the application' or 'Always usage'.",
+                preferredStyle: .alert)
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            alertController.addAction(cancelAction)
+            
+            let openAction = UIAlertAction(title: "Open settings", style: .default) { _ in
+                if let url = URL(string: UIApplicationOpenSettingsURLString) {
+                    UIApplication.shared.open(url,
+                                              options: [:],
+                                              completionHandler: { (handler) in
+                                                print(handler)
+                    })                    }
+            }
+            alertController.addAction(openAction)
+            
+            controller.present(alertController, animated: true, completion: nil)
+            locationManager.stopUpdatingLocation()
+        default:
+            break
         }
     }
     

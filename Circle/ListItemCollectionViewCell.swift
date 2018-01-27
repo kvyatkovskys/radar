@@ -48,14 +48,6 @@ final class ListItemCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    var contact: Contact? {
-        didSet {
-            imageView.tintColor = UIColor.blueImage
-            imageView.image = contact?.type.image
-            titleLabel.text = contact?.type.title
-        }
-    }
-    
     var payment: PaymentType? {
         didSet {
             imageView.image = payment?.image
@@ -68,6 +60,14 @@ final class ListItemCollectionViewCell: UICollectionViewCell {
             imageView.tintColor = UIColor.blueImage
             imageView.image = parking?.image
             titleLabel.text = parking?.title
+        }
+    }
+    
+    var service: RestaurantServiceType? {
+        didSet {
+            imageView.tintColor = UIColor.blueImage
+            imageView.image = service?.image
+            titleLabel.text = service?.title
         }
     }
     
