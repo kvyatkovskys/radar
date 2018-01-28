@@ -1,21 +1,21 @@
 //
-//  DetailRestaurantServiceTableViewCell.swift
+//  DetailRestaurantSpecialityTableViewCell.swift
 //  Circle
 //
-//  Created by Kviatkovskii on 26/01/2018.
+//  Created by Kviatkovskii on 28/01/2018.
 //  Copyright © 2018 Kviatkovskii. All rights reserved.
 //
 
 import UIKit
 
-typealias RestaurantService = (services: [RestaurantServiceType?], color: UIColor?)
+typealias RestaurantSpeciality = (specialties: [RestaurantSpecialityType?], color: UIColor?)
 
-final class DetailRestaurantServiceTableViewCell: UITableViewCell, UICollectionViewDelegate {
-    static let cellIdentifier = "DetailRestaurantServiceTableViewCell"
+final class DetailRestaurantSpecialityTableViewCell: UITableViewCell, UICollectionViewDelegate {
+    static let cellIdentifier = "DetailRestaurantSpecialityTableViewCell"
     
-    fileprivate var collectionDataSource: ListRServicesCollectionDataSource?
+    fileprivate var collectionDataSource: ListRSpecialtiesCollectionDataSource?
     //swiftlint:disable weak_delegate
-    fileprivate var collectionDelegate: ListRServicesCollectionDelegate?
+    fileprivate var collectionDelegate: ListRSpecialtiesCollectionDelegate?
     
     fileprivate lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -36,11 +36,12 @@ final class DetailRestaurantServiceTableViewCell: UITableViewCell, UICollectionV
         }
     }
     
-    var restaurantService: RestaurantService? {
+    var restaurantSpeciatity: RestaurantSpeciality? {
         didSet {
-            collectionView.register(ListRServiceCollectionViewCell.self, forCellWithReuseIdentifier: ListRServiceCollectionViewCell.cellIdentifier)
-            collectionDataSource = ListRServicesCollectionDataSource(collectionView: collectionView, restaurantService)
-            collectionDelegate = ListRServicesCollectionDelegate(collectionView: collectionView, restaurantService)
+            collectionView.register(ListRSpecialityCollectionViewCell.self,
+                                    forCellWithReuseIdentifier: ListRSpecialityCollectionViewCell.cellIdentifier)
+            collectionDataSource = ListRSpecialtiesCollectionDataSource(collectionView: collectionView, restaurantSpeciatity)
+            collectionDelegate = ListRSpecialtiesCollectionDelegate(collectionView: collectionView, restaurantSpeciatity)
         }
     }
     

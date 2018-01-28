@@ -8,6 +8,27 @@
 
 import Foundation
 
+enum RestaurantSpecialityType: String {
+    case lunch, dinner, drinks, breakfast, coffee
+    
+    var title: String {
+        switch self {
+        case .breakfast: return "Breakfast"
+        case .lunch: return "Lunch"
+        case .dinner: return "Dinner"
+        case .drinks: return "Drinks"
+        case .coffee: return "Coffee"
+        }
+    }
+    
+    var width: CGFloat {
+        switch self {
+        case .breakfast, .coffee, .dinner, .drinks, .lunch:
+            return self.rawValue.width(font: .boldSystemFont(ofSize: 12.0), height: 25.0) + 25.0
+        }
+    }
+}
+
 enum RestaurantServiceType: String {
     case groups, waiter, delivery, outdoor, kids, reserve, takeout, catering, walkins, pickup
     
@@ -26,8 +47,11 @@ enum RestaurantServiceType: String {
         }
     }
     
-    var image: UIImage {
-        return (UIImage(named: "ic_check")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate))!
+    var width: CGFloat {
+        switch self {
+        case .catering, .groups, .waiter, .delivery, .outdoor, .kids, .reserve, .takeout, .walkins, .pickup:
+            return self.rawValue.width(font: .boldSystemFont(ofSize: 12.0), height: 25.0) + 25.0
+        }
     }
 }
 
@@ -144,6 +168,7 @@ enum TypeDetailCell {
     case payment([PaymentType?], CGFloat)
     case parking([ParkingType?], CGFloat)
     case restaurantService([RestaurantServiceType?], CGFloat, UIColor?)
+    case restaurantSpeciality([RestaurantSpecialityType?], CGFloat, UIColor?)
     
     var title: String {
         switch self {
@@ -154,6 +179,7 @@ enum TypeDetailCell {
         case .payment: return "Payment"
         case .parking: return "Parking"
         case .restaurantService: return "Restaurant service"
+        case .restaurantSpeciality: return "Restaurant specialties"
         }
     }
 }

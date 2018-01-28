@@ -19,7 +19,6 @@ struct DetailPlaceViewModel {
 
     init(_ place: Place) {
         self.place = place
-        print(place.info)
         var items: [DetailSectionObjects] = []
         
         if (place.info.phone != nil) || (place.info.website != nil) || (place.info.appLink != nil) {
@@ -124,8 +123,18 @@ struct DetailPlaceViewModel {
         
         if let restaurantService = place.info.restaurantServices {
             let serviceType = restaurantService.filter({ $0.value == true }).map({ RestaurantServiceType(rawValue: $0.key) })
-            let type = TypeDetailCell.restaurantService(serviceType, 50.0, place.info.categories?.first?.color)
-            items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
+            if !serviceType.isEmpty {
+                let type = TypeDetailCell.restaurantService(serviceType, 50.0, place.info.categories?.first?.color)
+                items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
+            }
+        }
+        
+        if let restaurantSpecialties = place.info.restaurantSpecialties {
+            let specialityType = restaurantSpecialties.filter({ $0.value == true }).map({ RestaurantSpecialityType(rawValue: $0.key) })
+            if !specialityType.isEmpty {
+                let type = TypeDetailCell.restaurantSpeciality(specialityType, 50.0, place.info.categories?.first?.color)
+                items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
+            }
         }
         
         if let description = place.info.description {

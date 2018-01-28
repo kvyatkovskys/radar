@@ -63,14 +63,6 @@ final class ListItemCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    var service: RestaurantServiceType? {
-        didSet {
-            imageView.tintColor = UIColor.blueImage
-            imageView.image = service?.image
-            titleLabel.text = service?.title
-        }
-    }
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         

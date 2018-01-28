@@ -42,7 +42,7 @@ final class DetailSectionTableViewCell: UITableViewCell {
         titleLabel.snp.makeConstraints { (make) in
             make.top.equalTo(lineView)
             make.left.equalToSuperview().offset(10.0)
-            make.width.equalTo(200.0)
+            make.right.equalToSuperview().offset(-10.0)
             make.bottom.equalToSuperview().offset(-5.0)
         }
     }
