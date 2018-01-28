@@ -124,7 +124,7 @@ struct DetailPlaceViewModel {
         
         if let restaurantService = place.info.restaurantServices {
             let serviceType = restaurantService.filter({ $0.value == true }).map({ RestaurantServiceType(rawValue: $0.key) })
-            let type = TypeDetailCell.restaurantService(serviceType, 70.0)
+            let type = TypeDetailCell.restaurantService(serviceType, 50.0, place.info.categories?.first?.color)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         

@@ -18,7 +18,7 @@ fileprivate extension UIColor {
     }
 
     static var mainColor: UIColor {
-        return UIColor(withHex: 0x2c3e50, alpha: 1.0)
+        return UIColor(withHex: 0xf82462, alpha: 1.0)
     }
 }
 
@@ -272,11 +272,11 @@ extension DetailPlaceViewController: UITableViewDataSource {
             
             cell.parkings = parkings
             return cell
-        case .restaurantService(let services, _):
+        case .restaurantService(let services, _, let color):
             let cell = tableView.dequeueReusableCell(withIdentifier: DetailRestaurantServiceTableViewCell.cellIdentifier,
                                                      for: indexPath) as? DetailRestaurantServiceTableViewCell ?? DetailRestaurantServiceTableViewCell()
             
-            cell.services = services
+            cell.restaurantService = RestaurantService(services, color)
             return cell
         }
     }
@@ -304,7 +304,7 @@ extension DetailPlaceViewController: UITableViewDelegate {
         case .workDays(_, let height): return height
         case .payment(_, let height): return height
         case .parking(_, let height): return height
-        case .restaurantService(_, let height): return height
+        case .restaurantService(_, let height, _): return height
         }
     }
     

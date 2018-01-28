@@ -11,7 +11,7 @@ import Kingfisher
 
 fileprivate extension UIColor {
     static var tabColor: UIColor {
-        return UIColor(withHex: 0x2c3e50, alpha: 1.0)
+        return UIColor(withHex: 0xf82462, alpha: 1.0)
     }
 }
 

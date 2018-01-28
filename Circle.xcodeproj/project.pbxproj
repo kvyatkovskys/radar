@@ -64,6 +64,7 @@
 		8BC35066201CF60700BB375B /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC35065201CF60700BB375B /* FavoritesViewController.swift */; };
 		8BC35069201CF64600BB375B /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC35068201CF64600BB375B /* SearchViewController.swift */; };
 		8BC3506C201D13C800BB375B /* ListContactsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC3506B201D13C800BB375B /* ListContactsCollectionViewCell.swift */; };
+		8BC3506E201DDDA200BB375B /* ListRServiceCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC3506D201DDDA200BB375B /* ListRServiceCollectionViewCell.swift */; };
 		8BE2089D1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2089C1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift */; };
 		8BE2089F1FFD17470048D690 /* FilterPlacesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2089E1FFD17470048D690 /* FilterPlacesViewController.swift */; };
 		8BE208A11FFD1D300048D690 /* Controller+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE208A01FFD1D300048D690 /* Controller+Extension.swift */; };
@@ -154,6 +155,7 @@
 		8BC35065201CF60700BB375B /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		8BC35068201CF64600BB375B /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		8BC3506B201D13C800BB375B /* ListContactsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListContactsCollectionViewCell.swift; sourceTree = "<group>"; };
+		8BC3506D201DDDA200BB375B /* ListRServiceCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRServiceCollectionViewCell.swift; sourceTree = "<group>"; };
 		8BE2089C1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		8BE2089E1FFD17470048D690 /* FilterPlacesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterPlacesViewController.swift; sourceTree = "<group>"; };
 		8BE208A01FFD1D300048D690 /* Controller+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Controller+Extension.swift"; sourceTree = "<group>"; };
@@ -478,6 +480,7 @@
 			isa = PBXGroup;
 			children = (
 				8BC35062201CF22400BB375B /* ListRServicesCollectionDataSource.swift */,
+				8BC3506D201DDDA200BB375B /* ListRServiceCollectionViewCell.swift */,
 			);
 			path = "List Restaurant Services";
 			sourceTree = "<group>";
@@ -802,6 +805,7 @@
 				8BE208A31FFD25750048D690 /* FilterPlacesModel.swift in Sources */,
 				8B41154B1FDB2CEF00C6614C /* AppDelegate.swift in Sources */,
 				8B82C39E20150BE600E0CA89 /* WorkDaysCollectionViewCell.swift in Sources */,
+				8BC3506E201DDDA200BB375B /* ListRServiceCollectionViewCell.swift in Sources */,
 				8B18FE0D200A1F1800E637C7 /* MapViewController.swift in Sources */,
 				8B18FE12200A8FFA00E637C7 /* SettingsViewModel.swift in Sources */,
 				8BC3505E201BA1EB00BB375B /* ListPrakingCollectionDataSource.swift in Sources */,

@@ -32,10 +32,10 @@ struct FilterDistanceViewModel {
                                         FilterDistanceModel(title: "2000 meters", value: 2000.0),
                                         FilterDistanceModel(title: "2500 meters", value: 2500.0),
                                         FilterDistanceModel(title: "3000 meters", value: 3000.0),
-                                        FilterDistanceModel(title: "3000 meters", value: 3500.0),
-                                        FilterDistanceModel(title: "3000 meters", value: 4000.0),
-                                        FilterDistanceModel(title: "3000 meters", value: 4500.0),
-                                        FilterDistanceModel(title: "3000 meters", value: 5000.0)]
+                                        FilterDistanceModel(title: "3500 meters", value: 3500.0),
+                                        FilterDistanceModel(title: "4000 meters", value: 4000.0),
+                                        FilterDistanceModel(title: "4500 meters", value: 4500.0),
+                                        FilterDistanceModel(title: "5000 meters", value: 5000.0)]
     
     init() {
         var selectedDistance: Double? = 0.0

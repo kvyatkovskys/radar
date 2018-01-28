@@ -8,6 +8,8 @@
 
 import UIKit
 
+typealias RestaurantService = (services: [RestaurantServiceType?], color: UIColor?)
+
 final class DetailRestaurantServiceTableViewCell: UITableViewCell, UICollectionViewDelegate {
     static let cellIdentifier = "DetailRestaurantServiceTableViewCell"
     
@@ -33,10 +35,10 @@ final class DetailRestaurantServiceTableViewCell: UITableViewCell, UICollectionV
         }
     }
     
-    var services: [RestaurantServiceType?] = [] {
+    var restaurantService: RestaurantService? {
         didSet {
-            collectionView.register(ListItemCollectionViewCell.self, forCellWithReuseIdentifier: ListItemCollectionViewCell.cellIdentifier)
-            collectionDataSource = ListRServicesCollectionDataSource(collectionView: collectionView, services)
+            collectionView.register(ListRServiceCollectionViewCell.self, forCellWithReuseIdentifier: ListRServiceCollectionViewCell.cellIdentifier)
+            collectionDataSource = ListRServicesCollectionDataSource(collectionView: collectionView, restaurantService)
         }
     }
     

@@ -143,7 +143,7 @@ enum TypeDetailCell {
     case workDays(WorkDays, CGFloat)
     case payment([PaymentType?], CGFloat)
     case parking([ParkingType?], CGFloat)
-    case restaurantService([RestaurantServiceType?], CGFloat)
+    case restaurantService([RestaurantServiceType?], CGFloat, UIColor?)
     
     var title: String {
         switch self {
