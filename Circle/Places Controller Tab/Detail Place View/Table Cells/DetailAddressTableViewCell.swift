@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import Contacts
 
 fileprivate extension UIColor {
     static var shadowGray: UIColor {
@@ -90,7 +91,14 @@ final class DetailAddressTableViewCell: UITableViewCell {
         let regionSpan = MKCoordinateRegionMakeWithDistance(coordinates, regionDistance, regionDistance)
         let options = [MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center),
                        MKLaunchOptionsMapSpanKey: NSValue(mkCoordinateSpan: regionSpan.span)]
-        let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
+
+        let state = location?.state ?? ""
+        let zip = location?.zip ?? ""
+        let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: [CNPostalAddressStreetKey: location?.street as Any,
+                                                                                 CNPostalAddressCityKey: location?.city as Any,
+                                                                                 CNPostalAddressCountryKey: location?.country as Any,
+                                                                                 CNPostalAddressStateKey: state as Any,
+                                                                                 CNPostalAddressPostalCodeKey: zip as Any])
         let mapItem = MKMapItem(placemark: placemark)
         mapItem.name = address
         mapItem.openInMaps(launchOptions: options)

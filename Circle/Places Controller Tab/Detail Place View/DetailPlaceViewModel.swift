@@ -98,9 +98,9 @@ struct DetailPlaceViewModel {
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         
-        if let address = place.info.address {
+        if let address = place.info.location?.street {
             let height = address.height(font: .boldSystemFont(ofSize: 15.0),
-                                        width: ScreenSize.SCREEN_WIDTH) + 80.0
+                                        width: ScreenSize.SCREEN_WIDTH) + 60.0
             let type = TypeDetailCell.address(address, place.info.location, height)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }

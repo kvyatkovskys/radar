@@ -82,10 +82,20 @@ struct LocationPlace {
     let coordinate: CLLocation
     let latitude: Double
     let longitude: Double
+    let city: String
+    let country: String
+    let street: String
+    let zip: String?
+    let state: String?
 }
 
 extension LocationPlace: Unboxable {
     init(unboxer: Unboxer) throws {
+        self.city = try unboxer.unbox(key: "city")
+        self.country = try unboxer.unbox(key: "country")
+        self.street = try unboxer.unbox(key: "street")
+        self.zip = unboxer.unbox(key: "zip")
+        self.state = unboxer.unbox(key: "state")
         self.latitude = try unboxer.unbox(key: "latitude")
         self.longitude = try unboxer.unbox(key: "longitude")
         self.coordinate = CLLocation(latitude: latitude, longitude: longitude)
