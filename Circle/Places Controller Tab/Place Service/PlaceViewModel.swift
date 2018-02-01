@@ -35,7 +35,7 @@ struct PlaceViewModel {
     var openMap: ((_ places: [Places], _ location: CLLocation?, _ sourceRect: CGRect) -> Void) = {_, _, _ in }
     
     /// open detail place controller
-    var openDetailPlace: ((_ place: Place) -> Void) = {_ in }
+    var openDetailPlace: ((_ place: Place, _ favoritesViewModel: FavoritesViewModel) -> Void) = {_, _ in }
     
     init(_ service: PlaceService) {
         self.placeService = service

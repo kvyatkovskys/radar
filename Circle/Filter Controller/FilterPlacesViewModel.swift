@@ -12,7 +12,7 @@ import RealmSwift
 protocol CategoriesProtocol {
     var selectIndexes: NSMutableIndexSet { get set }
     func addIndex(_ index: IndexPath)
-    func deletedindex(_ index: IndexPath)
+    func deletedIndex(_ index: IndexPath)
 }
 
 enum TypeFilter: Int {
@@ -114,7 +114,7 @@ struct FilterCategoriesViewModel: CategoriesProtocol {
         }
     }
     
-    func deletedindex(_ index: IndexPath) {
+    func deletedIndex(_ index: IndexPath) {
         selectIndexes.remove(index.row)
         
         do {

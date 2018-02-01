@@ -9,6 +9,7 @@
 import UIKit
 import Kingfisher
 import RxSwift
+import RealmSwift
 
 let heightHeaderTable: CGFloat = 220.0
 
@@ -23,9 +24,11 @@ fileprivate extension UIColor {
 }
 
 final class DetailPlaceViewController: UIViewController {
-    typealias Dependecies = HasDetailPlaceViewModel & HasKingfisher & HasOpenGraphService
+    typealias Dependecies = HasDetailPlaceViewModel & HasKingfisher & HasOpenGraphService & HasFavoritesViewModel
     
+    fileprivate var notificationTokenFavorites: NotificationToken?
     fileprivate let viewModel: DetailPlaceViewModel
+    fileprivate let favoritesViewModel: FavoritesViewModel
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
     fileprivate let sevice: OpenGraphService
     fileprivate let disposeBag = DisposeBag()
@@ -82,15 +85,18 @@ final class DetailPlaceViewController: UIViewController {
         return view
     }()
     
-    fileprivate let favoriteButton: UIButton = {
+    fileprivate lazy var favoriteButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "ic_favorite")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        let image = UIImage(named: self.favoritesViewModel.isAddFavorite == true ? "ic_favorite" : "ic_favorite_border")?.withRenderingMode(.alwaysTemplate)
+        button.setImage(image, for: .normal)
         button.tintColor = UIColor.mainColor
         button.backgroundColor = UIColor.shadowGray
-        button.setTitle(" Add", for: .normal)
+        button.setTitle(self.favoritesViewModel.isAddFavorite == true ? " Remove" : " Add", for: .normal)
         button.setTitleColor(UIColor.mainColor, for: .normal)
         button.titleLabel?.font = .boldSystemFont(ofSize: 17.0)
         button.layer.cornerRadius = 5.0
+        button.addTarget(self, action: #selector(addToFavorites), for: .touchUpInside)
+        button.isSelected = !self.favoritesViewModel.isAddFavorite
         return button
     }()
     
@@ -177,6 +183,7 @@ final class DetailPlaceViewController: UIViewController {
     
     init(_ dependecies: Dependecies) {
         self.viewModel = dependecies.viewModel
+        self.favoritesViewModel = dependecies.favoritesViewModel
         self.kingfisherOptions = dependecies.kingfisherOptions
         self.sevice = dependecies.service
         super.init(nibName: nil, bundle: nil)
@@ -189,9 +196,7 @@ final class DetailPlaceViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = viewModel.place.info.categories?.reduce("", { (acc, item) -> String in
-            return "\(acc) " + "\(item.title)"
-        })
+        setTitleNavBar()
         
         headerView.addSubview(imageHeader)
         headerView.addSubview(titlePlace)
@@ -213,6 +218,43 @@ final class DetailPlaceViewController: UIViewController {
         tableView.register(DetailRestaurantServiceTableViewCell.self, forCellReuseIdentifier: DetailRestaurantServiceTableViewCell.cellIdentifier)
         tableView.register(DetailRestaurantSpecialityTableViewCell.self,
                            forCellReuseIdentifier: DetailRestaurantSpecialityTableViewCell.cellIdentifier)
+        
+        do {
+            let realm = try Realm()
+            let favorites = realm.objects(Favorites.self)
+            notificationTokenFavorites = favorites.observe { [unowned self] (changes: RealmCollectionChange) in
+                switch changes {
+                case .update:
+                    if self.favoritesViewModel.checkAddingToFavorites(self.viewModel.place.info) {
+                        self.favoriteButton.setTitle(" Remove", for: .normal)
+                        self.favoriteButton.setImage(UIImage(named: "ic_favorite")?.withRenderingMode(.alwaysTemplate), for: .normal)
+                    } else {
+                        self.favoriteButton.setTitle(" Add", for: .normal)
+                        self.favoriteButton.setImage(UIImage(named: "ic_favorite_border")?.withRenderingMode(.alwaysTemplate), for: .normal)
+                    }
+                case .error(let error):
+                    fatalError("\(error)")
+                case .initial:
+                    break
+                }
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
+    deinit {
+        notificationTokenFavorites?.invalidate()
+    }
+    
+    @objc func addToFavorites(sender: UIButton) {
+        sender.isSelected = !sender.isSelected
+        
+        guard sender.isSelected else {
+            favoritesViewModel.addToFavorite(place: viewModel.place.info)
+            return
+        }
+        favoritesViewModel.deleteFromFavorites(place: viewModel.place.info)
     }
     
     @objc func sharePlace() {
@@ -221,6 +263,12 @@ final class DetailPlaceViewController: UIViewController {
                                                            applicationActivities: nil)
             present(shareController, animated: true, completion: nil)
         }
+    }
+    
+    func setTitleNavBar() {
+        navigationItem.title = viewModel.place.info.categories?.reduce("", { (acc, item) -> String in
+            return "\(acc) " + "\(item.title)"
+        })
     }
 }
 
@@ -319,9 +367,7 @@ extension DetailPlaceViewController: UITableViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard scrollView.contentOffset.y > -23.0 else {
-            navigationItem.title = viewModel.place.info.categories?.reduce("", { (acc, item) -> String in
-                return "\(acc) " + "\(item.title)"
-            })
+            setTitleNavBar()
             return
         }
         navigationItem.title = viewModel.place.info.name

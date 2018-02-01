@@ -33,7 +33,7 @@ struct DetailPlaceViewModel {
             var closedDays: [Days] = []
             var openedDays: [Days] = []
             
-            hours.forEach({ (key, value) in
+            hours.filter({ $0.key.contains("1") }).forEach({ (key, value) in
                 switch key {
                 case _ where key.contains(DaysType.monday.shortName):
                     guard key.contains("close") else {

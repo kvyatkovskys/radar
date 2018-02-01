@@ -28,7 +28,7 @@ extension CategoriesTableViewDelegate: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if viewModel.selectIndexes.contains(indexPath.row) {
-            viewModel.deletedindex(indexPath)
+            viewModel.deletedIndex(indexPath)
         } else {
             viewModel.addIndex(indexPath)
         }

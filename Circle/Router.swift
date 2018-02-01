@@ -38,8 +38,8 @@ struct Router {
                          sourceRect: sourceRect)
         }
         
-        viewModel.openDetailPlace = { place in
-            self.openDetailPlace(place, optionKingfisher, placesViewController)
+        viewModel.openDetailPlace = { place, favoritesViewModel in
+            self.openDetailPlace(place, favoritesViewModel, optionKingfisher, placesViewController)
         }
         
         placesViewController = PlacesViewController(PlacesViewDependecies(optionKingfisher, viewModel))
@@ -76,8 +76,8 @@ struct Router {
     }
     
     /// open detail controller about place
-    fileprivate func openDetailPlace(_ place: Place, _ kingfisherOptions: KingfisherOptionsInfo, _ fromController: UIViewController) {
-        let dependecies = DetailPlaceDependecies(DetailPlaceViewModel(place), kingfisherOptions, OpenGraphService())
+    fileprivate func openDetailPlace(_ place: Place, _ favoritesViewModel: FavoritesViewModel, _ kingfisherOptions: KingfisherOptionsInfo, _ fromController: UIViewController) {
+        let dependecies = DetailPlaceDependecies(DetailPlaceViewModel(place), favoritesViewModel, kingfisherOptions, OpenGraphService())
         let detailPlaceController = DetailPlaceViewController(dependecies)
         detailPlaceController.hidesBottomBarWhenPushed = true
         fromController.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
