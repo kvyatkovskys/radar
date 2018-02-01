@@ -9,32 +9,28 @@
 import Foundation
 
 class PlaceSetting {
-    fileprivate var fileds: [String]
-    
-    init() {
-        self.fileds = [FBSDKPlacesFieldKeyPlaceID,
-                       FBSDKPlacesFieldKeyName,
-                       FBSDKPlacesFieldKeyAbout,
-                       FBSDKPlacesFieldKeyDescription,
-                       FBSDKPlacesFieldKeyCoverPhoto,
-                       FBSDKPlacesFieldKeyPhone,
-                       FBSDKPlacesFieldKeyPaymentOptions,
-                       FBSDKPlacesFieldKeyHours,
-                       FBSDKPlacesFieldKeyIsAlwaysOpen,
-                       FBSDKPlacesFieldKeyIsPermanentlyClosed,
-                       FBSDKPlacesFieldKeyOverallStarRating,
-                       FBSDKPlacesFieldKeyRatingCount,
-                       FBSDKPlacesFieldKeyParking,
-                       FBSDKPlacesFieldKeyRestaurantServices,
-                       FBSDKPlacesFieldKeyRestaurantSpecialties,
-                       FBSDKPlacesFieldKeySingleLineAddress,
-                       FBSDKPlacesFieldKeyWebsite,
-                       FBSDKPlacesResponseKeyMatchedCategories,
-                       FBSDKPlacesFieldKeyLocation,
-                       FBSDKPlacesSummaryKeyTracking,
-                       FBSDKPlacesFieldKeyCategories,
-                       FBSDKPlacesFieldKeyAppLinks]
-    }
+    fileprivate var fileds: [String] = [FBSDKPlacesFieldKeyPlaceID,
+                                        FBSDKPlacesFieldKeyName,
+                                        FBSDKPlacesFieldKeyAbout,
+                                        FBSDKPlacesFieldKeyDescription,
+                                        FBSDKPlacesFieldKeyCoverPhoto,
+                                        FBSDKPlacesFieldKeyPhone,
+                                        FBSDKPlacesFieldKeyPaymentOptions,
+                                        FBSDKPlacesFieldKeyHours,
+                                        FBSDKPlacesFieldKeyIsAlwaysOpen,
+                                        FBSDKPlacesFieldKeyIsPermanentlyClosed,
+                                        FBSDKPlacesFieldKeyOverallStarRating,
+                                        FBSDKPlacesFieldKeyRatingCount,
+                                        FBSDKPlacesFieldKeyParking,
+                                        FBSDKPlacesFieldKeyRestaurantServices,
+                                        FBSDKPlacesFieldKeyRestaurantSpecialties,
+                                        FBSDKPlacesFieldKeySingleLineAddress,
+                                        FBSDKPlacesFieldKeyWebsite,
+                                        FBSDKPlacesResponseKeyMatchedCategories,
+                                        FBSDKPlacesFieldKeyLocation,
+                                        FBSDKPlacesFieldKeyCategories,
+                                        FBSDKPlacesFieldKeyAppLinks,
+                                        FBSDKPlacesFieldKeyProfilePhoto]
     
     func getFields() -> [String] {
         guard FBSDKAccessToken.current() != nil else { return fileds }

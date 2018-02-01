@@ -10,8 +10,6 @@ import Foundation
 import RxSwift
 import RealmSwift
 
-typealias Place = (info: PlaceModel, title: NSMutableAttributedString?, rating: NSMutableAttributedString?)
-
 struct Places {
     let items: [PlaceModel]
     let ratings: [NSMutableAttributedString?]
@@ -35,7 +33,7 @@ struct PlaceViewModel {
     var openMap: ((_ places: [Places], _ location: CLLocation?, _ sourceRect: CGRect) -> Void) = {_, _, _ in }
     
     /// open detail place controller
-    var openDetailPlace: ((_ place: Place, _ favoritesViewModel: FavoritesViewModel) -> Void) = {_, _ in }
+    var openDetailPlace: ((_ place: PlaceModel, _ title: NSMutableAttributedString?, _ rating: NSMutableAttributedString?, _ favoritesViewModel: FavoritesViewModel) -> Void) = {_, _, _, _ in }
     
     init(_ service: PlaceService) {
         self.placeService = service
@@ -99,7 +97,7 @@ struct PlaceViewModel {
         })
         
         let titles = model.data.map({ (place) -> NSMutableAttributedString? in
-            let title = NSAttributedString(string: "\(place.name)",
+            let title = NSAttributedString(string: "\(place.name ?? "")",
                 attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 17.0),
                              NSAttributedStringKey.foregroundColor: UIColor.black])
             let about = NSAttributedString(string: "\n\n\(place.about ?? "")",

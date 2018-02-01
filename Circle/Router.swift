@@ -16,14 +16,14 @@ fileprivate extension UIColor {
 }
 
 struct Router {
+    fileprivate let optionKingfisher: KingfisherOptionsInfo = {
+        return [KingfisherOptionsInfoItem.transition(.fade(0.2))]
+    }()
+    
     func showMainTabController() -> UITabBarController {
         //swiftlint:disable force_cast
         var placesViewController = UIViewController()
         var viewModel = PlaceViewModel(PlaceService())
-        
-        let optionKingfisher: KingfisherOptionsInfo = {
-            return [KingfisherOptionsInfoItem.transition(.fade(0.2))]
-        }()
         
         viewModel.openFilter = { delegate in
             let dependecies = FilterPlacesDependecies(FilterViewModel(), FilterDistanceViewModel(), FilterCategoriesViewModel(), delegate)
@@ -31,15 +31,15 @@ struct Router {
                                   toController: FilterPlacesViewController(dependecies))
         }
         
-        viewModel.openMap = { (places: [Places], location: CLLocation?, sourceRect: CGRect) in
+        viewModel.openMap = { places, location, sourceRect in
             let dependecies = MapDependecies(places, location)
             self.openMap(fromController: placesViewController as! PlacesViewController,
                          toController: MapViewController(dependecies),
                          sourceRect: sourceRect)
         }
         
-        viewModel.openDetailPlace = { place, favoritesViewModel in
-            self.openDetailPlace(place, favoritesViewModel, optionKingfisher, placesViewController)
+        viewModel.openDetailPlace = { place, title, rating, favoritesViewModel in
+            self.openDetailPlace(place, title, rating, favoritesViewModel, placesViewController)
         }
         
         placesViewController = PlacesViewController(PlacesViewDependecies(optionKingfisher, viewModel))
@@ -48,25 +48,34 @@ struct Router {
         placesViewController.tabBarItem = UITabBarItem(title: "My location", image: locationImage, tag: 1)
         placesViewController.navigationController?.navigationBar.isTranslucent = true
         
+        // Search Controller
         let searchViewController = SearchViewController()
         let searchImage = UIImage(named: "ic_search")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         searchViewController.navigationItem.title = "Search place"
         searchViewController.tabBarItem = UITabBarItem(title: "Search", image: searchImage, tag: 2)
         searchViewController.navigationController?.navigationBar.isTranslucent = true
         
-        let favoritesViewModel = FavoritesViewModel()
-        let favoritesViewController = FavoritesViewController(FavoritesDependencies(favoritesViewModel, optionKingfisher))
+        // Favorites Controller
+        var favoritesViewController = UIViewController()
+        var favoritesViewModel = FavoritesViewModel()
+        
+        favoritesViewModel.openDetailPlace = { place, title, rating, viewModel in
+            self.openDetailPlace(place, title, rating, viewModel, favoritesViewController)
+        }
+        favoritesViewController = FavoritesViewController(FavoritesDependencies(favoritesViewModel, optionKingfisher))
         let favoriteImage = UIImage(named: "ic_favorite")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         favoritesViewController.navigationItem.title = "Favorites"
         favoritesViewController.tabBarItem = UITabBarItem(title: "Favorites", image: favoriteImage, tag: 3)
         favoritesViewController.navigationController?.navigationBar.isTranslucent = true
         
+        // Setting Controller
         let settingsController = SettingsViewController(SettingsViewDependecies(SettingsViewModel()))
         let settingsImage = UIImage(named: "ic_settings")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         settingsController.navigationItem.title = "Settings of app"
         settingsController.tabBarItem = UITabBarItem(title: "Settings", image: settingsImage, tag: 4)
         settingsController.navigationController?.navigationBar.isTranslucent = true
         
+        // Tab View Controller
         let tabController = UITabBarController()
         tabController.tabBar.tintColor = UIColor.tabColor
         tabController.viewControllers = [placesViewController,
@@ -77,8 +86,15 @@ struct Router {
     }
     
     /// open detail controller about place
-    fileprivate func openDetailPlace(_ place: Place, _ favoritesViewModel: FavoritesViewModel, _ kingfisherOptions: KingfisherOptionsInfo, _ fromController: UIViewController) {
-        let dependecies = DetailPlaceDependecies(DetailPlaceViewModel(place), favoritesViewModel, kingfisherOptions, OpenGraphService())
+    fileprivate func openDetailPlace(_ place: PlaceModel,
+                                     _ title: NSMutableAttributedString?,
+                                     _ rating: NSMutableAttributedString?,
+                                     _ favoritesViewModel: FavoritesViewModel,
+                                     _ fromController: UIViewController) {
+        let dependecies = DetailPlaceDependecies(DetailPlaceViewModel(place, title, rating, FavoritesService()),
+                                                 favoritesViewModel,
+                                                 optionKingfisher,
+                                                 OpenGraphService())
         let detailPlaceController = DetailPlaceViewController(dependecies)
         detailPlaceController.hidesBottomBarWhenPushed = true
         fromController.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)

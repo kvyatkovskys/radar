@@ -11,6 +11,7 @@
 		2CE34B24D65E94C397FD1B43 /* Pods_Circle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E0022E72D06AC70840D3662 /* Pods_Circle.framework */; };
 		8B147BCF2022FD6E00EDA2D4 /* FavoritesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B147BCE2022FD6E00EDA2D4 /* FavoritesModel.swift */; };
 		8B147BD12023021600EDA2D4 /* FavoritesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B147BD02023021600EDA2D4 /* FavoritesViewModel.swift */; };
+		8B147BD42023B13800EDA2D4 /* FavoritesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B147BD32023B13800EDA2D4 /* FavoritesService.swift */; };
 		8B18BFD61FFA594D00C7906D /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18BFD51FFA594D00C7906D /* Color+Extension.swift */; };
 		8B18BFD81FFACC6F00C7906D /* PlaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18BFD71FFACC6F00C7906D /* PlaceViewModel.swift */; };
 		8B18FE082007F8E000E637C7 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18FE072007F8E000E637C7 /* View+Extension.swift */; };
@@ -104,6 +105,7 @@
 		7C60842BBC33FD63E648DBC6 /* Pods-Circle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Circle.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Circle/Pods-Circle.debug.xcconfig"; sourceTree = "<group>"; };
 		8B147BCE2022FD6E00EDA2D4 /* FavoritesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesModel.swift; sourceTree = "<group>"; };
 		8B147BD02023021600EDA2D4 /* FavoritesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewModel.swift; sourceTree = "<group>"; };
+		8B147BD32023B13800EDA2D4 /* FavoritesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesService.swift; sourceTree = "<group>"; };
 		8B18BFD51FFA594D00C7906D /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 		8B18BFD71FFACC6F00C7906D /* PlaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceViewModel.swift; sourceTree = "<group>"; };
 		8B18FE072007F8E000E637C7 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
@@ -239,6 +241,17 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		8B147BD2202399D800EDA2D4 /* Table View */ = {
+			isa = PBXGroup;
+			children = (
+				8B6D4E1E1FFBA0CD007904D4 /* PlacesTableViewDataSource.swift */,
+				8B6D4E201FFBA0DC007904D4 /* PlacesTableViewDelegate.swift */,
+				8B5F71561FF93C9700E628F9 /* PlaceTableViewCell.swift */,
+				8BE2089C1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift */,
+			);
+			path = "Table View";
+			sourceTree = "<group>";
+		};
 		8B18BFD91FFACE0100C7906D /* Project Extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -343,6 +356,7 @@
 				8BC35067201CF62100BB375B /* Favorites Controller Tab */,
 				8B44C3841FF012E1003C0754 /* Setting Controller Tab */,
 				8B44C3811FF012A2003C0754 /* Places Controller Tab */,
+				8B18FE15200B5D6C00E637C7 /* Detail Place View */,
 				8B82C38F20139C9F00E0CA89 /* ListItemCollectionViewCell.swift */,
 				8BC35077201E2AEA00BB375B /* List Restaurant Specialties */,
 				8BC3505A201A6FD900BB375B /* List Payments */,
@@ -411,11 +425,7 @@
 			children = (
 				8B5F71541FF933AC00E628F9 /* Place Service */,
 				8B41154C1FDB2CEF00C6614C /* PlacesViewController.swift */,
-				8B6D4E1E1FFBA0CD007904D4 /* PlacesTableViewDataSource.swift */,
-				8B6D4E201FFBA0DC007904D4 /* PlacesTableViewDelegate.swift */,
-				8B5F71561FF93C9700E628F9 /* PlaceTableViewCell.swift */,
-				8BE2089C1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift */,
-				8B18FE15200B5D6C00E637C7 /* Detail Place View */,
+				8B147BD2202399D800EDA2D4 /* Table View */,
 			);
 			path = "Places Controller Tab";
 			sourceTree = "<group>";
@@ -508,6 +518,7 @@
 				8BC35065201CF60700BB375B /* FavoritesViewController.swift */,
 				8B147BCE2022FD6E00EDA2D4 /* FavoritesModel.swift */,
 				8B147BD02023021600EDA2D4 /* FavoritesViewModel.swift */,
+				8B147BD32023B13800EDA2D4 /* FavoritesService.swift */,
 			);
 			path = "Favorites Controller Tab";
 			sourceTree = "<group>";
@@ -812,6 +823,7 @@
 				8BC35069201CF64600BB375B /* SearchViewController.swift in Sources */,
 				8B18FE082007F8E000E637C7 /* View+Extension.swift in Sources */,
 				8BC35072201E248600BB375B /* ListRSpecialtiesCollectionDataSource.swift in Sources */,
+				8B147BD42023B13800EDA2D4 /* FavoritesService.swift in Sources */,
 				8B82C39A20150AD000E0CA89 /* WorkDaysCollectionDataSource.swift in Sources */,
 				8B5F71511FF916B300E628F9 /* PlaceService.swift in Sources */,
 				8B82C38E201399B500E0CA89 /* ListContactsCollectionDelegate.swift in Sources */,

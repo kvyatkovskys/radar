@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RxSwift
 
 struct DetailSectionObjects {
     var sectionName: String
@@ -14,22 +15,40 @@ struct DetailSectionObjects {
 }
 
 struct DetailPlaceViewModel {
-    let place: Place
+    var place: PlaceModel
+    let title: NSMutableAttributedString?
+    let rating: NSMutableAttributedString?
     var dataSource: [DetailSectionObjects]
+    
+    fileprivate let service: FavoritesService
+    fileprivate let disposeBag = DisposeBag()
 
-    init(_ place: Place) {
+    init(_ place: PlaceModel, _ title: NSMutableAttributedString?, _ rating: NSMutableAttributedString?, _ service: FavoritesService) {
+        self.service = service
         self.place = place
+        self.title = title
+        self.rating = rating
+        self.dataSource = DetailPlaceViewModel.updateValue(place: place, colorCategory: place.categories?.first?.color)
+    }
+    
+    func getInfoAboutPlace(id: Int) -> Observable<[DetailSectionObjects]> {
+        return service.loadInfoPlace(id: id).flatMap({ (model) -> Observable<[DetailSectionObjects]> in
+            return Observable.just(DetailPlaceViewModel.updateValue(place: model, colorCategory: self.place.categories?.first?.color))
+        })
+    }
+    
+    static fileprivate func updateValue(place: PlaceModel, colorCategory: UIColor?) -> [DetailSectionObjects] {
         var items: [DetailSectionObjects] = []
         
-        if (place.info.phone != nil) || (place.info.website != nil) || (place.info.appLink != nil) {
-            let itemsContact = [Contact(type: ContactType.phone, value: place.info.phone),
-                                Contact(type: ContactType.website, value: place.info.website),
-                                Contact(type: ContactType.facebook, value: place.info.appLink)]
+        if (place.phone != nil) || (place.website != nil) || (place.appLink != nil) {
+            let itemsContact = [Contact(type: ContactType.phone, value: place.phone),
+                                Contact(type: ContactType.website, value: place.website),
+                                Contact(type: ContactType.facebook, value: place.appLink)]
             let type = TypeDetailCell.contact(itemsContact, 50.0)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         
-        if let hours = place.info.hours {
+        if let hours = place.hours {
             var closedDays: [Days] = []
             var openedDays: [Days] = []
             
@@ -93,19 +112,19 @@ struct DetailPlaceViewModel {
             
             let type = TypeDetailCell.workDays((closed: sortedClosedDays,
                                                 opened: sortedOpenedDays,
-                                                currentDay: CurrentDay(index, place.info.categories?.first?.color)),
+                                                currentDay: CurrentDay(index, colorCategory)),
                                                90.0)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         
-        if let address = place.info.location?.street {
+        if let address = place.location?.street {
             let height = address.height(font: .boldSystemFont(ofSize: 15.0),
                                         width: ScreenSize.SCREEN_WIDTH) + 60.0
-            let type = TypeDetailCell.address(address, place.info.location, height)
+            let type = TypeDetailCell.address(address, place.location, height)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         
-        if let payments = place.info.paymentOptions {
+        if let payments = place.paymentOptions {
             let paymentsType = payments.filter({ $0.value == true }).map({ PaymentType(rawValue: $0.key) })
             if !paymentsType.isEmpty {
                 let type = TypeDetailCell.payment(paymentsType, 70.0)
@@ -113,7 +132,7 @@ struct DetailPlaceViewModel {
             }
         }
         
-        if let parking = place.info.parking {
+        if let parking = place.parking {
             let parkingType = parking.filter({ $0.value == true }).map({ ParkingType(rawValue: $0.key) })
             if !parkingType.isEmpty {
                 let type = TypeDetailCell.parking(parkingType, 70.0)
@@ -121,29 +140,29 @@ struct DetailPlaceViewModel {
             }
         }
         
-        if let restaurantService = place.info.restaurantServices {
+        if let restaurantService = place.restaurantServices {
             let serviceType = restaurantService.filter({ $0.value == true }).map({ RestaurantServiceType(rawValue: $0.key) })
             if !serviceType.isEmpty {
-                let type = TypeDetailCell.restaurantService(serviceType, 50.0, place.info.categories?.first?.color)
+                let type = TypeDetailCell.restaurantService(serviceType, 50.0, colorCategory)
                 items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
             }
         }
         
-        if let restaurantSpecialties = place.info.restaurantSpecialties {
+        if let restaurantSpecialties = place.restaurantSpecialties {
             let specialityType = restaurantSpecialties.filter({ $0.value == true }).map({ RestaurantSpecialityType(rawValue: $0.key) })
             if !specialityType.isEmpty {
-                let type = TypeDetailCell.restaurantSpeciality(specialityType, 50.0, place.info.categories?.first?.color)
+                let type = TypeDetailCell.restaurantSpeciality(specialityType, 50.0, colorCategory)
                 items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
             }
         }
         
-        if let description = place.info.description {
+        if let description = place.description {
             let height = description.height(font: .systemFont(ofSize: 14.0),
                                             width: ScreenSize.SCREEN_WIDTH)
             let type = TypeDetailCell.description(description, height)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         
-        self.dataSource = items
+        return items
     }
 }

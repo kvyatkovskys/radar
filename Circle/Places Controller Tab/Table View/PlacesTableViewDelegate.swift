@@ -22,7 +22,7 @@ final class PlacesTableViewDelegate: NSObject {
     }
 }
 
-extension PlacesTableViewDelegate: UITableViewDelegate {
+extension PlacesTableViewDelegate: UITableViewDelegate {    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let lastSectionIndex = tableView.numberOfSections - 1
         let lastRowIndex = tableView.numberOfRows(inSection: lastSectionIndex) - 4
@@ -40,6 +40,6 @@ extension PlacesTableViewDelegate: UITableViewDelegate {
         let place = places[indexPath.section].items[indexPath.row]
         let title = places[indexPath.section].titles[indexPath.row]
         let rating = places[indexPath.section].ratings[indexPath.row]
-        viewModel.openDetailPlace(Place(info: place, title: title, rating: rating), FavoritesViewModel())
+        viewModel.openDetailPlace(place, title, rating, FavoritesViewModel())
     }
 }

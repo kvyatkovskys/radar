@@ -12,6 +12,9 @@ import RealmSwift
 struct FavoritesViewModel {
     var favoritePlaces: [FavoritesModel] = []
     
+    /// open detail place controller
+    var openDetailPlace: ((_ place: PlaceModel, _ title: NSMutableAttributedString?, _ rating: NSMutableAttributedString?, _ favoritesViewModel: FavoritesViewModel) -> Void) = {_, _, _, _ in }
+    
     init() {
         var favorites: [Favorites] = []
         do {
@@ -71,7 +74,7 @@ struct FavoritesViewModel {
     }
     
     /// check, if place adding to favorites
-    func checkAddingToFavorites(_ place: Place) -> Bool {
+    func checkAddingToFavorites(_ place: PlaceModel) -> Bool {
         var favorites: [Favorites] = []
         do {
             let realm = try Realm()
@@ -80,7 +83,7 @@ struct FavoritesViewModel {
             print(error)
         }
         
-        return favorites.contains(where: { $0.id == place.info.id })
+        return favorites.contains(where: { $0.id == place.id })
     }
     
     /// added to favorites

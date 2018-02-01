@@ -24,7 +24,7 @@ extension PlaceDataModel: Unboxable {
 
 struct PlaceModel {
     let id: Int
-    let name: String
+    let name: String?
     let phone: Int?
     let ratingStar: Float?
     let ratingCount: Int?
@@ -45,12 +45,43 @@ struct PlaceModel {
     let parking: [String: Bool]?
     let restaurantServices: [String: Bool]?
     let restaurantSpecialties: [String: Bool]?
+    let fromFavorites: Bool
+    
+    init(id: Int, name: String? = nil, phone: Int? = nil, ratingStar: Float? = nil, ratingCount: Int? = nil, hours: [String: String]? = nil,
+         isAlwaysOpen: Bool? = nil, isClosed: Bool? = nil, address: String? = nil, website: String? = nil, categories: [Categories]? = nil,
+         subCategories: [String]? = nil, description: String? = nil, coverPhoto: URL? = nil, about: String? = nil, location: LocationPlace? = nil,
+         context: String? = nil, appLink: URL? = nil, paymentOptions: [String: Bool]? = nil, parking: [String: Bool]? = nil,
+         restaurantServices: [String: Bool]? = nil, restaurantSpecialties: [String: Bool]? = nil, fromFavorites: Bool) {
+        self.id = id
+        self.name = name
+        self.phone  = phone
+        self.ratingStar = ratingStar
+        self.ratingCount = ratingCount
+        self.hours = hours
+        self.isAlwaysOpen = isAlwaysOpen
+        self.isClosed = isClosed
+        self.address = address
+        self.website = website
+        self.categories = categories
+        self.subCategories = subCategories
+        self.description = description
+        self.coverPhoto = coverPhoto
+        self.about = about
+        self.location = location
+        self.context = context
+        self.appLink = appLink
+        self.paymentOptions = paymentOptions
+        self.parking = parking
+        self.restaurantServices = restaurantServices
+        self.restaurantSpecialties = restaurantSpecialties
+        self.fromFavorites = fromFavorites
+    }
 }
 
 extension PlaceModel: Unboxable {
     init(unboxer: Unboxer) throws {
         self.id = try unboxer.unbox(key: "id")
-        self.name = try unboxer.unbox(key: "name")
+        self.name = unboxer.unbox(key: "name")
         self.phone = unboxer.unbox(key: "phone")
         self.ratingStar = unboxer.unbox(key: "overall_star_rating")
         self.ratingCount = unboxer.unbox(key: "rating_count")
@@ -59,8 +90,8 @@ extension PlaceModel: Unboxable {
         self.isClosed = unboxer.unbox(key: "is_permanently_closed")
         self.address = unboxer.unbox(key: "single_line_address")
         self.website = unboxer.unbox(key: "website")
-        let categories: [String] = try unboxer.unbox(key: "matched_categories")
-        self.categories = categories.map({ Categories(rawValue: $0)! })
+        let categories: [String]? = unboxer.unbox(key: "matched_categories")
+        self.categories = (categories ?? []).map({ Categories(rawValue: $0)! })
         let subCategories: [[String: Any]] = try unboxer.unbox(key: "category_list")
         self.subCategories = subCategories.map({ $0["name"] }) as? [String]
         self.description = unboxer.unbox(key: "description")
@@ -75,6 +106,7 @@ extension PlaceModel: Unboxable {
         self.parking = unboxer.unbox(key: "parking")
         self.restaurantServices = unboxer.unbox(key: "restaurant_services")
         self.restaurantSpecialties = unboxer.unbox(key: "restaurant_specialties")
+        self.fromFavorites = false
     }
 }
 

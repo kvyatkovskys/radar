@@ -39,6 +39,25 @@ final class FavoritesViewController: UIViewController {
         self.viewModel = dependecies.favoritesViewModel
         self.optionsKingfisher = dependecies.kingfisherOptions
         super.init(nibName: nil, bundle: nil)
+        
+        do {
+            let realm = try Realm()
+            let results = realm.objects(Favorites.self)
+            
+            notificationToken = results.observe { [unowned self] (changes: RealmCollectionChange) in
+                switch changes {
+                case .initial:
+                    self.tableView.reloadData()
+                case .update(let collectionType, _, _, _):
+                    self.viewModel.favoritePlaces = self.viewModel.updateValue(collectionType.sorted(by: { $0.date! > $1.date! }).map({ $0 }))
+                    self.tableView.reloadData()
+                case .error(let error):
+                    fatalError("\(error)")
+                }
+            }
+        } catch {
+            print(error)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -52,25 +71,6 @@ final class FavoritesViewController: UIViewController {
         updateViewConstraints()
         
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
-        
-        do {
-            let realm = try Realm()
-            let results = realm.objects(Favorites.self)
-            
-            notificationToken = results.observe { [unowned self] (changes: RealmCollectionChange) in
-                switch changes {
-                case .initial:
-                    break
-                case .update(let collectionType, _, _, _):
-                    self.viewModel.favoritePlaces = self.viewModel.updateValue(collectionType.sorted(by: { $0.date! > $1.date! }).map({ $0 }))
-                    self.tableView.reloadData()
-                case .error(let error):
-                    fatalError("\(error)")
-                }
-            }
-        } catch {
-            print(error)
-        }
     }
     
     deinit {
@@ -103,7 +103,7 @@ extension FavoritesViewController: UITableViewDataSource {
 
 extension FavoritesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let delete = UITableViewRowAction(style: .destructive, title: "Remove") { [unowned self] (action, indexPath) in
+        let delete = UITableViewRowAction(style: .destructive, title: "Remove") { [unowned self] (_, indexPath) in
 
             self.viewModel.deleteFromFavorites(id: self.viewModel.favoritePlaces[indexPath.row].id)
             self.viewModel.favoritePlaces.remove(at: indexPath.row)
@@ -111,7 +111,7 @@ extension FavoritesViewController: UITableViewDelegate {
             self.tableView.deleteRows(at: [indexPath], with: .automatic)
             self.tableView.endUpdates()
         }
-        
+
         return [delete]
     }
     
@@ -121,5 +121,13 @@ extension FavoritesViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+       
+        let place = PlaceModel(id: viewModel.favoritePlaces[indexPath.row].id,
+                               categories: viewModel.favoritePlaces[indexPath.row].categories,
+                               coverPhoto: viewModel.favoritePlaces[indexPath.row].picture,
+                               fromFavorites: true)
+        let title = viewModel.favoritePlaces[indexPath.row].title
+        let rating = viewModel.favoritePlaces[indexPath.row].rating
+        viewModel.openDetailPlace(place, title, rating, viewModel)
     }
 }

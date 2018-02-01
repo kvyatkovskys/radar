@@ -27,7 +27,7 @@ final class DetailPlaceViewController: UIViewController {
     typealias Dependecies = HasDetailPlaceViewModel & HasKingfisher & HasOpenGraphService & HasFavoritesViewModel
     
     fileprivate var notificationTokenFavorites: NotificationToken?
-    fileprivate let viewModel: DetailPlaceViewModel
+    fileprivate var viewModel: DetailPlaceViewModel
     fileprivate let favoritesViewModel: FavoritesViewModel
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
     fileprivate let sevice: OpenGraphService
@@ -46,7 +46,7 @@ final class DetailPlaceViewController: UIViewController {
         image.layer.masksToBounds = true
         image.backgroundColor = .shadowGray
         image.kf.indicatorType = .activity
-        image.kf.setImage(with: viewModel.place.info.coverPhoto,
+        image.kf.setImage(with: viewModel.place.coverPhoto,
                                 placeholder: nil,
                                 options: self.kingfisherOptions,
                                 progressBlock: nil,
@@ -58,21 +58,22 @@ final class DetailPlaceViewController: UIViewController {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = .boldSystemFont(ofSize: 17.0)
-        label.attributedText = self.viewModel.place.title
+        label.attributedText = self.viewModel.title
+        
         return label
     }()
     
     fileprivate lazy var ratingLabel: UILabel = {
         let label = UILabel()
-        label.attributedText = self.viewModel.place.rating
+        label.attributedText = self.viewModel.rating
         return label
     }()
     
     fileprivate lazy var listSubCategoriesView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
-        let listCategories = ListCategoriesViewController(ListSubCategoriesViewModel(self.viewModel.place.info.subCategories ?? [],
-                                                                                     color: self.viewModel.place.info.categories?.first?.color))
+        let listCategories = ListCategoriesViewController(ListSubCategoriesViewModel(self.viewModel.place.subCategories ?? [],
+                                                                                     color: self.viewModel.place.categories?.first?.color))
         
         var frame = listCategories.view.frame
         frame.size.height = view.frame.height
@@ -209,16 +210,6 @@ final class DetailPlaceViewController: UIViewController {
         view.addSubview(tableView)
         updateViewConstraints()
         
-        tableView.register(DetailDescriptionTableViewCell.self, forCellReuseIdentifier: DetailDescriptionTableViewCell.cellIdentifier)
-        tableView.register(DeatilContactsTableViewCell.self, forCellReuseIdentifier: DeatilContactsTableViewCell.cellIdentifier)
-        tableView.register(DetailAddressTableViewCell.self, forCellReuseIdentifier: DetailAddressTableViewCell.cellIdentifier)
-        tableView.register(DetailWorkDaysTableViewCell.self, forCellReuseIdentifier: DetailWorkDaysTableViewCell.cellIdentifier)
-        tableView.register(DetailPaymentTableViewCell.self, forCellReuseIdentifier: DetailPaymentTableViewCell.cellIdentifier)
-        tableView.register(DetailParkingTableViewCell.self, forCellReuseIdentifier: DetailParkingTableViewCell.cellIdentifier)
-        tableView.register(DetailRestaurantServiceTableViewCell.self, forCellReuseIdentifier: DetailRestaurantServiceTableViewCell.cellIdentifier)
-        tableView.register(DetailRestaurantSpecialityTableViewCell.self,
-                           forCellReuseIdentifier: DetailRestaurantSpecialityTableViewCell.cellIdentifier)
-        
         do {
             let realm = try Realm()
             let favorites = realm.objects(Favorites.self)
@@ -241,6 +232,26 @@ final class DetailPlaceViewController: UIViewController {
         } catch {
             print(error)
         }
+        
+        tableView.register(DetailDescriptionTableViewCell.self, forCellReuseIdentifier: DetailDescriptionTableViewCell.cellIdentifier)
+        tableView.register(DeatilContactsTableViewCell.self, forCellReuseIdentifier: DeatilContactsTableViewCell.cellIdentifier)
+        tableView.register(DetailAddressTableViewCell.self, forCellReuseIdentifier: DetailAddressTableViewCell.cellIdentifier)
+        tableView.register(DetailWorkDaysTableViewCell.self, forCellReuseIdentifier: DetailWorkDaysTableViewCell.cellIdentifier)
+        tableView.register(DetailPaymentTableViewCell.self, forCellReuseIdentifier: DetailPaymentTableViewCell.cellIdentifier)
+        tableView.register(DetailParkingTableViewCell.self, forCellReuseIdentifier: DetailParkingTableViewCell.cellIdentifier)
+        tableView.register(DetailRestaurantServiceTableViewCell.self, forCellReuseIdentifier: DetailRestaurantServiceTableViewCell.cellIdentifier)
+        tableView.register(DetailRestaurantSpecialityTableViewCell.self,
+                           forCellReuseIdentifier: DetailRestaurantSpecialityTableViewCell.cellIdentifier)
+        
+        if viewModel.place.fromFavorites {
+            viewModel.getInfoAboutPlace(id: viewModel.place.id).asObservable()
+                .subscribe(onNext: { [unowned self] (dataSource) in
+                    self.viewModel.dataSource = dataSource
+                    self.tableView.reloadData()
+                }, onError: { (error) in
+                    print(error)
+                }).disposed(by: disposeBag)
+        }
     }
     
     deinit {
@@ -251,22 +262,22 @@ final class DetailPlaceViewController: UIViewController {
         sender.isSelected = !sender.isSelected
         
         guard sender.isSelected else {
-            favoritesViewModel.addToFavorite(place: viewModel.place.info)
+            favoritesViewModel.addToFavorite(place: viewModel.place)
             return
         }
-        favoritesViewModel.deleteFromFavorites(id: viewModel.place.info.id)
+        favoritesViewModel.deleteFromFavorites(id: viewModel.place.id)
     }
     
     @objc func sharePlace() {
-        if let text = viewModel.place.title?.string, let image = imageHeader.image {
-            let shareController = UIActivityViewController(activityItems: [image, text],
+        if let image = imageHeader.image {
+            let shareController = UIActivityViewController(activityItems: [image, viewModel.place.name ?? ""],
                                                            applicationActivities: nil)
             present(shareController, animated: true, completion: nil)
         }
     }
     
     func setTitleNavBar() {
-        navigationItem.title = viewModel.place.info.categories?.reduce("", { (acc, item) -> String in
+        navigationItem.title = viewModel.place.categories?.reduce("", { (acc, item) -> String in
             return "\(acc) " + "\(item.title)"
         })
     }
@@ -370,6 +381,6 @@ extension DetailPlaceViewController: UITableViewDelegate {
             setTitleNavBar()
             return
         }
-        navigationItem.title = viewModel.place.info.name
+        navigationItem.title = viewModel.place.name
     }
 }

@@ -11,14 +11,9 @@ import RxSwift
 import Unbox
 
 struct PlaceService {
-    fileprivate let placeManager: FBSDKPlacesManager
-    fileprivate var setting: PlaceSetting
+    fileprivate let placeManager = FBSDKPlacesManager()
+    fileprivate var setting = PlaceSetting()
     
-    init() {
-        self.placeManager = FBSDKPlacesManager()
-        self.setting = PlaceSetting()
-    }
-
     func loadMorePlaces(url: URL) -> Observable<PlaceDataModel> {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
