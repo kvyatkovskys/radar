@@ -25,7 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupNavigationBar()
         initialAuthViewController()
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
-        migrations(shema: 7)
+        migrations(schema: 0)
+        print(Realm.Configuration.defaultConfiguration.fileURL as Any)
         
         return true
     }
@@ -54,11 +55,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().tintColor = UIColor.white
     }
     
-    fileprivate func migrations(shema: UInt64) {
+    fileprivate func migrations(schema: UInt64) {
         let config = Realm.Configuration(
-            schemaVersion: shema,
+            schemaVersion: schema,
             migrationBlock: { _, oldSchemaVersion in
-                if oldSchemaVersion < shema {}
+                if oldSchemaVersion < schema {
+                    
+                }
         })
         Realm.Configuration.defaultConfiguration = config
         

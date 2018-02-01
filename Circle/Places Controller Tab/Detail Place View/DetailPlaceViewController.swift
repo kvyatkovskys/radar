@@ -87,16 +87,16 @@ final class DetailPlaceViewController: UIViewController {
     
     fileprivate lazy var favoriteButton: UIButton = {
         let button = UIButton()
-        let image = UIImage(named: self.favoritesViewModel.isAddFavorite == true ? "ic_favorite" : "ic_favorite_border")?.withRenderingMode(.alwaysTemplate)
+        let image = UIImage(named: self.favoritesViewModel.checkAddingToFavorites(self.viewModel.place) == true ? "ic_favorite" : "ic_favorite_border")?.withRenderingMode(.alwaysTemplate)
         button.setImage(image, for: .normal)
         button.tintColor = UIColor.mainColor
         button.backgroundColor = UIColor.shadowGray
-        button.setTitle(self.favoritesViewModel.isAddFavorite == true ? " Remove" : " Add", for: .normal)
+        button.setTitle(self.favoritesViewModel.checkAddingToFavorites(self.viewModel.place) == true ? " Remove" : " Add", for: .normal)
         button.setTitleColor(UIColor.mainColor, for: .normal)
         button.titleLabel?.font = .boldSystemFont(ofSize: 17.0)
         button.layer.cornerRadius = 5.0
         button.addTarget(self, action: #selector(addToFavorites), for: .touchUpInside)
-        button.isSelected = !self.favoritesViewModel.isAddFavorite
+        button.isSelected = !self.favoritesViewModel.checkAddingToFavorites(self.viewModel.place)
         return button
     }()
     
@@ -182,7 +182,7 @@ final class DetailPlaceViewController: UIViewController {
     }
     
     init(_ dependecies: Dependecies) {
-        self.viewModel = dependecies.viewModel
+        self.viewModel = dependecies.detailViewModel
         self.favoritesViewModel = dependecies.favoritesViewModel
         self.kingfisherOptions = dependecies.kingfisherOptions
         self.sevice = dependecies.service
@@ -225,7 +225,7 @@ final class DetailPlaceViewController: UIViewController {
             notificationTokenFavorites = favorites.observe { [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
                 case .update:
-                    if self.favoritesViewModel.checkAddingToFavorites(self.viewModel.place.info) {
+                    if self.favoritesViewModel.checkAddingToFavorites(self.viewModel.place) {
                         self.favoriteButton.setTitle(" Remove", for: .normal)
                         self.favoriteButton.setImage(UIImage(named: "ic_favorite")?.withRenderingMode(.alwaysTemplate), for: .normal)
                     } else {
@@ -254,7 +254,7 @@ final class DetailPlaceViewController: UIViewController {
             favoritesViewModel.addToFavorite(place: viewModel.place.info)
             return
         }
-        favoritesViewModel.deleteFromFavorites(place: viewModel.place.info)
+        favoritesViewModel.deleteFromFavorites(id: viewModel.place.info.id)
     }
     
     @objc func sharePlace() {

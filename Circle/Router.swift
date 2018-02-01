@@ -54,7 +54,8 @@ struct Router {
         searchViewController.tabBarItem = UITabBarItem(title: "Search", image: searchImage, tag: 2)
         searchViewController.navigationController?.navigationBar.isTranslucent = true
         
-        let favoritesViewController = FavoritesViewController()
+        let favoritesViewModel = FavoritesViewModel()
+        let favoritesViewController = FavoritesViewController(FavoritesDependencies(favoritesViewModel, optionKingfisher))
         let favoriteImage = UIImage(named: "ic_favorite")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         favoritesViewController.navigationItem.title = "Favorites"
         favoritesViewController.tabBarItem = UITabBarItem(title: "Favorites", image: favoriteImage, tag: 3)

@@ -9,12 +9,21 @@
 import Foundation
 import RealmSwift
 
+struct FavoritesModel {
+    let id: Int
+    let title: NSMutableAttributedString?
+    let rating: NSMutableAttributedString?
+    let picture: URL?
+    let categories: [Categories]?
+}
+
 class Favorites: Object {
     @objc dynamic var id: Int = 0
     @objc dynamic var title: String?
     @objc dynamic var about: String?
-    @objc dynamic var picture: Data?
+    @objc dynamic var picture: String?
     @objc dynamic var ratingStar: Float = 0
     @objc dynamic var ratingCount: Int = 0
+    @objc dynamic var date: Date?
     let categories = List<String>()
 }

@@ -40,6 +40,6 @@ extension PlacesTableViewDelegate: UITableViewDelegate {
         let place = places[indexPath.section].items[indexPath.row]
         let title = places[indexPath.section].titles[indexPath.row]
         let rating = places[indexPath.section].ratings[indexPath.row]
-        viewModel.openDetailPlace(Place(info: place, title: title, rating: rating), FavoritesViewModel(place))
+        viewModel.openDetailPlace(Place(info: place, title: title, rating: rating), FavoritesViewModel())
     }
 }

@@ -126,7 +126,6 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(Realm.Configuration.defaultConfiguration.fileURL as Any)
         
         view.backgroundColor = .white
         headerView.addSubview(mapView)

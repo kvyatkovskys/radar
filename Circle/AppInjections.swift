@@ -94,20 +94,30 @@ protocol HasFavoritesViewModel {
     var favoritesViewModel: FavoritesViewModel { get }
 }
 
+struct FavoritesDependencies: HasFavoritesViewModel, HasKingfisher {
+    let favoritesViewModel: FavoritesViewModel
+    let kingfisherOptions: KingfisherOptionsInfo
+    
+    init(_ favoritesViewModel: FavoritesViewModel, _ kingfisherOptions: KingfisherOptionsInfo) {
+        self.favoritesViewModel = favoritesViewModel
+        self.kingfisherOptions = kingfisherOptions
+    }
+}
+
 // MARK: DetailPlaceViewController
 protocol HasDetailPlaceViewModel {
-    var viewModel: DetailPlaceViewModel { get }
+    var detailViewModel: DetailPlaceViewModel { get }
 }
 
 /// container dependecies injection's for detail place controller
 struct DetailPlaceDependecies: HasDetailPlaceViewModel, HasKingfisher, HasOpenGraphService, HasFavoritesViewModel {
-    let viewModel: DetailPlaceViewModel
+    let detailViewModel: DetailPlaceViewModel
     let favoritesViewModel: FavoritesViewModel
     let kingfisherOptions: KingfisherOptionsInfo
     let service: OpenGraphService
     
-    init(_ viewModel: DetailPlaceViewModel, _ favoritesViewModel: FavoritesViewModel, _ kingfisherOptions: KingfisherOptionsInfo, _ service: OpenGraphService) {
-        self.viewModel = viewModel
+    init(_ detailViewModel: DetailPlaceViewModel, _ favoritesViewModel: FavoritesViewModel, _ kingfisherOptions: KingfisherOptionsInfo, _ service: OpenGraphService) {
+        self.detailViewModel = detailViewModel
         self.favoritesViewModel = favoritesViewModel
         self.kingfisherOptions = kingfisherOptions
         self.service = service
