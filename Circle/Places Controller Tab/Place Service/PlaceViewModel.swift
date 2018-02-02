@@ -48,20 +48,22 @@ struct PlaceViewModel {
     }
     
     /// get info about for current location
-    func getInfoPlaces(location: CLLocation, distance: CLLocationDistance) -> Observable<Places> {
-        var selected: [Categories] = [.arts, .education, .fitness, .food, .hotel, .medical, .shopping, .travel]
+    func getInfoPlaces(location: CLLocation?, distance: CLLocationDistance, searchTerm: String? = nil) -> Observable<Places> {
+        var categories = PlaceSetting().allCategories
         
-        do {
-            let realm = try Realm()
-            let selectedCategories = realm.objects(FilterSelectedCategory.self)
-            if !selectedCategories.isEmpty {
-                selected = selectedCategories.map({ Categories(rawValue: $0.category)! })
+        if searchTerm == nil {
+            do {
+                let realm = try Realm()
+                let selectedCategories = realm.objects(FilterSelectedCategory.self)
+                if !selectedCategories.isEmpty {
+                    categories = selectedCategories.map({ Categories(rawValue: $0.category)! })
+                }
+            } catch {
+                print(error)
             }
-        } catch {
-            print(error)
         }
         
-        return placeService.getInfoAboutPlaces(location, selected, distance)
+        return placeService.getInfoAboutPlaces(location, categories, distance, searchTerm)
             .asObservable().flatMap { (model) -> Observable<Places> in
                 let (places, ratings, titles) = self.updateResults(model: model)
                 return Observable.just(Places(places, ratings, titles, model.next))

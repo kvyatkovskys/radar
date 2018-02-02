@@ -8,7 +8,7 @@
 
 import Foundation
 
-class PlaceSetting {
+final class PlaceSetting {
     fileprivate var fileds: [String] = [FBSDKPlacesFieldKeyPlaceID,
                                         FBSDKPlacesFieldKeyName,
                                         FBSDKPlacesFieldKeyAbout,
@@ -32,7 +32,7 @@ class PlaceSetting {
                                         FBSDKPlacesFieldKeyAppLinks,
                                         FBSDKPlacesFieldKeyProfilePhoto]
     
-    func getFields() -> [String] {
+    var fields: [String] {
         guard FBSDKAccessToken.current() != nil else { return fileds }
         /**
          Field Key for the OpenGraphContext of the place, including friends who were at this
@@ -44,6 +44,10 @@ class PlaceSetting {
             return fileds
         }
         return fileds
+    }
+    
+    var allCategories: [Categories] {
+        return [.arts, .education, .fitness, .food, .hotel, .medical, .shopping, .travel]
     }
 }
 

@@ -8,17 +8,12 @@
 
 import Foundation
 import CoreLocation
-
-protocol LocationServiceDelegate: class {
-    func locationService(didFailWithError error: Error)
-    func locationService(currentLocation: CLLocation?)
-}
+import RxSwift
+import RealmSwift
 
 final class LocationService: NSObject, CLLocationManagerDelegate {
-    fileprivate weak var delegate: LocationServiceDelegate?
-    // для работы с геопозиции
     fileprivate let locationManager: CLLocationManager
-    var userLocation: CLLocation?
+    let userLocation = PublishSubject<CLLocation?>()
     
     fileprivate let geocoder: CLGeocoder = {
         return CLGeocoder()
@@ -26,8 +21,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
     
     fileprivate let controller: UIViewController
     
-    init(delegate: LocationServiceDelegate, controller: UIViewController) {
-        self.delegate = delegate
+    init(controller: UIViewController) {
         self.controller = controller
         self.locationManager = CLLocationManager()
         super.init()
@@ -54,11 +48,8 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
             
             let openAction = UIAlertAction(title: "Open settings", style: .default) { _ in
                 if let url = URL(string: UIApplicationOpenSettingsURLString) {
-                    UIApplication.shared.open(url,
-                                              options: [:],
-                                              completionHandler: { (handler) in
-                                                print(handler)
-                    })                    }
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                }
             }
             alertController.addAction(openAction)
             
@@ -98,24 +89,33 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
     func stop() {
         locationManager.stopUpdatingLocation()
     }
-    
+}
+
+extension LocationService {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        delegate?.locationService(didFailWithError: error)
         geocoder.cancelGeocode()
+        userLocation.onError(NSError(type: .other, info: error.localizedDescription))
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let currentLocation = locations.first {
-            locationManager.stopUpdatingLocation()
-            userLocation = currentLocation
-            delegate?.locationService(currentLocation: currentLocation)
-        } else {
-            delegate?.locationService(currentLocation: nil)
+            userLocation.onNext(currentLocation)
+            do {
+                let realm = try Realm()
+                if let searchModel = realm.objects(Search.self).first {
+                    searchModel.latitude = currentLocation.coordinate.latitude
+                    searchModel.longitude = currentLocation.coordinate.longitude
+                    
+                    try realm.write {
+                        realm.add(searchModel)
+                    }
+                }
+            } catch {
+                print(error)
+            }
         }
     }
-}
-
-extension LocationService {
+    
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedAlways || status == .authorizedWhenInUse {
             locationManager.startUpdatingLocation()

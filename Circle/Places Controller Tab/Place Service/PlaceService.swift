@@ -34,11 +34,15 @@ struct PlaceService {
             })
     }
     
-    func getInfoAboutPlaces(_ location: CLLocation, _ categories: [Categories], _ distance: CLLocationDistance) -> Observable<PlaceDataModel> {
+    func getInfoAboutPlaces(_ location: CLLocation?,
+                            _ categories: [Categories],
+                            _ distance: CLLocationDistance,
+                            _ searchTerm: String? = nil) -> Observable<PlaceDataModel> {
+        
         let request = placeManager.placeSearchRequest(for: location,
-                                                      searchTerm: nil,
+                                                      searchTerm: searchTerm,
                                                       categories: categories.map({ $0.rawValue }),
-                                                      fields: setting.getFields(),
+                                                      fields: setting.fields,
                                                       distance: distance,
                                                       cursor: nil)
         

@@ -23,14 +23,11 @@ fileprivate extension UIColor {
     }
 }
 
-final class PlacesViewController: UIViewController, LocationServiceDelegate, FilterPlacesDelegate {
-    typealias Dependecies = HasKingfisher & HasPlaceViewModel
+final class PlacesViewController: UIViewController, FilterPlacesDelegate {
+    typealias Dependecies = HasKingfisher & HasPlaceViewModel & HasLocationService
     
-    // для работы с геопозиции
-    fileprivate lazy var locationService: LocationService = {
-        return LocationService(delegate: self, controller: self)
-    }()
-    
+    fileprivate var locationService: LocationService
+    fileprivate var userLocation: CLLocation?
     fileprivate var notificationTokenCategories: NotificationToken?
     fileprivate var notificationTokenDistance: NotificationToken?
     fileprivate var viewModel: PlaceViewModel
@@ -117,6 +114,7 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     init(_ dependencies: Dependecies) {
         self.kingfisherOptions = dependencies.kingfisherOptions
         self.viewModel = dependencies.viewModel
+        self.locationService = dependencies.locationService
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -136,7 +134,7 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         navigationItem.rightBarButtonItem = rightBarButton
         
         updateConstraints()
-        startDetectLocation()
+        locationService.start()
         
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
         tableDataSource = PlacesTableViewDataSource(tableView, kingfisherOptions: kingfisherOptions)
@@ -145,7 +143,7 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         refreshControl.rx.controlEvent(.valueChanged).asObservable()
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] _ in
-                self.startDetectLocation()
+                self.locationService.start()
             }).disposed(by: disposeBag)
         
         tableDelegate?.nextUrl.asObserver()
@@ -161,7 +159,7 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
             notificationTokenCategories = selectedCategories.observe { [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
                 case .update:
-                    self.startDetectLocation()
+                    self.locationService.start()
                 case .error(let error):
                     fatalError("\(error)")
                 case .initial:
@@ -171,6 +169,16 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         } catch {
             print(error)
         }
+        
+        locationService.userLocation.asObserver()
+            .subscribe(onNext: { [unowned self] (location) in
+                self.userLocation = location
+                self.centerMapOnLocation(location)
+                self.loadInfoAboutLocation(location)
+            }, onError: { (error) in
+                print(error)
+                self.showAlertLight(title: "Error", message: "We can't determine your location!\n\(error.localizedDescription)")
+            }).disposed(by: disposeBag)
     }
     
     deinit {
@@ -179,28 +187,11 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         locationService.checkAuthorized()
     }
     
     @objc func showMap() {
-        viewModel.openMap(tableDataSource?.places ?? [], locationService.userLocation, tapViewOnMap.frame)
-    }
-    
-    // MARK: LocationServiceDelegate
-    func startDetectLocation() {
-        locationService.start()
-    }
-    
-    func locationService(didFailWithError error: Error) {
-        showAlertLight(title: "Error", message: "We can't determine your location!")
-    }
-    
-    func locationService(currentLocation: CLLocation?) {
-        if let location = currentLocation {
-            centerMapOnLocation(location)
-            loadInfoAboutLocation(location)
-        }
+        viewModel.openMap(tableDataSource?.places ?? [], userLocation, tapViewOnMap.frame)
     }
     
     // MARK: PlaceViewModel
@@ -210,7 +201,7 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
     
     // MARK: FilterPlacesDelegate
     func selectDistance(value: Double) {
-        if let location = locationService.userLocation {
+        if let location = userLocation {
             loadInfoAboutLocation(location, distance: value)
             centerMapOnLocation(location, radius: value)
         }
@@ -230,7 +221,7 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
             }).disposed(by: disposeBag)
     }
     
-    fileprivate func loadInfoAboutLocation(_ location: CLLocation, distance: Double = FilterDistanceViewModel().defaultDistance) {
+    fileprivate func loadInfoAboutLocation(_ location: CLLocation?, distance: Double = FilterDistanceViewModel().defaultDistance) {
         indicatorView.showIndicator()
         viewModel.getInfoPlaces(location: location, distance: distance).asObservable()
             .observeOn(MainScheduler.instance)
@@ -258,7 +249,7 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
             mapView.removeAnnotations(mapView.annotations)
         }
         let locations = places.items.map({ CLLocationCoordinate2D(latitude: $0.location?.latitude ?? 0,
-                                                                   longitude: $0.location?.longitude ?? 0) })
+                                                                  longitude: $0.location?.longitude ?? 0) })
         
         locations.forEach { (location) in
             let annotation = MKPointAnnotation()
@@ -269,9 +260,11 @@ final class PlacesViewController: UIViewController, LocationServiceDelegate, Fil
         }
     }
     
-    fileprivate func centerMapOnLocation(_ location: CLLocation, radius: Double = FilterDistanceViewModel().defaultDistance) {
-        let regionRadius: CLLocationDistance = radius
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius, regionRadius)
-        mapView.setRegion(coordinateRegion, animated: false)
+    fileprivate func centerMapOnLocation(_ location: CLLocation?, radius: Double = FilterDistanceViewModel().defaultDistance) {
+        if let location = location {
+            let regionRadius: CLLocationDistance = radius
+            let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius, regionRadius)
+            mapView.setRegion(coordinateRegion, animated: false)
+        }
     }
 }
