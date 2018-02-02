@@ -16,7 +16,7 @@ enum RequestErrorType: Int {
     case custom = 0
     case other = -1
     case tokenExpires = 1
-    case emptyCoockie = 2
+    case empty = 2
     case emptyUrl = 3
     case tokenEmpty = 4
     
