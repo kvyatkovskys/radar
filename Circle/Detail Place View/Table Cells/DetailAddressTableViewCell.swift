@@ -12,7 +12,7 @@ import Contacts
 
 fileprivate extension UIColor {
     static var shadowGray: UIColor {
-        return UIColor(withHex: 0xecf0f1, alpha: 1.0)
+        return UIColor(withHex: 0xecf0f1, alpha: 0.7)
     }
     
     static var mainColor: UIColor {
@@ -35,7 +35,7 @@ final class DetailAddressTableViewCell: UITableViewCell {
         button.setTitle(" Map", for: .normal)
         button.setImage(UIImage(named: "ic_map")?.withRenderingMode(.alwaysTemplate), for: .normal)
         button.tintColor = UIColor.mainColor
-        button.titleLabel?.font = .boldSystemFont(ofSize: 17.0)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 15.0)
         button.setTitleColor(UIColor.mainColor, for: .normal)
         button.backgroundColor = UIColor.shadowGray
         button.layer.cornerRadius = 5.0
@@ -100,7 +100,7 @@ final class DetailAddressTableViewCell: UITableViewCell {
                                                                                  CNPostalAddressStateKey: state as Any,
                                                                                  CNPostalAddressPostalCodeKey: zip as Any])
         let mapItem = MKMapItem(placemark: placemark)
-        mapItem.name = address
+        mapItem.name = location?.street
         mapItem.openInMaps(launchOptions: options)
     }
 }

@@ -22,10 +22,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        migrations(schema: 1)
         setupNavigationBar()
-        initialAuthViewController()
+        initialViewController()
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
-        migrations(schema: 0)
         print(Realm.Configuration.defaultConfiguration.fileURL as Any)
         
         return true
@@ -38,7 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                                      annotation: options[UIApplicationOpenURLOptionsKey.annotation])
     }
     
-    fileprivate func initialAuthViewController() {
+    fileprivate func initialViewController() {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.backgroundColor = UIColor.white
         window?.makeKeyAndVisible()

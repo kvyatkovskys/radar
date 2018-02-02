@@ -7,20 +7,22 @@
 //
 
 import Foundation
+import RealmSwift
 
 enum SettingType: String {
-    case facebook
+    case facebook, favorites
     
     var title: String {
         switch self {
-        case .facebook:
-            return "Facebook"
+        case .facebook: return "Conntect to Facebook"
+        case .favorites: return "Favorites"
         }
     }
 }
 
-enum SettingRowType: String {
+enum SettingRowType {
     case facebookLogin
+    case clearFavorites(String, UIImage, UIColor)
 }
 
 struct SettingsObject {
@@ -34,5 +36,22 @@ struct SettingsObject {
 }
 
 struct SettingsViewModel {
-    let items: [SettingsObject] = [SettingsObject(SettingType.facebook, [SettingRowType.facebookLogin])]
+    let items: [SettingsObject] = [SettingsObject(.favorites, [.clearFavorites("Clear Favorites",
+                                                                               UIImage(named: "ic_delete_forever")!.withRenderingMode(.alwaysTemplate),
+                                                                               UIColor.red)]),
+                                   SettingsObject(.facebook, [.facebookLogin])]
+    
+    /// deleted all objects from favorites
+    func deleteAllFavorites() {
+        do {
+            let realm = try Realm()
+            let favorite = realm.objects(Favorites.self)
+            
+            try realm.write {
+                realm.delete(favorite)
+            }
+        } catch {
+            print(error)
+        }
+    }
 }

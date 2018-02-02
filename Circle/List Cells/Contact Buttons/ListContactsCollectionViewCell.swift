@@ -10,7 +10,7 @@ import UIKit
 
 fileprivate extension UIColor {
     static var shadowGray: UIColor {
-        return UIColor(withHex: 0xecf0f1, alpha: 1.0)
+        return UIColor(withHex: 0xecf0f1, alpha: 0.7)
     }
     
     static var mainColor: UIColor {

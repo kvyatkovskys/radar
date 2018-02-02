@@ -11,10 +11,12 @@ import RealmSwift
 
 struct FavoritesModel {
     let id: Int
+    let name: String?
     let title: NSMutableAttributedString?
     let rating: NSMutableAttributedString?
     let picture: URL?
     let categories: [Categories]?
+    let subCategories: [String]?
 }
 
 class Favorites: Object {
@@ -26,4 +28,5 @@ class Favorites: Object {
     @objc dynamic var ratingCount: Int = 0
     @objc dynamic var date: Date?
     let categories = List<String>()
+    let subCategories = List<String>()
 }

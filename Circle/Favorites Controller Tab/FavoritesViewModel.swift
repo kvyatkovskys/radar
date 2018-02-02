@@ -51,10 +51,12 @@ struct FavoritesViewModel {
             resultTitle.append(about)
             
             result.append(FavoritesModel(id: item.id,
+                                         name: item.title,
                                          title: resultTitle,
                                          rating: resultRating,
                                          picture: URL(string: item.picture ?? ""),
-                                         categories: item.categories.map({ Categories(rawValue: $0)! })))
+                                         categories: item.categories.map({ Categories(rawValue: $0)! }),
+                                         subCategories: item.subCategories.map({ $0 })))
         }
         
         return result
@@ -101,6 +103,10 @@ struct FavoritesViewModel {
             
             place.categories?.forEach({ category in
                 favorite.categories.append(category.rawValue)
+            })
+            
+            place.subCategories?.forEach({ subCategiry in
+                favorite.subCategories.append(subCategiry)
             })
             
             if let url = place.coverPhoto {

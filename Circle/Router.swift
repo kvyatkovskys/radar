@@ -51,7 +51,7 @@ struct Router {
         // Search Controller
         let searchViewController = SearchViewController()
         let searchImage = UIImage(named: "ic_search")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
-        searchViewController.navigationItem.title = "Search place"
+        searchViewController.navigationItem.title = "Find a place"
         searchViewController.tabBarItem = UITabBarItem(title: "Search", image: searchImage, tag: 2)
         searchViewController.navigationController?.navigationBar.isTranslucent = true
         
@@ -71,7 +71,7 @@ struct Router {
         // Setting Controller
         let settingsController = SettingsViewController(SettingsViewDependecies(SettingsViewModel()))
         let settingsImage = UIImage(named: "ic_settings")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
-        settingsController.navigationItem.title = "Settings of app"
+        settingsController.navigationItem.title = "Application settings"
         settingsController.tabBarItem = UITabBarItem(title: "Settings", image: settingsImage, tag: 4)
         settingsController.navigationController?.navigationBar.isTranslucent = true
         

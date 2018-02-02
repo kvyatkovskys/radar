@@ -15,7 +15,7 @@ let heightHeaderTable: CGFloat = 220.0
 
 fileprivate extension UIColor {
     static var shadowGray: UIColor {
-        return UIColor(withHex: 0xecf0f1, alpha: 1.0)
+        return UIColor(withHex: 0xecf0f1, alpha: 0.7)
     }
 
     static var mainColor: UIColor {
@@ -94,7 +94,7 @@ final class DetailPlaceViewController: UIViewController {
         button.backgroundColor = UIColor.shadowGray
         button.setTitle(self.favoritesViewModel.checkAddingToFavorites(self.viewModel.place) == true ? " Remove" : " Add", for: .normal)
         button.setTitleColor(UIColor.mainColor, for: .normal)
-        button.titleLabel?.font = .boldSystemFont(ofSize: 17.0)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 15.0)
         button.layer.cornerRadius = 5.0
         button.addTarget(self, action: #selector(addToFavorites), for: .touchUpInside)
         button.isSelected = !self.favoritesViewModel.checkAddingToFavorites(self.viewModel.place)
@@ -108,7 +108,7 @@ final class DetailPlaceViewController: UIViewController {
         button.backgroundColor = UIColor.shadowGray
         button.setTitle(" Share", for: .normal)
         button.setTitleColor(UIColor.mainColor, for: .normal)
-        button.titleLabel?.font = .boldSystemFont(ofSize: 17.0)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 15.0)
         button.layer.cornerRadius = 5.0
         button.addTarget(self, action: #selector(sharePlace), for: .touchUpInside)
         return button
@@ -129,12 +129,16 @@ final class DetailPlaceViewController: UIViewController {
         return table
     }()
     
+    fileprivate lazy var indicatorView: ActivityIndicatorView = {
+        return ActivityIndicatorView(container: self.view)
+    }()
+    
     override func updateViewConstraints() {
         super.updateViewConstraints()
         
         tableView.snp.remakeConstraints { (make) in
             make.top.left.right.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-10.0)
+            make.bottom.equalToSuperview()
         }
         
         imageHeader.snp.remakeConstraints { (make) in
@@ -244,12 +248,15 @@ final class DetailPlaceViewController: UIViewController {
                            forCellReuseIdentifier: DetailRestaurantSpecialityTableViewCell.cellIdentifier)
         
         if viewModel.place.fromFavorites {
+            indicatorView.showIndicator()
             viewModel.getInfoAboutPlace(id: viewModel.place.id).asObservable()
                 .subscribe(onNext: { [unowned self] (dataSource) in
                     self.viewModel.dataSource = dataSource
                     self.tableView.reloadData()
+                    self.indicatorView.hideIndicator()
                 }, onError: { (error) in
                     print(error)
+                    self.indicatorView.hideIndicator()
                 }).disposed(by: disposeBag)
         }
     }

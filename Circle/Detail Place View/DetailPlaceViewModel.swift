@@ -117,10 +117,10 @@ struct DetailPlaceViewModel {
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         
-        if let address = place.location?.street {
-            let height = address.height(font: .boldSystemFont(ofSize: 15.0),
-                                        width: ScreenSize.SCREEN_WIDTH) + 60.0
-            let type = TypeDetailCell.address(address, place.location, height)
+        if let street = place.location?.street, let city = place.location?.city {
+            let height = (city + " - " + street).height(font: .boldSystemFont(ofSize: 15.0),
+                                                        width: ScreenSize.SCREEN_WIDTH) + 60.0
+            let type = TypeDetailCell.address(city + " - " + street, place.location, height)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         

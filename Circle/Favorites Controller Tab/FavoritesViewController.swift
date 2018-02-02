@@ -123,7 +123,9 @@ extension FavoritesViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
        
         let place = PlaceModel(id: viewModel.favoritePlaces[indexPath.row].id,
+                               name: viewModel.favoritePlaces[indexPath.row].name,
                                categories: viewModel.favoritePlaces[indexPath.row].categories,
+                               subCategories: viewModel.favoritePlaces[indexPath.row].subCategories,
                                coverPhoto: viewModel.favoritePlaces[indexPath.row].picture,
                                fromFavorites: true)
         let title = viewModel.favoritePlaces[indexPath.row].title

@@ -12,6 +12,7 @@
 		8B147BCF2022FD6E00EDA2D4 /* FavoritesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B147BCE2022FD6E00EDA2D4 /* FavoritesModel.swift */; };
 		8B147BD12023021600EDA2D4 /* FavoritesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B147BD02023021600EDA2D4 /* FavoritesViewModel.swift */; };
 		8B147BD42023B13800EDA2D4 /* FavoritesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B147BD32023B13800EDA2D4 /* FavoritesService.swift */; };
+		8B147BD820246A4000EDA2D4 /* StandardSettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B147BD720246A4000EDA2D4 /* StandardSettingTableViewCell.swift */; };
 		8B18BFD61FFA594D00C7906D /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18BFD51FFA594D00C7906D /* Color+Extension.swift */; };
 		8B18BFD81FFACC6F00C7906D /* PlaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18BFD71FFACC6F00C7906D /* PlaceViewModel.swift */; };
 		8B18FE082007F8E000E637C7 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18FE072007F8E000E637C7 /* View+Extension.swift */; };
@@ -106,6 +107,7 @@
 		8B147BCE2022FD6E00EDA2D4 /* FavoritesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesModel.swift; sourceTree = "<group>"; };
 		8B147BD02023021600EDA2D4 /* FavoritesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewModel.swift; sourceTree = "<group>"; };
 		8B147BD32023B13800EDA2D4 /* FavoritesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesService.swift; sourceTree = "<group>"; };
+		8B147BD720246A4000EDA2D4 /* StandardSettingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandardSettingTableViewCell.swift; sourceTree = "<group>"; };
 		8B18BFD51FFA594D00C7906D /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 		8B18BFD71FFACC6F00C7906D /* PlaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceViewModel.swift; sourceTree = "<group>"; };
 		8B18FE072007F8E000E637C7 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
@@ -252,6 +254,29 @@
 			path = "Table View";
 			sourceTree = "<group>";
 		};
+		8B147BD52023C68C00EDA2D4 /* List Cells */ = {
+			isa = PBXGroup;
+			children = (
+				8B82C38F20139C9F00E0CA89 /* ListItemCollectionViewCell.swift */,
+				8BC35077201E2AEA00BB375B /* List Restaurant Specialties */,
+				8BC3505A201A6FD900BB375B /* List Payments */,
+				8BC35064201CF5D400BB375B /* List Restaurant Services */,
+				8BC35061201CF17400BB375B /* List Parkings */,
+				8B82C39120139F2D00E0CA89 /* Contact Buttons */,
+				8B21F30720162F980013E11C /* List Work Days */,
+			);
+			path = "List Cells";
+			sourceTree = "<group>";
+		};
+		8B147BD620246A1100EDA2D4 /* Setting Cells */ = {
+			isa = PBXGroup;
+			children = (
+				8B18FE13200A994F00E637C7 /* FCButtonLoginTableViewCell.swift */,
+				8B147BD720246A4000EDA2D4 /* StandardSettingTableViewCell.swift */,
+			);
+			path = "Setting Cells";
+			sourceTree = "<group>";
+		};
 		8B18BFD91FFACE0100C7906D /* Project Extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -357,13 +382,7 @@
 				8B44C3841FF012E1003C0754 /* Setting Controller Tab */,
 				8B44C3811FF012A2003C0754 /* Places Controller Tab */,
 				8B18FE15200B5D6C00E637C7 /* Detail Place View */,
-				8B82C38F20139C9F00E0CA89 /* ListItemCollectionViewCell.swift */,
-				8BC35077201E2AEA00BB375B /* List Restaurant Specialties */,
-				8BC3505A201A6FD900BB375B /* List Payments */,
-				8BC35064201CF5D400BB375B /* List Restaurant Services */,
-				8BC35061201CF17400BB375B /* List Parkings */,
-				8B82C39120139F2D00E0CA89 /* Contact Buttons */,
-				8B21F30720162F980013E11C /* List Work Days */,
+				8B147BD52023C68C00EDA2D4 /* List Cells */,
 				8B1A80AC1FFAE4640039C39A /* Categories View */,
 				8B18FE0E200A24C200E637C7 /* Map View */,
 				8B82C3962014BC7300E0CA89 /* Open Graph Service */,
@@ -435,7 +454,7 @@
 			children = (
 				8B44C3821FF012C8003C0754 /* SettingsViewController.swift */,
 				8B18FE11200A8FFA00E637C7 /* SettingsViewModel.swift */,
-				8B18FE13200A994F00E637C7 /* FCButtonLoginTableViewCell.swift */,
+				8B147BD620246A1100EDA2D4 /* Setting Cells */,
 			);
 			path = "Setting Controller Tab";
 			sourceTree = "<group>";
@@ -836,6 +855,7 @@
 				8B41771D1FFF64A7002A963A /* DistancePickerViewDelegate.swift in Sources */,
 				8BFBF57D200517D000CE2C8B /* CategoriesTableViewDelegate.swift in Sources */,
 				8B5F71531FF923A700E628F9 /* PlaceModel.swift in Sources */,
+				8B147BD820246A4000EDA2D4 /* StandardSettingTableViewCell.swift in Sources */,
 				8B18FE0A2009113F00E637C7 /* RatingPlacesView.swift in Sources */,
 				8B82C38820136D6400E0CA89 /* ListCategoriesViewController.swift in Sources */,
 				8B44C37F1FEFE195003C0754 /* QuickAlertController.swift in Sources */,
