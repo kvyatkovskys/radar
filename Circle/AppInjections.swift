@@ -134,10 +134,20 @@ protocol HasSearchViewModel {
     var searchViewModel: SearchViewModel { get }
 }
 
-struct SeacrhPlaceDependecies: HasSearchViewModel {
+struct SeacrhPlaceDependecies: HasSearchViewModel, HasKingfisher {
     let searchViewModel: SearchViewModel
+    let kingfisherOptions: KingfisherOptionsInfo
     
-    init(_ searchViewModel: SearchViewModel) {
+    init(_ searchViewModel: SearchViewModel, _ kingfisherOptions: KingfisherOptionsInfo) {
         self.searchViewModel = searchViewModel
+        self.kingfisherOptions = kingfisherOptions
+    }
+}
+
+struct ResultSearchDependecies: HasKingfisher {
+    let kingfisherOptions: KingfisherOptionsInfo
+    
+    init(_ kingfisherOptions: KingfisherOptionsInfo) {
+        self.kingfisherOptions = kingfisherOptions
     }
 }

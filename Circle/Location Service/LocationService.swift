@@ -102,13 +102,17 @@ extension LocationService {
             userLocation.onNext(currentLocation)
             do {
                 let realm = try Realm()
-                if let searchModel = realm.objects(Search.self).first {
-                    searchModel.latitude = currentLocation.coordinate.latitude
-                    searchModel.longitude = currentLocation.coordinate.longitude
-                    
-                    try realm.write {
-                        realm.add(searchModel)
+                let oldLocation = realm.objects(Search.self).first
+                try realm.write {
+                    guard let oldLocation = oldLocation else {
+                        let search = Search()
+                        search.latitude = currentLocation.coordinate.latitude
+                        search.longitude = currentLocation.coordinate.longitude
+                        realm.add(search)
+                        return
                     }
+                    oldLocation.latitude = currentLocation.coordinate.latitude
+                    oldLocation.longitude = currentLocation.coordinate.longitude
                 }
             } catch {
                 print(error)

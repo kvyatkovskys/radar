@@ -8,14 +8,18 @@
 
 import UIKit
 import RxSwift
+import Kingfisher
 
 final class SearchViewController: UIViewController, UISearchControllerDelegate, UISearchBarDelegate {
 
-    typealias Dependecies = HasSearchViewModel
+    typealias Dependecies = HasSearchViewModel & HasKingfisher
     
     fileprivate let disposeBag = DisposeBag()
-    fileprivate let resultController = ResultSearchViewController()
     fileprivate let searchViewModel: SearchViewModel
+    fileprivate let kingfisherOptions: KingfisherOptionsInfo
+    fileprivate lazy var resultController: ResultSearchViewController = {
+        return ResultSearchViewController(ResultSearchDependecies(self.kingfisherOptions))
+    }()
     
     fileprivate lazy var searchController: UISearchController = {
         let controller = UISearchController(searchResultsController: resultController)
@@ -46,7 +50,7 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
     
     fileprivate let tableView: UITableView = {
         let table = UITableView()
-        //table.tableFooterView = UIView(frame: CGRect.zero)
+        table.tableFooterView = UIView(frame: CGRect.zero)
         return table
     }()
     
@@ -61,6 +65,7 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
     
     init(_ dependecies: Dependecies) {
         self.searchViewModel = dependecies.searchViewModel
+        self.kingfisherOptions = dependecies.kingfisherOptions
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -89,15 +94,15 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
             .debounce(0.3, scheduler: MainScheduler.instance)
             .distinctUntilChanged()
             .filter({ !$0.isEmpty })
-            .flatMapLatest { (query) -> Observable<Places> in
+            .flatMapLatest { [unowned self] (query) -> Observable<Places> in
                 if query.isEmpty {
                     return Observable.just(Places([], [], [], nil))
                 }
                 return self.searchViewModel.searchQuery(query).catchErrorJustReturn(Places([], [], [], nil))
             }
             .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { (model) in
-                print(model)
+            .subscribe(onNext: { [unowned self] (model) in
+                self.resultController.updateTable(places: model)
             }, onError: { (error) in
                 print(error)
             }).disposed(by: disposeBag)

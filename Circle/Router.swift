@@ -53,7 +53,7 @@ struct Router {
         // Search Controller
         var searchViewController = UIViewController()
         let searchViewModel = SearchViewModel(viewModel)
-        searchViewController = SearchViewController(SeacrhPlaceDependecies(searchViewModel))
+        searchViewController = SearchViewController(SeacrhPlaceDependecies(searchViewModel, optionKingfisher))
         let searchImage = UIImage(named: "ic_search")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         searchViewController.navigationItem.title = "Find a place"
         searchViewController.tabBarItem = UITabBarItem(title: "Search", image: searchImage, tag: 2)
