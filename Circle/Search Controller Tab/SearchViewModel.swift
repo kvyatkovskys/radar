@@ -10,24 +10,35 @@ import Foundation
 import RealmSwift
 import RxSwift
 
+typealias Query = (query: String, weight: Int)
+
 struct SearchViewModel {
     fileprivate let placeViewModel: PlaceViewModel
-    let searchQueries: [String]
+    
+    var searchQueries: [Query] {
+        var queries: [Query] = []
+        do {
+            let realm = try Realm()
+            let search = realm.objects(Search.self).first?.searchQuery.map({ $0 })
+            queries = search?.reduce(into: [], { (acc, query) in
+                if let index = acc?.index(where: { $0.query == query }) {
+                    acc![index].weight += 1
+                } else {
+                    acc?.append(Query(query, 0))
+                }
+            }) ?? []
+        } catch {
+            print(error)
+        }
+        let results = queries.sorted(by: { $0.weight > $1.weight })
+        return results
+    }
+    
     /// open detail place controller
     var openDetailPlace: ((_ place: PlaceModel, _ title: NSMutableAttributedString?, _ rating: NSMutableAttributedString?, _ favoritesViewModel: FavoritesViewModel) -> Void) = {_, _, _, _ in }
     
     init(_ placeViewModel: PlaceViewModel) {
         self.placeViewModel = placeViewModel
-        
-        var queries: [String] = []
-        do {
-            let realm = try Realm()
-            let search = realm.objects(Search.self).flatMap({ $0.searchQuery })
-            queries = search.map({ $0 }).reduce([], { $0.contains($1) ? $0 : $0 + [$1]})
-        } catch {
-            print(error)
-        }
-        self.searchQueries = queries
     }
     
     func searchQuery(_ query: String, _ distance: Double) -> Observable<Places> {
@@ -46,16 +57,15 @@ struct SearchViewModel {
             .flatMap({ (model) -> Observable<Places> in
                 return Observable.just(model)
             })
+        .share(replay: 1, scope: .forever)
     }
     
     func saveQuerySearch(_ query: String) {
         do {
             let realm = try Realm()
             if let searchModel = realm.objects(Search.self).first {
-                searchModel.searchQuery.append(query)
-                
                 try realm.write {
-                    realm.add(searchModel)
+                    searchModel.searchQuery.append(query)
                 }
             }
         } catch {

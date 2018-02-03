@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0C09101538FFD3248E65345B /* Pods_CircleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1D7303EAE4F5F8B3765FDDF /* Pods_CircleTests.framework */; };
 		2CE34B24D65E94C397FD1B43 /* Pods_Circle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E0022E72D06AC70840D3662 /* Pods_Circle.framework */; };
+		8B105CB120260560006A5BBC /* SearchQueryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B105CB020260560006A5BBC /* SearchQueryTableViewCell.swift */; };
 		8B147BCF2022FD6E00EDA2D4 /* FavoritesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B147BCE2022FD6E00EDA2D4 /* FavoritesModel.swift */; };
 		8B147BD12023021600EDA2D4 /* FavoritesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B147BD02023021600EDA2D4 /* FavoritesViewModel.swift */; };
 		8B147BD42023B13800EDA2D4 /* FavoritesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B147BD32023B13800EDA2D4 /* FavoritesService.swift */; };
@@ -107,6 +108,7 @@
 		65187D40B7A35C90F17F99D7 /* Pods-Circle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Circle.release.xcconfig"; path = "Pods/Target Support Files/Pods-Circle/Pods-Circle.release.xcconfig"; sourceTree = "<group>"; };
 		6E0022E72D06AC70840D3662 /* Pods_Circle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Circle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C60842BBC33FD63E648DBC6 /* Pods-Circle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Circle.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Circle/Pods-Circle.debug.xcconfig"; sourceTree = "<group>"; };
+		8B105CB020260560006A5BBC /* SearchQueryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchQueryTableViewCell.swift; sourceTree = "<group>"; };
 		8B147BCE2022FD6E00EDA2D4 /* FavoritesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesModel.swift; sourceTree = "<group>"; };
 		8B147BD02023021600EDA2D4 /* FavoritesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewModel.swift; sourceTree = "<group>"; };
 		8B147BD32023B13800EDA2D4 /* FavoritesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesService.swift; sourceTree = "<group>"; };
@@ -555,6 +557,7 @@
 				8B147BDD2025198200EDA2D4 /* SearchModel.swift */,
 				8B147BDB2024A3A900EDA2D4 /* SearchViewModel.swift */,
 				8B147BD92024A1AE00EDA2D4 /* ResultSearchViewController.swift */,
+				8B105CB020260560006A5BBC /* SearchQueryTableViewCell.swift */,
 			);
 			path = "Search Controller Tab";
 			sourceTree = "<group>";
@@ -861,6 +864,7 @@
 				8B41770A1FFD5785002A963A /* ActivityIndicatorView.swift in Sources */,
 				8B82C39020139C9F00E0CA89 /* ListItemCollectionViewCell.swift in Sources */,
 				8B21F30920187DE90013E11C /* DetailPaymentTableViewCell.swift in Sources */,
+				8B105CB120260560006A5BBC /* SearchQueryTableViewCell.swift in Sources */,
 				8BC35063201CF22400BB375B /* ListRServicesCollectionDataSource.swift in Sources */,
 				8BE208A51FFD25CB0048D690 /* FilterPlacesViewModel.swift in Sources */,
 				8B41771D1FFF64A7002A963A /* DistancePickerViewDelegate.swift in Sources */,

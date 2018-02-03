@@ -11,31 +11,39 @@ import RxSwift
 import Kingfisher
 
 enum SearchDistance: Int {
-    case oneThousand, twoThousand, threeThousand, fourThousand
+    case oneThousand, twoThousand, threeThousand, fiveThousand
     
     var title: String {
         switch self {
         case .oneThousand: return "1000 m"
-        case .twoThousand: return "2000 m"
-        case .threeThousand: return "3000 m"
-        case .fourThousand: return "4000 m"
+        case .twoThousand: return "2500 m"
+        case .threeThousand: return "3500 m"
+        case .fiveThousand: return "5000 m"
         }
     }
     
     var value: Double {
         switch self {
         case .oneThousand: return 1000.0
-        case .twoThousand: return 2000.0
-        case .threeThousand: return 3000.0
-        case .fourThousand: return 4000.0
+        case .twoThousand: return 2500.0
+        case .threeThousand: return 3500.0
+        case .fiveThousand: return 5000.0
         }
     }
+}
+
+enum ViewType: String {
+    case search, savedQueries
 }
 
 final class SearchViewController: UIViewController, UISearchControllerDelegate, UISearchBarDelegate {
 
     typealias Dependecies = HasSearchViewModel & HasKingfisher
     
+    fileprivate var dataSource: [Places] = []
+    fileprivate var dataSourceQueries: [Query]
+    fileprivate var viewType = ViewType.search
+    fileprivate var search: Observable<Places> = Observable.just(Places([], [], [], nil))
     fileprivate let disposeBag = DisposeBag()
     fileprivate let searchViewModel: SearchViewModel
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
@@ -52,7 +60,7 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
         controller.searchBar.scopeButtonTitles = [SearchDistance.oneThousand.title,
                                                   SearchDistance.twoThousand.title,
                                                   SearchDistance.threeThousand.title,
-                                                  SearchDistance.fourThousand.title]
+                                                  SearchDistance.fiveThousand.title]
         controller.hidesNavigationBarDuringPresentation = true
         controller.dimsBackgroundDuringPresentation = true
         controller.searchBar.sizeToFit()
@@ -74,10 +82,35 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
         return controller
     }()
     
-    fileprivate let tableView: UITableView = {
+    fileprivate lazy var tableView: UITableView = {
         let table = UITableView()
         table.tableFooterView = UIView(frame: CGRect.zero)
+        table.dataSource = self
+        table.delegate = self
+        table.separatorColor = .lightGray
+        table.separatorInset = UIEdgeInsets(top: 0.0, left: 30.0, bottom: 0.0, right: 30.0)
         return table
+    }()
+    
+    fileprivate lazy var titleQuerySearch: UILabel = {
+        let label = UILabel(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 50.0))
+        label.text = "You recently searched for"
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.font = .boldSystemFont(ofSize: 15.0)
+        label.textColor = .gray
+        return label
+    }()
+    
+    fileprivate lazy var leftBarButton: UIBarButtonItem = {
+        let closeImage = UIImage(named: "ic_close")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        let button = UIBarButtonItem(image: closeImage, style: .done, target: self, action: #selector(closeSearchQueries))
+        button.tintColor = .white
+        return button
+    }()
+    
+    fileprivate lazy var indicatorView: ActivityIndicatorView = {
+        return ActivityIndicatorView(container: self.view)
     }()
     
     override func updateViewConstraints() {
@@ -92,6 +125,7 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
     init(_ dependecies: Dependecies) {
         self.searchViewModel = dependecies.searchViewModel
         self.kingfisherOptions = dependecies.kingfisherOptions
+        self.dataSourceQueries = dependecies.searchViewModel.searchQueries
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -103,6 +137,7 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
         super.viewDidLoad()
 
         view.addSubview(tableView)
+        tableView.tableHeaderView = titleQuerySearch
         updateViewConstraints()
         
         if #available(iOS 11.0, *) {
@@ -115,35 +150,142 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
             navigationItem.titleView = searchController.searchBar
         }
         
-        let searchDistance = searchController.searchBar.rx.selectedScopeButtonIndex.asObservable()
+        let searchDistance = searchController.searchBar.rx.selectedScopeButtonIndex
             .flatMap { Observable.just(SearchDistance(rawValue: $0)) }
         
-        let searhQuery = searchController.searchBar.rx.text.orEmpty
+        let searchQuery = searchController.searchBar.rx.text.orEmpty
             .skip(1)
             .debounce(0.3, scheduler: MainScheduler.instance)
             .distinctUntilChanged()
             .filter({ !$0.isEmpty })
-            
-            Observable.combineLatest(searchDistance, searhQuery)
+        
+        Observable.combineLatest(searchDistance, searchQuery)
             .flatMapLatest { [unowned self] (distance, query) -> Observable<Places> in
-                if query.isEmpty {
-                    return Observable.just(Places([], [], [], nil))
-                }
                 return self.searchViewModel.searchQuery(query, distance?.value ?? 0.0).catchErrorJustReturn(Places([], [], [], nil))
             }
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] (model) in
                 self.resultController.updateTable(places: model)
-            }, onError: { (error) in
-                print(error)
-            }).disposed(by: disposeBag)
+                }, onError: { (error) in
+                    print(error)
+            })
+            .disposed(by: disposeBag)
         
         resultController.selectResult.asObservable()
             .subscribe(onNext: { [unowned self] (result) in
                 self.searchViewModel.openDetailPlace(result.place, result.title, result.rating, FavoritesViewModel())
                 self.searchViewModel.saveQuerySearch(self.searchController.searchBar.text ?? "")
+                self.dataSourceQueries = self.searchViewModel.searchQueries
             }, onError: { (error) in
                 print(error)
             }).disposed(by: disposeBag)
+        
+        tableView.register(SearchQueryTableViewCell.self, forCellReuseIdentifier: SearchQueryTableViewCell.cellIdentifier)
+        tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
+    }
+    
+    @objc func closeSearchQueries() {
+        dataSource = []
+        navigationItem.leftBarButtonItem = nil
+        viewType = .search
+        tableView.tableHeaderView = titleQuerySearch
+        tableView.separatorColor = .lightGray
+        tableView.reloadData()
+        tableView.scrollsToTop = true
+        
+        if #available(iOS 11.0, *) {
+            navigationItem.searchController = searchController
+        } else {
+            navigationItem.titleView = searchController.searchBar
+        }
+    }
+}
+
+extension SearchViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        switch viewType {
+        case .search: return dataSourceQueries.count
+        case .savedQueries: return dataSource.isEmpty ? 0 : dataSource[section].items.count
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch viewType {
+        case .search:
+            let querySearch = dataSourceQueries[indexPath.row]
+            let cell = tableView.dequeueReusableCell(withIdentifier: SearchQueryTableViewCell.cellIdentifier,
+                                                     for: indexPath) as? SearchQueryTableViewCell ?? SearchQueryTableViewCell()
+            
+            cell.title = querySearch.query
+            return cell
+        case .savedQueries:
+            let place = dataSource[indexPath.section].items[indexPath.row]
+            let rating = dataSource[indexPath.section].ratings[indexPath.row]
+            let title = dataSource[indexPath.section].titles[indexPath.row]
+            let cell = tableView.dequeueReusableCell(withIdentifier: PlaceTableViewCell.cellIndetifier,
+                                                     for: indexPath) as? PlaceTableViewCell ?? PlaceTableViewCell()
+            
+            cell.rating = rating
+            cell.title = title
+            cell.titleCategory = place.categories?.first?.title
+            cell.colorCategory = place.categories?.first?.color
+            cell.imageCell.kf.indicatorType = .activity
+            cell.imageCell.kf.setImage(with: place.coverPhoto,
+                                       placeholder: nil,
+                                       options: self.kingfisherOptions,
+                                       progressBlock: nil,
+                                       completionHandler: nil)
+            
+            return cell
+        }
+    }
+}
+
+extension SearchViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch viewType {
+        case .search: return 50.0
+        case .savedQueries: return 170.0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        switch viewType {
+        case .search:
+            let query = searchViewModel.searchQueries[indexPath.row].query
+            navigationItem.leftBarButtonItem = leftBarButton
+            viewType = .savedQueries
+            tableView.tableHeaderView = nil
+            tableView.separatorColor = .clear
+            tableView.reloadData()
+            indicatorView.showIndicator()
+            
+            if #available(iOS 11.0, *) {
+                navigationItem.searchController = nil
+                navigationItem.title = query
+            } else {
+                navigationItem.titleView = nil
+                navigationItem.title = query
+            }
+            
+            searchViewModel.searchQuery(query, SearchDistance.fiveThousand.value).asObservable()
+                .share(replay: 1, scope: .forever)
+                .subscribe(onNext: { [unowned self] (model) in
+                    self.dataSource = [model]
+                    tableView.reloadData()
+                    self.indicatorView.hideIndicator()
+                    }, onError: { [unowned self] (error) in
+                        print(error)
+                        self.indicatorView.hideIndicator()
+                }).disposed(by: disposeBag)
+        case .savedQueries:
+            let place = dataSource[indexPath.section].items[indexPath.row]
+            let title = dataSource[indexPath.section].titles[indexPath.row]
+            let rating = dataSource[indexPath.section].ratings[indexPath.row]
+            
+            searchViewModel.openDetailPlace(place, title, rating, FavoritesViewModel())
+        }
     }
 }
