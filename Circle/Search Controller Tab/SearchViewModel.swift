@@ -12,12 +12,25 @@ import RxSwift
 
 struct SearchViewModel {
     fileprivate let placeViewModel: PlaceViewModel
+    let searchQueries: [String]
+    /// open detail place controller
+    var openDetailPlace: ((_ place: PlaceModel, _ title: NSMutableAttributedString?, _ rating: NSMutableAttributedString?, _ favoritesViewModel: FavoritesViewModel) -> Void) = {_, _, _, _ in }
     
     init(_ placeViewModel: PlaceViewModel) {
         self.placeViewModel = placeViewModel
+        
+        var queries: [String] = []
+        do {
+            let realm = try Realm()
+            let search = realm.objects(Search.self).flatMap({ $0.searchQuery })
+            queries = search.map({ $0 }).reduce([], { $0.contains($1) ? $0 : $0 + [$1]})
+        } catch {
+            print(error)
+        }
+        self.searchQueries = queries
     }
     
-    func searchQuery(_ query: String) -> Observable<Places> {
+    func searchQuery(_ query: String, _ distance: Double) -> Observable<Places> {
         var location = CLLocation()
         
         do {
@@ -28,7 +41,7 @@ struct SearchViewModel {
             print(error)
         }
         
-        return placeViewModel.getInfoPlaces(location: location, distance: FilterDistanceViewModel().defaultDistance, searchTerm: query)
+        return placeViewModel.getInfoPlaces(location: location, distance: distance, searchTerm: query)
             .asObservable()
             .flatMap({ (model) -> Observable<Places> in
                 return Observable.just(model)

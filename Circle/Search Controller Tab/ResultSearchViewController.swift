@@ -8,19 +8,23 @@
 
 import UIKit
 import Kingfisher
+import RxSwift
 
 final class ResultSearchViewController: UIViewController {
 
     typealias Dependecies = HasKingfisher
+    typealias Result = (place: PlaceModel, title: NSMutableAttributedString?, rating: NSMutableAttributedString?)
     
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
     fileprivate var dataSource: [Places] = [Places([], [], [], nil)]
+    let selectResult = PublishSubject<Result>()
     
     fileprivate lazy var tableView: UITableView = {
         let table = UITableView()
         table.tableFooterView = UIView(frame: CGRect.zero)
         table.delegate = self
         table.dataSource = self
+        table.separatorColor = .clear
         return table
     }()
     
@@ -88,12 +92,16 @@ extension ResultSearchViewController: UITableViewDataSource {
     }
 }
 
-extension ResultSearchViewController: UITableViewDelegate {
+extension ResultSearchViewController: UITableViewDelegate {    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 170.0
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let place = dataSource[indexPath.section].items[indexPath.row]
+        let title = dataSource[indexPath.section].titles[indexPath.row]
+        let rating = dataSource[indexPath.section].ratings[indexPath.row]
+        selectResult.onNext(Result(place, title, rating))
     }
 }

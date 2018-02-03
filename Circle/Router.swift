@@ -52,7 +52,12 @@ struct Router {
         
         // Search Controller
         var searchViewController = UIViewController()
-        let searchViewModel = SearchViewModel(viewModel)
+        var searchViewModel = SearchViewModel(viewModel)
+        
+        searchViewModel.openDetailPlace = { place, title, rating, favoritesViewModel in
+            self.openDetailPlace(place, title, rating, favoritesViewModel, searchViewController)
+        }
+        
         searchViewController = SearchViewController(SeacrhPlaceDependecies(searchViewModel, optionKingfisher))
         let searchImage = UIImage(named: "ic_search")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         searchViewController.navigationItem.title = "Find a place"

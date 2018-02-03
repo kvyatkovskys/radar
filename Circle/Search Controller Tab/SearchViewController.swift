@@ -10,6 +10,28 @@ import UIKit
 import RxSwift
 import Kingfisher
 
+enum SearchDistance: Int {
+    case oneThousand, twoThousand, threeThousand, fourThousand
+    
+    var title: String {
+        switch self {
+        case .oneThousand: return "1000 m"
+        case .twoThousand: return "2000 m"
+        case .threeThousand: return "3000 m"
+        case .fourThousand: return "4000 m"
+        }
+    }
+    
+    var value: Double {
+        switch self {
+        case .oneThousand: return 1000.0
+        case .twoThousand: return 2000.0
+        case .threeThousand: return 3000.0
+        case .fourThousand: return 4000.0
+        }
+    }
+}
+
 final class SearchViewController: UIViewController, UISearchControllerDelegate, UISearchBarDelegate {
 
     typealias Dependecies = HasSearchViewModel & HasKingfisher
@@ -27,6 +49,10 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
         controller.searchBar.placeholder = "Enter: Pizza"
         controller.searchBar.delegate = self
         controller.searchBar.searchBarStyle = .default
+        controller.searchBar.scopeButtonTitles = [SearchDistance.oneThousand.title,
+                                                  SearchDistance.twoThousand.title,
+                                                  SearchDistance.threeThousand.title,
+                                                  SearchDistance.fourThousand.title]
         controller.hidesNavigationBarDuringPresentation = true
         controller.dimsBackgroundDuringPresentation = true
         controller.searchBar.sizeToFit()
@@ -89,20 +115,33 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
             navigationItem.titleView = searchController.searchBar
         }
         
-        searchController.searchBar.rx.text.orEmpty
+        let searchDistance = searchController.searchBar.rx.selectedScopeButtonIndex.asObservable()
+            .flatMap { Observable.just(SearchDistance(rawValue: $0)) }
+        
+        let searhQuery = searchController.searchBar.rx.text.orEmpty
             .skip(1)
             .debounce(0.3, scheduler: MainScheduler.instance)
             .distinctUntilChanged()
             .filter({ !$0.isEmpty })
-            .flatMapLatest { [unowned self] (query) -> Observable<Places> in
+            
+            Observable.combineLatest(searchDistance, searhQuery)
+            .flatMapLatest { [unowned self] (distance, query) -> Observable<Places> in
                 if query.isEmpty {
                     return Observable.just(Places([], [], [], nil))
                 }
-                return self.searchViewModel.searchQuery(query).catchErrorJustReturn(Places([], [], [], nil))
+                return self.searchViewModel.searchQuery(query, distance?.value ?? 0.0).catchErrorJustReturn(Places([], [], [], nil))
             }
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] (model) in
                 self.resultController.updateTable(places: model)
+            }, onError: { (error) in
+                print(error)
+            }).disposed(by: disposeBag)
+        
+        resultController.selectResult.asObservable()
+            .subscribe(onNext: { [unowned self] (result) in
+                self.searchViewModel.openDetailPlace(result.place, result.title, result.rating, FavoritesViewModel())
+                self.searchViewModel.saveQuerySearch(self.searchController.searchBar.text ?? "")
             }, onError: { (error) in
                 print(error)
             }).disposed(by: disposeBag)
