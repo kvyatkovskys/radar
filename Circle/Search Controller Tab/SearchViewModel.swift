@@ -30,8 +30,9 @@ struct SearchViewModel {
         } catch {
             print(error)
         }
-        let results = queries.sorted(by: { $0.weight > $1.weight })
-        return results
+
+        let endRange = queries.count >= 6 ? 6 : queries.count
+        return queries.sorted(by: { $0.weight > $1.weight })[0..<endRange].map({ $0 })
     }
     
     /// open detail place controller

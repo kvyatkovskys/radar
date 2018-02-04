@@ -9,6 +9,7 @@
 import UIKit
 import RxSwift
 import Kingfisher
+import RealmSwift
 
 enum SearchDistance: Int {
     case oneThousand, twoThousand, threeThousand, fiveThousand
@@ -40,6 +41,7 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
 
     typealias Dependecies = HasSearchViewModel & HasKingfisher
     
+    fileprivate var notificationToken: NotificationToken?
     fileprivate var dataSource: [Places] = []
     fileprivate var dataSourceQueries: [Query]
     fileprivate var viewType = ViewType.search
@@ -150,6 +152,7 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
             navigationItem.titleView = searchController.searchBar
         }
         
+        var isSaveSearchText = false
         let searchDistance = searchController.searchBar.rx.selectedScopeButtonIndex
             .flatMap { Observable.just(SearchDistance(rawValue: $0)) }
         
@@ -165,28 +168,75 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
             }
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] (model) in
+                isSaveSearchText = false
                 self.resultController.updateTable(places: model)
                 }, onError: { (error) in
                     print(error)
             })
             .disposed(by: disposeBag)
         
+        searchController.searchBar.rx.textDidEndEditing.asObservable()
+            .subscribe(onNext: { [unowned self] (_) in
+                self.tableView.reloadData()
+            }, onError: { (error) in
+                print(error)
+            }).disposed(by: disposeBag)
+        
         resultController.selectResult.asObservable()
             .subscribe(onNext: { [unowned self] (result) in
                 self.searchViewModel.openDetailPlace(result.place, result.title, result.rating, FavoritesViewModel())
-                self.searchViewModel.saveQuerySearch(self.searchController.searchBar.text ?? "")
-                self.dataSourceQueries = self.searchViewModel.searchQueries
+                
+                if !isSaveSearchText {
+                    isSaveSearchText = true
+                    self.searchViewModel.saveQuerySearch(self.searchController.searchBar.text ?? "")
+                }
             }, onError: { (error) in
                 print(error)
             }).disposed(by: disposeBag)
         
         tableView.register(SearchQueryTableViewCell.self, forCellReuseIdentifier: SearchQueryTableViewCell.cellIdentifier)
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
+        
+        do {
+            let realm = try Realm()
+            let results = realm.objects(Search.self)
+            
+            notificationToken = results.observe { [unowned self] (changes: RealmCollectionChange) in
+                switch changes {
+                case .initial:
+                    if self.dataSourceQueries.isEmpty {
+                        self.titleQuerySearch.text = "Try to find something!"
+                    }
+                case .update:
+                    self.dataSourceQueries = self.searchViewModel.searchQueries
+                    
+                    guard !self.dataSourceQueries.isEmpty else {
+                        self.titleQuerySearch.text = "Try to find something!"
+                        return
+                    }
+
+                    self.titleQuerySearch.text = "You recently searched for"
+                    
+                    if self.viewType == .search {
+                        self.tableView.reloadData()
+                    }
+                case .error(let error):
+                    fatalError("\(error)")
+                }
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
+    deinit {
+        notificationToken?.invalidate()
     }
     
     @objc func closeSearchQueries() {
         dataSource = []
         navigationItem.leftBarButtonItem = nil
+        navigationItem.title = "Find a place"
         viewType = .search
         tableView.tableHeaderView = titleQuerySearch
         tableView.separatorColor = .lightGray
@@ -271,7 +321,6 @@ extension SearchViewController: UITableViewDelegate {
             }
             
             searchViewModel.searchQuery(query, SearchDistance.fiveThousand.value).asObservable()
-                .share(replay: 1, scope: .forever)
                 .subscribe(onNext: { [unowned self] (model) in
                     self.dataSource = [model]
                     tableView.reloadData()

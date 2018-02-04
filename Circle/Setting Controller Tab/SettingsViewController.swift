@@ -47,6 +47,20 @@ final class SettingsViewController: UIViewController {
         tableView.register(FCButtonLoginTableViewCell.self, forCellReuseIdentifier: FCButtonLoginTableViewCell.cellIdentifier)
         tableView.register(StandardSettingTableViewCell.self, forCellReuseIdentifier: StandardSettingTableViewCell.cellIdentifier)
     }
+    
+    func setUpAlertView(title: String, description: String, action: @escaping () -> Void) {
+        let alert = UIAlertController(title: title,
+                                      message: description,
+                                      preferredStyle: UIAlertControllerStyle.alert)
+        let clear = UIAlertAction(title: "Clear", style: .destructive, handler: { _ in
+            action()
+        })
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alert.addAction(clear)
+        alert.addAction(cancel)
+        present(alert, animated: true, completion: nil)
+    }
 }
 
 extension SettingsViewController: UITableViewDataSource {
@@ -70,7 +84,7 @@ extension SettingsViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: FCButtonLoginTableViewCell.cellIdentifier,
                                                      for: indexPath) as? FCButtonLoginTableViewCell ?? FCButtonLoginTableViewCell()
             return cell
-        case .clearFavorites(let title, let image, let color):
+        case .clearFavorites(let title, _, let image, let color), .clearHistorySearch(let title, _, let image, let color):
             let cell = tableView.dequeueReusableCell(withIdentifier: StandardSettingTableViewCell.cellIdentifier,
                                                      for: indexPath) as? StandardSettingTableViewCell ?? StandardSettingTableViewCell()
             
@@ -89,18 +103,14 @@ extension SettingsViewController: UITableViewDelegate {
         let typeCell = viewModel.items[indexPath.section].sectionObjects[indexPath.row]
         
         switch typeCell {
-        case .clearFavorites:
-            let alert = UIAlertController(title: "Clear Favorites",
-                                          message: "Are you sure you want to clear all items in your Favorites?",
-                                          preferredStyle: UIAlertControllerStyle.alert)
-            let clear = UIAlertAction(title: "Clear", style: .destructive, handler: { [unowned self] _ in
+        case .clearFavorites(let title, let description, _, _):
+            setUpAlertView(title: title, description: description, action: { [unowned self] in
                 self.viewModel.deleteAllFavorites()
             })
-            let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-            
-            alert.addAction(clear)
-            alert.addAction(cancel)
-            present(alert, animated: true, completion: nil)
+        case .clearHistorySearch(let title, let description, _, _):
+            setUpAlertView(title: title, description: description, action: { [unowned self] in
+                self.viewModel.deleteSearchHistory()
+            })
         default:
             break
         }
@@ -110,7 +120,7 @@ extension SettingsViewController: UITableViewDelegate {
         let typeCell = viewModel.items[indexPath.section].sectionObjects[indexPath.row]
         
         switch typeCell {
-        case .facebookLogin, .clearFavorites: return 50.0
+        case .facebookLogin, .clearFavorites, .clearHistorySearch: return 50.0
         }
     }
 }
