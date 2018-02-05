@@ -89,6 +89,20 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
     func stop() {
         locationManager.stopUpdatingLocation()
     }
+    
+    fileprivate func getAddressFromLocation(_ coordinates: CLLocation, completion: @escaping(_ street: String?, _ city: String?, _ country: String?, _ region: String?, _ error: Error?) -> Void) {
+        geocoder.reverseGeocodeLocation(coordinates) { (placemarks, error) in
+            if error == nil, let place = placemarks?.first {
+                let street = place.addressDictionary?["Thoroughfare"] as? String
+                let city = place.addressDictionary?["City"] as? String
+                let country = place.addressDictionary?["Country"] as? String
+                let region = place.addressDictionary?["State"] as? String
+                completion(street, city, country, region, nil)
+            } else {
+                completion(nil, nil, nil, nil, error)
+            }
+        }
+    }
 }
 
 extension LocationService {
@@ -100,23 +114,37 @@ extension LocationService {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let currentLocation = locations.first {
             userLocation.onNext(currentLocation)
-            do {
-                let realm = try Realm()
-                let oldLocation = realm.objects(Search.self).first
-                try realm.write {
-                    guard let oldLocation = oldLocation else {
-                        let search = Search()
-                        search.latitude = currentLocation.coordinate.latitude
-                        search.longitude = currentLocation.coordinate.longitude
-                        realm.add(search)
-                        return
-                    }
-                    oldLocation.latitude = currentLocation.coordinate.latitude
-                    oldLocation.longitude = currentLocation.coordinate.longitude
+
+            let location = Location()
+            location.latitude = currentLocation.coordinate.latitude
+            location.longitude = currentLocation.coordinate.longitude
+            location.altitude = currentLocation.altitude
+            location.horizontalAccuracy = currentLocation.horizontalAccuracy
+            location.verticalAccuracy = currentLocation.verticalAccuracy
+            location.speed = currentLocation.speed
+            location.timestamp = currentLocation.timestamp
+            
+            getAddressFromLocation(currentLocation, completion: { (street, city, country, region, error) in
+                if error == nil {
+                    location.street = street
+                    location.city = city
+                    location.country = country
+                    location.region = region
                 }
-            } catch {
-                print(error)
-            }
+                
+                do {
+                    let realm = try Realm()
+                    let oldLocation = realm.objects(Location.self).last
+                    
+                    guard location.latitude != oldLocation?.latitude && location.longitude != oldLocation?.longitude else { return }
+                    
+                    try realm.write {
+                        realm.add(location)
+                    }
+                } catch {
+                    print(error)
+                }
+            })
         }
     }
     

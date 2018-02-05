@@ -10,7 +10,7 @@ import Foundation
 import RealmSwift
 
 class Search: Object {
-    @objc dynamic var latitude: Double = 0.0
-    @objc dynamic var longitude: Double = 0.0
-    let searchQuery = List<String>()
+    @objc dynamic var query: String = ""
+    @objc dynamic var date: Date = Date()
+    @objc dynamic var location: Location?
 }

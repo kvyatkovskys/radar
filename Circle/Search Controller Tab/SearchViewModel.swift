@@ -19,8 +19,8 @@ struct SearchViewModel {
         var queries: [Query] = []
         do {
             let realm = try Realm()
-            let search = realm.objects(Search.self).first?.searchQuery.map({ $0 })
-            queries = search?.reduce(into: [], { (acc, query) in
+            let search = realm.objects(Search.self).filter("query != ''").map({ $0.query })
+            queries = search.reduce(into: [], { (acc, query) in
                 if let index = acc?.index(where: { $0.query == query }) {
                     acc![index].weight += 1
                 } else {
@@ -47,8 +47,8 @@ struct SearchViewModel {
         
         do {
             let realm = try Realm()
-            let searchModel = realm.objects(Search.self).first
-            location = CLLocation(latitude: searchModel?.latitude ?? 0.0, longitude: searchModel?.longitude ?? 0.0)
+            let locationModel = realm.objects(Location.self).first
+            location = CLLocation(latitude: locationModel?.latitude ?? 0.0, longitude: locationModel?.longitude ?? 0.0)
         } catch {
             print(error)
         }
@@ -64,12 +64,17 @@ struct SearchViewModel {
     func saveQuerySearch(_ query: String) {
         do {
             let realm = try Realm()
-            if let searchModel = realm.objects(Search.self).first {
-                try realm.write {
-                    searchModel.searchQuery.append(query)
-                }
+            let searchModel = Search()
+            let location = realm.objects(Location.self).last
+            
+            searchModel.query = query
+            searchModel.date = Date()
+            searchModel.location = location
+            
+            try realm.write {
+                realm.add(searchModel)
             }
-        } catch {
+    } catch {
             print(error)
         }
     }

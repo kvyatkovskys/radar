@@ -23,8 +23,9 @@ enum SettingType: String {
 
 enum SettingRowType {
     case facebookLogin
-    case clearFavorites(title: String, description: String, image: UIImage, color:UIColor)
-    case clearHistorySearch(title: String, description: String, image: UIImage, color:UIColor)
+    case clearFavorites(title: String, description: String, image: UIImage, color: UIColor)
+    case clearHistorySearch(title: String, description: String, image: UIImage, color: UIColor)
+    case showSearchHistory(title: String, image: UIImage, color: UIColor)
 }
 
 struct SettingsObject {
@@ -38,7 +39,10 @@ struct SettingsObject {
 }
 
 struct SettingsViewModel {
-    let items: [SettingsObject] = [SettingsObject(.search, [.clearHistorySearch(title: "Clear search history",
+    let items: [SettingsObject] = [SettingsObject(.search, [.showSearchHistory(title: "Show search history",
+                                                                               image: UIImage(named: "ic_history")!.withRenderingMode(.alwaysTemplate),
+                                                                               color: UIColor.gray),
+                                                            .clearHistorySearch(title: "Clear search history",
                                                                                    description: "Are you sure you to clear search history?",
                                                                                    image: UIImage(named: "ic_delete_forever")!.withRenderingMode(.alwaysTemplate),
                                                                                    color: UIColor.red)]),
@@ -47,6 +51,9 @@ struct SettingsViewModel {
                                                                                image: UIImage(named: "ic_delete_forever")!.withRenderingMode(.alwaysTemplate),
                                                                                color: UIColor.red)]),
                                    SettingsObject(.facebook, [.facebookLogin])]
+    
+    /// open search history modal view
+    var openSearchHistory: (() -> Void) = { }
     
     /// deleted all objects from favorites
     func deleteAllFavorites() {
@@ -66,10 +73,10 @@ struct SettingsViewModel {
     func deleteSearchHistory() {
         do {
             let realm = try Realm()
-            let favorite = realm.objects(Search.self)
+            let search = realm.objects(Search.self)
             
             try realm.write {
-                realm.delete(favorite)
+                realm.delete(search)
             }
         } catch {
             print(error)

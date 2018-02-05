@@ -151,3 +151,15 @@ struct ResultSearchDependecies: HasKingfisher {
         self.kingfisherOptions = kingfisherOptions
     }
 }
+
+protocol HasSearchHistoryViewModel {
+    var searchHistoryViewModel: SearchHistoryViewModel { get }
+}
+
+struct SearchHistoryDependecies: HasSearchHistoryViewModel {
+    let searchHistoryViewModel: SearchHistoryViewModel
+    
+    init(_ searchHistoryViewModel: SearchHistoryViewModel) {
+        self.searchHistoryViewModel = searchHistoryViewModel
+    }
+}

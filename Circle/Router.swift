@@ -71,6 +71,7 @@ struct Router {
         favoritesViewModel.openDetailPlace = { place, title, rating, viewModel in
             self.openDetailPlace(place, title, rating, viewModel, favoritesViewController)
         }
+        
         favoritesViewController = FavoritesViewController(FavoritesDependencies(favoritesViewModel, optionKingfisher))
         let favoriteImage = UIImage(named: "ic_favorite")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         favoritesViewController.navigationItem.title = "Favorites"
@@ -78,7 +79,13 @@ struct Router {
         favoritesViewController.navigationController?.navigationBar.isTranslucent = true
         
         // Setting Controller
-        let settingsController = SettingsViewController(SettingsViewDependecies(SettingsViewModel()))
+        var settingsController = UIViewController()
+        var settingViewModel = SettingsViewModel()
+        settingViewModel.openSearchHistory = {
+            self.openSearchHistory(settingsController)
+        }
+        
+        settingsController = SettingsViewController(SettingsViewDependecies(settingViewModel))
         let settingsImage = UIImage(named: "ic_settings")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         settingsController.navigationItem.title = "Application settings"
         settingsController.tabBarItem = UITabBarItem(title: "Settings", image: settingsImage, tag: 4)
@@ -92,6 +99,13 @@ struct Router {
                                          favoritesViewController,
                                          settingsController].map({ UINavigationController(rootViewController: $0) })
         return tabController
+    }
+    
+    fileprivate func openSearchHistory(_ fromController: UIViewController) {
+        let showHistoryController = SearchHistoryViewController(SearchHistoryDependecies(SearchHistoryViewModel()))
+        let newNavController = UINavigationController(rootViewController: showHistoryController)
+        newNavController.navigationBar.isTranslucent = true
+        fromController.present(newNavController, animated: true, completion: nil)
     }
     
     /// open detail controller about place
