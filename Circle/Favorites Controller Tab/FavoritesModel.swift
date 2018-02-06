@@ -27,6 +27,7 @@ class Favorites: Object {
     @objc dynamic var ratingStar: Float = 0
     @objc dynamic var ratingCount: Int = 0
     @objc dynamic var date: Date?
+    @objc dynamic var location: Location?
     let categories = List<String>()
     let subCategories = List<String>()
 }

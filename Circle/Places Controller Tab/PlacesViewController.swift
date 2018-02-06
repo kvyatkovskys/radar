@@ -175,9 +175,11 @@ final class PlacesViewController: UIViewController, FilterPlacesDelegate {
                 self.userLocation = location
                 self.centerMapOnLocation(location)
                 self.loadInfoAboutLocation(location)
-            }, onError: { (error) in
+            }, onError: { [unowned self] (error) in
                 print(error)
-                self.showAlertLight(title: "Error", message: "We can't determine your location!\n\(error.localizedDescription)")
+                if self.refreshControl.isRefreshing {
+                    self.refreshControl.endRefreshing()
+                }
             }).disposed(by: disposeBag)
     }
     

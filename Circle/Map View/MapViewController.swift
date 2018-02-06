@@ -82,6 +82,7 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
             annotation.subtitle = item.subTitle
             DispatchQueue.main.async { [unowned self] in
                 self.mapView.addAnnotation(annotation)
+                self.mapView.add(MKCircle(center: item.location, radius: 150.0))
             }
         }
     }
@@ -90,5 +91,16 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
         let regionRadius: CLLocationDistance = radius
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius, regionRadius)
         mapView.setRegion(coordinateRegion, animated: false)
+    }
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        if overlay is MKCircle {
+            let circleRenderer = MKCircleRenderer(overlay: overlay)
+            circleRenderer.lineWidth = 1.0
+            circleRenderer.strokeColor = UIColor.black.withAlphaComponent(0.1)
+            circleRenderer.fillColor = UIColor.lightGray.withAlphaComponent(0.1)
+            return circleRenderer
+        }
+        return MKOverlayRenderer(overlay: overlay)
     }
 }

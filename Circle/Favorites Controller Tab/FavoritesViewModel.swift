@@ -100,6 +100,8 @@ struct FavoritesViewModel {
             favorite.ratingCount = place.ratingCount ?? 0
             favorite.ratingStar = place.ratingStar ?? 0
             favorite.date = Date()
+            favorite.location?.latitude = place.location?.latitude ?? 0.0
+            favorite.location?.longitude = place.location?.longitude ?? 0.0
             
             place.categories?.forEach({ category in
                 favorite.categories.append(category.rawValue)

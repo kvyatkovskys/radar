@@ -17,6 +17,7 @@ class Location: Object {
     @objc dynamic var speed: Double = 0.0
     @objc dynamic var timestamp: Date?
     @objc dynamic var verticalAccuracy: Double = 0.0
+    @objc dynamic var course: Double = 0.0
     @objc dynamic var street: String?
     @objc dynamic var city: String?
     @objc dynamic var country: String?

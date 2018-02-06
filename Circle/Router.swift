@@ -44,7 +44,7 @@ struct Router {
         
         placesViewController = PlacesViewController(PlacesViewDependecies(optionKingfisher,
                                                                           viewModel,
-                                                                          LocationService(controller: placesViewController)))
+                                                                          LocationService()))
         let locationImage = UIImage(named: "ic_my_location")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         placesViewController.navigationItem.title = "Around here"
         placesViewController.tabBarItem = UITabBarItem(title: "My location", image: locationImage, tag: 1)
