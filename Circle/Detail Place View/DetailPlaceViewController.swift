@@ -266,6 +266,7 @@ final class DetailPlaceViewController: UIViewController {
     }
     
     @objc func addToFavorites(sender: UIButton) {
+        UIImpactFeedbackGenerator().impactOccurred()
         sender.isSelected = !sender.isSelected
         
         guard sender.isSelected else {
@@ -276,6 +277,7 @@ final class DetailPlaceViewController: UIViewController {
     }
     
     @objc func sharePlace() {
+        UIImpactFeedbackGenerator().impactOccurred()
         if let image = imageHeader.image {
             let shareController = UIActivityViewController(activityItems: [image, viewModel.place.name ?? ""],
                                                            applicationActivities: nil)

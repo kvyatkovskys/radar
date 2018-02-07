@@ -93,6 +93,10 @@ struct FavoritesViewModel {
         do {
             let realm = try Realm()
             let favorite = Favorites()
+            let location = Location()
+            
+            location.latitude = place.location?.latitude ?? 0.0
+            location.longitude = place.location?.longitude ?? 0.0
             
             favorite.id = place.id
             favorite.title = place.name
@@ -100,8 +104,7 @@ struct FavoritesViewModel {
             favorite.ratingCount = place.ratingCount ?? 0
             favorite.ratingStar = place.ratingStar ?? 0
             favorite.date = Date()
-            favorite.location?.latitude = place.location?.latitude ?? 0.0
-            favorite.location?.longitude = place.location?.longitude ?? 0.0
+            favorite.location = location
             
             place.categories?.forEach({ category in
                 favorite.categories.append(category.rawValue)

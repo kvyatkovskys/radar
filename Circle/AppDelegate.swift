@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import UserNotifications
 
 // color for navigation bar
 fileprivate extension UIColor {
@@ -28,6 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupNavigationBar()
         initialViewController()
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        checkAuthNotification(application)
         
         return true
     }
@@ -39,13 +41,48 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                                      annotation: options[UIApplicationOpenURLOptionsKey.annotation])
     }
     
+    fileprivate func checkAuthNotification(_ application: UIApplication) {
+        let center = UNUserNotificationCenter.current()
+        center.getNotificationSettings { (settings) in
+            switch settings.authorizationStatus {
+            case .denied, .notDetermined:
+                center.requestAuthorization(options: [.alert, .sound, .badge]) { [unowned self] (accept, _) in
+                    if !accept {
+                        print("Something went wrong")
+                        let alertController = UIAlertController(title: "Notifications are disabled.",
+                                                                message: "Open the setting for this application and turn on 'Allow Notifications'.",
+                                                                preferredStyle: .alert)
+                        
+                        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                        alertController.addAction(cancelAction)
+                        
+                        let openAction = UIAlertAction(title: "Open settings", style: .default) { _ in
+                            if let url = URL(string: UIApplicationOpenSettingsURLString) {
+                                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                            }
+                        }
+                        alertController.addAction(openAction)
+                        
+                        self.window?.rootViewController?.present(alertController, animated: true, completion: nil)
+                    }
+                }
+            case .authorized:
+                DispatchQueue.main.async {
+                    guard application.applicationIconBadgeNumber > 0 else { return }
+                    application.applicationIconBadgeNumber = 0
+                }
+            }
+        }
+    }
+    
     fileprivate func initialViewController() {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.backgroundColor = UIColor.white
         window?.makeKeyAndVisible()
         
+        let locationService = LocationService()
         let router = Router()
-        window?.rootViewController = router.showMainTabController()
+        window?.rootViewController = router.showMainTabController(locationService)
     }
     
     fileprivate func setupNavigationBar() {
@@ -83,6 +120,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+        checkAuthNotification(application)
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -92,19 +130,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-    }
-}
-
-extension AppDelegate: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        if region is CLCircularRegion {
-            //handleEvent(forRegion: region)
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
-        if region is CLCircularRegion {
-            //handleEvent(forRegion: region)
-        }
     }
 }

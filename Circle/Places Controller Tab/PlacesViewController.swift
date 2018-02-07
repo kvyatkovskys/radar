@@ -129,7 +129,7 @@ final class PlacesViewController: UIViewController, FilterPlacesDelegate {
         headerView.addSubview(mapView)
         headerView.addSubview(tapViewOnMap)
         view.addSubview(tableView)
-        tableView.tableHeaderView = headerView
+        //tableView.tableHeaderView = headerView
         tableView.addSubview(refreshControl)
         navigationItem.rightBarButtonItem = rightBarButton
         

@@ -9,6 +9,20 @@
 import Foundation
 import RealmSwift
 
+fileprivate extension UIColor {
+    static var deleted: UIColor {
+        return UIColor(withHex: 0xF62232, alpha: 1.0)
+    }
+    
+    static var notify: UIColor {
+        return UIColor(withHex: 0x5796DB, alpha: 1.0)
+    }
+    
+    static var history: UIColor {
+        return UIColor(withHex: 0x8C9EA0, alpha: 1.0)
+    }
+}
+
 enum SettingType: String {
     case facebook, favorites, search
     
@@ -23,6 +37,7 @@ enum SettingType: String {
 
 enum SettingRowType {
     case facebookLogin
+    case favoriteNotify(title: String, description: String, image: UIImage, color: UIColor)
     case clearFavorites(title: String, description: String, image: UIImage, color: UIColor)
     case clearHistorySearch(title: String, description: String, image: UIImage, color: UIColor)
     case showSearchHistory(title: String, image: UIImage, color: UIColor)
@@ -41,15 +56,19 @@ struct SettingsObject {
 struct SettingsViewModel {
     let items: [SettingsObject] = [SettingsObject(.search, [.showSearchHistory(title: "Show search history",
                                                                                image: UIImage(named: "ic_history")!.withRenderingMode(.alwaysTemplate),
-                                                                               color: UIColor.gray),
+                                                                               color: UIColor.history),
                                                             .clearHistorySearch(title: "Clear search history",
                                                                                    description: "Are you sure you to clear search history?",
                                                                                    image: UIImage(named: "ic_delete_forever")!.withRenderingMode(.alwaysTemplate),
-                                                                                   color: UIColor.red)]),
-                                   SettingsObject(.favorites, [.clearFavorites(title: "Clear Favorites",
+                                                                                   color: UIColor.deleted)]),
+                                   SettingsObject(.favorites, [.favoriteNotify(title: "Notify me if i'am near all my favorite places",
+                                                                               description: "",
+                                                                               image: UIImage(named: "ic_notifications")!.withRenderingMode(.alwaysTemplate),
+                                                                               color: UIColor.notify),
+                                                               .clearFavorites(title: "Clear Favorites",
                                                                                description: "Are you sure you want to clear all items in your Favorites?",
                                                                                image: UIImage(named: "ic_delete_forever")!.withRenderingMode(.alwaysTemplate),
-                                                                               color: UIColor.red)]),
+                                                                               color: UIColor.deleted)]),
                                    SettingsObject(.facebook, [.facebookLogin])]
     
     /// open search history modal view

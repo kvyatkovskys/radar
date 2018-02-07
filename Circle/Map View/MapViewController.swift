@@ -82,7 +82,7 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
             annotation.subtitle = item.subTitle
             DispatchQueue.main.async { [unowned self] in
                 self.mapView.addAnnotation(annotation)
-                self.mapView.add(MKCircle(center: item.location, radius: 150.0))
+                self.mapView.add(MKCircle(center: item.location, radius: 100.0))
             }
         }
     }

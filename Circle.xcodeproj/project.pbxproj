@@ -14,6 +14,7 @@
 		8B105CB52028A56E006A5BBC /* SearchHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B105CB42028A56E006A5BBC /* SearchHistoryViewController.swift */; };
 		8B105CB72028A96B006A5BBC /* SearchHistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B105CB62028A96B006A5BBC /* SearchHistoryTableViewCell.swift */; };
 		8B105CB92028AA5C006A5BBC /* SearchHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B105CB82028AA5C006A5BBC /* SearchHistoryViewModel.swift */; };
+		8B105CBB202B655A006A5BBC /* KSNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B105CBA202B655A006A5BBC /* KSNotifications.swift */; };
 		8B147BCF2022FD6E00EDA2D4 /* FavoritesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B147BCE2022FD6E00EDA2D4 /* FavoritesModel.swift */; };
 		8B147BD12023021600EDA2D4 /* FavoritesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B147BD02023021600EDA2D4 /* FavoritesViewModel.swift */; };
 		8B147BD42023B13800EDA2D4 /* FavoritesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B147BD32023B13800EDA2D4 /* FavoritesService.swift */; };
@@ -56,6 +57,7 @@
 		8B5F71511FF916B300E628F9 /* PlaceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F71501FF916B300E628F9 /* PlaceService.swift */; };
 		8B5F71531FF923A700E628F9 /* PlaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F71521FF923A700E628F9 /* PlaceModel.swift */; };
 		8B5F71571FF93C9700E628F9 /* PlaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F71561FF93C9700E628F9 /* PlaceTableViewCell.swift */; };
+		8B6A37A5202B96C8003CD1A8 /* SwitchSettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6A37A4202B96C8003CD1A8 /* SwitchSettingTableViewCell.swift */; };
 		8B6D4E1F1FFBA0CD007904D4 /* PlacesTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6D4E1E1FFBA0CD007904D4 /* PlacesTableViewDataSource.swift */; };
 		8B6D4E211FFBA0DC007904D4 /* PlacesTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6D4E201FFBA0DC007904D4 /* PlacesTableViewDelegate.swift */; };
 		8B82C38620133A0200E0CA89 /* Error+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C38520133A0200E0CA89 /* Error+Extension.swift */; };
@@ -108,6 +110,19 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		8BAC19F2202B8B6A009C6547 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		65187D40B7A35C90F17F99D7 /* Pods-Circle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Circle.release.xcconfig"; path = "Pods/Target Support Files/Pods-Circle/Pods-Circle.release.xcconfig"; sourceTree = "<group>"; };
 		6E0022E72D06AC70840D3662 /* Pods_Circle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Circle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -117,6 +132,7 @@
 		8B105CB42028A56E006A5BBC /* SearchHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHistoryViewController.swift; sourceTree = "<group>"; };
 		8B105CB62028A96B006A5BBC /* SearchHistoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHistoryTableViewCell.swift; sourceTree = "<group>"; };
 		8B105CB82028AA5C006A5BBC /* SearchHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHistoryViewModel.swift; sourceTree = "<group>"; };
+		8B105CBA202B655A006A5BBC /* KSNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KSNotifications.swift; sourceTree = "<group>"; };
 		8B147BCE2022FD6E00EDA2D4 /* FavoritesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesModel.swift; sourceTree = "<group>"; };
 		8B147BD02023021600EDA2D4 /* FavoritesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewModel.swift; sourceTree = "<group>"; };
 		8B147BD32023B13800EDA2D4 /* FavoritesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesService.swift; sourceTree = "<group>"; };
@@ -164,6 +180,7 @@
 		8B5F71501FF916B300E628F9 /* PlaceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceService.swift; sourceTree = "<group>"; };
 		8B5F71521FF923A700E628F9 /* PlaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceModel.swift; sourceTree = "<group>"; };
 		8B5F71561FF93C9700E628F9 /* PlaceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceTableViewCell.swift; sourceTree = "<group>"; };
+		8B6A37A4202B96C8003CD1A8 /* SwitchSettingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchSettingTableViewCell.swift; sourceTree = "<group>"; };
 		8B6D4E1E1FFBA0CD007904D4 /* PlacesTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesTableViewDataSource.swift; sourceTree = "<group>"; };
 		8B6D4E201FFBA0DC007904D4 /* PlacesTableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesTableViewDelegate.swift; sourceTree = "<group>"; };
 		8B82C38520133A0200E0CA89 /* Error+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extension.swift"; sourceTree = "<group>"; };
@@ -289,6 +306,7 @@
 			children = (
 				8B18FE13200A994F00E637C7 /* FCButtonLoginTableViewCell.swift */,
 				8B147BD720246A4000EDA2D4 /* StandardSettingTableViewCell.swift */,
+				8B6A37A4202B96C8003CD1A8 /* SwitchSettingTableViewCell.swift */,
 			);
 			path = "Setting Cells";
 			sourceTree = "<group>";
@@ -393,6 +411,7 @@
 				8B41154A1FDB2CEF00C6614C /* AppDelegate.swift */,
 				8B41156A1FDC83AF00C6614C /* Router.swift */,
 				8B41156C1FDC845B00C6614C /* AppInjections.swift */,
+				8B105CBA202B655A006A5BBC /* KSNotifications.swift */,
 				8BC3506A201CF64F00BB375B /* Search Controller Tab */,
 				8BC35067201CF62100BB375B /* Favorites Controller Tab */,
 				8B44C3841FF012E1003C0754 /* Setting Controller Tab */,
@@ -470,9 +489,7 @@
 			children = (
 				8B44C3821FF012C8003C0754 /* SettingsViewController.swift */,
 				8B18FE11200A8FFA00E637C7 /* SettingsViewModel.swift */,
-				8B105CB42028A56E006A5BBC /* SearchHistoryViewController.swift */,
-				8B105CB82028AA5C006A5BBC /* SearchHistoryViewModel.swift */,
-				8B105CB62028A96B006A5BBC /* SearchHistoryTableViewCell.swift */,
+				8BAC19F3202B9445009C6547 /* Search History Controller */,
 				8B147BD620246A1100EDA2D4 /* Setting Cells */,
 			);
 			path = "Setting Controller Tab";
@@ -523,6 +540,16 @@
 				8B82C3942014B72500E0CA89 /* FriendsModel.swift */,
 			);
 			path = "Open Graph Service";
+			sourceTree = "<group>";
+		};
+		8BAC19F3202B9445009C6547 /* Search History Controller */ = {
+			isa = PBXGroup;
+			children = (
+				8B105CB42028A56E006A5BBC /* SearchHistoryViewController.swift */,
+				8B105CB82028AA5C006A5BBC /* SearchHistoryViewModel.swift */,
+				8B105CB62028A96B006A5BBC /* SearchHistoryTableViewCell.swift */,
+			);
+			path = "Search History Controller";
 			sourceTree = "<group>";
 		};
 		8BC3505A201A6FD900BB375B /* List Payments */ = {
@@ -608,6 +635,7 @@
 				0F0A513428C2CA0A3AFE4EAC /* [CP] Embed Pods Frameworks */,
 				BCF1126009D109BA2D0BA57B /* [CP] Copy Pods Resources */,
 				8B41156E1FDC858C00C6614C /* ShellScript */,
+				8BAC19F2202B8B6A009C6547 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
@@ -884,6 +912,7 @@
 				8B41771D1FFF64A7002A963A /* DistancePickerViewDelegate.swift in Sources */,
 				8BFBF57D200517D000CE2C8B /* CategoriesTableViewDelegate.swift in Sources */,
 				8B5F71531FF923A700E628F9 /* PlaceModel.swift in Sources */,
+				8B6A37A5202B96C8003CD1A8 /* SwitchSettingTableViewCell.swift in Sources */,
 				8B147BD820246A4000EDA2D4 /* StandardSettingTableViewCell.swift in Sources */,
 				8B18FE0A2009113F00E637C7 /* RatingPlacesView.swift in Sources */,
 				8B82C38820136D6400E0CA89 /* ListCategoriesViewController.swift in Sources */,
@@ -902,6 +931,7 @@
 				8B41154B1FDB2CEF00C6614C /* AppDelegate.swift in Sources */,
 				8B82C39E20150BE600E0CA89 /* WorkDaysCollectionViewCell.swift in Sources */,
 				8BC3506E201DDDA200BB375B /* ListRServiceCollectionViewCell.swift in Sources */,
+				8B105CBB202B655A006A5BBC /* KSNotifications.swift in Sources */,
 				8B18FE0D200A1F1800E637C7 /* MapViewController.swift in Sources */,
 				8B105CB52028A56E006A5BBC /* SearchHistoryViewController.swift in Sources */,
 				8B105CB92028AA5C006A5BBC /* SearchHistoryViewModel.swift in Sources */,
@@ -1054,6 +1084,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7C60842BBC33FD63E648DBC6 /* Pods-Circle.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1080,6 +1111,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 65187D40B7A35C90F17F99D7 /* Pods-Circle.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";

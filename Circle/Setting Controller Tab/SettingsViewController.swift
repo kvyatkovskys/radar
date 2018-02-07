@@ -46,6 +46,7 @@ final class SettingsViewController: UIViewController {
         
         tableView.register(FCButtonLoginTableViewCell.self, forCellReuseIdentifier: FCButtonLoginTableViewCell.cellIdentifier)
         tableView.register(StandardSettingTableViewCell.self, forCellReuseIdentifier: StandardSettingTableViewCell.cellIdentifier)
+        tableView.register(SwitchSettingTableViewCell.self, forCellReuseIdentifier: SwitchSettingTableViewCell.cellIdentifier)
     }
     
     func setUpAlertView(title: String, description: String, action: @escaping () -> Void) {
@@ -80,6 +81,14 @@ extension SettingsViewController: UITableViewDataSource {
         let typeCell = viewModel.items[indexPath.section].sectionObjects[indexPath.row]
         
         switch typeCell {
+        case .favoriteNotify(let title, _, let image, let color):
+            let cell = tableView.dequeueReusableCell(withIdentifier: SwitchSettingTableViewCell.cellIdentifier,
+                                                     for: indexPath) as? SwitchSettingTableViewCell ?? SwitchSettingTableViewCell()
+            
+            cell.title = title
+            cell.img = image
+            cell.imageColor = color
+            return cell
         case .facebookLogin:
             let cell = tableView.dequeueReusableCell(withIdentifier: FCButtonLoginTableViewCell.cellIdentifier,
                                                      for: indexPath) as? FCButtonLoginTableViewCell ?? FCButtonLoginTableViewCell()
@@ -125,7 +134,7 @@ extension SettingsViewController: UITableViewDelegate {
         let typeCell = viewModel.items[indexPath.section].sectionObjects[indexPath.row]
         
         switch typeCell {
-        case .facebookLogin, .clearFavorites, .clearHistorySearch, .showSearchHistory: return 50.0
+        case .facebookLogin, .clearFavorites, .clearHistorySearch, .showSearchHistory, .favoriteNotify: return 50.0
         }
     }
 }

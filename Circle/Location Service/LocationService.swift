@@ -10,6 +10,7 @@ import Foundation
 import CoreLocation
 import RxSwift
 import RealmSwift
+import UserNotifications
 
 final class LocationService: NSObject, CLLocationManagerDelegate {
     fileprivate var locationManager: CLLocationManager
@@ -34,7 +35,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
             
             favorites.forEach({ (item) in
                 let location = CLLocation(latitude: item.location?.latitude ?? 0.0, longitude: item.location?.longitude ?? 0.0)
-                startMonitoring(locationRegion: location, radius: 250.0, identifier: "\(item.id)")
+                startMonitoring(locationRegion: location, radius: 100.0, identifier: "\(item.id)")
             })
         } catch {
             print(error)
@@ -73,10 +74,9 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
     func checkAuthorized() {
         switch CLLocationManager.authorizationStatus() {
         case .restricted, .denied:
-            let alertController = UIAlertController(
-                title: "Access to the location is disabled.",
-                message: "To locate the location automatically, open the setting for this application and set i to 'When using the application' or 'Always usage'.",
-                preferredStyle: .alert)
+            let alertController = UIAlertController(title: "Access to the location is disabled.",
+                                                    message: "To locate the location automatically, open the setting for this application and set to 'When using the application' or 'Always usage'.",
+                                                    preferredStyle: .alert)
             
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             alertController.addAction(cancelAction)
@@ -142,7 +142,41 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
     }
 }
 
+extension LocationService: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .sound])
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        completionHandler()
+    }
+}
+
 extension LocationService {
+    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        if region is CLCircularRegion {
+            do {
+                let realm = try Realm()
+                let favorites = realm.objects(Favorites.self).filter("id = \(region.identifier)")
+                if let favorite = favorites.first {
+                    let notification = KSNotifications(center: UNUserNotificationCenter.current())
+                    notification.center.delegate = self
+                    notification.showNotification(title: "You are near your favorite place!",
+                                                  subTitle: favorite.title ?? "",
+                                                  body: favorite.about ?? "" + "\n",
+                                                  imageUrl: favorite.picture)
+                }
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
+        if region is CLCircularRegion {
+        }
+    }
+    
     func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error) {
         print("Monitoring failed for region with identifier: \(region!.identifier)")
     }

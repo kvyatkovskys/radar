@@ -20,7 +20,7 @@ struct Router {
         return [KingfisherOptionsInfoItem.transition(.fade(0.2))]
     }()
     
-    func showMainTabController() -> UITabBarController {
+    func showMainTabController(_ locationService: LocationService) -> UITabBarController {
         //swiftlint:disable force_cast
         var placesViewController = UIViewController()
         var viewModel = PlaceViewModel(PlaceService())
@@ -44,7 +44,7 @@ struct Router {
         
         placesViewController = PlacesViewController(PlacesViewDependecies(optionKingfisher,
                                                                           viewModel,
-                                                                          LocationService()))
+                                                                          locationService))
         let locationImage = UIImage(named: "ic_my_location")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         placesViewController.navigationItem.title = "Around here"
         placesViewController.tabBarItem = UITabBarItem(title: "My location", image: locationImage, tag: 1)
