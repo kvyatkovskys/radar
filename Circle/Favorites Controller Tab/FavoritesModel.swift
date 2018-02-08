@@ -27,7 +27,8 @@ class Favorites: Object {
     @objc dynamic var ratingStar: Float = 0
     @objc dynamic var ratingCount: Int = 0
     @objc dynamic var date: Date?
-    @objc dynamic var location: Location?
+    @objc dynamic var latitude: Double = 0
+    @objc dynamic var longitude: Double = 0
     let categories = List<String>()
     let subCategories = List<String>()
 }

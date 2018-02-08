@@ -34,7 +34,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
             let favorites = realm.objects(Favorites.self)
             
             favorites.forEach({ (item) in
-                let location = CLLocation(latitude: item.location?.latitude ?? 0.0, longitude: item.location?.longitude ?? 0.0)
+                let location = CLLocation(latitude: item.latitude, longitude: item.longitude)
                 startMonitoring(locationRegion: location, radius: 100.0, identifier: "\(item.id)")
             })
         } catch {

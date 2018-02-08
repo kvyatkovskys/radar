@@ -37,6 +37,10 @@ final class DetailPlaceViewController: UIViewController {
     fileprivate let sevice: OpenGraphService
     fileprivate let disposeBag = DisposeBag()
     
+    fileprivate var isAddFavorites: Bool {
+        return self.favoritesViewModel.checkAddingToFavorites(self.viewModel.place)
+    }
+    
     fileprivate lazy var headerView: UIView = {
         let view = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: heightHeaderTable))
         view.backgroundColor = .white
@@ -92,16 +96,16 @@ final class DetailPlaceViewController: UIViewController {
     
     fileprivate lazy var favoriteButton: UIButton = {
         let button = UIButton()
-        let image = UIImage(named: self.favoritesViewModel.checkAddingToFavorites(self.viewModel.place) == true ? "ic_favorite" : "ic_favorite_border")?.withRenderingMode(.alwaysTemplate)
+        let image = UIImage(named: isAddFavorites == true ? "ic_favorite" : "ic_favorite_border")?.withRenderingMode(.alwaysTemplate)
         button.setImage(image, for: .normal)
         button.tintColor = UIColor.mainColor
         button.backgroundColor = UIColor.shadowGray
-        button.setTitle(self.favoritesViewModel.checkAddingToFavorites(self.viewModel.place) == true ? " Remove" : " Add", for: .normal)
+        button.setTitle(isAddFavorites == true ? " Remove" : " Add", for: .normal)
         button.setTitleColor(UIColor.mainColor, for: .normal)
         button.titleLabel?.font = .boldSystemFont(ofSize: 15.0)
         button.layer.cornerRadius = 5.0
         button.addTarget(self, action: #selector(addToFavorites), for: .touchUpInside)
-        button.isSelected = !self.favoritesViewModel.checkAddingToFavorites(self.viewModel.place)
+        button.isSelected = !isAddFavorites
         return button
     }()
     
@@ -138,14 +142,7 @@ final class DetailPlaceViewController: UIViewController {
     }()
     
     fileprivate lazy var rightBarButton: UIBarButtonItem = {
-        let notifyImage: UIImage?
-        
-        if self.favoritesViewModel.checkAddingToFavorites(self.viewModel.place) {
-            notifyImage = UIImage(named: "ic_notifications_active")
-        } else {
-            notifyImage = UIImage(named: "ic_notifications_off")
-        }
-        
+        let notifyImage = UIImage(named: "ic_notifications_active")        
         let button = UIBarButtonItem(image: notifyImage, style: .done, target: self, action: #selector(changeNotify))
         return button
     }()
@@ -219,7 +216,10 @@ final class DetailPlaceViewController: UIViewController {
         super.viewDidLoad()
         
         setTitleNavBar()
-        navigationItem.rightBarButtonItem = rightBarButton
+        
+        if isAddFavorites {
+            navigationItem.rightBarButtonItem = rightBarButton
+        }
         
         headerView.addSubview(imageHeader)
         headerView.addSubview(titlePlace)
@@ -237,16 +237,16 @@ final class DetailPlaceViewController: UIViewController {
             let favorites = realm.objects(Favorites.self)
             notificationTokenFavorites = favorites.observe { [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
-                case .update:
-                    if self.favoritesViewModel.checkAddingToFavorites(self.viewModel.place) {
-                        self.favoriteButton.setTitle(" Remove", for: .normal)
-                        self.favoriteButton.setImage(UIImage(named: "ic_favorite")?.withRenderingMode(.alwaysTemplate), for: .normal)
-                        self.navigationItem.rightBarButtonItem?.image = UIImage(named: "ic_notifications_active")
-                    } else {
+                case .update(let favorites, _, _, _):
+                    guard favorites.contains(where: { $0.id == self.viewModel.place.id }) else {
                         self.favoriteButton.setTitle(" Add", for: .normal)
                         self.favoriteButton.setImage(UIImage(named: "ic_favorite_border")?.withRenderingMode(.alwaysTemplate), for: .normal)
-                        self.navigationItem.rightBarButtonItem?.image = UIImage(named: "ic_notifications_off")
+                        self.navigationItem.rightBarButtonItem = nil
+                        return
                     }
+                    self.favoriteButton.setTitle(" Remove", for: .normal)
+                    self.favoriteButton.setImage(UIImage(named: "ic_favorite")?.withRenderingMode(.alwaysTemplate), for: .normal)
+                    self.navigationItem.rightBarButtonItem = self.rightBarButton
                 case .error(let error):
                     fatalError("\(error)")
                 case .initial:

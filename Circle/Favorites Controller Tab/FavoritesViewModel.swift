@@ -80,12 +80,12 @@ struct FavoritesViewModel {
         var favorites: [Favorites] = []
         do {
             let realm = try Realm()
-            favorites = realm.objects(Favorites.self).map({ $0 })
+            favorites = realm.objects(Favorites.self).filter("id = \(place.id)").map({ $0 })
         } catch {
             print(error)
         }
         
-        return favorites.contains(where: { $0.id == place.id })
+        return !favorites.isEmpty
     }
     
     /// added to favorites
@@ -95,10 +95,6 @@ struct FavoritesViewModel {
         do {
             let realm = try Realm()
             let favorite = Favorites()
-            let location = Location()
-            
-            location.latitude = place.location?.latitude ?? 0.0
-            location.longitude = place.location?.longitude ?? 0.0
             
             favorite.id = place.id
             favorite.title = place.name
@@ -106,7 +102,8 @@ struct FavoritesViewModel {
             favorite.ratingCount = place.ratingCount ?? 0
             favorite.ratingStar = place.ratingStar ?? 0
             favorite.date = Date()
-            favorite.location = location
+            favorite.latitude = place.location?.latitude ?? 0.0
+            favorite.longitude = place.location?.longitude ?? 0.0
             
             place.categories?.forEach({ category in
                 favorite.categories.append(category.rawValue)

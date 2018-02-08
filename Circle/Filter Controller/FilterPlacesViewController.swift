@@ -13,7 +13,7 @@ import RealmSwift
 // color for segmented control
 fileprivate extension UIColor {
     static var segmentedColor: UIColor {
-        return UIColor(withHex: 0x34495e, alpha: 1.0)
+        return UIColor(withHex: 0xf82462, alpha: 1.0)
     }
 }
 
@@ -39,6 +39,8 @@ final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
         let segmented = UISegmentedControl(items: viewModel.items.map({ $0.title }))
         segmented.selectedSegmentIndex = 0
         segmented.tintColor = UIColor.segmentedColor
+        segmented.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.white], for: .selected)
+        segmented.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.gray], for: .normal)
         return segmented
     }()
     
