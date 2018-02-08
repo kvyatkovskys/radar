@@ -16,13 +16,6 @@ import RealmSwift
 
 let heightHeader: CGFloat = 100.0
 
-// color for hide map view
-fileprivate extension UIColor {
-    static var arrowButton: UIColor {
-        return UIColor(withHex: 0x34495e, alpha: 1.0)
-    }
-}
-
 final class PlacesViewController: UIViewController, FilterPlacesDelegate {
     typealias Dependecies = HasKingfisher & HasPlaceViewModel & HasLocationService
     
@@ -45,41 +38,15 @@ final class PlacesViewController: UIViewController, FilterPlacesDelegate {
         return table
     }()
     
-    fileprivate lazy var headerView: UIView = {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: heightHeader))
-        view.backgroundColor = .white
-        return view
-    }()
-    
-    fileprivate lazy var tapViewOnMap: UIView = {
-        let view = UIView()
-        view.backgroundColor = .clear
-        
-        let tapOnMap = UITapGestureRecognizer(target: self, action: #selector(showMap))
-        view.addGestureRecognizer(tapOnMap)
-        
-        return view
-    }()
-    
-    fileprivate lazy var mapView: MKMapView = {
-        let map = MKMapView()
-        map.mapType = .standard
-        map.isZoomEnabled = true
-        map.isRotateEnabled = true
-        map.isScrollEnabled = true
-        map.showsBuildings = true
-        map.showsCompass = true
-        map.showsPointsOfInterest = true
-        map.showsUserLocation = true
-        map.showsScale = true
-        map.contentMode = .scaleAspectFill
-        return map
-    }()
-    
     lazy var rightBarButton: UIBarButtonItem = {
-        let categoriesImage = UIImage(named: "ic_filter_list")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        let categoriesImage = UIImage(named: "ic_filter_list")?.withRenderingMode(.alwaysTemplate)
         let button = UIBarButtonItem(image: categoriesImage, style: .done, target: self, action: #selector(openFilter))
-        button.tintColor = .white
+        return button
+    }()
+    
+    lazy var leftBarButton: UIBarButtonItem = {
+        let categoriesImage = UIImage(named: "ic_map")?.withRenderingMode(.alwaysTemplate)
+        let button = UIBarButtonItem(image: categoriesImage, style: .done, target: self, action: #selector(showMap))
         return button
     }()
     
@@ -96,16 +63,6 @@ final class PlacesViewController: UIViewController, FilterPlacesDelegate {
         tableView.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(64.0)
             make.bottom.left.right.equalToSuperview()
-        }
-        
-        tapViewOnMap.snp.makeConstraints { (make) in
-            make.height.equalTo(heightHeader)
-            make.left.top.right.equalToSuperview()
-        }
-        
-        mapView.snp.makeConstraints { (make) in
-            make.height.equalTo(heightHeader)
-            make.left.top.right.equalToSuperview()
         }
         
         super.updateViewConstraints()
@@ -126,12 +83,10 @@ final class PlacesViewController: UIViewController, FilterPlacesDelegate {
         super.viewDidLoad()
         
         view.backgroundColor = .white
-        headerView.addSubview(mapView)
-        headerView.addSubview(tapViewOnMap)
         view.addSubview(tableView)
-        //tableView.tableHeaderView = headerView
         tableView.addSubview(refreshControl)
         navigationItem.rightBarButtonItem = rightBarButton
+        navigationItem.leftBarButtonItem = leftBarButton
         
         updateConstraints()
         locationService.start()
@@ -173,7 +128,6 @@ final class PlacesViewController: UIViewController, FilterPlacesDelegate {
         locationService.userLocation.asObserver()
             .subscribe(onNext: { [unowned self] (location) in
                 self.userLocation = location
-                self.centerMapOnLocation(location)
                 self.loadInfoAboutLocation(location)
             }, onError: { [unowned self] (error) in
                 print(error)
@@ -193,7 +147,7 @@ final class PlacesViewController: UIViewController, FilterPlacesDelegate {
     }
     
     @objc func showMap() {
-        viewModel.openMap(tableDataSource?.places ?? [], userLocation, tapViewOnMap.frame)
+        viewModel.openMap(tableDataSource?.places ?? [], userLocation)
     }
     
     // MARK: PlaceViewModel
@@ -205,7 +159,6 @@ final class PlacesViewController: UIViewController, FilterPlacesDelegate {
     func selectDistance(value: Double) {
         if let location = userLocation {
             loadInfoAboutLocation(location, distance: value)
-            centerMapOnLocation(location, radius: value)
         }
     }
     
@@ -217,7 +170,6 @@ final class PlacesViewController: UIViewController, FilterPlacesDelegate {
                 self.tableDataSource?.places += [model]
                 self.tableDelegate?.places += [model]
                 self.tableView.reloadData()
-                self.addPointOnMap(places: model, removeOldAnnotations: false)
             }, onError: { (error) in
                 print(error)
             }).disposed(by: disposeBag)
@@ -231,7 +183,6 @@ final class PlacesViewController: UIViewController, FilterPlacesDelegate {
                 self.tableDataSource?.places = [model]
                 self.tableDelegate?.places = [model]
                 self.tableView.reloadData()
-                self.addPointOnMap(places: model)
                 
                 self.indicatorView.hideIndicator()
                 if self.refreshControl.isRefreshing {
@@ -244,29 +195,5 @@ final class PlacesViewController: UIViewController, FilterPlacesDelegate {
                         self.refreshControl.endRefreshing()
                     }
             }).disposed(by: disposeBag)
-    }
-    
-    fileprivate func addPointOnMap(places: Places, removeOldAnnotations: Bool = true) {
-        if removeOldAnnotations {
-            mapView.removeAnnotations(mapView.annotations)
-        }
-        let locations = places.items.map({ CLLocationCoordinate2D(latitude: $0.location?.latitude ?? 0,
-                                                                  longitude: $0.location?.longitude ?? 0) })
-        
-        locations.forEach { (location) in
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = location
-            DispatchQueue.main.async { [unowned self] in
-                self.mapView.addAnnotation(annotation)
-            }
-        }
-    }
-    
-    fileprivate func centerMapOnLocation(_ location: CLLocation?, radius: Double = FilterDistanceViewModel().defaultDistance) {
-        if let location = location {
-            let regionRadius: CLLocationDistance = radius
-            let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius, regionRadius)
-            mapView.setRegion(coordinateRegion, animated: false)
-        }
     }
 }

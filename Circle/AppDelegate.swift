@@ -94,13 +94,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     fileprivate func migrations(schema: UInt64) {
-        let config = Realm.Configuration(
-            schemaVersion: schema,
-            migrationBlock: { _, oldSchemaVersion in
-                if oldSchemaVersion < schema { }
+        let config = Realm.Configuration(schemaVersion: schema, migrationBlock: { _, oldSchemaVersion in
+            if oldSchemaVersion < schema { }
         })
-        Realm.Configuration.defaultConfiguration = config
         
+        Realm.Configuration.defaultConfiguration = config
         do {
             _ = try Realm()
         } catch {

@@ -30,7 +30,7 @@ struct PlaceViewModel {
     var openFilter: ((_ delegate: FilterPlacesDelegate) -> Void) = {_ in }
     
     /// open map controller
-    var openMap: ((_ places: [Places], _ location: CLLocation?, _ sourceRect: CGRect) -> Void) = {_, _, _ in }
+    var openMap: ((_ places: [Places], _ location: CLLocation?) -> Void) = {_, _ in }
     
     /// open detail place controller
     var openDetailPlace: ((_ place: PlaceModel, _ title: NSMutableAttributedString?, _ rating: NSMutableAttributedString?, _ favoritesViewModel: FavoritesViewModel) -> Void) = {_, _, _, _ in }

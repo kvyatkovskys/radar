@@ -210,10 +210,12 @@ extension LocationService {
             
             guard (50.0..<100.0).contains(distance) || distance > 100.0 else {
                 userLocation.onNext(oldLocation)
+                print("не записываем")
                 return
             }
             
             userLocation.onNext(currentLocation)
+            print("записываем")
             
             let location = Location()
             location.latitude = currentLocation.coordinate.latitude

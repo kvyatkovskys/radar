@@ -21,6 +21,10 @@ fileprivate extension UIColor {
     static var mainColor: UIColor {
         return UIColor(withHex: 0xf82462, alpha: 1.0)
     }
+    
+    static var notifyEnabled: UIColor {
+        return UIColor(withHex: 0xF62232, alpha: 1.0)
+    }
 }
 
 final class DetailPlaceViewController: UIViewController {
@@ -133,6 +137,19 @@ final class DetailPlaceViewController: UIViewController {
         return ActivityIndicatorView(container: self.view)
     }()
     
+    fileprivate lazy var rightBarButton: UIBarButtonItem = {
+        let notifyImage: UIImage?
+        
+        if self.favoritesViewModel.checkAddingToFavorites(self.viewModel.place) {
+            notifyImage = UIImage(named: "ic_notifications_active")
+        } else {
+            notifyImage = UIImage(named: "ic_notifications_off")
+        }
+        
+        let button = UIBarButtonItem(image: notifyImage, style: .done, target: self, action: #selector(changeNotify))
+        return button
+    }()
+    
     override func updateViewConstraints() {
         super.updateViewConstraints()
         
@@ -202,6 +219,7 @@ final class DetailPlaceViewController: UIViewController {
         super.viewDidLoad()
         
         setTitleNavBar()
+        navigationItem.rightBarButtonItem = rightBarButton
         
         headerView.addSubview(imageHeader)
         headerView.addSubview(titlePlace)
@@ -223,9 +241,11 @@ final class DetailPlaceViewController: UIViewController {
                     if self.favoritesViewModel.checkAddingToFavorites(self.viewModel.place) {
                         self.favoriteButton.setTitle(" Remove", for: .normal)
                         self.favoriteButton.setImage(UIImage(named: "ic_favorite")?.withRenderingMode(.alwaysTemplate), for: .normal)
+                        self.navigationItem.rightBarButtonItem?.image = UIImage(named: "ic_notifications_active")
                     } else {
                         self.favoriteButton.setTitle(" Add", for: .normal)
                         self.favoriteButton.setImage(UIImage(named: "ic_favorite_border")?.withRenderingMode(.alwaysTemplate), for: .normal)
+                        self.navigationItem.rightBarButtonItem?.image = UIImage(named: "ic_notifications_off")
                     }
                 case .error(let error):
                     fatalError("\(error)")
@@ -265,8 +285,11 @@ final class DetailPlaceViewController: UIViewController {
         notificationTokenFavorites?.invalidate()
     }
     
+    @objc func changeNotify() {
+        
+    }
+    
     @objc func addToFavorites(sender: UIButton) {
-        UIImpactFeedbackGenerator().impactOccurred()
         sender.isSelected = !sender.isSelected
         
         guard sender.isSelected else {

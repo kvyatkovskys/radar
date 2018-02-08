@@ -90,17 +90,16 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
         table.dataSource = self
         table.delegate = self
         table.separatorColor = .lightGray
-        table.separatorInset = UIEdgeInsets(top: 0.0, left: 30.0, bottom: 0.0, right: 30.0)
+        table.separatorInset = UIEdgeInsets(top: 0.0, left: 15.0, bottom: 0.0, right: 15.0)
+        
         return table
     }()
     
     fileprivate lazy var titleQuerySearch: UILabel = {
         let label = UILabel(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 50.0))
-        label.text = "You recently searched for"
-        label.textAlignment = .center
+        label.text = "   You recently searched for"
         label.numberOfLines = 0
-        label.font = .boldSystemFont(ofSize: 15.0)
-        label.textColor = .gray
+        label.font = .boldSystemFont(ofSize: 17.0)
         return label
     }()
     
@@ -205,17 +204,17 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
                 switch changes {
                 case .initial:
                     if self.dataSourceQueries.isEmpty {
-                        self.titleQuerySearch.text = "Try to find something!"
+                        self.titleQuerySearch.text = "   Try to find something!"
                     }
                 case .update:
                     self.dataSourceQueries = self.searchViewModel.searchQueries
                     
                     guard !self.dataSourceQueries.isEmpty else {
-                        self.titleQuerySearch.text = "Try to find something!"
+                        self.titleQuerySearch.text = "   Try to find something!"
                         return
                     }
 
-                    self.titleQuerySearch.text = "You recently searched for"
+                    self.titleQuerySearch.text = "   You recently searched for"
                     
                     if self.viewType == .search {
                         self.tableView.reloadData()
@@ -294,7 +293,7 @@ extension SearchViewController: UITableViewDataSource {
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch viewType {
-        case .search: return 50.0
+        case .search: return 44.0
         case .savedQueries: return 170.0
         }
     }

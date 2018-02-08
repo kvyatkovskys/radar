@@ -31,11 +31,9 @@ struct Router {
                                   toController: FilterPlacesViewController(dependecies))
         }
         
-        viewModel.openMap = { places, location, sourceRect in
+        viewModel.openMap = { places, location in
             let dependecies = MapDependecies(places, location)
-            self.openMap(fromController: placesViewController as! PlacesViewController,
-                         toController: MapViewController(dependecies),
-                         sourceRect: sourceRect)
+            self.openMap(fromController: placesViewController as! PlacesViewController, toController: MapViewController(dependecies))
         }
         
         viewModel.openDetailPlace = { place, title, rating, favoritesViewModel in
@@ -138,18 +136,18 @@ struct Router {
     }
     
     /// open map controller
-    fileprivate func openMap(fromController: PlacesViewController, toController: UIViewController, sourceRect: CGRect) {
+    fileprivate func openMap(fromController: PlacesViewController, toController: UIViewController) {
         let navigation = UINavigationController(rootViewController: toController)
         navigation.modalPresentationStyle = UIModalPresentationStyle.popover
         navigation.isNavigationBarHidden = true
         
         let popover = navigation.popoverPresentationController
         popover?.delegate = fromController
-        popover?.sourceRect = sourceRect
-        popover?.sourceView = fromController.view
+        popover?.barButtonItem = fromController.leftBarButton
+        popover?.permittedArrowDirections = UIPopoverArrowDirection.any
         
         let width = fromController.view.frame.size.width
-        let height = fromController.view.frame.size.height - 200.0
+        let height = fromController.view.frame.size.height - 130.0
         toController.preferredContentSize = CGSize(width: width, height: height)
     
         fromController.present(navigation, animated: true, completion: nil)

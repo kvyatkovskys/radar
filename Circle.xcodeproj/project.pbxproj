@@ -411,7 +411,7 @@
 				8B41154A1FDB2CEF00C6614C /* AppDelegate.swift */,
 				8B41156A1FDC83AF00C6614C /* Router.swift */,
 				8B41156C1FDC845B00C6614C /* AppInjections.swift */,
-				8B105CBA202B655A006A5BBC /* KSNotifications.swift */,
+				8B6A37A6202C731F003CD1A8 /* Notifications */,
 				8BC3506A201CF64F00BB375B /* Search Controller Tab */,
 				8BC35067201CF62100BB375B /* Favorites Controller Tab */,
 				8B44C3841FF012E1003C0754 /* Setting Controller Tab */,
@@ -521,6 +521,14 @@
 				8B105CB220288EB3006A5BBC /* LocationModel.swift */,
 			);
 			path = "Location Service";
+			sourceTree = "<group>";
+		};
+		8B6A37A6202C731F003CD1A8 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				8B105CBA202B655A006A5BBC /* KSNotifications.swift */,
+			);
+			path = Notifications;
 			sourceTree = "<group>";
 		};
 		8B82C39120139F2D00E0CA89 /* Contact Buttons */ = {

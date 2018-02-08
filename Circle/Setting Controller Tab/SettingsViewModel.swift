@@ -61,7 +61,7 @@ struct SettingsViewModel {
                                                                                    description: "Are you sure you to clear search history?",
                                                                                    image: UIImage(named: "ic_delete_forever")!.withRenderingMode(.alwaysTemplate),
                                                                                    color: UIColor.deleted)]),
-                                   SettingsObject(.favorites, [.favoriteNotify(title: "Notify me if i'am near all my favorite places",
+                                   SettingsObject(.favorites, [.favoriteNotify(title: "Disable all notifications for selected places",
                                                                                description: "",
                                                                                image: UIImage(named: "ic_notifications")!.withRenderingMode(.alwaysTemplate),
                                                                                color: UIColor.notify),

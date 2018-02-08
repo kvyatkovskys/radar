@@ -90,6 +90,8 @@ struct FavoritesViewModel {
     
     /// added to favorites
     func addToFavorite(place: PlaceModel) {
+        UIImpactFeedbackGenerator().impactOccurred()
+        
         do {
             let realm = try Realm()
             let favorite = Favorites()
@@ -128,6 +130,8 @@ struct FavoritesViewModel {
     
     /// deleted from favorites
     func deleteFromFavorites(id: Int) {
+        UIImpactFeedbackGenerator().impactOccurred()
+        
         do {
             let realm = try Realm()
             let favorite = realm.objects(Favorites.self).filter("id = \(id)")

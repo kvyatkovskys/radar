@@ -47,7 +47,7 @@ struct SearchViewModel {
         
         do {
             let realm = try Realm()
-            let locationModel = realm.objects(Location.self).first
+            let locationModel = realm.objects(Location.self).last
             location = CLLocation(latitude: locationModel?.latitude ?? 0.0, longitude: locationModel?.longitude ?? 0.0)
         } catch {
             print(error)
