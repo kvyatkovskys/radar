@@ -13,6 +13,7 @@ final class ListFavoritesNoticeTableViewCell: UITableViewCell {
     
     fileprivate let titleLabel: UILabel = {
         let label = UILabel()
+        label.numberOfLines = 0
         return label
     }()
     
@@ -21,8 +22,8 @@ final class ListFavoritesNoticeTableViewCell: UITableViewCell {
         
         titleLabel.snp.makeConstraints { (make) in
             make.top.bottom.equalToSuperview().inset(5.0)
-            make.right.equalToSuperview()
             make.left.equalToSuperview().offset(15.0)
+            make.right.equalToSuperview().offset(-25.0)
         }
     }
     
@@ -32,10 +33,18 @@ final class ListFavoritesNoticeTableViewCell: UITableViewCell {
         }
     }
     
+    var checkmark: Bool = true {
+        didSet {
+            guard checkmark else {
+                accessoryType = .none
+                return
+            }
+            accessoryType = .checkmark
+        }
+    }
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        selectionStyle = .none
         
         addSubview(titleLabel)
         updateConstraints()

@@ -48,8 +48,8 @@ final class FavoritesViewController: UIViewController {
                 switch changes {
                 case .initial:
                     self.tableView.reloadData()
-                case .update(let collectionType, _, _, _):
-                    self.viewModel.favoritePlaces = self.viewModel.updateValue(collectionType.sorted(by: { $0.date! > $1.date! }).map({ $0 }))
+                case .update(let collection, _, _, _):
+                    self.viewModel.favoritePlaces = self.viewModel.updateValue(collection.sorted(byKeyPath: "date", ascending: false).map({ $0 }))
                     self.tableView.reloadData()
                 case .error(let error):
                     fatalError("\(error)")
@@ -104,7 +104,6 @@ extension FavoritesViewController: UITableViewDataSource {
 extension FavoritesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let delete = UITableViewRowAction(style: .destructive, title: "Remove") { [unowned self] (_, indexPath) in
-
             self.viewModel.deleteFromFavorites(id: self.viewModel.favoritePlaces[indexPath.row].id)
             self.viewModel.favoritePlaces.remove(at: indexPath.row)
             self.tableView.beginUpdates()

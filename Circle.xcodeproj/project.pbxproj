@@ -49,8 +49,6 @@
 		8B41156D1FDC845B00C6614C /* AppInjections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B41156C1FDC845B00C6614C /* AppInjections.swift */; };
 		8B41770A1FFD5785002A963A /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4177091FFD5785002A963A /* ActivityIndicatorView.swift */; };
 		8B4177191FFD670B002A963A /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4177181FFD670B002A963A /* DeviceType.swift */; };
-		8B41771B1FFF6491002A963A /* DistancePickerViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B41771A1FFF6491002A963A /* DistancePickerViewDataSource.swift */; };
-		8B41771D1FFF64A7002A963A /* DistancePickerViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B41771C1FFF64A7002A963A /* DistancePickerViewDelegate.swift */; };
 		8B44C37D1FEFDFA5003C0754 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B44C37C1FEFDFA5003C0754 /* LocationService.swift */; };
 		8B44C37F1FEFE195003C0754 /* QuickAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B44C37E1FEFE195003C0754 /* QuickAlertController.swift */; };
 		8B44C3831FF012C8003C0754 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B44C3821FF012C8003C0754 /* SettingsViewController.swift */; };
@@ -62,6 +60,7 @@
 		8B6A37AA202DD403003CD1A8 /* ListFavoritesNoticeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6A37A9202DD403003CD1A8 /* ListFavoritesNoticeViewController.swift */; };
 		8B6A37AC202DD484003CD1A8 /* ListFavoritesNoticeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6A37AB202DD484003CD1A8 /* ListFavoritesNoticeViewModel.swift */; };
 		8B6A37AE202DD547003CD1A8 /* ListFavoritesNoticeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6A37AD202DD547003CD1A8 /* ListFavoritesNoticeTableViewCell.swift */; };
+		8B6A37B1202E314B003CD1A8 /* DistanceFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6A37B0202E314B003CD1A8 /* DistanceFilterView.swift */; };
 		8B6D4E1F1FFBA0CD007904D4 /* PlacesTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6D4E1E1FFBA0CD007904D4 /* PlacesTableViewDataSource.swift */; };
 		8B6D4E211FFBA0DC007904D4 /* PlacesTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6D4E201FFBA0DC007904D4 /* PlacesTableViewDelegate.swift */; };
 		8B82C38620133A0200E0CA89 /* Error+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C38520133A0200E0CA89 /* Error+Extension.swift */; };
@@ -175,8 +174,6 @@
 		8B41156C1FDC845B00C6614C /* AppInjections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInjections.swift; sourceTree = "<group>"; };
 		8B4177091FFD5785002A963A /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
 		8B4177181FFD670B002A963A /* DeviceType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceType.swift; sourceTree = "<group>"; };
-		8B41771A1FFF6491002A963A /* DistancePickerViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistancePickerViewDataSource.swift; sourceTree = "<group>"; };
-		8B41771C1FFF64A7002A963A /* DistancePickerViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistancePickerViewDelegate.swift; sourceTree = "<group>"; };
 		8B44C37C1FEFDFA5003C0754 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		8B44C37E1FEFE195003C0754 /* QuickAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAlertController.swift; sourceTree = "<group>"; };
 		8B44C3821FF012C8003C0754 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -189,6 +186,7 @@
 		8B6A37A9202DD403003CD1A8 /* ListFavoritesNoticeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListFavoritesNoticeViewController.swift; sourceTree = "<group>"; };
 		8B6A37AB202DD484003CD1A8 /* ListFavoritesNoticeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListFavoritesNoticeViewModel.swift; sourceTree = "<group>"; };
 		8B6A37AD202DD547003CD1A8 /* ListFavoritesNoticeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListFavoritesNoticeTableViewCell.swift; sourceTree = "<group>"; };
+		8B6A37B0202E314B003CD1A8 /* DistanceFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceFilterView.swift; sourceTree = "<group>"; };
 		8B6D4E1E1FFBA0CD007904D4 /* PlacesTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesTableViewDataSource.swift; sourceTree = "<group>"; };
 		8B6D4E201FFBA0DC007904D4 /* PlacesTableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesTableViewDelegate.swift; sourceTree = "<group>"; };
 		8B82C38520133A0200E0CA89 /* Error+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extension.swift"; sourceTree = "<group>"; };
@@ -466,8 +464,7 @@
 		8B41771E1FFF69BF002A963A /* Distance View */ = {
 			isa = PBXGroup;
 			children = (
-				8B41771A1FFF6491002A963A /* DistancePickerViewDataSource.swift */,
-				8B41771C1FFF64A7002A963A /* DistancePickerViewDelegate.swift */,
+				8B6A37B0202E314B003CD1A8 /* DistanceFilterView.swift */,
 			);
 			path = "Distance View";
 			sourceTree = "<group>";
@@ -498,9 +495,7 @@
 				8B44C3821FF012C8003C0754 /* SettingsViewController.swift */,
 				8B6A37A7202DA9A1003CD1A8 /* SettingsModel.swift */,
 				8B18FE11200A8FFA00E637C7 /* SettingsViewModel.swift */,
-				8B6A37A9202DD403003CD1A8 /* ListFavoritesNoticeViewController.swift */,
-				8B6A37AB202DD484003CD1A8 /* ListFavoritesNoticeViewModel.swift */,
-				8B6A37AD202DD547003CD1A8 /* ListFavoritesNoticeTableViewCell.swift */,
+				8B6A37AF202DE92D003CD1A8 /* List Favorites Notice */,
 				8BAC19F3202B9445009C6547 /* Search History Controller */,
 				8B147BD620246A1100EDA2D4 /* Setting Cells */,
 			);
@@ -541,6 +536,16 @@
 				8B105CBA202B655A006A5BBC /* KSNotifications.swift */,
 			);
 			path = Notifications;
+			sourceTree = "<group>";
+		};
+		8B6A37AF202DE92D003CD1A8 /* List Favorites Notice */ = {
+			isa = PBXGroup;
+			children = (
+				8B6A37A9202DD403003CD1A8 /* ListFavoritesNoticeViewController.swift */,
+				8B6A37AB202DD484003CD1A8 /* ListFavoritesNoticeViewModel.swift */,
+				8B6A37AD202DD547003CD1A8 /* ListFavoritesNoticeTableViewCell.swift */,
+			);
+			path = "List Favorites Notice";
 			sourceTree = "<group>";
 		};
 		8B82C39120139F2D00E0CA89 /* Contact Buttons */ = {
@@ -882,7 +887,6 @@
 				8B41154D1FDB2CEF00C6614C /* PlacesViewController.swift in Sources */,
 				8B3398D2200F77E4002966ED /* DeatilContactsTableViewCell.swift in Sources */,
 				8B82C38620133A0200E0CA89 /* Error+Extension.swift in Sources */,
-				8B41771B1FFF6491002A963A /* DistancePickerViewDataSource.swift in Sources */,
 				8B82C3932014843E00E0CA89 /* OpenGraphService.swift in Sources */,
 				8BC35074201E250000BB375B /* ListRSpecialityCollectionViewCell.swift in Sources */,
 				8B3398CE200F66B5002966ED /* DetailDescriptionTableViewCell.swift in Sources */,
@@ -916,6 +920,7 @@
 				8BC35066201CF60700BB375B /* FavoritesViewController.swift in Sources */,
 				8B3398D4200FE5E2002966ED /* DetailAddressTableViewCell.swift in Sources */,
 				8BFBF57B200517B000CE2C8B /* CategoriesTableViewDataSource.swift in Sources */,
+				8B6A37B1202E314B003CD1A8 /* DistanceFilterView.swift in Sources */,
 				8BC35069201CF64600BB375B /* SearchViewController.swift in Sources */,
 				8B18FE082007F8E000E637C7 /* View+Extension.swift in Sources */,
 				8BC35072201E248600BB375B /* ListRSpecialtiesCollectionDataSource.swift in Sources */,
@@ -931,7 +936,6 @@
 				8BC35063201CF22400BB375B /* ListRServicesCollectionDataSource.swift in Sources */,
 				8BE208A51FFD25CB0048D690 /* FilterPlacesViewModel.swift in Sources */,
 				8B105CB320288EB3006A5BBC /* LocationModel.swift in Sources */,
-				8B41771D1FFF64A7002A963A /* DistancePickerViewDelegate.swift in Sources */,
 				8BFBF57D200517D000CE2C8B /* CategoriesTableViewDelegate.swift in Sources */,
 				8B5F71531FF923A700E628F9 /* PlaceModel.swift in Sources */,
 				8B6A37A5202B96C8003CD1A8 /* SwitchSettingTableViewCell.swift in Sources */,

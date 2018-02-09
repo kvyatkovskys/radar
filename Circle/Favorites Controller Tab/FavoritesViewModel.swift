@@ -21,11 +21,11 @@ struct FavoritesViewModel {
         var favorites: [Favorites] = []
         do {
             let realm = try Realm()
-            favorites = realm.objects(Favorites.self).map({ $0 })
+            favorites = realm.objects(Favorites.self).sorted(byKeyPath: "date", ascending: false).map({ $0 })
         } catch {
             print(error)
         }
-        self.favoritePlaces = updateValue(favorites.sorted(by: { $0.date! > $1.date! }))
+        self.favoritePlaces = updateValue(favorites)
     }
     
     func updateValue(_ favorites: [Favorites]) -> [FavoritesModel] {

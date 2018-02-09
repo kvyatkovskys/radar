@@ -26,26 +26,16 @@ struct FilterViewModel {
 
 struct FilterDistanceViewModel {
     let defaultDistance: Double
-    let items: [FilterDistanceModel] = [FilterDistanceModel(title: "500 meters", value: 500.0),
-                                        FilterDistanceModel(title: "1000 meters", value: 1000.0),
-                                        FilterDistanceModel(title: "1500 meters", value: 1500.0),
-                                        FilterDistanceModel(title: "2000 meters", value: 2000.0),
-                                        FilterDistanceModel(title: "2500 meters", value: 2500.0),
-                                        FilterDistanceModel(title: "3000 meters", value: 3000.0),
-                                        FilterDistanceModel(title: "3500 meters", value: 3500.0),
-                                        FilterDistanceModel(title: "4000 meters", value: 4000.0),
-                                        FilterDistanceModel(title: "4500 meters", value: 4500.0),
-                                        FilterDistanceModel(title: "5000 meters", value: 5000.0)]
-    
+ 
     init() {
-        var selectedDistance: Double? = 0.0
+        var selectedDistance: Double = 0.0
         do {
             let realm = try Realm()
-            selectedDistance = realm.objects(FilterSelectedDistance.self).first?.distance
+            selectedDistance = realm.objects(FilterSelectedDistance.self).first?.distance ?? 1000.0
         } catch {
             print(error)
         }
-        self.defaultDistance = selectedDistance ?? 1000.0
+        self.defaultDistance = selectedDistance
     }
     
     func setNewDistance(value: Double) {

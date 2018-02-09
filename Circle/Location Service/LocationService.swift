@@ -41,16 +41,14 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
                 case .initial:
                     break
                 case .update(let favorite, _, _, _):
-                    print(favorite)
                     let settingsIsDisabled = realm.objects(Settings.self).first
                     guard let disabledNotice = settingsIsDisabled?.disabledNotice, disabledNotice == false else {
-                        print("уведомления все отключены")
+                        print("notifications are disabled")
                         return
                     }
                    
                     self.stopMonitoring()
                     favorite.filter({ $0.notify == true }).forEach({ (item) in
-                        print(item)
                         let location = CLLocation(latitude: item.latitude, longitude: item.longitude)
                         self.startMonitoring(locationRegion: location, radius: 100.0, identifier: "\(item.id)")
                     })

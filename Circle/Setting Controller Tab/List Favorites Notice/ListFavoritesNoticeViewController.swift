@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import RealmSwift
 
 final class ListFavoritesNoticeViewController: UIViewController {
     typealias Dependecies = HasListFavoritesNoticeViewModel
     
-    fileprivate let viewModel: ListFavoritesNoticeViewModel
+    fileprivate var viewModel: ListFavoritesNoticeViewModel
+    fileprivate var notificationToken: NotificationToken?
     
     fileprivate lazy var tableView: UITableView = {
         let table = UITableView()
@@ -49,13 +51,39 @@ final class ListFavoritesNoticeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = "Search History"
+        navigationItem.title = "List Favorites"
         navigationItem.leftBarButtonItem = leftBarButton
         
         view.addSubview(tableView)
         updateViewConstraints()
         
         tableView.register(ListFavoritesNoticeTableViewCell.self, forCellReuseIdentifier: ListFavoritesNoticeTableViewCell.cellIdentifier)
+        
+        do {
+            let realm = try Realm()
+            let favorites = realm.objects(Favorites.self)
+            
+            notificationToken = favorites.observe({ [unowned self] (changes: RealmCollectionChange) in
+                switch changes {
+                case .initial:
+                    break
+                case .update(let favorite, _, _, let modifications):
+                    self.tableView.beginUpdates()
+                    self.viewModel.dataSource = favorite.sorted(byKeyPath: "date", ascending: false).map({ $0 })
+                    let indexPaths = modifications.map({ IndexPath(row: $0, section: 0) })
+                    self.tableView.reloadRows(at: indexPaths, with: .automatic)
+                    self.tableView.endUpdates()
+                case .error(let error):
+                    fatalError("\(error)")
+                }
+            })
+        } catch {
+            print(error)
+        }
+    }
+    
+    deinit {
+        notificationToken?.invalidate()
     }
 
     @objc func closeController() {
@@ -73,7 +101,8 @@ extension ListFavoritesNoticeViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: ListFavoritesNoticeTableViewCell.cellIdentifier,
                                                  for: indexPath) as? ListFavoritesNoticeTableViewCell ?? ListFavoritesNoticeTableViewCell()
         
-        cell.title = item        
+        cell.title = item.title
+        cell.checkmark = item.notify
         return cell
     }
 }
@@ -81,5 +110,12 @@ extension ListFavoritesNoticeViewController: UITableViewDataSource {
 extension ListFavoritesNoticeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44.0
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        let item = viewModel.dataSource[indexPath.row]
+        viewModel.selectNotify(item)
     }
 }

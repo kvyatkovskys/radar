@@ -29,9 +29,7 @@ final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
     fileprivate let viewModelDistance: FilterDistanceViewModel
     fileprivate let viewModel: FilterViewModel
     fileprivate weak var delegate: FilterPlacesDelegate?
-    fileprivate var pickerDataSource: DistancePickerViewDataSource?
     //swiftlint:disable weak_delegate
-    fileprivate var pickerDelegate: DistancePickerViewDelegate?
     fileprivate var tableDataSource: CategoriesTableViewDataSource?
     fileprivate var tableDelegate: CategoriesTableViewDelegate?
     
@@ -44,9 +42,9 @@ final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
         return segmented
     }()
     
-    fileprivate lazy var pickerView: UIPickerView = {
-        let picker = UIPickerView()
-        return picker
+    fileprivate lazy var distanceView: DistanceFilterView = {
+        let view = DistanceFilterView()
+        return view
     }()
     
     fileprivate lazy var tableView: UITableView = {
@@ -69,8 +67,8 @@ final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
             make.height.equalTo(25.0)
         }
         
-        if view.subviews.contains(pickerView) {
-            pickerView.snp.makeConstraints { (make) in
+        if view.subviews.contains(distanceView) {
+            distanceView.snp.makeConstraints { (make) in
                 make.top.equalTo(segmentedControl.snp.bottom).offset(5.0)
                 make.left.bottom.right.equalToSuperview()
             }
@@ -78,7 +76,7 @@ final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
         
         if view.subviews.contains(tableView) {
             tableView.snp.makeConstraints { (make) in
-                make.top.equalTo(segmentedControl.snp.bottom)
+                make.top.equalTo(segmentedControl.snp.bottom).offset(5.0)
                 make.left.bottom.right.equalToSuperview()
             }
         }
@@ -109,19 +107,16 @@ final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
         
         view.addSubview(segmentedControl)
         
-        pickerDataSource = DistancePickerViewDataSource(pickerView, viewModelDistance)
-        pickerDelegate = DistancePickerViewDelegate(pickerView, viewModelDistance.items)
-        
         tableView.register(CategoriesTableViewCell.self, forCellReuseIdentifier: CategoriesTableViewCell.cellIdentifier)
         tableDataSource = CategoriesTableViewDataSource(tableView, viewModelCategories)
         tableDelegate = CategoriesTableViewDelegate(tableView, viewModelCategories)
         
-        pickerDelegate?.selectValue.asObserver()
+        distanceView.sliderDistance.asObserver()
             .subscribe(onNext: { [unowned self, weak delegate = self.delegate] (value) in
                 self.viewModelDistance.setNewDistance(value: value)
                 delegate?.selectDistance(value: value)
-                }, onError: { (error) in
-                    print(error)
+            }, onError: { (error) in
+                print(error)
             }).disposed(by: disposeBag)
         
         segmentedControl.rx.selectedSegmentIndex
@@ -131,17 +126,17 @@ final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
                 case .distance?:
                     self.navigationController?.preferredContentSize = CGSize(width: 250.0, height: 200.0)
                     self.view.subviews.filter({ $0 is UITableView || $0 is RatingPlacesView }).forEach({ $0.removeFromSuperview() })
-                    self.view.addSubview(self.pickerView)
+                    self.view.addSubview(self.distanceView)
                     self.updateViewConstraints()
                 case .categories?:
                     self.navigationController?.preferredContentSize = CGSize(width: 250.0,
                                                                              height: self.tableView.contentSize.height)
-                    self.view.subviews.filter({ $0 is UIPickerView || $0 is RatingPlacesView }).forEach({ $0.removeFromSuperview() })
+                    self.view.subviews.filter({ $0 is DistanceFilterView || $0 is RatingPlacesView }).forEach({ $0.removeFromSuperview() })
                     self.view.addSubview(self.tableView)
                     self.updateViewConstraints()
                 case .rating?:
                     self.navigationController?.preferredContentSize = CGSize(width: 250.0, height: 200.0)
-                    self.view.subviews.filter({ $0 is UIPickerView || $0 is UITableView }).forEach({ $0.removeFromSuperview() })
+                    self.view.subviews.filter({ $0 is DistanceFilterView || $0 is UITableView }).forEach({ $0.removeFromSuperview() })
                     self.view.addSubview(self.ratingView)
                     self.updateViewConstraints()
                 case .none:
