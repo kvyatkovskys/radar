@@ -15,7 +15,8 @@ import UserNotifications
 final class LocationService: NSObject, CLLocationManagerDelegate {
     fileprivate var locationManager: CLLocationManager
     fileprivate let window = UIApplication.shared.keyWindow
-    fileprivate var notificationToken: NotificationToken?
+    fileprivate var notificationTokenSettings: NotificationToken?
+    fileprivate var notificationTokenFavorites: NotificationToken?
     let userLocation = PublishSubject<CLLocation?>()
     
     fileprivate let geocoder: CLGeocoder = {
@@ -33,18 +34,42 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
         do {
             let realm = try Realm()
             let settings = realm.objects(Settings.self)
+            let favorites = realm.objects(Favorites.self)
             
-            notificationToken = settings.observe { [unowned self] (changes: RealmCollectionChange) in
+            notificationTokenFavorites = favorites.observe({ [unowned self] (changes: RealmCollectionChange) in
+                switch changes {
+                case .initial:
+                    break
+                case .update(let favorite, _, _, _):
+                    print(favorite)
+                    let settingsIsDisabled = realm.objects(Settings.self).first
+                    guard let disabledNotice = settingsIsDisabled?.disabledNotice, disabledNotice == false else {
+                        print("уведомления все отключены")
+                        return
+                    }
+                   
+                    self.stopMonitoring()
+                    favorite.filter({ $0.notify == true }).forEach({ (item) in
+                        print(item)
+                        let location = CLLocation(latitude: item.latitude, longitude: item.longitude)
+                        self.startMonitoring(locationRegion: location, radius: 100.0, identifier: "\(item.id)")
+                    })
+                case .error(let error):
+                    fatalError("\(error)")
+                }
+            })
+            
+            notificationTokenSettings = settings.observe { [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
                 case .update(let setting, _, _, _), .initial(let setting):
-                    let favorites = realm.objects(Favorites.self).filter("notify = 1")
+                    let favoritesIsNotify = realm.objects(Favorites.self).filter("notify = 1")
                     
                     guard let disabledNotice = setting.first?.disabledNotice, disabledNotice == false else {
                         self.stopMonitoring()
                         return
                     }
                     
-                    favorites.forEach({ (item) in
+                    favoritesIsNotify.forEach({ (item) in
                         self.stopMonitoring()
                         let location = CLLocation(latitude: item.latitude, longitude: item.longitude)
                         self.startMonitoring(locationRegion: location, radius: 100.0, identifier: "\(item.id)")
@@ -56,6 +81,11 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
         } catch {
             print(error)
         }
+    }
+    
+    deinit {
+        notificationTokenSettings?.invalidate()
+        notificationTokenFavorites?.invalidate()
     }
     
     func start() {
@@ -142,8 +172,21 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
             return
         }
         if CLLocationManager.authorizationStatus() != .authorizedAlways {
-            window?.rootViewController?.showAlertLight(title: "Warning",
-                                                       message: "Your geotification is saved but will only be activated once you grant Geotify permission to access the device location.")
+            let alertController = UIAlertController(title: "Warning",
+                                                    message: "Your geotification is saved but will only be activated once you grant Geotify permission to access the device location.",
+                                                    preferredStyle: .alert)
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            alertController.addAction(cancelAction)
+            
+            let openAction = UIAlertAction(title: "Open settings", style: .default) { _ in
+                if let url = URL(string: UIApplicationOpenSettingsURLString) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                }
+            }
+            alertController.addAction(openAction)
+            
+            window?.rootViewController?.present(alertController, animated: true, completion: nil)
         }
         let region = regionCreate(with: locationRegion, radius: radius, identifier: identifier)
         locationManager.startMonitoring(for: region)
