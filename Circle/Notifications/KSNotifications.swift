@@ -59,7 +59,7 @@ final class KSNotifications: NSObject {
         }
     }
     
-    fileprivate func loadImage(with url: URL, completion: @escaping (_ image: UIImage?) -> Void) {
+    fileprivate func loadImage(with url: URL, completion: @escaping (_: UIImage?) -> Void) {
         URLSession.shared.dataTask(with: url) { (data, response, _) in
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
                 completion(nil)

@@ -9,11 +9,13 @@
 import Foundation
 import RealmSwift
 
+typealias FavoritesNotify = (addFavorites: Bool, allowNotify: Bool?)
+
 struct FavoritesViewModel {
     var favoritePlaces: [FavoritesModel] = []
     
     /// open detail place controller
-    var openDetailPlace: ((_ place: PlaceModel, _ title: NSMutableAttributedString?, _ rating: NSMutableAttributedString?, _ favoritesViewModel: FavoritesViewModel) -> Void) = {_, _, _, _ in }
+    var openDetailPlace: ((PlaceModel, NSMutableAttributedString?, NSMutableAttributedString?, FavoritesViewModel) -> Void) = {_, _, _, _ in }
     
     init() {
         var favorites: [Favorites] = []
@@ -76,7 +78,7 @@ struct FavoritesViewModel {
     }
     
     /// check, if place adding to favorites
-    func checkAddingToFavorites(_ place: PlaceModel) -> Bool {
+    func checkAddAndNotify(_ place: PlaceModel) -> FavoritesNotify {
         var favorites: [Favorites] = []
         do {
             let realm = try Realm()
@@ -85,7 +87,27 @@ struct FavoritesViewModel {
             print(error)
         }
         
-        return !favorites.isEmpty
+        return FavoritesNotify(!favorites.isEmpty, favorites.first?.notify)
+    }
+    
+    func allowNotify(place: PlaceModel) -> Bool {
+        UIImpactFeedbackGenerator().impactOccurred()
+        
+        var result = false
+        do {
+            let realm = try Realm()
+            let favorite = realm.objects(Favorites.self).filter("id = \(place.id)").first
+            
+            if let oldFavorite = favorite {
+                try realm.write {
+                    result = !oldFavorite.notify
+                    oldFavorite.notify = !oldFavorite.notify
+                }
+            }
+        } catch {
+            print(error)
+        }
+        return result
     }
     
     /// added to favorites
@@ -104,6 +126,7 @@ struct FavoritesViewModel {
             favorite.date = Date()
             favorite.latitude = place.location?.latitude ?? 0.0
             favorite.longitude = place.location?.longitude ?? 0.0
+            favorite.notify = true
             
             place.categories?.forEach({ category in
                 favorite.categories.append(category.rawValue)

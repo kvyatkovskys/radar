@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import RxSwift
 
 final class SettingsViewController: UIViewController {
     typealias Dependecies = HasSettingsViewModel
     
     fileprivate let viewModel: SettingsViewModel
+    fileprivate let disposeBag = DisposeBag()
     
     fileprivate lazy var tableView: UITableView = {
         let table = UITableView()
@@ -81,13 +83,22 @@ extension SettingsViewController: UITableViewDataSource {
         let typeCell = viewModel.items[indexPath.section].sectionObjects[indexPath.row]
         
         switch typeCell {
-        case .favoriteNotify(let title, _, let image, let color):
+        case .favoriteNotify(let title, let enable, let image, let color):
             let cell = tableView.dequeueReusableCell(withIdentifier: SwitchSettingTableViewCell.cellIdentifier,
                                                      for: indexPath) as? SwitchSettingTableViewCell ?? SwitchSettingTableViewCell()
             
             cell.title = title
             cell.img = image
             cell.imageColor = color
+            cell.enable = enable
+            
+            cell.switchButton.rx.value.asObservable()
+                .subscribe(onNext: { [unowned self] (isOn) in
+                    self.viewModel.disabledNotice(isOn)
+                }, onError: { (error) in
+                    print(error)
+                }).disposed(by: disposeBag)
+            
             return cell
         case .facebookLogin:
             let cell = tableView.dequeueReusableCell(withIdentifier: FCButtonLoginTableViewCell.cellIdentifier,

@@ -37,8 +37,8 @@ final class DetailPlaceViewController: UIViewController {
     fileprivate let sevice: OpenGraphService
     fileprivate let disposeBag = DisposeBag()
     
-    fileprivate var isAddFavorites: Bool {
-        return self.favoritesViewModel.checkAddingToFavorites(self.viewModel.place)
+    fileprivate var favoriteNotify: FavoritesNotify {
+        return favoritesViewModel.checkAddAndNotify(viewModel.place)
     }
     
     fileprivate lazy var headerView: UIView = {
@@ -96,16 +96,16 @@ final class DetailPlaceViewController: UIViewController {
     
     fileprivate lazy var favoriteButton: UIButton = {
         let button = UIButton()
-        let image = UIImage(named: isAddFavorites == true ? "ic_favorite" : "ic_favorite_border")?.withRenderingMode(.alwaysTemplate)
+        let image = UIImage(named: favoriteNotify.addFavorites == true ? "ic_favorite" : "ic_favorite_border")?.withRenderingMode(.alwaysTemplate)
         button.setImage(image, for: .normal)
         button.tintColor = UIColor.mainColor
         button.backgroundColor = UIColor.shadowGray
-        button.setTitle(isAddFavorites == true ? " Remove" : " Add", for: .normal)
+        button.setTitle(favoriteNotify.addFavorites == true ? " Remove" : " Add", for: .normal)
         button.setTitleColor(UIColor.mainColor, for: .normal)
         button.titleLabel?.font = .boldSystemFont(ofSize: 15.0)
         button.layer.cornerRadius = 5.0
         button.addTarget(self, action: #selector(addToFavorites), for: .touchUpInside)
-        button.isSelected = !isAddFavorites
+        button.isSelected = !favoriteNotify.addFavorites
         return button
     }()
     
@@ -141,11 +141,18 @@ final class DetailPlaceViewController: UIViewController {
         return ActivityIndicatorView(container: self.view)
     }()
     
-    fileprivate lazy var rightBarButton: UIBarButtonItem = {
-        let notifyImage = UIImage(named: "ic_notifications_active")        
+    fileprivate func rightBarButton() -> UIBarButtonItem {
+        let notifyImage: UIImage?
+        
+        if let allow = favoriteNotify.allowNotify, allow == true {
+            notifyImage = UIImage(named: "ic_notifications_active")
+        } else {
+            notifyImage = UIImage(named: "ic_notifications_off")
+        }
+
         let button = UIBarButtonItem(image: notifyImage, style: .done, target: self, action: #selector(changeNotify))
         return button
-    }()
+    }
     
     override func updateViewConstraints() {
         super.updateViewConstraints()
@@ -217,8 +224,8 @@ final class DetailPlaceViewController: UIViewController {
         
         setTitleNavBar()
         
-        if isAddFavorites {
-            navigationItem.rightBarButtonItem = rightBarButton
+        if favoriteNotify.addFavorites {
+            navigationItem.rightBarButtonItem = rightBarButton()
         }
         
         headerView.addSubview(imageHeader)
@@ -246,7 +253,7 @@ final class DetailPlaceViewController: UIViewController {
                     }
                     self.favoriteButton.setTitle(" Remove", for: .normal)
                     self.favoriteButton.setImage(UIImage(named: "ic_favorite")?.withRenderingMode(.alwaysTemplate), for: .normal)
-                    self.navigationItem.rightBarButtonItem = self.rightBarButton
+                    self.navigationItem.rightBarButtonItem = self.rightBarButton()
                 case .error(let error):
                     fatalError("\(error)")
                 case .initial:
@@ -286,7 +293,13 @@ final class DetailPlaceViewController: UIViewController {
     }
     
     @objc func changeNotify() {
-        
+        let allow = favoritesViewModel.allowNotify(place: viewModel.place)
+    
+        guard allow else {
+            navigationItem.rightBarButtonItem?.image = UIImage(named: "ic_notifications_off")
+            return
+        }
+        navigationItem.rightBarButtonItem?.image = UIImage(named: "ic_notifications_active")
     }
     
     @objc func addToFavorites(sender: UIButton) {

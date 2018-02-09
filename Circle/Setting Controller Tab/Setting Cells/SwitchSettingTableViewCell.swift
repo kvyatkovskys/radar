@@ -24,7 +24,7 @@ final class SwitchSettingTableViewCell: UITableViewCell {
         return label
     }()
     
-    fileprivate let switchButton: UISwitch = {
+    let switchButton: UISwitch = {
         let switchButton = UISwitch()
         return switchButton
     }()
@@ -44,6 +44,12 @@ final class SwitchSettingTableViewCell: UITableViewCell {
     var title: String? {
         didSet {
             titleLabel.text = title
+        }
+    }
+    
+    var enable: Bool = false {
+        didSet {
+            switchButton.setOn(enable, animated: false)
         }
     }
     
@@ -71,6 +77,8 @@ final class SwitchSettingTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        selectionStyle = .none
         
         addSubview(imageCell)
         addSubview(titleLabel)

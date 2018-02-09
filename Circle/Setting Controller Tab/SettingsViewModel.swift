@@ -37,7 +37,7 @@ enum SettingType: String {
 
 enum SettingRowType {
     case facebookLogin
-    case favoriteNotify(title: String, description: String, image: UIImage, color: UIColor)
+    case favoriteNotify(title: String, enabled: Bool, image: UIImage, color: UIColor)
     case clearFavorites(title: String, description: String, image: UIImage, color: UIColor)
     case clearHistorySearch(title: String, description: String, image: UIImage, color: UIColor)
     case showSearchHistory(title: String, image: UIImage, color: UIColor)
@@ -54,25 +54,66 @@ struct SettingsObject {
 }
 
 struct SettingsViewModel {
-    let items: [SettingsObject] = [SettingsObject(.search, [.showSearchHistory(title: "Show search history",
-                                                                               image: UIImage(named: "ic_history")!.withRenderingMode(.alwaysTemplate),
-                                                                               color: UIColor.history),
-                                                            .clearHistorySearch(title: "Clear search history",
-                                                                                   description: "Are you sure you to clear search history?",
-                                                                                   image: UIImage(named: "ic_delete_forever")!.withRenderingMode(.alwaysTemplate),
-                                                                                   color: UIColor.deleted)]),
-                                   SettingsObject(.favorites, [.favoriteNotify(title: "Disable all notifications for selected places",
-                                                                               description: "",
-                                                                               image: UIImage(named: "ic_notifications")!.withRenderingMode(.alwaysTemplate),
-                                                                               color: UIColor.notify),
-                                                               .clearFavorites(title: "Clear Favorites",
-                                                                               description: "Are you sure you want to clear all items in your Favorites?",
-                                                                               image: UIImage(named: "ic_delete_forever")!.withRenderingMode(.alwaysTemplate),
-                                                                               color: UIColor.deleted)]),
-                                   SettingsObject(.facebook, [.facebookLogin])]
+    let items: [SettingsObject]
     
     /// open search history modal view
     var openSearchHistory: (() -> Void) = { }
+    
+    init() {
+        let searchObjects: [SettingRowType] = [.showSearchHistory(title: "Show search history",
+                                                image: UIImage(named: "ic_history")!.withRenderingMode(.alwaysTemplate),
+                                                color: UIColor.history),
+                             .clearHistorySearch(title: "Clear search history",
+                                                 description: "Are you sure you to clear search history?",
+                                                 image: UIImage(named: "ic_delete_forever")!.withRenderingMode(.alwaysTemplate),
+                                                 color: UIColor.deleted)]
+        
+        var disabledNotice = false
+        do {
+            let realm = try Realm()
+            let settings = realm.objects(Settings.self).first
+            if let settings = settings {
+                disabledNotice = settings.disabledNotice
+            }
+        } catch {
+            print(error)
+        }
+        
+        let favoritesObjects: [SettingRowType] = [.favoriteNotify(title: "Disable all notifications for selected places",
+                                                                  enabled: disabledNotice,
+                                                                  image: UIImage(named: "ic_notifications")!.withRenderingMode(.alwaysTemplate),
+                                                                  color: UIColor.notify),
+                                                  .clearFavorites(title: "Clear Favorites",
+                                                                  description: "Are you sure you want to clear all items in your Favorites?",
+                                                                  image: UIImage(named: "ic_delete_forever")!.withRenderingMode(.alwaysTemplate),
+                                                                  color: UIColor.deleted)]
+        
+        let facebookObjects: [SettingRowType] = [.facebookLogin]
+        
+        self.items = [SettingsObject(.search, searchObjects),
+                      SettingsObject(.favorites, favoritesObjects),
+                      SettingsObject(.facebook, facebookObjects)]
+    }
+    
+    /// disabled all notifications for favorites the places
+    func disabledNotice(_ isOn: Bool) {
+        do {
+            let realm = try Realm()
+            let settings = realm.objects(Settings.self).first
+            
+            try realm.write {
+                guard let oldSettings = settings else {
+                    let newSettings = Settings()
+                    newSettings.disabledNotice = isOn
+                    realm.add(newSettings)
+                    return
+                }
+                oldSettings.disabledNotice = isOn
+            }
+        } catch {
+            print(error)
+        }
+    }
     
     /// deleted all objects from favorites
     func deleteAllFavorites() {

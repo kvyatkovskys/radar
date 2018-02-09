@@ -31,4 +31,5 @@ class Favorites: Object {
     @objc dynamic var longitude: Double = 0
     let categories = List<String>()
     let subCategories = List<String>()
+    @objc dynamic var notify: Bool = false
 }

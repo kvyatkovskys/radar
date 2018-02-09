@@ -15,6 +15,7 @@ import UserNotifications
 final class LocationService: NSObject, CLLocationManagerDelegate {
     fileprivate var locationManager: CLLocationManager
     fileprivate let window = UIApplication.shared.keyWindow
+    fileprivate var notificationToken: NotificationToken?
     let userLocation = PublishSubject<CLLocation?>()
     
     fileprivate let geocoder: CLGeocoder = {
@@ -31,12 +32,27 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
         
         do {
             let realm = try Realm()
-            let favorites = realm.objects(Favorites.self)
+            let settings = realm.objects(Settings.self)
             
-            favorites.forEach({ (item) in
-                let location = CLLocation(latitude: item.latitude, longitude: item.longitude)
-                startMonitoring(locationRegion: location, radius: 100.0, identifier: "\(item.id)")
-            })
+            notificationToken = settings.observe { [unowned self] (changes: RealmCollectionChange) in
+                switch changes {
+                case .update(let setting, _, _, _), .initial(let setting):
+                    let favorites = realm.objects(Favorites.self).filter("notify = 1")
+                    
+                    guard let disabledNotice = setting.first?.disabledNotice, disabledNotice == false else {
+                        self.stopMonitoring()
+                        return
+                    }
+                    
+                    favorites.forEach({ (item) in
+                        self.stopMonitoring()
+                        let location = CLLocation(latitude: item.latitude, longitude: item.longitude)
+                        self.startMonitoring(locationRegion: location, radius: 100.0, identifier: "\(item.id)")
+                    })
+                case .error(let error):
+                    fatalError("\(error)")
+                }
+            }
         } catch {
             print(error)
         }
@@ -125,7 +141,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
             window?.rootViewController?.showAlertLight(title: "Error", message: "Geofencing is not supported on this device!")
             return
         }
-        if CLLocationManager.authorizationStatus() != .authorizedAlways || CLLocationManager.authorizationStatus() != .authorizedWhenInUse {
+        if CLLocationManager.authorizationStatus() != .authorizedAlways {
             window?.rootViewController?.showAlertLight(title: "Warning",
                                                        message: "Your geotification is saved but will only be activated once you grant Geotify permission to access the device location.")
         }
@@ -133,9 +149,9 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
         locationManager.startMonitoring(for: region)
     }
     
-    fileprivate func stopMonitoring(identifier: String) {
+    fileprivate func stopMonitoring() {
         locationManager.monitoredRegions.forEach({ (region) in
-            if let circularRegion = region as? CLCircularRegion, circularRegion.identifier == identifier {
+            if let circularRegion = region as? CLCircularRegion {
                 locationManager.stopMonitoring(for: circularRegion)
             }
         })
