@@ -1,17 +1,17 @@
 //
-//  SearchHistoryViewController.swift
+//  ListFavoritesNoticeViewController.swift
 //  Circle
 //
-//  Created by Kviatkovskii on 05/02/2018.
+//  Created by Kviatkovskii on 09/02/2018.
 //  Copyright © 2018 Kviatkovskii. All rights reserved.
 //
 
 import UIKit
 
-final class SearchHistoryViewController: UIViewController {
-    typealias Dependecies = HasSearchHistoryViewModel
+final class ListFavoritesNoticeViewController: UIViewController {
+    typealias Dependecies = HasListFavoritesNoticeViewModel
     
-    fileprivate let viewModel: SearchHistoryViewModel
+    fileprivate let viewModel: ListFavoritesNoticeViewModel
     
     fileprivate lazy var tableView: UITableView = {
         let table = UITableView()
@@ -38,7 +38,7 @@ final class SearchHistoryViewController: UIViewController {
     }
     
     init(_ dependecies: Dependecies) {
-        self.viewModel = dependecies.searchHistoryViewModel
+        self.viewModel = dependecies.listFavoritesNoticeViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -55,32 +55,30 @@ final class SearchHistoryViewController: UIViewController {
         view.addSubview(tableView)
         updateViewConstraints()
         
-        tableView.register(SearchHistoryTableViewCell.self, forCellReuseIdentifier: SearchHistoryTableViewCell.cellIdentifier)
+        tableView.register(ListFavoritesNoticeTableViewCell.self, forCellReuseIdentifier: ListFavoritesNoticeTableViewCell.cellIdentifier)
     }
-    
+
     @objc func closeController() {
         dismiss(animated: true, completion: nil)
     }
 }
 
-extension SearchHistoryViewController: UITableViewDataSource {
+extension ListFavoritesNoticeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.dataSource.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = viewModel.dataSource[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: SearchHistoryTableViewCell.cellIdentifier,
-                                                 for: indexPath) as? SearchHistoryTableViewCell ?? SearchHistoryTableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: ListFavoritesNoticeTableViewCell.cellIdentifier,
+                                                 for: indexPath) as? ListFavoritesNoticeTableViewCell ?? ListFavoritesNoticeTableViewCell()
         
-        cell.title = item.query
-        cell.subTitle = item.date
-        
+        cell.title = item        
         return cell
     }
 }
 
-extension SearchHistoryViewController: UITableViewDelegate {
+extension ListFavoritesNoticeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44.0
     }

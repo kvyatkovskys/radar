@@ -83,6 +83,10 @@ struct Router {
             self.openSearchHistory(settingsController)
         }
         
+        settingViewModel.openListFavoritesNotice = {
+            self.openListFavoritesNotice(settingsController)
+        }
+        
         settingsController = SettingsViewController(SettingsViewDependecies(settingViewModel))
         let settingsImage = UIImage(named: "ic_settings")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         settingsController.navigationItem.title = "Application settings"
@@ -97,6 +101,13 @@ struct Router {
                                          favoritesViewController,
                                          settingsController].map({ UINavigationController(rootViewController: $0) })
         return tabController
+    }
+    
+    fileprivate func openListFavoritesNotice(_ fromController: UIViewController) {
+        let listNoticeController = ListFavoritesNoticeViewController(ListFavoritesNoticeDependecies(ListFavoritesNoticeViewModel()))
+        let newNavController = UINavigationController(rootViewController: listNoticeController)
+        newNavController.navigationBar.isTranslucent = true
+        fromController.present(newNavController, animated: true, completion: nil)
     }
     
     fileprivate func openSearchHistory(_ fromController: UIViewController) {

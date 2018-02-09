@@ -104,7 +104,8 @@ extension SettingsViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: FCButtonLoginTableViewCell.cellIdentifier,
                                                      for: indexPath) as? FCButtonLoginTableViewCell ?? FCButtonLoginTableViewCell()
             return cell
-        case .clearFavorites(let title, _, let image, let color),
+        case .listFavoritesNoticy(let title, _, let image, let color),
+             .clearFavorites(let title, _, let image, let color),
              .clearHistorySearch(let title, _, let image, let color),
              .showSearchHistory(let title, let image, let color):
             
@@ -136,6 +137,8 @@ extension SettingsViewController: UITableViewDelegate {
             })
         case .showSearchHistory:
             viewModel.openSearchHistory()
+        case .listFavoritesNoticy:
+            viewModel.openListFavoritesNotice()
         default:
             break
         }
@@ -145,7 +148,13 @@ extension SettingsViewController: UITableViewDelegate {
         let typeCell = viewModel.items[indexPath.section].sectionObjects[indexPath.row]
         
         switch typeCell {
-        case .facebookLogin, .clearFavorites, .clearHistorySearch, .showSearchHistory, .favoriteNotify: return 50.0
+        case .facebookLogin,
+             .clearFavorites,
+             .clearHistorySearch,
+             .showSearchHistory,
+             .favoriteNotify,
+             .listFavoritesNoticy:
+            return 50.0
         }
     }
 }

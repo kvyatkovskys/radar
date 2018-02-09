@@ -163,3 +163,15 @@ struct SearchHistoryDependecies: HasSearchHistoryViewModel {
         self.searchHistoryViewModel = searchHistoryViewModel
     }
 }
+
+protocol HasListFavoritesNoticeViewModel {
+    var listFavoritesNoticeViewModel: ListFavoritesNoticeViewModel { get }
+}
+
+struct ListFavoritesNoticeDependecies: HasListFavoritesNoticeViewModel {
+    let listFavoritesNoticeViewModel: ListFavoritesNoticeViewModel
+    
+    init(_ listFavoritesNoticeViewModel: ListFavoritesNoticeViewModel) {
+        self.listFavoritesNoticeViewModel = listFavoritesNoticeViewModel
+    }
+}

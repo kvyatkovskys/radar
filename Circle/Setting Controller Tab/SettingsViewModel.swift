@@ -37,6 +37,7 @@ enum SettingType: String {
 
 enum SettingRowType {
     case facebookLogin
+    case listFavoritesNoticy(title: String, description: String, image: UIImage, color: UIColor)
     case favoriteNotify(title: String, enabled: Bool, image: UIImage, color: UIColor)
     case clearFavorites(title: String, description: String, image: UIImage, color: UIColor)
     case clearHistorySearch(title: String, description: String, image: UIImage, color: UIColor)
@@ -59,6 +60,8 @@ struct SettingsViewModel {
     /// open search history modal view
     var openSearchHistory: (() -> Void) = { }
     
+    var openListFavoritesNotice: (() -> Void) = { }
+    
     init() {
         let searchObjects: [SettingRowType] = [.showSearchHistory(title: "Show search history",
                                                 image: UIImage(named: "ic_history")!.withRenderingMode(.alwaysTemplate),
@@ -79,7 +82,11 @@ struct SettingsViewModel {
             print(error)
         }
         
-        let favoritesObjects: [SettingRowType] = [.favoriteNotify(title: "Disable all notifications for selected places",
+        let favoritesObjects: [SettingRowType] = [.listFavoritesNoticy(title: "List notifications",
+                                                                       description: "",
+                                                                       image: UIImage(named: "ic_list")!.withRenderingMode(.alwaysTemplate),
+                                                                       color: UIColor.history),
+                                                  .favoriteNotify(title: "Disable all notifications for selected places",
                                                                   enabled: disabledNotice,
                                                                   image: UIImage(named: "ic_notifications")!.withRenderingMode(.alwaysTemplate),
                                                                   color: UIColor.notify),
