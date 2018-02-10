@@ -14,6 +14,27 @@ struct PlaceService {
     fileprivate let placeManager = FBSDKPlacesManager()
     fileprivate var setting = PlaceSetting()
     
+    func loadPlacesForMinDistance() -> Observable<PlaceDataModel> {
+        return Observable.create({ (observable) in
+            self.placeManager.generateCurrentPlaceRequest(withMinimumConfidenceLevel: .FBSDKPlaceLocationConfidenceLow, fields: self.setting.fields) { (request, error) in
+                guard error == nil else {
+                    observable.on(.error(error!))
+                    return
+                }
+                _ = request?.start(completionHandler: { (_, result, error) in
+                    guard error == nil else {
+                        return
+                    }
+                    
+                    if let data = result as? [String: Any], let model: PlaceDataModel = try? unbox(dictionary: data) {
+                        observable.on(.next(model))
+                    }
+                })
+            }
+            return Disposables.create()
+        })
+    }
+    
     func loadMorePlaces(url: URL) -> Observable<PlaceDataModel> {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -34,11 +55,7 @@ struct PlaceService {
             })
     }
     
-    func getInfoAboutPlaces(_ location: CLLocation?,
-                            _ categories: [Categories],
-                            _ distance: CLLocationDistance,
-                            _ searchTerm: String? = nil) -> Observable<PlaceDataModel> {
-        
+    func loadPlaces(_ location: CLLocation?, _ categories: [Categories], _ distance: CLLocationDistance, _ searchTerm: String? = nil) -> Observable<PlaceDataModel> {
         let request = placeManager.placeSearchRequest(for: location,
                                                       searchTerm: searchTerm,
                                                       categories: categories.map({ $0.rawValue }),
@@ -52,7 +69,7 @@ struct PlaceService {
                     observable.on(.error(error!))
                     return
                 }
-
+                
                 if let data = result as? [String: Any], let model: PlaceDataModel = try? unbox(dictionary: data) {
                     observable.on(.next(model))
                 }

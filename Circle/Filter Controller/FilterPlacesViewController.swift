@@ -17,18 +17,13 @@ fileprivate extension UIColor {
     }
 }
 
-protocol FilterPlacesDelegate: class {
-    func selectDistance(value: Double)
-}
-
 final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
-    typealias Dependecies = HasFilterPlacesViewModel & HasFilterPlacesDelegate
+    typealias Dependecies = HasFilterPlacesViewModel
     
     fileprivate let disposeBag = DisposeBag()
     fileprivate let viewModelCategories: FilterCategoriesViewModel
     fileprivate let viewModelDistance: FilterDistanceViewModel
     fileprivate let viewModel: FilterViewModel
-    fileprivate weak var delegate: FilterPlacesDelegate?
     //swiftlint:disable weak_delegate
     fileprivate var tableDataSource: CategoriesTableViewDataSource?
     fileprivate var tableDelegate: CategoriesTableViewDelegate?
@@ -94,7 +89,6 @@ final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
         self.viewModel = dependecies.viewModel
         self.viewModelDistance = dependecies.viewModelDistance
         self.viewModelCategories = dependecies.viewModelCategories
-        self.delegate = dependecies.delegate
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -112,16 +106,15 @@ final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
         tableDelegate = CategoriesTableViewDelegate(tableView, viewModelCategories)
         
         distanceView.sliderDistance.asObserver()
-            .subscribe(onNext: { [unowned self, weak delegate = self.delegate] (value) in
+            .subscribe(onNext: { [unowned self] (value) in
                 self.viewModelDistance.setNewDistance(value: value)
-                delegate?.selectDistance(value: value)
             }, onError: { (error) in
                 print(error)
             }).disposed(by: disposeBag)
         
         distanceView.nearMe.asObservable()
-            .subscribe(onNext: { (isOn) in
-                print(isOn)
+            .subscribe(onNext: { [unowned self] (isOn) in
+                self.viewModelDistance.setMinDistance(value: isOn)
             }, onError: { (error) in
                 print(error)
             }).disposed(by: disposeBag)

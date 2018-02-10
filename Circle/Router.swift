@@ -25,8 +25,8 @@ struct Router {
         var placesViewController = UIViewController()
         var viewModel = PlaceViewModel(PlaceService())
         
-        viewModel.openFilter = { delegate in
-            let dependecies = FilterPlacesDependecies(FilterViewModel(), FilterDistanceViewModel(), FilterCategoriesViewModel(), delegate)
+        viewModel.openFilter = {
+            let dependecies = FilterPlacesDependecies(FilterViewModel(), FilterDistanceViewModel(), FilterCategoriesViewModel())
             self.openFilterPlaces(fromController: placesViewController as! PlacesViewController,
                                   toController: FilterPlacesViewController(dependecies))
         }

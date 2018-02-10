@@ -48,7 +48,7 @@ final class DistanceFilterView: UIView {
     
     fileprivate lazy var titleMinDistance: UILabel = {
         let label = UILabel()
-        label.text = "Near me"
+        label.text = "Find what's nearby"
         label.textAlignment = .left
         label.font = .systemFont(ofSize: 16.0)
         return label
@@ -56,7 +56,8 @@ final class DistanceFilterView: UIView {
     
     fileprivate lazy var swicthButton: UISwitch = {
         let swicth = UISwitch()
-        swicth.setOn(filterDistance.searchForMinDistance, animated: true)
+        swicth.setOn(filterDistance.searchForMinDistance, animated: false)
+        swicth.onTintColor = UIColor.sliderColor
         return swicth
     }()
     

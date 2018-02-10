@@ -25,7 +25,7 @@ extension PlaceDataModel: Unboxable {
 struct PlaceModel {
     let id: Int
     let name: String?
-    let phone: Int?
+    let phone: String?
     let ratingStar: Float?
     let ratingCount: Int?
     let hours: [String: String]?
@@ -46,12 +46,13 @@ struct PlaceModel {
     let restaurantServices: [String: Bool]?
     let restaurantSpecialties: [String: Bool]?
     let fromFavorites: Bool
+    let picture: URL?
     
-    init(id: Int, name: String? = nil, phone: Int? = nil, ratingStar: Float? = nil, ratingCount: Int? = nil, hours: [String: String]? = nil,
+    init(id: Int, name: String? = nil, phone: String? = nil, ratingStar: Float? = nil, ratingCount: Int? = nil, hours: [String: String]? = nil,
          isAlwaysOpen: Bool? = nil, isClosed: Bool? = nil, address: String? = nil, website: String? = nil, categories: [Categories]? = nil,
          subCategories: [String]? = nil, description: String? = nil, coverPhoto: URL? = nil, about: String? = nil, location: LocationPlace? = nil,
          context: String? = nil, appLink: URL? = nil, paymentOptions: [String: Bool]? = nil, parking: [String: Bool]? = nil,
-         restaurantServices: [String: Bool]? = nil, restaurantSpecialties: [String: Bool]? = nil, fromFavorites: Bool) {
+         restaurantServices: [String: Bool]? = nil, restaurantSpecialties: [String: Bool]? = nil, fromFavorites: Bool, picture: URL? = nil) {
         self.id = id
         self.name = name
         self.phone  = phone
@@ -75,6 +76,7 @@ struct PlaceModel {
         self.restaurantServices = restaurantServices
         self.restaurantSpecialties = restaurantSpecialties
         self.fromFavorites = fromFavorites
+        self.picture = picture
     }
 }
 
@@ -107,6 +109,8 @@ extension PlaceModel: Unboxable {
         self.restaurantServices = unboxer.unbox(key: "restaurant_services")
         self.restaurantSpecialties = unboxer.unbox(key: "restaurant_specialties")
         self.fromFavorites = false
+        let pictureUrl: String? = unboxer.unbox(keyPath: "picture.data.url")
+        self.picture = pictureUrl != nil ? URL(string: pictureUrl ?? "") : nil
     }
 }
 

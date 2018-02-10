@@ -59,24 +59,16 @@ protocol HasFilterPlacesViewModel {
     var viewModelCategories: FilterCategoriesViewModel { get }
 }
 
-//swiftlint:disable class_delegate_protocol
-protocol HasFilterPlacesDelegate {
-    weak var delegate: FilterPlacesDelegate? { get }
-}
-
 /// container dependecies injection's for filter view
-struct FilterPlacesDependecies: HasFilterPlacesViewModel, HasFilterPlacesDelegate {
+struct FilterPlacesDependecies: HasFilterPlacesViewModel {
     let viewModel: FilterViewModel
     let viewModelDistance: FilterDistanceViewModel
     let viewModelCategories: FilterCategoriesViewModel
     
-    weak var delegate: FilterPlacesDelegate?
-    
-    init(_ viewModel: FilterViewModel, _ viewModelDistance: FilterDistanceViewModel, _ viewModelCategories: FilterCategoriesViewModel, _ delegate: FilterPlacesDelegate?) {
+    init(_ viewModel: FilterViewModel, _ viewModelDistance: FilterDistanceViewModel, _ viewModelCategories: FilterCategoriesViewModel) {
         self.viewModel = viewModel
         self.viewModelDistance = viewModelDistance
         self.viewModelCategories = viewModelCategories
-        self.delegate = delegate
     }
 }
 

@@ -11,7 +11,7 @@ import Kingfisher
 import RxSwift
 import RealmSwift
 
-let heightHeaderTable: CGFloat = 220.0
+let heightHeaderTable: CGFloat = 370.0
 
 fileprivate extension UIColor {
     static var shadowGray: UIColor {
@@ -27,7 +27,7 @@ fileprivate extension UIColor {
     }
 }
 
-final class DetailPlaceViewController: UIViewController {
+final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDelegate {
     typealias Dependecies = HasDetailPlaceViewModel & HasKingfisher & HasOpenGraphService & HasFavoritesViewModel
     
     fileprivate var notificationTokenFavorites: NotificationToken?
@@ -49,9 +49,8 @@ final class DetailPlaceViewController: UIViewController {
     
     fileprivate lazy var imageHeader: UIImageView = {
         let image = UIImageView()
-        image.layer.cornerRadius = 5.0
         image.contentMode = .scaleAspectFill
-        image.layer.masksToBounds = true
+        image.clipsToBounds = true
         image.backgroundColor = .shadowGray
         image.kf.indicatorType = .activity
         image.kf.setImage(with: viewModel.place.coverPhoto,
@@ -62,12 +61,24 @@ final class DetailPlaceViewController: UIViewController {
         return image
     }()
     
+    fileprivate lazy var picture: UIImageView = {
+        let image = UIImageView()
+        image.clipsToBounds = true
+        image.backgroundColor = .shadowGray
+        image.kf.indicatorType = .activity
+        image.kf.setImage(with: viewModel.place.picture,
+                          placeholder: nil,
+                          options: self.kingfisherOptions,
+                          progressBlock: nil,
+                          completionHandler: nil)
+        return image
+    }()
+    
     fileprivate lazy var titlePlace: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = .boldSystemFont(ofSize: 17.0)
         label.attributedText = self.viewModel.title
-        
         return label
     }()
     
@@ -80,8 +91,16 @@ final class DetailPlaceViewController: UIViewController {
     fileprivate lazy var listSubCategoriesView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
+        
+        let color: UIColor?
+        if (self.viewModel.place.categories ?? []).isEmpty {
+            color = UIColor.mainColor
+        } else {
+            color = self.viewModel.place.categories?.first?.color
+        }
+        
         let listCategories = ListCategoriesViewController(ListSubCategoriesViewModel(self.viewModel.place.subCategories ?? [],
-                                                                                     color: self.viewModel.place.categories?.first?.color))
+                                                                                     color: color))
         
         var frame = listCategories.view.frame
         frame.size.height = view.frame.height
@@ -158,48 +177,55 @@ final class DetailPlaceViewController: UIViewController {
         super.updateViewConstraints()
         
         tableView.snp.remakeConstraints { (make) in
-            make.top.left.right.equalToSuperview()
+            make.top.equalToSuperview().offset(64.0)
+            make.left.right.equalToSuperview()
             make.bottom.equalToSuperview()
         }
         
         imageHeader.snp.remakeConstraints { (make) in
-            make.top.left.equalTo(self.tableView).offset(10.0)
-            make.width.equalTo(100.0)
-            make.height.equalTo(140.0)
+            make.top.left.equalTo(self.tableView)
+            make.width.equalTo(ScreenSize.SCREEN_WIDTH)
+            make.height.equalTo(160.0)
+        }
+        
+        picture.snp.makeConstraints { (make) in
+            make.top.equalTo(imageHeader.snp.bottom).offset(10.0)
+            make.left.equalTo(self.view).offset(10.0)
+            make.size.equalTo(CGSize(width: 50.0, height: 50.0))
         }
         
         titlePlace.snp.remakeConstraints { (make) in
-            make.top.equalTo(imageHeader)
-            make.left.equalTo(imageHeader.snp.right).offset(10.0)
+            make.top.equalTo(picture)
+            make.left.equalTo(picture.snp.right).offset(20.0)
             make.right.equalTo(self.view).offset(-10.0)
-            make.bottom.equalTo(ratingLabel.snp.top).offset(-10.0)
+            make.height.equalTo(90.0)
         }
-        
+
         ratingLabel.snp.remakeConstraints { (make) in
-            make.bottom.equalTo(imageHeader)
-            make.left.equalTo(titlePlace)
+            make.top.equalTo(picture.snp.bottom).offset(15.0)
+            make.left.equalTo(picture)
             make.height.equalTo(15.0)
         }
-        
+
         listSubCategoriesView.snp.remakeConstraints { (make) in
             make.bottom.equalTo(lineView)
             make.right.equalTo(titlePlace)
-            make.left.equalTo(ratingLabel.snp.right).offset(10.0)
-            make.top.equalTo(titlePlace.snp.bottom)
+            make.left.equalTo(ratingLabel)
+            make.top.equalTo(titlePlace.snp.bottom).offset(10.0)
         }
-        
+
         lineView.snp.remakeConstraints { (make) in
             make.bottom.equalTo(favoriteButton.snp.top).offset(-10.0)
             make.left.right.equalToSuperview()
             make.height.equalTo(0.1)
         }
-        
+
         favoriteButton.snp.makeConstraints { (make) in
             make.right.equalTo(headerView.snp.centerX).offset(-20.0)
             make.bottom.equalToSuperview().offset(-15.0)
             make.size.equalTo(CGSize(width: 120.0, height: 35.0))
         }
-        
+
         shareButton.snp.makeConstraints { (make) in
             make.left.equalTo(headerView.snp.centerX).offset(20.0)
             make.bottom.equalToSuperview().offset(-15.0)
@@ -229,6 +255,7 @@ final class DetailPlaceViewController: UIViewController {
         }
         
         headerView.addSubview(imageHeader)
+        headerView.addSubview(picture)
         headerView.addSubview(titlePlace)
         headerView.addSubview(ratingLabel)
         headerView.addSubview(listSubCategoriesView)
@@ -422,7 +449,7 @@ extension DetailPlaceViewController: UITableViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard scrollView.contentOffset.y > -23.0 else {
+        guard scrollView.contentOffset.y > 210.0 else {
             setTitleNavBar()
             return
         }

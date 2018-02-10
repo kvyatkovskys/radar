@@ -27,7 +27,7 @@ struct Places {
 struct PlaceViewModel {
     fileprivate let placeService: PlaceService
     /// open filter controller
-    var openFilter: ((FilterPlacesDelegate) -> Void) = {_ in }
+    var openFilter: (() -> Void) = { }
     
     /// open map controller
     var openMap: (([Places], CLLocation?) -> Void) = {_, _ in }
@@ -39,7 +39,16 @@ struct PlaceViewModel {
         self.placeService = service
     }
     
-    func loadMoreInfoPlaces(url: URL) -> Observable<Places> {
+    func getPlacesFirMinDistance() -> Observable<Places> {
+        return placeService.loadPlacesForMinDistance().asObservable()
+            .flatMap({ (model) -> Observable<Places> in
+                let (places, ratings, titles) = self.updateResults(model: model)
+                return Observable.just(Places(places, ratings, titles, model.next))
+            })
+    }
+    
+    /// load more places
+    func getMorePlaces(url: URL) -> Observable<Places> {
         return placeService.loadMorePlaces(url: url).asObservable()
             .flatMap({ (model) -> Observable<Places> in
                 let (places, ratings, titles) = self.updateResults(model: model)
@@ -48,7 +57,7 @@ struct PlaceViewModel {
     }
     
     /// get info about for current location
-    func getInfoPlaces(location: CLLocation?, distance: CLLocationDistance, searchTerm: String? = nil) -> Observable<Places> {
+    func getPlaces(location: CLLocation?, distance: CLLocationDistance, searchTerm: String? = nil) -> Observable<Places> {
         var categories = PlaceSetting().allCategories
         
         if searchTerm == nil {
@@ -63,7 +72,7 @@ struct PlaceViewModel {
             }
         }
         
-        return placeService.getInfoAboutPlaces(location, categories, distance, searchTerm)
+        return placeService.loadPlaces(location, categories, distance, searchTerm)
             .asObservable().flatMap { (model) -> Observable<Places> in
                 let (places, ratings, titles) = self.updateResults(model: model)
                 return Observable.just(Places(places, ratings, titles, model.next))

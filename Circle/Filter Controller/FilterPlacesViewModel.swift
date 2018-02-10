@@ -43,15 +43,33 @@ struct FilterDistanceViewModel {
         self.searchForMinDistance = minDistance
     }
     
+    func setMinDistance(value: Bool) {
+        do {
+            let realm = try Realm()
+            let oldMinDistance = realm.objects(FilterSelectedDistance.self).first
+            try realm.write {
+                guard let minDistance = oldMinDistance else {
+                    let newMinDistance = FilterSelectedDistance()
+                    newMinDistance.searchForMinDistance = value
+                    realm.add(newMinDistance)
+                    return
+                }
+                minDistance.searchForMinDistance = value
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
     func setNewDistance(value: Double) {
         do {
             let realm = try Realm()
             let oldDistance = realm.objects(FilterSelectedDistance.self).first
             try realm.write {
                 guard let oldDistance = oldDistance else {
-                    let selectedDistance = FilterSelectedDistance()
-                    selectedDistance.distance = value
-                    realm.add(selectedDistance)
+                    let newDistance = FilterSelectedDistance()
+                    newDistance.distance = value
+                    realm.add(newDistance)
                     return
                 }
                 oldDistance.distance = value

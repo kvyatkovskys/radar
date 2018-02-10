@@ -16,9 +16,10 @@ import RealmSwift
 
 let heightHeader: CGFloat = 100.0
 
-final class PlacesViewController: UIViewController, FilterPlacesDelegate {
+final class PlacesViewController: UIViewController {
     typealias Dependecies = HasKingfisher & HasPlaceViewModel & HasLocationService
     
+    fileprivate var searchForMinDistance: Bool = false
     fileprivate var locationService: LocationService
     fileprivate var userLocation: CLLocation?
     fileprivate var notificationTokenCategories: NotificationToken?
@@ -103,7 +104,7 @@ final class PlacesViewController: UIViewController, FilterPlacesDelegate {
         
         tableDelegate?.nextUrl.asObserver()
             .subscribe(onNext: { [unowned self] (url) in
-                self.loadMoreInfoAboutLocation(url: url)
+                self.loadMorePlacesLocation(url: url)
             }, onError: { (error) in
                 print(error)
             }).disposed(by: disposeBag)
@@ -111,7 +112,9 @@ final class PlacesViewController: UIViewController, FilterPlacesDelegate {
         do {
             let realm = try Realm()
             let selectedCategories = realm.objects(FilterSelectedCategory.self)
-            notificationTokenCategories = selectedCategories.observe { [unowned self] (changes: RealmCollectionChange) in
+            let filterDistance = realm.objects(FilterSelectedDistance.self)
+            
+            notificationTokenCategories = selectedCategories.observe({ [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
                 case .update:
                     self.locationService.start()
@@ -120,7 +123,28 @@ final class PlacesViewController: UIViewController, FilterPlacesDelegate {
                 case .initial:
                     break
                 }
-            }
+            })
+            
+            notificationTokenDistance = filterDistance.observe({ [unowned self] (changes: RealmCollectionChange) in
+                switch changes {
+                case .initial(let filter):
+                    self.searchForMinDistance = filter.first?.searchForMinDistance ?? false
+                    guard self.searchForMinDistance else {
+                        return
+                    }
+                    self.loadPlacesForMinDistance()
+                case .update(let filter, _, _, _):
+                    let searchFilter = filter.first
+                    self.searchForMinDistance = searchFilter?.searchForMinDistance ?? false
+                    guard self.searchForMinDistance == false else {
+                        self.loadPlacesForMinDistance()
+                        return
+                    }
+                    self.searchForNewDistance(value: searchFilter?.distance ?? 1000.0)
+                case .error(let error):
+                    fatalError("\(error)")
+                }
+            })
         } catch {
             print(error)
         }
@@ -128,7 +152,8 @@ final class PlacesViewController: UIViewController, FilterPlacesDelegate {
         locationService.userLocation.asObserver()
             .subscribe(onNext: { [unowned self] (location) in
                 self.userLocation = location
-                self.loadInfoAboutLocation(location)
+                guard self.searchForMinDistance == false else { return }
+                self.loadPlacesLocation(location)
             }, onError: { [unowned self] (error) in
                 print(error)
                 if self.refreshControl.isRefreshing {
@@ -139,6 +164,7 @@ final class PlacesViewController: UIViewController, FilterPlacesDelegate {
     
     deinit {
         notificationTokenCategories?.invalidate()
+        notificationTokenDistance?.invalidate()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -150,21 +176,42 @@ final class PlacesViewController: UIViewController, FilterPlacesDelegate {
         viewModel.openMap(tableDataSource?.places ?? [], userLocation)
     }
     
-    // MARK: PlaceViewModel
-    @objc func openFilter() {
-        viewModel.openFilter(self)
-    }
-    
-    // MARK: FilterPlacesDelegate
-    func selectDistance(value: Double) {
+    fileprivate func searchForNewDistance(value: Double) {
         if let location = userLocation {
-            loadInfoAboutLocation(location, distance: value)
+            loadPlacesLocation(location, distance: value)
         }
     }
     
+    // MARK: PlaceViewModel
+    @objc func openFilter() {
+        viewModel.openFilter()
+    }
+    
     // MARK: Current class func
-    fileprivate func loadMoreInfoAboutLocation(url: URL) {
-        viewModel.loadMoreInfoPlaces(url: url).asObservable()
+    fileprivate func loadPlacesForMinDistance() {
+        indicatorView.showIndicator()
+        viewModel.getPlacesFirMinDistance().asObservable()
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { [unowned self] (model) in
+                self.tableDataSource?.places = [model]
+                self.tableDelegate?.places = [model]
+                self.tableView.reloadData()
+                
+                self.indicatorView.hideIndicator()
+                if self.refreshControl.isRefreshing {
+                    self.refreshControl.endRefreshing()
+                }
+            }, onError: { (error) in
+                print(error)
+                self.indicatorView.hideIndicator()
+                if self.refreshControl.isRefreshing {
+                    self.refreshControl.endRefreshing()
+                }
+            }).disposed(by: disposeBag)
+    }
+    
+    fileprivate func loadMorePlacesLocation(url: URL) {
+        viewModel.getMorePlaces(url: url).asObservable()
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] (model) in
                 self.tableDataSource?.places += [model]
@@ -175,9 +222,9 @@ final class PlacesViewController: UIViewController, FilterPlacesDelegate {
             }).disposed(by: disposeBag)
     }
     
-    fileprivate func loadInfoAboutLocation(_ location: CLLocation?, distance: Double = FilterDistanceViewModel().defaultDistance) {
+    fileprivate func loadPlacesLocation(_ location: CLLocation?, distance: Double = FilterDistanceViewModel().defaultDistance) {
         indicatorView.showIndicator()
-        viewModel.getInfoPlaces(location: location, distance: distance).asObservable()
+        viewModel.getPlaces(location: location, distance: distance).asObservable()
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] (model) in
                 self.tableDataSource?.places = [model]

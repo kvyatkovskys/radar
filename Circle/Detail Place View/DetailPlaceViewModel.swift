@@ -9,6 +9,12 @@
 import Foundation
 import RxSwift
 
+fileprivate extension UIColor {
+    static var mainColor: UIColor {
+        return UIColor(withHex: 0xf82462, alpha: 1.0)
+    }
+}
+
 struct DetailSectionObjects {
     var sectionName: String
     var sectionObjects: [TypeDetailCell]
@@ -28,17 +34,24 @@ struct DetailPlaceViewModel {
         self.place = place
         self.title = title
         self.rating = rating
-        self.dataSource = DetailPlaceViewModel.updateValue(place: place, colorCategory: place.categories?.first?.color)
+        self.dataSource = DetailPlaceViewModel.updateValue(place: place)
     }
     
     func getInfoAboutPlace(id: Int) -> Observable<[DetailSectionObjects]> {
         return service.loadInfoPlace(id: id).flatMap({ (model) -> Observable<[DetailSectionObjects]> in
-            return Observable.just(DetailPlaceViewModel.updateValue(place: model, colorCategory: self.place.categories?.first?.color))
+            return Observable.just(DetailPlaceViewModel.updateValue(place: model))
         })
     }
     
-    static fileprivate func updateValue(place: PlaceModel, colorCategory: UIColor?) -> [DetailSectionObjects] {
+    static fileprivate func updateValue(place: PlaceModel) -> [DetailSectionObjects] {
         var items: [DetailSectionObjects] = []
+        
+        let colorCategory: UIColor?
+        if (place.categories ?? []).isEmpty {
+            colorCategory = UIColor.mainColor
+        } else {
+            colorCategory = place.categories?.first?.color
+        }
         
         if (place.phone != nil) || (place.website != nil) || (place.appLink != nil) {
             let itemsContact = [Contact(type: ContactType.phone, value: place.phone),

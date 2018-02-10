@@ -8,6 +8,12 @@
 
 import UIKit
 
+fileprivate extension UIColor {
+    static var mainColor: UIColor {
+        return UIColor(withHex: 0xf82462, alpha: 1.0)
+    }
+}
+
 final class SwitchSettingTableViewCell: UITableViewCell {
     static let cellIdentifier = "SwitchSettingTableViewCell"
     
@@ -26,6 +32,7 @@ final class SwitchSettingTableViewCell: UITableViewCell {
     
     let switchButton: UISwitch = {
         let switchButton = UISwitch()
+        switchButton.onTintColor = UIColor.mainColor
         return switchButton
     }()
     

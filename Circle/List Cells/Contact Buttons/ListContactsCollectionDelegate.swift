@@ -33,7 +33,7 @@ extension ListContactsCollectionDelegate: UICollectionViewDelegate, UICollection
         let contact = buttons[indexPath.row]
         switch contact.type {
         case .phone:
-            if let url = URL(string: "tel://\(contact.value ?? 0)"), UIApplication.shared.canOpenURL(url) {
+            if let url = URL(string: "tel://\(contact.value ?? "")"), UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
         case .website, .facebook:

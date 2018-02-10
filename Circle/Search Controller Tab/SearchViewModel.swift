@@ -53,7 +53,7 @@ struct SearchViewModel {
             print(error)
         }
         
-        return placeViewModel.getInfoPlaces(location: location, distance: distance, searchTerm: query)
+        return placeViewModel.getPlaces(location: location, distance: distance, searchTerm: query)
             .asObservable()
             .flatMap({ (model) -> Observable<Places> in
                 return Observable.just(model)
