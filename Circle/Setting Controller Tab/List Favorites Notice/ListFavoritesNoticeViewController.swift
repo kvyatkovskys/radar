@@ -67,12 +67,9 @@ final class ListFavoritesNoticeViewController: UIViewController {
                 switch changes {
                 case .initial:
                     break
-                case .update(let favorite, _, _, let modifications):
-                    self.tableView.beginUpdates()
+                case .update(let favorite, _, _, _):
                     self.viewModel.dataSource = favorite.sorted(byKeyPath: "date", ascending: false).map({ $0 })
-                    let indexPaths = modifications.map({ IndexPath(row: $0, section: 0) })
-                    self.tableView.reloadRows(at: indexPaths, with: .automatic)
-                    self.tableView.endUpdates()
+                    self.tableView.reloadData()
                 case .error(let error):
                     fatalError("\(error)")
                 }
@@ -109,7 +106,7 @@ extension ListFavoritesNoticeViewController: UITableViewDataSource {
 
 extension ListFavoritesNoticeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 44.0
+        return 50.0
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -117,5 +114,6 @@ extension ListFavoritesNoticeViewController: UITableViewDelegate {
         
         let item = viewModel.dataSource[indexPath.row]
         viewModel.selectNotify(item)
+        tableView.reloadRows(at: [indexPath], with: .automatic)
     }
 }

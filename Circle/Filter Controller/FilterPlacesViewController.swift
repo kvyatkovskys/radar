@@ -119,6 +119,13 @@ final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
                 print(error)
             }).disposed(by: disposeBag)
         
+        distanceView.nearMe.asObservable()
+            .subscribe(onNext: { (isOn) in
+                print(isOn)
+            }, onError: { (error) in
+                print(error)
+            }).disposed(by: disposeBag)
+        
         segmentedControl.rx.selectedSegmentIndex
             .subscribe(onNext: { [unowned self] (index) in
                 let type = TypeFilter(rawValue: index)

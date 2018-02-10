@@ -19,6 +19,9 @@ fileprivate extension UIColor {
 final class DistanceFilterView: UIView {
     fileprivate let disposeBag = DisposeBag()
     let sliderDistance = PublishSubject<Double>()
+    let nearMe = PublishSubject<Bool>()
+    
+    fileprivate let filterDistance = FilterDistanceViewModel()
     
     fileprivate lazy var slider: UISlider = {
         let slider = UISlider()
@@ -26,7 +29,7 @@ final class DistanceFilterView: UIView {
         slider.maximumValue = 5000.0
         slider.tintColor = UIColor.sliderColor
         slider.isContinuous = true
-        slider.setValue(Float(FilterDistanceViewModel().defaultDistance), animated: true)
+        slider.setValue(Float(filterDistance.defaultDistance), animated: true)
         return slider
     }()
     
@@ -53,7 +56,7 @@ final class DistanceFilterView: UIView {
     
     fileprivate lazy var swicthButton: UISwitch = {
         let swicth = UISwitch()
-        swicth.setOn(false, animated: true)
+        swicth.setOn(filterDistance.searchForMinDistance, animated: true)
         return swicth
     }()
     
@@ -113,6 +116,15 @@ final class DistanceFilterView: UIView {
             }, onError: { (error) in
                 print(error)
             }).disposed(by: disposeBag)
+        
+        swicthButton.rx.value
+            .bind(to: nearMe)
+            .disposed(by: disposeBag)
+        
+        swicthButton.rx.value
+            .map({ !$0 })
+            .bind(to: slider.rx.isEnabled)
+            .disposed(by: disposeBag)
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -28,4 +28,5 @@ class FilterSelectedRating: Object {
 
 class FilterSelectedDistance: Object {
     @objc dynamic var distance: Double = 1000.0
+    @objc dynamic var searchForMinDistance: Bool = false
 }

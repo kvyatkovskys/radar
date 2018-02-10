@@ -13,6 +13,7 @@ final class ListFavoritesNoticeTableViewCell: UITableViewCell {
     
     fileprivate let titleLabel: UILabel = {
         let label = UILabel()
+        label.font = .systemFont(ofSize: 16.0)
         label.numberOfLines = 0
         return label
     }()
@@ -23,7 +24,7 @@ final class ListFavoritesNoticeTableViewCell: UITableViewCell {
         titleLabel.snp.makeConstraints { (make) in
             make.top.bottom.equalToSuperview().inset(5.0)
             make.left.equalToSuperview().offset(15.0)
-            make.right.equalToSuperview().offset(-25.0)
+            make.right.equalToSuperview().offset(-45.0)
         }
     }
     

@@ -26,16 +26,21 @@ struct FilterViewModel {
 
 struct FilterDistanceViewModel {
     let defaultDistance: Double
+    let searchForMinDistance: Bool
  
     init() {
         var selectedDistance: Double = 0.0
+        var minDistance: Bool = false
         do {
             let realm = try Realm()
-            selectedDistance = realm.objects(FilterSelectedDistance.self).first?.distance ?? 1000.0
+            let filterDistance = realm.objects(FilterSelectedDistance.self).first
+            selectedDistance = filterDistance?.distance ?? 1000.0
+            minDistance = filterDistance?.searchForMinDistance ?? false
         } catch {
             print(error)
         }
         self.defaultDistance = selectedDistance
+        self.searchForMinDistance = minDistance
     }
     
     func setNewDistance(value: Double) {
