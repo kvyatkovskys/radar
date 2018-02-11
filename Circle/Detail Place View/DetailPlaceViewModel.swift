@@ -26,32 +26,41 @@ struct DetailPlaceViewModel {
     let rating: NSMutableAttributedString?
     var dataSource: [DetailSectionObjects]
     
-    fileprivate let service: FavoritesService
+    fileprivate let colorCategory: UIColor?
+    fileprivate let favoritesService: FavoritesService
+    fileprivate let detailService = DetailService()
     fileprivate let disposeBag = DisposeBag()
 
-    init(_ place: PlaceModel, _ title: NSMutableAttributedString?, _ rating: NSMutableAttributedString?, _ service: FavoritesService) {
-        self.service = service
+    init(_ place: PlaceModel, _ title: NSMutableAttributedString?, _ rating: NSMutableAttributedString?, _ favoritesService: FavoritesService) {
+        self.favoritesService = favoritesService
         self.place = place
         self.title = title
         self.rating = rating
-        self.dataSource = DetailPlaceViewModel.updateValue(place: place)
-    }
-    
-    func getInfoAboutPlace(id: Int) -> Observable<[DetailSectionObjects]> {
-        return service.loadInfoPlace(id: id).flatMap({ (model) -> Observable<[DetailSectionObjects]> in
-            return Observable.just(DetailPlaceViewModel.updateValue(place: model))
-        })
-    }
-    
-    static fileprivate func updateValue(place: PlaceModel) -> [DetailSectionObjects] {
-        var items: [DetailSectionObjects] = []
         
-        let colorCategory: UIColor?
         if (place.categories ?? []).isEmpty {
             colorCategory = UIColor.mainColor
         } else {
             colorCategory = place.categories?.first?.color
         }
+        
+        self.dataSource = DetailPlaceViewModel.updateValue(place: place, color: colorCategory)
+    }
+    
+    func getPictureProfile() -> Observable<URL?> {
+        return detailService.loadPicture(id: place.id).asObservable()
+            .flatMap { (url) -> Observable<URL?> in
+                return Observable.just(url)
+        }
+    }
+    
+    func getInfoAboutPlace(id: Int) -> Observable<[DetailSectionObjects]> {
+        return favoritesService.loadInfoPlace(id: id).flatMap({ (model) -> Observable<[DetailSectionObjects]> in
+            return Observable.just(DetailPlaceViewModel.updateValue(place: model, color: self.colorCategory))
+        })
+    }
+    
+    static fileprivate func updateValue(place: PlaceModel, color: UIColor?) -> [DetailSectionObjects] {
+        var items: [DetailSectionObjects] = []
         
         if (place.phone != nil) || (place.website != nil) || (place.appLink != nil) {
             let itemsContact = [Contact(type: ContactType.phone, value: place.phone),
@@ -125,7 +134,7 @@ struct DetailPlaceViewModel {
             
             let type = TypeDetailCell.workDays((closed: sortedClosedDays,
                                                 opened: sortedOpenedDays,
-                                                currentDay: CurrentDay(index, colorCategory)),
+                                                currentDay: CurrentDay(index, color)),
                                                90.0)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
@@ -156,7 +165,7 @@ struct DetailPlaceViewModel {
         if let restaurantService = place.restaurantServices {
             let serviceType = restaurantService.filter({ $0.value == true }).map({ RestaurantServiceType(rawValue: $0.key) })
             if !serviceType.isEmpty {
-                let type = TypeDetailCell.restaurantService(serviceType, 50.0, colorCategory)
+                let type = TypeDetailCell.restaurantService(serviceType, 50.0, color)
                 items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
             }
         }
@@ -164,7 +173,7 @@ struct DetailPlaceViewModel {
         if let restaurantSpecialties = place.restaurantSpecialties {
             let specialityType = restaurantSpecialties.filter({ $0.value == true }).map({ RestaurantSpecialityType(rawValue: $0.key) })
             if !specialityType.isEmpty {
-                let type = TypeDetailCell.restaurantSpeciality(specialityType, 50.0, colorCategory)
+                let type = TypeDetailCell.restaurantSpeciality(specialityType, 50.0, color)
                 items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
             }
         }

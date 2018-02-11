@@ -34,6 +34,7 @@
 		8B21F30920187DE90013E11C /* DetailPaymentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B21F30820187DE90013E11C /* DetailPaymentTableViewCell.swift */; };
 		8B2940B02018AE94004CB9AD /* ListPaymentsCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2940AF2018AE94004CB9AD /* ListPaymentsCollectionDataSource.swift */; };
 		8B2940B22018B160004CB9AD /* DetailPlaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2940B12018B160004CB9AD /* DetailPlaceModel.swift */; };
+		8B2A3F252030952400D5856E /* DetailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2A3F242030952400D5856E /* DetailService.swift */; };
 		8B3398CC200F61E6002966ED /* DetailPlaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3398CB200F61E6002966ED /* DetailPlaceViewModel.swift */; };
 		8B3398CE200F66B5002966ED /* DetailDescriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3398CD200F66B5002966ED /* DetailDescriptionTableViewCell.swift */; };
 		8B3398D0200F7597002966ED /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3398CF200F7597002966ED /* String+Extension.swift */; };
@@ -155,6 +156,7 @@
 		8B21F30820187DE90013E11C /* DetailPaymentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPaymentTableViewCell.swift; sourceTree = "<group>"; };
 		8B2940AF2018AE94004CB9AD /* ListPaymentsCollectionDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListPaymentsCollectionDataSource.swift; sourceTree = "<group>"; };
 		8B2940B12018B160004CB9AD /* DetailPlaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPlaceModel.swift; sourceTree = "<group>"; };
+		8B2A3F242030952400D5856E /* DetailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailService.swift; sourceTree = "<group>"; };
 		8B3398CB200F61E6002966ED /* DetailPlaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPlaceViewModel.swift; sourceTree = "<group>"; };
 		8B3398CD200F66B5002966ED /* DetailDescriptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailDescriptionTableViewCell.swift; sourceTree = "<group>"; };
 		8B3398CF200F7597002966ED /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
@@ -351,6 +353,7 @@
 				8B18FE0F200A782D00E637C7 /* DetailPlaceViewController.swift */,
 				8B3398CB200F61E6002966ED /* DetailPlaceViewModel.swift */,
 				8B2940B12018B160004CB9AD /* DetailPlaceModel.swift */,
+				8B2A3F242030952400D5856E /* DetailService.swift */,
 				8B3398D72012770C002966ED /* Table Cells */,
 			);
 			path = "Detail Place View";
@@ -924,6 +927,7 @@
 				8BC35069201CF64600BB375B /* SearchViewController.swift in Sources */,
 				8B18FE082007F8E000E637C7 /* View+Extension.swift in Sources */,
 				8BC35072201E248600BB375B /* ListRSpecialtiesCollectionDataSource.swift in Sources */,
+				8B2A3F252030952400D5856E /* DetailService.swift in Sources */,
 				8B147BD42023B13800EDA2D4 /* FavoritesService.swift in Sources */,
 				8B82C39A20150AD000E0CA89 /* WorkDaysCollectionDataSource.swift in Sources */,
 				8B5F71511FF916B300E628F9 /* PlaceService.swift in Sources */,

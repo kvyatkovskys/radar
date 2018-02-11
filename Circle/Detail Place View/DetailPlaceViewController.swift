@@ -52,6 +52,11 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
         image.backgroundColor = .shadowGray
+        image.layer.shadowColor = UIColor.black.cgColor
+        image.layer.shadowRadius = 5.0
+        image.layer.shadowOpacity = 0.5
+        image.layer.shadowOffset = CGSize.zero
+        
         image.kf.indicatorType = .activity
         image.kf.setImage(with: viewModel.place.coverPhoto,
                                 placeholder: nil,
@@ -63,14 +68,25 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
     
     fileprivate lazy var picture: UIImageView = {
         let image = UIImageView()
-        image.clipsToBounds = true
+        image.contentMode = .scaleAspectFit
         image.backgroundColor = .shadowGray
+        image.layer.shadowColor = UIColor.black.cgColor
+        image.layer.shadowRadius = 4.0
+        image.layer.shadowOpacity = 0.4
+        image.layer.shadowOffset = CGSize.zero
+        
         image.kf.indicatorType = .activity
-        image.kf.setImage(with: viewModel.place.picture,
-                          placeholder: nil,
-                          options: self.kingfisherOptions,
-                          progressBlock: nil,
-                          completionHandler: nil)
+        viewModel.getPictureProfile().asObservable()
+            .subscribe(onNext: { [unowned self] (url) in
+                image.kf.setImage(with: url,
+                                  placeholder: nil,
+                                  options: self.kingfisherOptions,
+                                  progressBlock: nil,
+                                  completionHandler: nil)
+            }, onError: { (error) in
+                print(error)
+            }).disposed(by: disposeBag)
+        
         return image
     }()
     
@@ -84,6 +100,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
     
     fileprivate lazy var ratingLabel: UILabel = {
         let label = UILabel()
+        label.textAlignment = .center
         label.attributedText = self.viewModel.rating
         return label
     }()
@@ -189,22 +206,22 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         }
         
         picture.snp.makeConstraints { (make) in
-            make.top.equalTo(imageHeader.snp.bottom).offset(10.0)
+            make.top.equalTo(imageHeader.snp.bottom).offset(-30.0)
             make.left.equalTo(self.view).offset(10.0)
-            make.size.equalTo(CGSize(width: 50.0, height: 50.0))
+            make.size.equalTo(CGSize(width: 100.0, height: 100.0))
         }
         
         titlePlace.snp.remakeConstraints { (make) in
-            make.top.equalTo(picture)
-            make.left.equalTo(picture.snp.right).offset(20.0)
+            make.top.equalTo(imageHeader.snp.bottom).offset(10.0)
+            make.left.equalTo(picture.snp.right).offset(10.0)
             make.right.equalTo(self.view).offset(-10.0)
             make.height.equalTo(90.0)
         }
 
         ratingLabel.snp.remakeConstraints { (make) in
-            make.top.equalTo(picture.snp.bottom).offset(15.0)
-            make.left.equalTo(picture)
-            make.height.equalTo(15.0)
+            make.top.equalTo(picture.snp.bottom).offset(10.0)
+            make.left.right.equalTo(picture)
+            make.height.equalTo(20.0)
         }
 
         listSubCategoriesView.snp.remakeConstraints { (make) in

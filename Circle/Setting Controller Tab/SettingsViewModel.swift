@@ -82,7 +82,7 @@ struct SettingsViewModel {
             print(error)
         }
         
-        let favoritesObjects: [SettingRowType] = [.listFavoritesNoticy(title: "List notifications",
+        let favoritesObjects: [SettingRowType] = [.listFavoritesNoticy(title: "List of favorite places with notifications",
                                                                        description: "",
                                                                        image: UIImage(named: "ic_list")!.withRenderingMode(.alwaysTemplate),
                                                                        color: UIColor.history),

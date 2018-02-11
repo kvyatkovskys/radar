@@ -104,9 +104,17 @@ extension SettingsViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: FCButtonLoginTableViewCell.cellIdentifier,
                                                      for: indexPath) as? FCButtonLoginTableViewCell ?? FCButtonLoginTableViewCell()
             return cell
+        case .clearFavorites(let title, _, let image, let color),
+             .clearHistorySearch(let title, _, let image, let color):
+            
+            let cell = tableView.dequeueReusableCell(withIdentifier: StandardSettingTableViewCell.cellIdentifier,
+                                                     for: indexPath) as? StandardSettingTableViewCell ?? StandardSettingTableViewCell()
+            
+            cell.title = title
+            cell.img = image
+            cell.imageColor = color
+            return cell
         case .listFavoritesNoticy(let title, _, let image, let color),
-             .clearFavorites(let title, _, let image, let color),
-             .clearHistorySearch(let title, _, let image, let color),
              .showSearchHistory(let title, let image, let color):
             
             let cell = tableView.dequeueReusableCell(withIdentifier: StandardSettingTableViewCell.cellIdentifier,
@@ -115,6 +123,7 @@ extension SettingsViewController: UITableViewDataSource {
             cell.title = title
             cell.img = image
             cell.imageColor = color
+            cell.accessoryType = .disclosureIndicator
             return cell
         }
     }

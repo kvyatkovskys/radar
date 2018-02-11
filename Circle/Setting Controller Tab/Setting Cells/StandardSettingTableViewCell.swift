@@ -53,7 +53,7 @@ final class StandardSettingTableViewCell: UITableViewCell {
         titleLabel.snp.makeConstraints { (make) in
             make.left.equalTo(imageCell.snp.right).offset(10.0)
             make.top.bottom.equalToSuperview()
-            make.right.equalToSuperview().offset(-15.0)
+            make.right.equalToSuperview().offset(-40.0)
         }
     }
     

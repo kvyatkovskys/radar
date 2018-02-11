@@ -29,8 +29,7 @@ final class PlaceSetting {
                                         FBSDKPlacesResponseKeyMatchedCategories,
                                         FBSDKPlacesFieldKeyLocation,
                                         FBSDKPlacesFieldKeyCategories,
-                                        FBSDKPlacesFieldKeyAppLinks,
-                                        FBSDKPlacesFieldKeyProfilePhoto]
+                                        FBSDKPlacesFieldKeyAppLinks]
     
     var fields: [String] {
         guard FBSDKAccessToken.current() != nil else { return fileds }
