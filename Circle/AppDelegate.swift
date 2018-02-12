@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        migrations(schema: 4)
+        migrations(schema: 5)
         print(Realm.Configuration.defaultConfiguration.fileURL as Any)
         
         setupNavigationBar()

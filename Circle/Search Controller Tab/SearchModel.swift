@@ -11,6 +11,7 @@ import RealmSwift
 
 class Search: Object {
     @objc dynamic var query: String = ""
+    @objc dynamic var weigth: Int = 0
     @objc dynamic var date: Date = Date()
     @objc dynamic var location: Location?
 }

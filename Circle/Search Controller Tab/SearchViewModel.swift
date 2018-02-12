@@ -10,29 +10,24 @@ import Foundation
 import RealmSwift
 import RxSwift
 
-typealias Query = (query: String, weight: Int)
-
 struct SearchViewModel {
     fileprivate let placeViewModel: PlaceViewModel
     
-    var searchQueries: [Query] {
-        var queries: [Query] = []
+    var searchQueries: [String] {
+        var queries: [String] = []
         do {
             let realm = try Realm()
-            let search = realm.objects(Search.self).filter("query != ''").map({ $0.query })
-            queries = search.reduce(into: [], { (acc, query) in
-                if let index = acc?.index(where: { $0.query == query }) {
-                    acc![index].weight += 1
-                } else {
-                    acc?.append(Query(query, 0))
-                }
-            }) ?? []
+            queries = realm.objects(Search.self)
+                .filter("query != ''")
+                .sorted(byKeyPath: "weigth", ascending: false)
+                .distinct(by: ["query"])
+                .map({ $0.query })
         } catch {
             print(error)
         }
 
         let endRange = queries.count >= 6 ? 6 : queries.count
-        return queries.sorted(by: { $0.weight > $1.weight })[0..<endRange].map({ $0 })
+        return queries[0..<endRange].map({ $0.localizedCapitalized })
     }
     
     /// open detail place controller
@@ -64,17 +59,31 @@ struct SearchViewModel {
     func saveQuerySearch(_ query: String) {
         do {
             let realm = try Realm()
-            let searchModel = Search()
+            let search = Search()
+            let offset = query.count >= 4 ? 4 : query.count
+            let indexEndString = query.index(query.startIndex, offsetBy: offset)
+            
+            let oldSearch = realm.objects(Search.self)
+                .filter("query CONTAINS '\(query[..<indexEndString].lowercased())'")
+                .sorted(byKeyPath: "weigth", ascending: false)
+            print(oldSearch, query[..<indexEndString])
             let location = realm.objects(Location.self).last
             
-            searchModel.query = query
-            searchModel.date = Date()
-            searchModel.location = location
-            
             try realm.write {
-                realm.add(searchModel)
+                guard let old = oldSearch.first else {
+                    search.query = query.lowercased()
+                    search.weigth = 1
+                    search.date = Date()
+                    search.location = location
+                    realm.add(search)
+                    return
+                }
+                
+                old.date = Date()
+                old.weigth += 1
+                old.location = location
             }
-    } catch {
+        } catch {
             print(error)
         }
     }

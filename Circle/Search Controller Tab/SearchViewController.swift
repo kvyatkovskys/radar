@@ -43,7 +43,7 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
     
     fileprivate var notificationToken: NotificationToken?
     fileprivate var dataSource: [Places] = []
-    fileprivate var dataSourceQueries: [Query]
+    fileprivate var dataSourceQueries: [String]
     fileprivate var viewType = ViewType.search
     fileprivate var search: Observable<Places> = Observable.just(Places([], [], [], nil))
     fileprivate let disposeBag = DisposeBag()
@@ -208,6 +208,9 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
                     }
                 case .update:
                     self.dataSourceQueries = self.searchViewModel.searchQueries
+                    if self.viewType == .search {
+                        self.tableView.reloadData()
+                    }
                     
                     guard !self.dataSourceQueries.isEmpty else {
                         self.titleQuerySearch.text = "   Try to find something!"
@@ -215,10 +218,6 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
                     }
 
                     self.titleQuerySearch.text = "   You recently searched for"
-                    
-                    if self.viewType == .search {
-                        self.tableView.reloadData()
-                    }
                 case .error(let error):
                     fatalError("\(error)")
                 }
@@ -265,7 +264,7 @@ extension SearchViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: SearchQueryTableViewCell.cellIdentifier,
                                                      for: indexPath) as? SearchQueryTableViewCell ?? SearchQueryTableViewCell()
             
-            cell.title = querySearch.query
+            cell.title = querySearch
             return cell
         case .savedQueries:
             let place = dataSource[indexPath.section].items[indexPath.row]
@@ -303,7 +302,7 @@ extension SearchViewController: UITableViewDelegate {
         
         switch viewType {
         case .search:
-            let query = searchViewModel.searchQueries[indexPath.row].query
+            let query = searchViewModel.searchQueries[indexPath.row]
             navigationItem.leftBarButtonItem = leftBarButton
             viewType = .savedQueries
             tableView.tableHeaderView = nil
