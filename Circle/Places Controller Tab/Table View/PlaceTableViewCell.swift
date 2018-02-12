@@ -79,7 +79,10 @@ final class PlaceTableViewCell: UITableViewCell {
     
     var colorCategory: UIColor? {
         didSet {
-            guard colorCategory != nil else { return }
+            guard colorCategory != nil else {
+                categoryLabel.backgroundColor = .clear
+                return
+            }
             categoryLabel.backgroundColor = colorCategory
         }
     }

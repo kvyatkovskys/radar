@@ -19,7 +19,9 @@ final class SwitchSettingTableViewCell: UITableViewCell {
     
     fileprivate let imageCell: UIImageView = {
         let image = UIImageView()
-        image.contentMode = .scaleAspectFit
+        image.contentMode = .center
+        image.tintColor = .white
+        image.layer.cornerRadius = 5.0
         return image
     }()
     
@@ -44,7 +46,7 @@ final class SwitchSettingTableViewCell: UITableViewCell {
     
     var imageColor: UIColor? {
         didSet {
-            imageCell.tintColor = imageColor
+            imageCell.backgroundColor = imageColor
         }
     }
     

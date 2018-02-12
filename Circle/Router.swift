@@ -100,6 +100,7 @@ struct Router {
                                          searchViewController,
                                          favoritesViewController,
                                          settingsController].map({ UINavigationController(rootViewController: $0) })
+
         return tabController
     }
     

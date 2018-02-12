@@ -39,8 +39,6 @@ extension PlacesTableViewDataSource: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: PlaceTableViewCell.cellIndetifier,
                                                  for: indexPath) as? PlaceTableViewCell ?? PlaceTableViewCell()
         
-        cell.colorCategory = nil
-        
         cell.rating = rating
         cell.title = title
         cell.titleCategory = place.categories?.first?.title
