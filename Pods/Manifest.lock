@@ -1,5 +1,19 @@
 PODS:
-  - Kingfisher (4.6.1)
+  - Bolts (1.9.0):
+    - Bolts/AppLinks (= 1.9.0)
+    - Bolts/Tasks (= 1.9.0)
+  - Bolts/AppLinks (1.9.0):
+    - Bolts/Tasks
+  - Bolts/Tasks (1.9.0)
+  - FBSDKCoreKit (4.30.0):
+    - Bolts (~> 1.7)
+  - FBSDKLoginKit (4.30.0):
+    - FBSDKCoreKit
+  - FBSDKPlacesKit (4.30.0):
+    - FBSDKCoreKit
+  - FBSDKShareKit (4.30.0):
+    - FBSDKCoreKit (~> 4.30.0)
+  - Kingfisher (4.6.2)
   - Realm (3.1.1):
     - Realm/Headers (= 3.1.1)
   - Realm/Headers (3.1.1)
@@ -12,6 +26,10 @@ PODS:
   - Unbox (2.5.0)
 
 DEPENDENCIES:
+  - FBSDKCoreKit
+  - FBSDKLoginKit
+  - FBSDKPlacesKit
+  - FBSDKShareKit
   - Kingfisher
   - RealmSwift
   - RxCocoa
@@ -20,7 +38,12 @@ DEPENDENCIES:
   - Unbox
 
 SPEC CHECKSUMS:
-  Kingfisher: 1f9157d9c02b380cbd0b7cc890161195164eb634
+  Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
+  FBSDKCoreKit: 7c4bba2877781a131ab5d54c0a78c405d4307b62
+  FBSDKLoginKit: fe7a7e82373dc5daad92e1623219e86224ab1fb1
+  FBSDKPlacesKit: 88f3da3d7b608acfbd3d9db6121c561a955639f2
+  FBSDKShareKit: a9427574b51bde4f437262c3f118c4ccfddeef6c
+  Kingfisher: 55b9c395bf8d3949676ad3861111923990ab68cf
   Realm: 42d1c38a5b1bbcc828b48a7ce702cb86fc68adf4
   RealmSwift: d31937ca6a6ee54acde64ec839523c0a3c04924b
   RxCocoa: d88ba0f1f6abf040011a9eb4b539324fc426843a
@@ -28,6 +51,6 @@ SPEC CHECKSUMS:
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   Unbox: 30e437e6151a6de16139375fd4e8dd9a664cfbf7
 
-PODFILE CHECKSUM: 80af7772bab5e069f69e49512c2b1b42dc119825
+PODFILE CHECKSUM: 0c7fb68ae5a07e45f40733242960e9839ea7b285
 
 COCOAPODS: 1.3.1

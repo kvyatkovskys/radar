@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FBSDKLoginKit
 
 final class FCButtonLoginTableViewCell: UITableViewCell {
     static let cellIdentifier = "FCButtonLoginTableViewCell"

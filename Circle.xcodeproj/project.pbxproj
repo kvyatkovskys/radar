@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0C09101538FFD3248E65345B /* Pods_CircleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1D7303EAE4F5F8B3765FDDF /* Pods_CircleTests.framework */; };
-		2CE34B24D65E94C397FD1B43 /* Pods_Circle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E0022E72D06AC70840D3662 /* Pods_Circle.framework */; };
 		8B105CB120260560006A5BBC /* SearchQueryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B105CB020260560006A5BBC /* SearchQueryTableViewCell.swift */; };
 		8B105CB320288EB3006A5BBC /* LocationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B105CB220288EB3006A5BBC /* LocationModel.swift */; };
 		8B105CB52028A56E006A5BBC /* SearchHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B105CB42028A56E006A5BBC /* SearchHistoryViewController.swift */; };
@@ -93,11 +91,6 @@
 		8BE208A11FFD1D300048D690 /* Controller+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE208A01FFD1D300048D690 /* Controller+Extension.swift */; };
 		8BE208A31FFD25750048D690 /* FilterPlacesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE208A21FFD25750048D690 /* FilterPlacesModel.swift */; };
 		8BE208A51FFD25CB0048D690 /* FilterPlacesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE208A41FFD25CB0048D690 /* FilterPlacesViewModel.swift */; };
-		8BEA04411FF829A2001DFF7E /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BEA043C1FF829A0001DFF7E /* FBSDKShareKit.framework */; };
-		8BEA04421FF829A2001DFF7E /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BEA043D1FF829A0001DFF7E /* Bolts.framework */; };
-		8BEA04431FF829A2001DFF7E /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BEA043E1FF829A1001DFF7E /* FBSDKLoginKit.framework */; };
-		8BEA04441FF829A2001DFF7E /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BEA043F1FF829A2001DFF7E /* FBSDKCoreKit.framework */; };
-		8BEA04451FF829A2001DFF7E /* FBSDKPlacesKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BEA04401FF829A2001DFF7E /* FBSDKPlacesKit.framework */; };
 		8BEB4DF31FFAD285008AD1AB /* PlaceSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEB4DF21FFAD285008AD1AB /* PlaceSetting.swift */; };
 		8BFBF57D200517D000CE2C8B /* CategoriesTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFBF57C200517D000CE2C8B /* CategoriesTableViewDelegate.swift */; };
 		8BFBF57F2005187100CE2C8B /* CategoriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFBF57E2005187100CE2C8B /* CategoriesTableViewCell.swift */; };
@@ -128,7 +121,6 @@
 
 /* Begin PBXFileReference section */
 		65187D40B7A35C90F17F99D7 /* Pods-Circle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Circle.release.xcconfig"; path = "Pods/Target Support Files/Pods-Circle/Pods-Circle.release.xcconfig"; sourceTree = "<group>"; };
-		6E0022E72D06AC70840D3662 /* Pods_Circle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Circle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C60842BBC33FD63E648DBC6 /* Pods-Circle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Circle.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Circle/Pods-Circle.debug.xcconfig"; sourceTree = "<group>"; };
 		8B105CB020260560006A5BBC /* SearchQueryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchQueryTableViewCell.swift; sourceTree = "<group>"; };
 		8B105CB220288EB3006A5BBC /* LocationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationModel.swift; sourceTree = "<group>"; };
@@ -219,16 +211,10 @@
 		8BE208A01FFD1D300048D690 /* Controller+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Controller+Extension.swift"; sourceTree = "<group>"; };
 		8BE208A21FFD25750048D690 /* FilterPlacesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterPlacesModel.swift; sourceTree = "<group>"; };
 		8BE208A41FFD25CB0048D690 /* FilterPlacesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterPlacesViewModel.swift; sourceTree = "<group>"; };
-		8BEA043C1FF829A0001DFF7E /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
-		8BEA043D1FF829A0001DFF7E /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
-		8BEA043E1FF829A1001DFF7E /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
-		8BEA043F1FF829A2001DFF7E /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
-		8BEA04401FF829A2001DFF7E /* FBSDKPlacesKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKPlacesKit.framework; sourceTree = "<group>"; };
 		8BEB4DF21FFAD285008AD1AB /* PlaceSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceSetting.swift; sourceTree = "<group>"; };
 		8BFBF57C200517D000CE2C8B /* CategoriesTableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesTableViewDelegate.swift; sourceTree = "<group>"; };
 		8BFBF57E2005187100CE2C8B /* CategoriesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesTableViewCell.swift; sourceTree = "<group>"; };
 		B0DF7CDED56C3712288ED366 /* Pods-CircleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CircleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CircleTests/Pods-CircleTests.debug.xcconfig"; sourceTree = "<group>"; };
-		C1D7303EAE4F5F8B3765FDDF /* Pods_CircleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CircleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8A689D0A03FBE0C3621184D /* Pods-CircleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CircleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CircleTests/Pods-CircleTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -237,12 +223,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8BEA04451FF829A2001DFF7E /* FBSDKPlacesKit.framework in Frameworks */,
-				8BEA04441FF829A2001DFF7E /* FBSDKCoreKit.framework in Frameworks */,
-				8BEA04421FF829A2001DFF7E /* Bolts.framework in Frameworks */,
-				8BEA04411FF829A2001DFF7E /* FBSDKShareKit.framework in Frameworks */,
-				8BEA04431FF829A2001DFF7E /* FBSDKLoginKit.framework in Frameworks */,
-				2CE34B24D65E94C397FD1B43 /* Pods_Circle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -250,27 +230,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C09101538FFD3248E65345B /* Pods_CircleTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		39E491AB330439D0C40B8798 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				8BEA043D1FF829A0001DFF7E /* Bolts.framework */,
-				8BEA043F1FF829A2001DFF7E /* FBSDKCoreKit.framework */,
-				8BEA043E1FF829A1001DFF7E /* FBSDKLoginKit.framework */,
-				8BEA04401FF829A2001DFF7E /* FBSDKPlacesKit.framework */,
-				8BEA043C1FF829A0001DFF7E /* FBSDKShareKit.framework */,
-				6E0022E72D06AC70840D3662 /* Pods_Circle.framework */,
-				C1D7303EAE4F5F8B3765FDDF /* Pods_CircleTests.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		464E58E6E04DEB6FE5EB3BDC /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -399,7 +364,6 @@
 				8B41155E1FDB2CEF00C6614C /* CircleTests */,
 				8B4115481FDB2CEF00C6614C /* Products */,
 				464E58E6E04DEB6FE5EB3BDC /* Pods */,
-				39E491AB330439D0C40B8798 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -760,6 +724,11 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Circle/Pods-Circle-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKPlacesKit/FBSDKPlacesKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKShareKit/FBSDKShareKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
@@ -770,6 +739,11 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKPlacesKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKShareKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
@@ -804,9 +778,34 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-CircleTests/Pods-CircleTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKPlacesKit/FBSDKPlacesKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKShareKit/FBSDKShareKit.framework",
+				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
+				"${BUILT_PRODUCTS_DIR}/Unbox/Unbox.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKPlacesKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKShareKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Unbox.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1173,6 +1172,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kviatkovskii.CircleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Circle/Circle-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Circle.app/Circle";
@@ -1191,6 +1191,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kviatkovskii.CircleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Circle/Circle-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Circle.app/Circle";

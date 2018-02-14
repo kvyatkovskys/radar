@@ -7,16 +7,19 @@ def pods
   pod 'Unbox'
   pod 'Kingfisher'
   pod 'RealmSwift'
+  pod 'FBSDKCoreKit'  
+  pod 'FBSDKLoginKit'
+  pod 'FBSDKShareKit'
+  pod 'FBSDKPlacesKit'
 end
 
 target 'Circle' do
   use_frameworks!
-
   pods
 
   target 'CircleTests' do
     inherit! :search_paths
-    # Pods for testing
+    pods
   end
 
 end

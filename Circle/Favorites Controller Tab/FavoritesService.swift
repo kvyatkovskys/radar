@@ -9,6 +9,7 @@
 import Foundation
 import RxSwift
 import Unbox
+import FBSDKPlacesKit
 
 struct FavoritesService {
     fileprivate let placeManager = FBSDKPlacesManager()

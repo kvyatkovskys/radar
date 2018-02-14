@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import FBSDKPlacesKit
 
 final class PlaceSetting {
     fileprivate var fileds: [String] = [FBSDKPlacesFieldKeyPlaceID,

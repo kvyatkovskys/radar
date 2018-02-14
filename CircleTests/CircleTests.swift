@@ -7,30 +7,29 @@
 //
 
 import XCTest
+import RxSwift
+import Unbox
+
 @testable import Circle
 
 class CircleTests: XCTestCase {
+    fileprivate let disposeBag = DisposeBag()
     
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    func testGetPlaces() {
+        let testExpectation = expectation(description: "Ожидаем ответ от сервера")
+        let location = CLLocation(latitude: 55.7522, longitude: 37.6156)
+        let categories = PlaceSetting().allCategories
+        PlaceService().loadPlaces(location, categories, 1000.0).asObservable().subscribe(onNext: { (model) in
+            XCTAssertNotNil(model, "Моделька пустая, печалька")
+            testExpectation.fulfill()
+        }, onError: { (error) in
+            XCTFail("Всё сломалось модельки нет \(error)")
+        }).disposed(by: disposeBag)
+        
+        waitForExpectations(timeout: 10.0) { error in
+            if let error = error {
+                XCTFail("Не дождались результатов: \(error)")
+            }
         }
     }
-    
 }
