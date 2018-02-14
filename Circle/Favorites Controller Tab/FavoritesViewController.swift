@@ -14,6 +14,7 @@ final class FavoritesViewController: UIViewController {
     typealias Dependecies = HasFavoritesViewModel & HasKingfisher
 
     fileprivate var viewModel: FavoritesViewModel
+    fileprivate var dataSource: [FavoritesModel]
     fileprivate let optionsKingfisher: KingfisherOptionsInfo
     fileprivate var notificationToken: NotificationToken?
     
@@ -38,26 +39,8 @@ final class FavoritesViewController: UIViewController {
     init(_ dependecies: Dependecies) {
         self.viewModel = dependecies.favoritesViewModel
         self.optionsKingfisher = dependecies.kingfisherOptions
+        self.dataSource = dependecies.favoritesViewModel.favoritePlaces
         super.init(nibName: nil, bundle: nil)
-        
-        do {
-            let realm = try Realm()
-            let results = realm.objects(Favorites.self)
-            
-            notificationToken = results.observe { [unowned self] (changes: RealmCollectionChange) in
-                switch changes {
-                case .initial:
-                    self.tableView.reloadData()
-                case .update(let collection, _, _, _):
-                    self.viewModel.favoritePlaces = self.viewModel.updateValue(collection.sorted(byKeyPath: "date", ascending: false).map({ $0 }))
-                    self.tableView.reloadData()
-                case .error(let error):
-                    fatalError("\(error)")
-                }
-            }
-        } catch {
-            print(error)
-        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -71,6 +54,28 @@ final class FavoritesViewController: UIViewController {
         updateViewConstraints()
         
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
+        
+        do {
+            let realm = try Realm()
+            let results = realm.objects(Favorites.self).sorted(byKeyPath: "date", ascending: false)
+            
+            notificationToken = results.observe { [unowned self] (changes: RealmCollectionChange) in
+                switch changes {
+                case .initial:
+                    break
+                case .update(let collection, let deletions, let insertions, _):
+                    self.dataSource = self.viewModel.updateValue(collection.map({ $0 }))
+                    self.tableView.beginUpdates()
+                    self.tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0) }), with: .automatic)
+                    self.tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }), with: .automatic)
+                    self.tableView.endUpdates()
+                case .error(let error):
+                    fatalError("\(error)")
+                }
+            }
+        } catch {
+            print(error)
+        }
     }
     
     deinit {
@@ -80,19 +85,19 @@ final class FavoritesViewController: UIViewController {
 
 extension FavoritesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.favoritePlaces.count
+        return dataSource.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PlaceTableViewCell.cellIndetifier,
                                                  for: indexPath) as? PlaceTableViewCell ?? PlaceTableViewCell()
-        
-        cell.title = viewModel.favoritePlaces[indexPath.row].title
-        cell.rating = viewModel.favoritePlaces[indexPath.row].rating
-        cell.titleCategory = viewModel.favoritePlaces[indexPath.row].categories?.first?.title
-        cell.colorCategory = viewModel.favoritePlaces[indexPath.row].categories?.first?.color
+
+        cell.title = dataSource[indexPath.row].title
+        cell.rating = dataSource[indexPath.row].rating
+        cell.titleCategory = dataSource[indexPath.row].categories?.first?.title
+        cell.colorCategory = dataSource[indexPath.row].categories?.first?.color
         cell.imageCell.kf.indicatorType = .activity
-        cell.imageCell.kf.setImage(with: viewModel.favoritePlaces[indexPath.row].picture,
+        cell.imageCell.kf.setImage(with: dataSource[indexPath.row].picture,
                                    placeholder: nil,
                                    options: optionsKingfisher,
                                    progressBlock: nil,
@@ -104,13 +109,8 @@ extension FavoritesViewController: UITableViewDataSource {
 extension FavoritesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let delete = UITableViewRowAction(style: .destructive, title: "Remove") { [unowned self] (_, indexPath) in
-            self.viewModel.deleteFromFavorites(id: self.viewModel.favoritePlaces[indexPath.row].id)
-            self.viewModel.favoritePlaces.remove(at: indexPath.row)
-            self.tableView.beginUpdates()
-            self.tableView.deleteRows(at: [indexPath], with: .automatic)
-            self.tableView.endUpdates()
+            self.viewModel.deleteFromFavorites(id: self.dataSource[indexPath.row].id)
         }
-
         return [delete]
     }
     
@@ -120,15 +120,18 @@ extension FavoritesViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-       
-        let place = PlaceModel(id: viewModel.favoritePlaces[indexPath.row].id,
-                               name: viewModel.favoritePlaces[indexPath.row].name,
-                               categories: viewModel.favoritePlaces[indexPath.row].categories,
-                               subCategories: viewModel.favoritePlaces[indexPath.row].subCategories,
-                               coverPhoto: viewModel.favoritePlaces[indexPath.row].picture,
+        let favorite = dataSource[indexPath.row]
+        let place = PlaceModel(id: favorite.id,
+                               name: favorite.name,
+                               ratingStar: favorite.ratingStar,
+                               ratingCount: favorite.ratingCount,
+                               categories: favorite.categories,
+                               subCategories: favorite.subCategories,
+                               coverPhoto: favorite.picture,
+                               about: favorite.about,
                                fromFavorites: true)
-        let title = viewModel.favoritePlaces[indexPath.row].title
-        let rating = viewModel.favoritePlaces[indexPath.row].rating
+        let title = favorite.title
+        let rating = favorite.rating
         viewModel.openDetailPlace(place, title, rating, viewModel)
     }
 }

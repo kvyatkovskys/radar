@@ -27,10 +27,10 @@ struct Places {
 struct PlaceViewModel {
     fileprivate let placeService: PlaceService
     /// open filter controller
-    var openFilter: (() -> Void) = { }
+    var openFilter: (() -> Void) = { UIImpactFeedbackGenerator().impactOccurred() }
     
     /// open map controller
-    var openMap: (([Places], CLLocation?) -> Void) = {_, _ in }
+    var openMap: (([Places], CLLocation?) -> Void) = {_, _ in UIImpactFeedbackGenerator().impactOccurred() }
     
     /// open detail place controller
     var openDetailPlace: ((PlaceModel, NSMutableAttributedString?, NSMutableAttributedString?, FavoritesViewModel) -> Void) = {_, _, _, _ in }

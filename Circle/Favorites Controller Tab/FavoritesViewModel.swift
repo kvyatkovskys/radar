@@ -8,16 +8,12 @@
 
 import Foundation
 import RealmSwift
+import RxSwift
 
 typealias FavoritesNotify = (addFavorites: Bool, allowNotify: Bool?)
 
 struct FavoritesViewModel {
-    var favoritePlaces: [FavoritesModel] = []
-    
-    /// open detail place controller
-    var openDetailPlace: ((PlaceModel, NSMutableAttributedString?, NSMutableAttributedString?, FavoritesViewModel) -> Void) = {_, _, _, _ in }
-    
-    init() {
+    var favoritePlaces: [FavoritesModel] {
         var favorites: [Favorites] = []
         do {
             let realm = try Realm()
@@ -25,8 +21,11 @@ struct FavoritesViewModel {
         } catch {
             print(error)
         }
-        self.favoritePlaces = updateValue(favorites)
+        return updateValue(favorites)
     }
+    
+    /// open detail place controller
+    var openDetailPlace: ((PlaceModel, NSMutableAttributedString?, NSMutableAttributedString?, FavoritesViewModel) -> Void) = {_, _, _, _ in }
     
     func updateValue(_ favorites: [Favorites]) -> [FavoritesModel] {
         var result: [FavoritesModel] = []
@@ -58,7 +57,10 @@ struct FavoritesViewModel {
                                          rating: resultRating,
                                          picture: URL(string: item.picture ?? ""),
                                          categories: item.categories.map({ Categories(rawValue: $0)! }),
-                                         subCategories: item.subCategories.map({ $0 })))
+                                         subCategories: item.subCategories.map({ $0 }),
+                                         ratingStar: item.ratingStar,
+                                         ratingCount: item.ratingCount,
+                                         about: item.about))
         }
         
         return result
@@ -113,7 +115,7 @@ struct FavoritesViewModel {
     /// added to favorites
     func addToFavorite(place: PlaceModel) {
         UIImpactFeedbackGenerator().impactOccurred()
-        
+
         do {
             let realm = try Realm()
             let favorite = Favorites()

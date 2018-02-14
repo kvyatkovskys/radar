@@ -129,9 +129,7 @@ final class PlacesViewController: UIViewController {
                 switch changes {
                 case .initial(let filter):
                     self.searchForMinDistance = filter.first?.searchForMinDistance ?? false
-                    guard self.searchForMinDistance else {
-                        return
-                    }
+                    guard self.searchForMinDistance else { return }
                     self.loadPlacesForMinDistance()
                 case .update(let filter, _, _, _):
                     let searchFilter = filter.first
@@ -151,7 +149,10 @@ final class PlacesViewController: UIViewController {
         
         locationService.userLocation.asObserver()
             .subscribe(onNext: { [unowned self] (location) in
-                self.userLocation = location
+                if self.userLocation != location {
+                    self.indicatorView.showIndicator()
+                    self.userLocation = location
+                }
                 guard self.searchForMinDistance == false else { return }
                 self.loadPlacesLocation(location)
             }, onError: { [unowned self] (error) in
@@ -178,6 +179,7 @@ final class PlacesViewController: UIViewController {
     
     fileprivate func searchForNewDistance(value: Double) {
         if let location = userLocation {
+            indicatorView.showIndicator()
             loadPlacesLocation(location, distance: value)
         }
     }
@@ -223,14 +225,13 @@ final class PlacesViewController: UIViewController {
     }
     
     fileprivate func loadPlacesLocation(_ location: CLLocation?, distance: Double = FilterDistanceViewModel().defaultDistance) {
-        indicatorView.showIndicator()
         viewModel.getPlaces(location: location, distance: distance).asObservable()
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] (model) in
                 self.tableDataSource?.places = [model]
                 self.tableDelegate?.places = [model]
                 self.tableView.reloadData()
-                
+
                 self.indicatorView.hideIndicator()
                 if self.refreshControl.isRefreshing {
                     self.refreshControl.endRefreshing()

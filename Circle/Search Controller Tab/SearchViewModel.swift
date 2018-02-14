@@ -66,7 +66,6 @@ struct SearchViewModel {
             let oldSearch = realm.objects(Search.self)
                 .filter("query CONTAINS '\(query[..<indexEndString].lowercased())'")
                 .sorted(byKeyPath: "weigth", ascending: false)
-            print(oldSearch, query[..<indexEndString])
             let location = realm.objects(Location.self).last
             
             try realm.write {

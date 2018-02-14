@@ -17,6 +17,9 @@ struct FavoritesModel {
     let picture: URL?
     let categories: [Categories]?
     let subCategories: [String]?
+    let ratingStar: Float?
+    let ratingCount: Int?
+    let about: String?
 }
 
 class Favorites: Object {

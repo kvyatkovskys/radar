@@ -25,7 +25,6 @@ final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
     fileprivate let viewModelDistance: FilterDistanceViewModel
     fileprivate let viewModel: FilterViewModel
     //swiftlint:disable weak_delegate
-    fileprivate var tableDataSource: CategoriesTableViewDataSource?
     fileprivate var tableDelegate: CategoriesTableViewDelegate?
     
     fileprivate lazy var segmentedControl: UISegmentedControl = {
@@ -46,6 +45,7 @@ final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
         let table = UITableView()
         table.tableFooterView = UIView(frame: CGRect.zero)
         table.backgroundColor = .clear
+        table.separatorInset.left = 0.0
         return table
     }()
     
@@ -102,8 +102,15 @@ final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
         view.addSubview(segmentedControl)
         
         tableView.register(CategoriesTableViewCell.self, forCellReuseIdentifier: CategoriesTableViewCell.cellIdentifier)
-        tableDataSource = CategoriesTableViewDataSource(tableView, viewModelCategories)
         tableDelegate = CategoriesTableViewDelegate(tableView, viewModelCategories)
+        
+        Observable.of(viewModelCategories.items)
+            .bind(to: tableView.rx.items(cellIdentifier: CategoriesTableViewCell.cellIdentifier,
+                                         cellType: CategoriesTableViewCell.self)) { [unowned self] (index, model, cell) in
+                                            cell.title = model.category.title
+                                            cell.type = model.category
+                                            cell.select = self.viewModelCategories.selectIndexes.contains(index)
+            }.disposed(by: disposeBag)
         
         distanceView.sliderDistance.asObserver()
             .subscribe(onNext: { [unowned self] (value) in
@@ -130,7 +137,7 @@ final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
                     self.updateViewConstraints()
                 case .categories?:
                     self.navigationController?.preferredContentSize = CGSize(width: 250.0,
-                                                                             height: self.tableView.contentSize.height)
+                                                                             height: Double(self.viewModelCategories.items.count * 60))
                     self.view.subviews.filter({ $0 is DistanceFilterView || $0 is RatingPlacesView }).forEach({ $0.removeFromSuperview() })
                     self.view.addSubview(self.tableView)
                     self.updateViewConstraints()
