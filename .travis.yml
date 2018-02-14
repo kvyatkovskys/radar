@@ -2,9 +2,9 @@ language: swift
 
 before_install:
   - brew update
-  - brew install xctool
+  - brew upgrade xctool
 script: 
-  - xctool -workspace Circle.xcworkspace -scheme CircleTest test
+  - xcodebuild -workspace Circle.xcworkspace -scheme CircleTest -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 8' test ONLY_ACTIVE_ARCH=NO"
 
 os: ios
 osx_image: xcode9.2
