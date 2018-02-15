@@ -1,36 +1,12 @@
 language: swift
+osx_image: xcode9.2
 
 before_install:
   - brew update
   - brew upgrade xctool
-  - gem install bundler
-  - bundle install
 
 script: 
-  - xcodebuild -workspace Circle.xcworkspace -list -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.2' -sdk iphonesimulator
-
-stages:
-  - unit_tests
-  - test_flight
-
-variables:
-  LC_ALL: "en_US.UTF-8"
-  LANG: "en_US.UTF-8"
-
-unit_tests:
-  dependencies: []
-  stage: unit_tests
-  artifacts:
-    paths:
-      - fastlane/screenshots
-      - fastlane/logs
-  script:
-    - fastlane test
-  tags:
-    - ios
-
-os: ios
-osx_image: xcode9.2
+  - ./fastlane/travis.sh
 
 notifications:
   slack:
