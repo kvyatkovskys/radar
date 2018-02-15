@@ -1,4 +1,6 @@
 #!/bin/sh
 
-fastlane test
-exit $?
+if [["$TRAVIS_BRANCH" == "develop"]]; then
+	fastlane test
+	exit $?
+fi
