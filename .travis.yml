@@ -1,15 +1,13 @@
 language: swift
 osx_image: xcode9.2
-cache: cocoapods
 
 before_install:
   - brew update
-  - pod update
   - bundle install
 
 script:
-  - xcodebuild clean test -workspace "Circle".xcworkspace -scheme "Circle" -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.2' ONLY_ACTIVE_ARCH=NO
-  #- ./fastlane/travis.sh
+ # - xcodebuild clean test -workspace "Circle".xcworkspace -scheme "Circle" -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.2' ONLY_ACTIVE_ARCH=NO
+  - ./fastlane/travis.sh
 
 notifications:
   slack:
