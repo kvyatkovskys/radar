@@ -7,7 +7,7 @@ before_install:
   - bundle install
 
 script: 
-  - xcodebuild -workspace Circle.xcworkspace -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.2' -sdk iphonesimulator
+  - xcodebuild -workspace Circle.xcworkspace -list -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.2' -sdk iphonesimulator
 
 stages:
   - unit_tests
