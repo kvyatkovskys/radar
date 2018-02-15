@@ -5,8 +5,7 @@ before_install:
   - brew update
 
 script:
-  - xcodebuid -workspace Circle.workspace -scheme Circle
-  - ./fastlane/travis.sh
+  - xcodebuild -verbose -workspace "Circle.xcworkspace" -scheme "Circle" -destination "platform=iOS Simulator,name=iPhone 8,OS=11.2" -clean test
 
 notifications:
   slack:
