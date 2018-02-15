@@ -3,6 +3,7 @@ osx_image: xcode9.2
 
 before_install:
   - brew update
+  - bundle install
 
 script:
   - ./fastlane/travis.sh
