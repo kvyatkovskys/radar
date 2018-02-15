@@ -4,7 +4,8 @@ osx_image: xcode9.2
 before_install:
   - brew update
 
-script: 
+script:
+  - xcodebuid -workspace Circle.workspace -scheme Circle
   - ./fastlane/travis.sh
 
 notifications:
