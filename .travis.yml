@@ -4,9 +4,11 @@ osx_image: xcode9.2
 before_install:
   - brew update
 
+before_script:
+  - bundle exec pod install
+
 script:
-  - xcodebuild -workspace "Circle.xcworkspace" -scheme "Circle"
-  - .fastlane/travis.sh
+  - ./fastlane/travis.sh
 
 notifications:
   slack:
