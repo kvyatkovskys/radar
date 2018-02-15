@@ -1,4 +1,4 @@
-platform :ios, '9.0'
+platform :ios, '10.0'
 
 def pods
   pod 'RxSwift'
@@ -20,6 +20,11 @@ target 'Circle' do
   target 'CircleTests' do
     inherit! :search_paths
     pods
+  end
+  
+  target 'CircleUITests' do
+      inherit! :search_paths
+      pods
   end
 
 end

@@ -3,8 +3,23 @@ language: swift
 before_install:
   - brew update
   - brew upgrade xctool
+  - gem install bundler
+  - bundle install
+
 script: 
-  - xcodebuild -workspace Circle.xcworkspace -list -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.2' -sdk iphonesimulator clean test ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO
+  - xcodebuild -workspace Circle.xcworkspace -scheme Circle -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.2' -sdk iphonesimulator
+
+unit_tests:
+  dependencies: []
+  stage: unit_tests
+  artifacts:
+    paths:
+      - fastlane/screenshots
+      - fastlane/logs
+  script:
+    - fastlane test
+  tags:
+    - ios
 
 os: ios
 osx_image: xcode9.2

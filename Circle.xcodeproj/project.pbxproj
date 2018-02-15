@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D01F91573BA520EB153AF71 /* Pods_Circle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC945378AF2C38ECAC172475 /* Pods_Circle.framework */; };
+		46B272C70E70B5CD6F80FBE7 /* Pods_CircleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 962081C589226C394F4E0D88 /* Pods_CircleTests.framework */; };
 		8B105CB120260560006A5BBC /* SearchQueryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B105CB020260560006A5BBC /* SearchQueryTableViewCell.swift */; };
 		8B105CB320288EB3006A5BBC /* LocationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B105CB220288EB3006A5BBC /* LocationModel.swift */; };
 		8B105CB52028A56E006A5BBC /* SearchHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B105CB42028A56E006A5BBC /* SearchHistoryViewController.swift */; };
@@ -121,6 +123,7 @@
 
 /* Begin PBXFileReference section */
 		65187D40B7A35C90F17F99D7 /* Pods-Circle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Circle.release.xcconfig"; path = "Pods/Target Support Files/Pods-Circle/Pods-Circle.release.xcconfig"; sourceTree = "<group>"; };
+		79F55BA9564097FE1F2D7849 /* Pods_CircleUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CircleUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C60842BBC33FD63E648DBC6 /* Pods-Circle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Circle.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Circle/Pods-Circle.debug.xcconfig"; sourceTree = "<group>"; };
 		8B105CB020260560006A5BBC /* SearchQueryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchQueryTableViewCell.swift; sourceTree = "<group>"; };
 		8B105CB220288EB3006A5BBC /* LocationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationModel.swift; sourceTree = "<group>"; };
@@ -214,7 +217,11 @@
 		8BEB4DF21FFAD285008AD1AB /* PlaceSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceSetting.swift; sourceTree = "<group>"; };
 		8BFBF57C200517D000CE2C8B /* CategoriesTableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesTableViewDelegate.swift; sourceTree = "<group>"; };
 		8BFBF57E2005187100CE2C8B /* CategoriesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesTableViewCell.swift; sourceTree = "<group>"; };
+		962081C589226C394F4E0D88 /* Pods_CircleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CircleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0DF7CDED56C3712288ED366 /* Pods-CircleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CircleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CircleTests/Pods-CircleTests.debug.xcconfig"; sourceTree = "<group>"; };
+		C3DDFE105CCB8469AF87E388 /* Pods-CircleUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CircleUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CircleUITests/Pods-CircleUITests.release.xcconfig"; sourceTree = "<group>"; };
+		EC945378AF2C38ECAC172475 /* Pods_Circle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Circle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F492590FA08D8B776535C3C1 /* Pods-CircleUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CircleUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CircleUITests/Pods-CircleUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		F8A689D0A03FBE0C3621184D /* Pods-CircleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CircleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CircleTests/Pods-CircleTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -223,6 +230,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D01F91573BA520EB153AF71 /* Pods_Circle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,6 +238,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46B272C70E70B5CD6F80FBE7 /* Pods_CircleTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,6 +252,8 @@
 				65187D40B7A35C90F17F99D7 /* Pods-Circle.release.xcconfig */,
 				B0DF7CDED56C3712288ED366 /* Pods-CircleTests.debug.xcconfig */,
 				F8A689D0A03FBE0C3621184D /* Pods-CircleTests.release.xcconfig */,
+				F492590FA08D8B776535C3C1 /* Pods-CircleUITests.debug.xcconfig */,
+				C3DDFE105CCB8469AF87E388 /* Pods-CircleUITests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -364,6 +375,7 @@
 				8B41155E1FDB2CEF00C6614C /* CircleTests */,
 				8B4115481FDB2CEF00C6614C /* Products */,
 				464E58E6E04DEB6FE5EB3BDC /* Pods */,
+				A15039993CDB5AF4B26752BE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -608,6 +620,16 @@
 				8BFBF57E2005187100CE2C8B /* CategoriesTableViewCell.swift */,
 			);
 			path = "Categories View";
+			sourceTree = "<group>";
+		};
+		A15039993CDB5AF4B26752BE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EC945378AF2C38ECAC172475 /* Pods_Circle.framework */,
+				962081C589226C394F4E0D88 /* Pods_CircleTests.framework */,
+				79F55BA9564097FE1F2D7849 /* Pods_CircleUITests.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1048,7 +1070,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1099,7 +1121,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
