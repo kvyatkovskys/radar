@@ -5,7 +5,7 @@ before_install:
   - brew update
 
 script:
-  - xcodebuild -verbose -workspace "Circle.xcworkspace" -scheme "Circle" -destination "platform=iOS Simulator,name=iPhone 8,OS=11.2" -clean test
+  - xcodebuild -workspace "Circle.xcworkspace" -scheme "Circle" -destination "platform=iOS Simulator,name=iPhone 8,OS=11.2" test
 
 notifications:
   slack:
