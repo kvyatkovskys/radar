@@ -4,8 +4,6 @@ cache: cocoapods
 
 before_install:
   - brew update
-  - gem install cocoapods-acknowledgements
-  - gem install cocoapods
   - pod update
   - bundle install
 
