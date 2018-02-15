@@ -21,10 +21,5 @@ target 'Circle' do
     inherit! :search_paths
     pods
   end
-  
-  target 'CircleUITests' do
-      inherit! :search_paths
-      pods
-  end
 
 end
