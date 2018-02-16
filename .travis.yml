@@ -5,6 +5,8 @@ xcode_scheme: Circle
 podfile: Podfile
 
 before_install:
+  - brew update
+  - brew upgrade swiftlint
   - bundle install
   - pod repo update
   - pod install
