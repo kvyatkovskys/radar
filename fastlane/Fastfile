@@ -13,8 +13,7 @@ platform :ios do
     scan(workspace: "Circle.xcworkspace",
            devices: "iPhone 8 (11.2)",
             scheme: "Circle",
-            clean: true,
-            test_without_building: true)
+            clean: true)
   end
 
 end
