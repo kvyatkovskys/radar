@@ -11,6 +11,7 @@ before_install:
 script:
  #- xcodebuild build -workspace "Circle".xcworkspace -scheme "Circle" -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.2'
   - ./fastlane/travis.sh
+  - pod lib lint
 
 notifications:
   slack:
