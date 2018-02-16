@@ -1,13 +1,10 @@
 language: swift
 osx_image: xcode9.2
-cache:
-  directories:    
-    - Pods    
-    - $HOME/.cocoapods    
-    - $HOME/Library/Caches/CocoaPods
+cache: cocoapods
 
 before_install:
   - gem install cocoapods -v '1.4.0'
+  - travis_wait pod repo update --silent
   # - pod repo update
   # - bundle update
 
