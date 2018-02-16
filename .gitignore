@@ -1,7 +1,5 @@
-*.scannerwork
 *.mobileprovision
 *.zip
 *.ipa
 *.cer
 *.html
-*.junit
