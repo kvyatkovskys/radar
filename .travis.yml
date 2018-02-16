@@ -1,5 +1,10 @@
 language: swift
 osx_image: xcode9.2
+cache:
+  directories:    
+    - Pods    
+    - $HOME/.cocoapods    
+    - $HOME/Library/Caches/CocoaPods
 
 before_install:
   - brew update
