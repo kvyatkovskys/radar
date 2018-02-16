@@ -8,8 +8,8 @@ cache:
 
 before_install:
   - brew update
-  - pod repo update
-  - bundle update
+  # - pod repo update
+  # - bundle update
 
 script:
  - xcodebuild build -workspace "Circle".xcworkspace -scheme "Circle" -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.2'
