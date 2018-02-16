@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		06A697334B89620734C2466B /* Pods_CircleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 962081C589226C394F4E0D88 /* Pods_CircleTests.framework */; };
+		2A626B4EC59CF9D4C1080519 /* Pods_Circle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC945378AF2C38ECAC172475 /* Pods_Circle.framework */; };
+		341DD2BF2D4A7408F9B13ED9 /* Pods_CircleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 962081C589226C394F4E0D88 /* Pods_CircleTests.framework */; };
 		8B105CB120260560006A5BBC /* SearchQueryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B105CB020260560006A5BBC /* SearchQueryTableViewCell.swift */; };
 		8B105CB320288EB3006A5BBC /* LocationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B105CB220288EB3006A5BBC /* LocationModel.swift */; };
 		8B105CB52028A56E006A5BBC /* SearchHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B105CB42028A56E006A5BBC /* SearchHistoryViewController.swift */; };
@@ -95,7 +96,6 @@
 		8BEB4DF31FFAD285008AD1AB /* PlaceSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEB4DF21FFAD285008AD1AB /* PlaceSetting.swift */; };
 		8BFBF57D200517D000CE2C8B /* CategoriesTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFBF57C200517D000CE2C8B /* CategoriesTableViewDelegate.swift */; };
 		8BFBF57F2005187100CE2C8B /* CategoriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFBF57E2005187100CE2C8B /* CategoriesTableViewCell.swift */; };
-		D651C1D920BD15BA7A27573E /* Pods_Circle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC945378AF2C38ECAC172475 /* Pods_Circle.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -230,7 +230,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D651C1D920BD15BA7A27573E /* Pods_Circle.framework in Frameworks */,
+				2A626B4EC59CF9D4C1080519 /* Pods_Circle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,7 +238,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				06A697334B89620734C2466B /* Pods_CircleTests.framework in Frameworks */,
+				341DD2BF2D4A7408F9B13ED9 /* Pods_CircleTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
