@@ -15,7 +15,7 @@ platform :ios do
 			  ignore_exit_status: false)
 
     scan(workspace: "Circle.xcworkspace",
-           devices: "iPhone 8 (11.2)",
+            device: "iPhone 8 (11.2)",
             scheme: "Circle",
             clean: true)
   end
