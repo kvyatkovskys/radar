@@ -1,10 +1,11 @@
 language: swift
 osx_image: xcode9.2
 cache: cocoapods
+gemfile: Gemfile
 
 before_install:
   - gem install cocoapods -v '1.4.0'
-  - travis_wait pod install --silent
+  - travis_wait pod install --repo-update --silent
   - bundle install
 
 script:
