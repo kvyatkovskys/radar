@@ -12,8 +12,8 @@ before_install:
   - bundle update
 
 script:
- # - xcodebuild clean test -workspace "Circle".xcworkspace -scheme "Circle" -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.2' ONLY_ACTIVE_ARCH=NO
-  - ./fastlane/travis.sh
+ - xcodebuild build -workspace "Circle".xcworkspace -scheme "Circle" -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.2'
+  #- ./fastlane/travis.sh
 
 notifications:
   slack:
