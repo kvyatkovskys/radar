@@ -1,7 +1,7 @@
 language: swift
 osx_image: xcode9.2
 xcode_workspace: Circle.xcworkspace
-xcode_scheme: CircleTests
+xcode_scheme: Circle
 podfile: Podfile
 
 before_install:
@@ -10,7 +10,7 @@ before_install:
   - pod install
 
 script:
-  - set -o pipefail && xcodebuild test -workspace Circle.xcworkspace -scheme CircleTests -sdk iphonesimulator11.2 -destination 'name=iPhone 8,OS=11.2' ONLY_ACTIVE_ARCH=NO | xcpretty
+  - set -o pipefail && xcodebuild test -workspace Circle.xcworkspace -scheme Circle -sdk iphonesimulator11.2 -destination 'name=iPhone 8,OS=11.2' ONLY_ACTIVE_ARCH=NO | xcpretty
   #- xcrun xcodebuild test -workspace Circle.xcworkspace -scheme Circle -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.2'
   # - ./fastlane/travis.sh
 
