@@ -1,4 +1,3 @@
-Pods/Pods.xcodeproj/xcuserdata
 *.scannerwork
 *.mobileprovision
 *.zip
@@ -6,5 +5,3 @@ Pods/Pods.xcodeproj/xcuserdata
 *.cer
 *.html
 *.junit
-librealmcore-ios.a
-KSNotifications.swift
