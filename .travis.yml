@@ -4,13 +4,12 @@ cache: cocoapods
 
 before_install:
   - gem install cocoapods -v '1.4.0'
-  - travis_wait pod repo update --silent
-  # - pod repo update
-  # - bundle update
+  - travis_wait pod install --silent
+  - bundle install
 
 script:
- - xcodebuild build -workspace "Circle".xcworkspace -scheme "Circle" -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.2'
-  #- ./fastlane/travis.sh
+ #- xcodebuild build -workspace "Circle".xcworkspace -scheme "Circle" -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.2'
+  - ./fastlane/travis.sh
 
 notifications:
   slack:
