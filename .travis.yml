@@ -6,13 +6,12 @@ cache: cocoapods
 gemfile: Gemfile
 
 before_install:
-  - travis_wait pod install --repo-update --silent
+  #- travis_wait pod install --repo-update --silent
   - bundle install
 
-script: xcrun xcodebuild test -workspace Circle.xcworkspace -scheme Circle -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.2'
- #- mvn clean install
- #- xcodebuild clean test -workspace "Circle".xcworkspace -scheme "Circle" -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.2'
-#- ./fastlane/travis.sh
+script: 
+ #- xcrun xcodebuild test -workspace Circle.xcworkspace -scheme Circle -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.2'
+  - ./fastlane/travis.sh
 
 notifications:
   slack:
