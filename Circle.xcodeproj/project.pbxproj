@@ -95,7 +95,7 @@
 		8BEB4DF31FFAD285008AD1AB /* PlaceSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEB4DF21FFAD285008AD1AB /* PlaceSetting.swift */; };
 		8BFBF57D200517D000CE2C8B /* CategoriesTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFBF57C200517D000CE2C8B /* CategoriesTableViewDelegate.swift */; };
 		8BFBF57F2005187100CE2C8B /* CategoriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFBF57E2005187100CE2C8B /* CategoriesTableViewCell.swift */; };
-		A960193E18C96EBC99B685AD /* Pods_Circle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC945378AF2C38ECAC172475 /* Pods_Circle.framework */; };
+		D651C1D920BD15BA7A27573E /* Pods_Circle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC945378AF2C38ECAC172475 /* Pods_Circle.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -230,7 +230,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A960193E18C96EBC99B685AD /* Pods_Circle.framework in Frameworks */,
+				D651C1D920BD15BA7A27573E /* Pods_Circle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
