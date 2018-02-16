@@ -7,7 +7,7 @@ cache:
     - $HOME/Library/Caches/CocoaPods
 
 before_install:
-  - brew update
+  - gem install cocoapods -v '1.4.0'
   # - pod repo update
   # - bundle update
 
