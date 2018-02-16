@@ -8,8 +8,8 @@ before_install:
   - bundle install
 
 script:
- #- xcodebuild build -workspace "Circle".xcworkspace -scheme "Circle" -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.2'
-  - ./fastlane/travis.sh
+ - xcodebuild clean test -workspace "Circle".xcworkspace -scheme "Circle" -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.2'
+#- ./fastlane/travis.sh
 
 notifications:
   slack:
