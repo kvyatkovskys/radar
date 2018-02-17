@@ -18,11 +18,6 @@ final class PlaceTableViewCell: UITableViewCell {
     fileprivate let mainView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
-        let blur = UIBlurEffect(style: .extraLight)
-        let blurView = RoundedVisualEffectView(effect: blur)
-        blurView.bounds = view.bounds
-        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        view.addSubview(blurView)
         return view
     }()
     
@@ -38,7 +33,7 @@ final class PlaceTableViewCell: UITableViewCell {
     fileprivate let titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.font = .boldSystemFont(ofSize: 17.0)
+        label.font = .boldSystemFont(ofSize: 16.0)
         return label
     }()
     
@@ -49,7 +44,7 @@ final class PlaceTableViewCell: UITableViewCell {
     
     fileprivate let categoryLabel: UILabel = {
         let label = UILabel()
-        label.layer.cornerRadius = 8.0
+        label.layer.cornerRadius = 10.0
         label.layer.masksToBounds = true
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 11.0)
@@ -89,18 +84,19 @@ final class PlaceTableViewCell: UITableViewCell {
         super.updateConstraints()
         
         imageCell.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview().inset(5.0)
-            make.bottom.top.equalToSuperview().inset(8.0)
+            make.top.equalToSuperview().offset(15.0)
+            make.left.right.equalToSuperview().inset(10.0)
+            make.bottom.equalTo(mainView.snp.top)
         }
         
         mainView.snp.makeConstraints { (make) in
-            make.bottom.equalTo(imageCell)
-            make.left.right.equalToSuperview().inset(5.0)
+            make.bottom.equalToSuperview()
+            make.left.right.equalTo(imageCell)
             make.height.equalTo(60.0)
         }
         
         titleLabel.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview().inset(10.0)
+            make.left.right.equalToSuperview()
             make.top.equalToSuperview()
             make.height.equalTo(30.0)
         }
@@ -113,7 +109,7 @@ final class PlaceTableViewCell: UITableViewCell {
         }
 
         categoryLabel.snp.makeConstraints { (make) in
-            make.right.equalToSuperview().inset(10.0)
+            make.right.equalToSuperview()
             make.size.equalTo(CGSize(width: 70.0, height: 20.0))
             make.centerY.equalTo(ratingLabel)
         }

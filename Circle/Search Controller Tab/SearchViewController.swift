@@ -91,7 +91,6 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
         table.delegate = self
         table.separatorColor = .lightGray
         table.separatorInset = UIEdgeInsets(top: 0.0, left: 15.0, bottom: 0.0, right: 15.0)
-        
         return table
     }()
     

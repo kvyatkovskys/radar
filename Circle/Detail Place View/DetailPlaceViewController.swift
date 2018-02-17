@@ -36,6 +36,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         let image = UIImageView()
         image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
+        image.backgroundColor = .shadowGray
         
         image.kf.indicatorType = .activity
         image.kf.setImage(with: viewModel.place.coverPhoto,

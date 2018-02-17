@@ -40,7 +40,7 @@ final class KSTableView: UITableView {
     override init(frame: CGRect, style: UITableViewStyle) {
         super.init(frame: frame, style: style)
         self.backgroundColor = UIColor.lightGrayTable
-        self.separatorColor = .clear
+        self.separatorInset = UIEdgeInsets(top: 0.0, left: 10.0, bottom: 0.0, right: 10.0)
         self.tableFooterView = UIView(frame: CGRect.zero)
     }
     
