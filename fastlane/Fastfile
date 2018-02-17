@@ -7,7 +7,6 @@ platform :ios do
   	clear_derived_data
     clean_build_artifacts
     cocoapods
-    setup_travis
   end
 
   lane :test do
@@ -16,7 +15,7 @@ platform :ios do
 			  ignore_exit_status: false)
 
     scan(workspace: "Circle.xcworkspace",
-            device: "iPhone 8 (11.2)",
+            device: "iPhone 8 (11.2.5)",
             scheme: "Circle",
             clean: true)
   end

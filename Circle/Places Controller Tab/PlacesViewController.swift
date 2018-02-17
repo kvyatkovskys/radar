@@ -14,11 +14,10 @@ import RxCocoa
 import Kingfisher
 import RealmSwift
 
-let heightHeader: CGFloat = 100.0
-
 final class PlacesViewController: UIViewController {
     typealias Dependecies = HasKingfisher & HasPlaceViewModel & HasLocationService
     
+    fileprivate let heightHeader: CGFloat = 100.0
     fileprivate var searchForMinDistance: Bool = false
     fileprivate var locationService: LocationService
     fileprivate var userLocation: CLLocation?
@@ -31,11 +30,8 @@ final class PlacesViewController: UIViewController {
     //swiftlint:disable weak_delegate
     fileprivate var tableDelegate: PlacesTableViewDelegate?
         
-    fileprivate lazy var tableView: UITableView = {
-        let table = UITableView()
-        table.tableFooterView = UIView(frame: CGRect.zero)
-        table.backgroundColor = .clear
-        table.separatorColor = .clear
+    fileprivate lazy var tableView: KSTableView = {
+        let table = KSTableView()
         return table
     }()
     

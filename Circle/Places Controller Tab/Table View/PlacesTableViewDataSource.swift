@@ -15,7 +15,7 @@ final class PlacesTableViewDataSource: NSObject {
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
     fileprivate var notificationTokenRating: NotificationToken?
 
-    init(_ tableView: UITableView, places: [Places] = [], kingfisherOptions: KingfisherOptionsInfo) {
+    init(_ tableView: KSTableView, places: [Places] = [], kingfisherOptions: KingfisherOptionsInfo) {
         self.places = places
         self.kingfisherOptions = kingfisherOptions
         super.init()
@@ -35,12 +35,11 @@ extension PlacesTableViewDataSource: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let place = places[indexPath.section].items[indexPath.row]
         let rating = places[indexPath.section].ratings[indexPath.row]
-        let title = places[indexPath.section].titles[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: PlaceTableViewCell.cellIndetifier,
                                                  for: indexPath) as? PlaceTableViewCell ?? PlaceTableViewCell()
         
         cell.rating = rating
-        cell.title = title
+        cell.title = place.name
         cell.titleCategory = place.categories?.first?.title
         cell.colorCategory = place.categories?.first?.color
         cell.imageCell.kf.indicatorType = .activity

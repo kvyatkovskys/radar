@@ -11,25 +11,10 @@ import Kingfisher
 import RxSwift
 import RealmSwift
 
-let heightHeaderTable: CGFloat = 370.0
-
-fileprivate extension UIColor {
-    static var shadowGray: UIColor {
-        return UIColor(withHex: 0xecf0f1, alpha: 0.7)
-    }
-
-    static var mainColor: UIColor {
-        return UIColor(withHex: 0xf82462, alpha: 1.0)
-    }
-    
-    static var notifyEnabled: UIColor {
-        return UIColor(withHex: 0xF62232, alpha: 1.0)
-    }
-}
-
 final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDelegate {
     typealias Dependecies = HasDetailPlaceViewModel & HasKingfisher & HasOpenGraphService & HasFavoritesViewModel
     
+    fileprivate let heightHeader: CGFloat = 370.0
     fileprivate var notificationTokenFavorites: NotificationToken?
     fileprivate var viewModel: DetailPlaceViewModel
     fileprivate let favoritesViewModel: FavoritesViewModel
@@ -42,7 +27,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
     }
     
     fileprivate lazy var headerView: UIView = {
-        let view = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: heightHeaderTable))
+        let view = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: heightHeader))
         view.backgroundColor = .white
         return view
     }()
@@ -51,11 +36,6 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         let image = UIImageView()
         image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
-        image.backgroundColor = .shadowGray
-        image.layer.shadowColor = UIColor.black.cgColor
-        image.layer.shadowRadius = 5.0
-        image.layer.shadowOpacity = 0.5
-        image.layer.shadowOffset = CGSize.zero
         
         image.kf.indicatorType = .activity
         image.kf.setImage(with: viewModel.place.coverPhoto,

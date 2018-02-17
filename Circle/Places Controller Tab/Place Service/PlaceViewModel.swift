@@ -92,14 +92,13 @@ struct PlaceViewModel {
         return color
     }
     
-    //swiftlint:disable large_tuple
     fileprivate func updateResults(model: PlaceDataModel) -> ([PlaceModel], [NSMutableAttributedString?], [NSMutableAttributedString?]) {
         let ratings = model.data.map({ (place) -> NSMutableAttributedString? in
             let ratingStar = NSAttributedString(string: "\(place.ratingStar ?? 0)",
-                attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 17.0),
+                attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 18.0),
                              NSAttributedStringKey.foregroundColor: self.colorForRating(place.ratingStar ?? 0)])
             let ratingCount = NSAttributedString(string: " \(place.ratingCount ?? 0)",
-                attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 12.0),
+                attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 13.0),
                              NSAttributedStringKey.foregroundColor: UIColor.gray])
             
             let result = NSMutableAttributedString(attributedString: ratingStar)

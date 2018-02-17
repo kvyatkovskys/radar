@@ -10,13 +10,6 @@ import UIKit
 import RealmSwift
 import UserNotifications
 
-// color for navigation bar
-fileprivate extension UIColor {
-    static var navBarColor: UIColor {
-        return UIColor(withHex: 0x34495e, alpha: 1.0)
-    }
-}
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 

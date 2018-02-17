@@ -18,12 +18,10 @@ final class FavoritesViewController: UIViewController {
     fileprivate let optionsKingfisher: KingfisherOptionsInfo
     fileprivate var notificationToken: NotificationToken?
     
-    fileprivate lazy var tableView: UITableView = {
-        let table = UITableView()
-        table.tableFooterView = UIView(frame: CGRect.zero)
+    fileprivate lazy var tableView: KSTableView = {
+        let table = KSTableView()
         table.delegate = self
         table.dataSource = self
-        table.separatorColor = .clear
         return table
     }()
     
@@ -92,7 +90,7 @@ extension FavoritesViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: PlaceTableViewCell.cellIndetifier,
                                                  for: indexPath) as? PlaceTableViewCell ?? PlaceTableViewCell()
 
-        cell.title = dataSource[indexPath.row].title
+        cell.title = dataSource[indexPath.row].name
         cell.rating = dataSource[indexPath.row].rating
         cell.titleCategory = dataSource[indexPath.row].categories?.first?.title
         cell.colorCategory = dataSource[indexPath.row].categories?.first?.color
@@ -115,7 +113,7 @@ extension FavoritesViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 170.0
+        return heightTableCell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

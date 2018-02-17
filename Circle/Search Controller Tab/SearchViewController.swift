@@ -269,12 +269,11 @@ extension SearchViewController: UITableViewDataSource {
         case .savedQueries:
             let place = dataSource[indexPath.section].items[indexPath.row]
             let rating = dataSource[indexPath.section].ratings[indexPath.row]
-            let title = dataSource[indexPath.section].titles[indexPath.row]
             let cell = tableView.dequeueReusableCell(withIdentifier: PlaceTableViewCell.cellIndetifier,
                                                      for: indexPath) as? PlaceTableViewCell ?? PlaceTableViewCell()
             
             cell.rating = rating
-            cell.title = title
+            cell.title = place.name
             cell.titleCategory = place.categories?.first?.title
             cell.colorCategory = place.categories?.first?.color
             cell.imageCell.kf.indicatorType = .activity
@@ -293,7 +292,7 @@ extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch viewType {
         case .search: return 44.0
-        case .savedQueries: return 170.0
+        case .savedQueries: return heightTableCell
         }
     }
     

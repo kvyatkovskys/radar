@@ -20,4 +20,20 @@ extension UIColor {
     convenience init(withHex: Int, alpha: Float) {
         self.init(red: (withHex >> 16) & 0xff, green: (withHex >> 8) & 0xff, blue: withHex & 0xff, alphaLvl: alpha)
     }
+    
+    static var lightGrayTable: UIColor {
+        return UIColor(withHex: 0xf6f6f6, alpha: 1.0)
+    }
+    
+    static var navBarColor: UIColor {
+        return UIColor(withHex: 0x34495e, alpha: 1.0)
+    }
+    
+    static var shadowGray: UIColor {
+        return UIColor(withHex: 0xecf0f1, alpha: 0.7)
+    }
+    
+    static var mainColor: UIColor {
+        return UIColor(withHex: 0xf82462, alpha: 1.0)
+    }
 }

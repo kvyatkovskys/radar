@@ -9,12 +9,6 @@
 import Foundation
 import RxSwift
 
-fileprivate extension UIColor {
-    static var mainColor: UIColor {
-        return UIColor(withHex: 0xf82462, alpha: 1.0)
-    }
-}
-
 struct DetailSectionObjects {
     var sectionName: String
     var sectionObjects: [TypeDetailCell]

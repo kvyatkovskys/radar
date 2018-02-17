@@ -32,10 +32,10 @@ struct FavoritesViewModel {
         
         favorites.forEach { (item) in
             let ratingStar = NSAttributedString(string: "\(item.ratingStar)",
-                attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 17.0),
+                attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 18.0),
                              NSAttributedStringKey.foregroundColor: colorForRating(item.ratingStar)])
             let ratingCount = NSAttributedString(string: " \(item.ratingCount)",
-                attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 12.0),
+                attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 13.0),
                              NSAttributedStringKey.foregroundColor: UIColor.gray])
             
             let resultRating = NSMutableAttributedString(attributedString: ratingStar)

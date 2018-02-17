@@ -8,16 +8,6 @@
 
 import UIKit
 
-fileprivate extension UIColor {
-    static var shadowGray: UIColor {
-        return UIColor(withHex: 0xecf0f1, alpha: 0.7)
-    }
-    
-    static var mainColor: UIColor {
-        return UIColor(withHex: 0xf82462, alpha: 1.0)
-    }
-}
-
 final class ListContactsCollectionViewCell: UICollectionViewCell {
     static let cellIdentifier = "ListContactsCollectionViewCell"
     

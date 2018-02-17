@@ -19,12 +19,10 @@ final class ResultSearchViewController: UIViewController {
     fileprivate var dataSource: [Places] = [Places([], [], [], nil)]
     let selectResult = PublishSubject<Result>()
     
-    fileprivate lazy var tableView: UITableView = {
-        let table = UITableView()
-        table.tableFooterView = UIView(frame: CGRect.zero)
+    fileprivate lazy var tableView: KSTableView = {
+        let table = KSTableView()
         table.delegate = self
         table.dataSource = self
-        table.separatorColor = .clear
         return table
     }()
     
@@ -73,12 +71,11 @@ extension ResultSearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let place = dataSource[indexPath.section].items[indexPath.row]
         let rating = dataSource[indexPath.section].ratings[indexPath.row]
-        let title = dataSource[indexPath.section].titles[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: PlaceTableViewCell.cellIndetifier,
                                                  for: indexPath) as? PlaceTableViewCell ?? PlaceTableViewCell()
         
         cell.rating = rating
-        cell.title = title
+        cell.title = place.name
         cell.titleCategory = place.categories?.first?.title
         cell.colorCategory = place.categories?.first?.color
         cell.imageCell.kf.indicatorType = .activity
@@ -94,7 +91,7 @@ extension ResultSearchViewController: UITableViewDataSource {
 
 extension ResultSearchViewController: UITableViewDelegate {    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 170.0
+        return heightTableCell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
