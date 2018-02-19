@@ -60,7 +60,7 @@ final class FavoritesViewController: UIViewController {
             notificationToken = results.observe { [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
                 case .initial:
-                    break
+                    self.tableView.reloadData()
                 case .update(let collection, let deletions, let insertions, _):
                     self.dataSource = self.viewModel.updateValue(collection.map({ $0 }))
                     self.tableView.beginUpdates()

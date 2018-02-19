@@ -35,6 +35,7 @@
 		8B2940B02018AE94004CB9AD /* ListPaymentsCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2940AF2018AE94004CB9AD /* ListPaymentsCollectionDataSource.swift */; };
 		8B2940B22018B160004CB9AD /* DetailPlaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2940B12018B160004CB9AD /* DetailPlaceModel.swift */; };
 		8B2A3F252030952400D5856E /* DetailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2A3F242030952400D5856E /* DetailService.swift */; };
+		8B2D741120387A520022BDCC /* KSTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D741020387A520022BDCC /* KSTableView.swift */; };
 		8B3398CC200F61E6002966ED /* DetailPlaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3398CB200F61E6002966ED /* DetailPlaceViewModel.swift */; };
 		8B3398CE200F66B5002966ED /* DetailDescriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3398CD200F66B5002966ED /* DetailDescriptionTableViewCell.swift */; };
 		8B3398D0200F7597002966ED /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3398CF200F7597002966ED /* String+Extension.swift */; };
@@ -151,6 +152,7 @@
 		8B2940AF2018AE94004CB9AD /* ListPaymentsCollectionDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListPaymentsCollectionDataSource.swift; sourceTree = "<group>"; };
 		8B2940B12018B160004CB9AD /* DetailPlaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPlaceModel.swift; sourceTree = "<group>"; };
 		8B2A3F242030952400D5856E /* DetailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailService.swift; sourceTree = "<group>"; };
+		8B2D741020387A520022BDCC /* KSTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KSTableView.swift; sourceTree = "<group>"; };
 		8B3398CB200F61E6002966ED /* DetailPlaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPlaceViewModel.swift; sourceTree = "<group>"; };
 		8B3398CD200F66B5002966ED /* DetailDescriptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailDescriptionTableViewCell.swift; sourceTree = "<group>"; };
 		8B3398CF200F7597002966ED /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
@@ -394,7 +396,6 @@
 				8B41154A1FDB2CEF00C6614C /* AppDelegate.swift */,
 				8B41156A1FDC83AF00C6614C /* Router.swift */,
 				8B41156C1FDC845B00C6614C /* AppInjections.swift */,
-				8B6A37A6202C731F003CD1A8 /* Notifications */,
 				8BC3506A201CF64F00BB375B /* Search Controller Tab */,
 				8BC35067201CF62100BB375B /* Favorites Controller Tab */,
 				8B44C3841FF012E1003C0754 /* Setting Controller Tab */,
@@ -449,6 +450,8 @@
 		8B44C3801FF00F58003C0754 /* Project Settings */ = {
 			isa = PBXGroup;
 			children = (
+				8B105CBA202B655A006A5BBC /* KSNotifications.swift */,
+				8B2D741020387A520022BDCC /* KSTableView.swift */,
 				8B44C37E1FEFE195003C0754 /* QuickAlertController.swift */,
 				8B4177091FFD5785002A963A /* ActivityIndicatorView.swift */,
 				8B4177181FFD670B002A963A /* DeviceType.swift */,
@@ -459,8 +462,8 @@
 		8B44C3811FF012A2003C0754 /* Places Controller Tab */ = {
 			isa = PBXGroup;
 			children = (
-				8B5F71541FF933AC00E628F9 /* Place Service */,
 				8B41154C1FDB2CEF00C6614C /* PlacesViewController.swift */,
+				8B5F71541FF933AC00E628F9 /* Place Service */,
 				8B147BD2202399D800EDA2D4 /* Table View */,
 			);
 			path = "Places Controller Tab";
@@ -505,14 +508,6 @@
 				8B105CB220288EB3006A5BBC /* LocationModel.swift */,
 			);
 			path = "Location Service";
-			sourceTree = "<group>";
-		};
-		8B6A37A6202C731F003CD1A8 /* Notifications */ = {
-			isa = PBXGroup;
-			children = (
-				8B105CBA202B655A006A5BBC /* KSNotifications.swift */,
-			);
-			path = Notifications;
 			sourceTree = "<group>";
 		};
 		8B6A37AF202DE92D003CD1A8 /* List Favorites Notice */ = {
@@ -938,6 +933,7 @@
 				8B6D4E1F1FFBA0CD007904D4 /* PlacesTableViewDataSource.swift in Sources */,
 				8B18BFD81FFACC6F00C7906D /* PlaceViewModel.swift in Sources */,
 				8B5F71571FF93C9700E628F9 /* PlaceTableViewCell.swift in Sources */,
+				8B2D741120387A520022BDCC /* KSTableView.swift in Sources */,
 				8BC35066201CF60700BB375B /* FavoritesViewController.swift in Sources */,
 				8B3398D4200FE5E2002966ED /* DetailAddressTableViewCell.swift in Sources */,
 				8B6A37B1202E314B003CD1A8 /* DistanceFilterView.swift in Sources */,

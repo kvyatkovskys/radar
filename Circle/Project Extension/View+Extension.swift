@@ -17,34 +17,3 @@ extension UIView {
         return img!
     }
 }
-
-final class RoundedVisualEffectView: UIVisualEffectView {
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        updateMaskLayer()
-    }
-    
-    func updateMaskLayer() {
-        let path = UIBezierPath(roundedRect: self.bounds,
-                                byRoundingCorners: [.bottomLeft, .bottomRight],
-                                cornerRadii: CGSize(width: 5.0, height: 5.0))
-        let mask = CAShapeLayer()
-        mask.path = path.cgPath
-        self.layer.mask = mask
-    }
-}
-
-let heightTableCell: CGFloat = 250.0
-
-final class KSTableView: UITableView {
-    override init(frame: CGRect, style: UITableViewStyle) {
-        super.init(frame: frame, style: style)
-        self.backgroundColor = UIColor.lightGrayTable
-        self.separatorInset = UIEdgeInsets(top: 0.0, left: 10.0, bottom: 0.0, right: 10.0)
-        self.tableFooterView = UIView(frame: CGRect.zero)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
