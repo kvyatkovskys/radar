@@ -169,23 +169,9 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
             window?.rootViewController?.showAlertLight(title: "Error", message: "Geofencing is not supported on this device!")
             return
         }
-        if CLLocationManager.authorizationStatus() != .authorizedAlways {
-            let alertController = UIAlertController(title: "Warning",
-                                                    message: "Your geotification is saved but will only be activated once you grant Geotify permission to access the device location.",
-                                                    preferredStyle: .alert)
-            
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-            alertController.addAction(cancelAction)
-            
-            let openAction = UIAlertAction(title: "Open settings", style: .default) { _ in
-                if let url = URL(string: UIApplicationOpenSettingsURLString) {
-                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                }
-            }
-            alertController.addAction(openAction)
-            
-            window?.rootViewController?.present(alertController, animated: true, completion: nil)
-        }
+        
+        guard CLLocationManager.authorizationStatus() == .authorizedAlways else { return }
+        
         let region = regionCreate(with: locationRegion, radius: radius, identifier: identifier)
         locationManager.startMonitoring(for: region)
     }
@@ -311,6 +297,23 @@ extension LocationService {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedAlways || status == .authorizedWhenInUse {
             start()
+            
+            do {
+                let realm = try Realm()
+                let settings = realm.objects(Settings.self).first
+                try realm.write {
+                    guard let oldSettings = settings else {
+                        let newSettings = Settings()
+                        newSettings.cancelNotice = status == .authorizedAlways
+                        newSettings.disabledNotice = settings?.disabledNotice ?? false
+                        realm.add(newSettings)
+                        return
+                    }
+                    oldSettings.cancelNotice = status == .authorizedAlways
+                }
+            } catch {
+                print(error)
+            }
         }
     }
 }

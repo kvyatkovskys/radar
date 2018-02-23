@@ -10,6 +10,12 @@ import UIKit
 import Kingfisher
 import RealmSwift
 
+fileprivate extension UIColor {
+    static var alert: UIColor {
+        return UIColor(withHex: 0xff3232, alpha: 1.0)
+    }
+}
+
 final class FavoritesViewController: UIViewController {
     typealias Dependecies = HasFavoritesViewModel & HasKingfisher
 
@@ -17,12 +23,20 @@ final class FavoritesViewController: UIViewController {
     fileprivate var dataSource: [FavoritesModel]
     fileprivate let optionsKingfisher: KingfisherOptionsInfo
     fileprivate var notificationToken: NotificationToken?
+    fileprivate var notificationSettingsToken: NotificationToken?
     
     fileprivate lazy var tableView: KSTableView = {
         let table = KSTableView()
         table.delegate = self
         table.dataSource = self
         return table
+    }()
+    
+    fileprivate lazy var leftBarButton: UIBarButtonItem = {
+        let categoriesImage = UIImage(named: "ic_warning")?.withRenderingMode(.alwaysTemplate)
+        let button = UIBarButtonItem(image: categoriesImage, style: .done, target: self, action: #selector(showAlert))
+        button.tintColor = .alert
+        return button
     }()
     
     override func updateViewConstraints() {
@@ -55,6 +69,7 @@ final class FavoritesViewController: UIViewController {
         do {
             let realm = try Realm()
             let results = realm.objects(Favorites.self).sorted(byKeyPath: "date", ascending: false)
+            let settings = realm.objects(Settings.self)
             
             notificationToken = results.observe { [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
@@ -71,6 +86,19 @@ final class FavoritesViewController: UIViewController {
                     fatalError("\(error)")
                 }
             }
+            
+            notificationSettingsToken = settings.observe { [unowned self] (changes: RealmCollectionChange) in
+                switch changes {
+                case .initial(let collection), .update(let collection, _, _, _):
+                    guard collection.first?.cancelNotice ?? true else {
+                        self.navigationItem.leftBarButtonItem = self.leftBarButton
+                        return
+                    }
+                    self.navigationItem.leftBarButtonItem = nil
+                case .error(let error):
+                    fatalError("\(error)")
+                }
+            }
         } catch {
             print(error)
         }
@@ -78,6 +106,24 @@ final class FavoritesViewController: UIViewController {
     
     deinit {
         notificationToken?.invalidate()
+        notificationSettingsToken?.invalidate()
+    }
+    
+    @objc func showAlert() {
+        let alertController = UIAlertController(title: "Warning",
+                                                message: "To receive notifications when you are near a place, open the setting for this application and set the location as 'Always usage'",
+                                                preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        let openAction = UIAlertAction(title: "Open settings", style: .default) { _ in
+            if let url = URL(string: UIApplicationOpenSettingsURLString) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+        }
+        alertController.addAction(openAction)
+        present(alertController, animated: true, completion: nil)
     }
 }
 

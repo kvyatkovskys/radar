@@ -35,6 +35,8 @@ extension ListContactsCollectionDelegate: UICollectionViewDelegate, UICollection
         case .phone:
             if let url = URL(string: "tel://\(contact.value ?? "")"), UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                UIApplication.shared.keyWindow?.rootViewController?.showAlertLight(title: "Telephone", message: "\(contact.value ?? "")")
             }
         case .website, .facebook:
             if let url = URL(string: "\(contact.value ?? "")"), UIApplication.shared.canOpenURL(url) {

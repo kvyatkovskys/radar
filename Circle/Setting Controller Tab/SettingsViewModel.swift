@@ -65,7 +65,7 @@ struct SettingsViewModel {
     var openListFavoritesNotice: (() -> Void) = { }
     
     init() {
-        let settingsApp: [SettingRowType] = [.openSettings(title: "Open Settings phone",
+        let settingsApp: [SettingRowType] = [.openSettings(title: "Open settings phone",
                                                            image: UIImage(named: "ic_settings_app")!.withRenderingMode(.alwaysTemplate),
                                                            color: .standardGray)]
         
@@ -96,8 +96,8 @@ struct SettingsViewModel {
                                                                   enabled: disabledNotice,
                                                                   image: UIImage(named: "ic_notifications")!.withRenderingMode(.alwaysTemplate),
                                                                   color: .notify),
-                                                  .clearFavorites(title: "Clear Favorites",
-                                                                  description: "Are you sure you want to clear all items in your Favorites?",
+                                                  .clearFavorites(title: "Clear favorites",
+                                                                  description: "Are you sure you want to clear all items in your favorites?",
                                                                   image: UIImage(named: "ic_delete_forever")!.withRenderingMode(.alwaysTemplate),
                                                                   color: .deleted)]
         
