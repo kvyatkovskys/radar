@@ -14,7 +14,7 @@ import RealmSwift
 final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDelegate {
     typealias Dependecies = HasDetailPlaceViewModel & HasKingfisher & HasOpenGraphService & HasFavoritesViewModel
     
-    fileprivate let heightHeader: CGFloat = 370.0
+    fileprivate let heightHeader: CGFloat = 385.0
     fileprivate var notificationTokenFavorites: NotificationToken?
     fileprivate var viewModel: DetailPlaceViewModel
     fileprivate let favoritesViewModel: FavoritesViewModel
@@ -187,7 +187,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         }
         
         picture.snp.makeConstraints { (make) in
-            make.top.equalTo(imageHeader.snp.bottom).offset(-30.0)
+            make.top.equalTo(imageHeader.snp.bottom).offset(-15.0)
             make.left.equalTo(self.view).offset(10.0)
             make.size.equalTo(CGSize(width: 100.0, height: 100.0))
         }
@@ -196,7 +196,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
             make.top.equalTo(imageHeader.snp.bottom).offset(10.0)
             make.left.equalTo(picture.snp.right).offset(10.0)
             make.right.equalTo(self.view).offset(-10.0)
-            make.height.equalTo(90.0)
+            make.bottom.equalTo(ratingLabel)
         }
 
         ratingLabel.snp.remakeConstraints { (make) in
@@ -209,7 +209,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
             make.bottom.equalTo(lineView)
             make.right.equalTo(titlePlace)
             make.left.equalTo(ratingLabel)
-            make.top.equalTo(titlePlace.snp.bottom).offset(10.0)
+            make.top.equalTo(ratingLabel.snp.bottom).offset(10.0)
         }
 
         lineView.snp.remakeConstraints { (make) in

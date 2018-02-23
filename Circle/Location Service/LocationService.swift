@@ -240,7 +240,7 @@ extension LocationService {
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         geocoder.cancelGeocode()
-        userLocation.onError(NSError(type: .other, info: error.localizedDescription))
+        userLocation.onNext(nil)
         window?.rootViewController?.showAlertLight(title: "Error", message: "We can't determine your location!\n")
     }
     
@@ -264,15 +264,15 @@ extension LocationService {
             } catch {
                 print(error)
             }
-            
+
             guard (50.0..<100.0).contains(distance) || distance > 100.0 else {
                 userLocation.onNext(oldLocation)
-                print("не записываем")
+                stop()
                 return
             }
             
             userLocation.onNext(currentLocation)
-            print("записываем")
+            stop()
             
             let location = Location()
             location.latitude = currentLocation.coordinate.latitude

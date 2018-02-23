@@ -33,7 +33,7 @@ final class PlaceTableViewCell: UITableViewCell {
     fileprivate let titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.font = .boldSystemFont(ofSize: 16.0)
+        label.font = .boldSystemFont(ofSize: 17.0)
         return label
     }()
     
@@ -47,7 +47,7 @@ final class PlaceTableViewCell: UITableViewCell {
         label.layer.cornerRadius = 10.0
         label.layer.masksToBounds = true
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 11.0)
+        label.font = .boldSystemFont(ofSize: 13.0)
         label.textColor = .white
         return label
     }()
@@ -90,7 +90,7 @@ final class PlaceTableViewCell: UITableViewCell {
         }
         
         mainView.snp.makeConstraints { (make) in
-            make.bottom.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-10.0)
             make.left.right.equalTo(imageCell)
             make.height.equalTo(60.0)
         }
@@ -110,7 +110,7 @@ final class PlaceTableViewCell: UITableViewCell {
 
         categoryLabel.snp.makeConstraints { (make) in
             make.right.equalToSuperview()
-            make.size.equalTo(CGSize(width: 70.0, height: 20.0))
+            make.size.equalTo(CGSize(width: 80.0, height: 20.0))
             make.centerY.equalTo(ratingLabel)
         }
     }

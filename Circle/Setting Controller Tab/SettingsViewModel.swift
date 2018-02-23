@@ -18,19 +18,20 @@ fileprivate extension UIColor {
         return UIColor(withHex: 0x5796DB, alpha: 1.0)
     }
     
-    static var history: UIColor {
+    static var standardGray: UIColor {
         return UIColor(withHex: 0x8C9EA0, alpha: 1.0)
     }
 }
 
 enum SettingType: String {
-    case facebook, favorites, search
+    case facebook, favorites, search, app
     
     var title: String {
         switch self {
         case .facebook: return "Conntect to Facebook"
         case .favorites: return "Favorites"
         case .search: return "Search"
+        case .app: return ""
         }
     }
 }
@@ -42,6 +43,7 @@ enum SettingRowType {
     case clearFavorites(title: String, description: String, image: UIImage, color: UIColor)
     case clearHistorySearch(title: String, description: String, image: UIImage, color: UIColor)
     case showSearchHistory(title: String, image: UIImage, color: UIColor)
+    case openSettings(title: String, image: UIImage, color: UIColor)
 }
 
 struct SettingsObject {
@@ -63,13 +65,17 @@ struct SettingsViewModel {
     var openListFavoritesNotice: (() -> Void) = { }
     
     init() {
+        let settingsApp: [SettingRowType] = [.openSettings(title: "Open Settings phone",
+                                                           image: UIImage(named: "ic_settings_app")!.withRenderingMode(.alwaysTemplate),
+                                                           color: .standardGray)]
+        
         let searchObjects: [SettingRowType] = [.showSearchHistory(title: "Show search history",
                                                 image: UIImage(named: "ic_history")!.withRenderingMode(.alwaysTemplate),
-                                                color: UIColor.history),
+                                                color: .standardGray),
                              .clearHistorySearch(title: "Clear search history",
                                                  description: "Are you sure you to clear search history?",
                                                  image: UIImage(named: "ic_delete_forever")!.withRenderingMode(.alwaysTemplate),
-                                                 color: UIColor.deleted)]
+                                                 color: .deleted)]
         
         var disabledNotice = false
         do {
@@ -82,24 +88,31 @@ struct SettingsViewModel {
             print(error)
         }
         
-        let favoritesObjects: [SettingRowType] = [.listFavoritesNoticy(title: "List of favorite places with notifications",
+        let favoritesObjects: [SettingRowType] = [.listFavoritesNoticy(title: "List of places with notifications",
                                                                        description: "",
                                                                        image: UIImage(named: "ic_list")!.withRenderingMode(.alwaysTemplate),
-                                                                       color: UIColor.history),
-                                                  .favoriteNotify(title: "Disable all notifications for selected places",
+                                                                       color: .standardGray),
+                                                  .favoriteNotify(title: "Disable all notifications",
                                                                   enabled: disabledNotice,
                                                                   image: UIImage(named: "ic_notifications")!.withRenderingMode(.alwaysTemplate),
-                                                                  color: UIColor.notify),
+                                                                  color: .notify),
                                                   .clearFavorites(title: "Clear Favorites",
                                                                   description: "Are you sure you want to clear all items in your Favorites?",
                                                                   image: UIImage(named: "ic_delete_forever")!.withRenderingMode(.alwaysTemplate),
-                                                                  color: UIColor.deleted)]
+                                                                  color: .deleted)]
         
         let facebookObjects: [SettingRowType] = [.facebookLogin]
         
-        self.items = [SettingsObject(.search, searchObjects),
+        self.items = [SettingsObject(.app, settingsApp),
+                      SettingsObject(.search, searchObjects),
                       SettingsObject(.favorites, favoritesObjects),
                       SettingsObject(.facebook, facebookObjects)]
+    }
+    
+    func openSettingsPhone() {
+        if let url = URL(string: UIApplicationOpenSettingsURLString) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
     }
     
     /// disabled all notifications for favorites the places

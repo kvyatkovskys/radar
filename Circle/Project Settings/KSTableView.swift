@@ -8,7 +8,7 @@
 
 import Foundation
 
-let heightTableCell: CGFloat = 250.0
+let heightTableCell: CGFloat = 280.0
 
 final class KSTableView: UITableView {
     override init(frame: CGRect, style: UITableViewStyle) {

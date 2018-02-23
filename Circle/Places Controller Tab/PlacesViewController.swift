@@ -145,10 +145,8 @@ final class PlacesViewController: UIViewController {
         
         locationService.userLocation.asObserver()
             .subscribe(onNext: { [unowned self] (location) in
-                if self.userLocation != location {
-                    self.indicatorView.showIndicator()
-                    self.userLocation = location
-                }
+                self.indicatorView.showIndicator()
+                self.userLocation = location
                 guard self.searchForMinDistance == false else { return }
                 self.loadPlacesLocation(location)
             }, onError: { [unowned self] (error) in

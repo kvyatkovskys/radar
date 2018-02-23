@@ -47,10 +47,9 @@ final class FavoritesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         view.addSubview(tableView)
         updateViewConstraints()
-        
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
         
         do {
@@ -59,7 +58,8 @@ final class FavoritesViewController: UIViewController {
             
             notificationToken = results.observe { [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
-                case .initial:
+                case .initial(let collection):
+                    self.dataSource = self.viewModel.updateValue(collection.map({ $0 }))
                     self.tableView.reloadData()
                 case .update(let collection, let deletions, let insertions, _):
                     self.dataSource = self.viewModel.updateValue(collection.map({ $0 }))
