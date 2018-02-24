@@ -5,44 +5,57 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: update_fastlane" time="6.702852">
+      <testcase classname="fastlane.lanes" name="00: update_fastlane" time="5.45709">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: default_platform" time="0.004229">
+      <testcase classname="fastlane.lanes" name="01: default_platform" time="0.003528">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: clear_derived_data" time="0.002828">
+      <testcase classname="fastlane.lanes" name="02: clear_derived_data" time="0.004173">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="3: clean_build_artifacts" time="0.003897">
+      <testcase classname="fastlane.lanes" name="03: clean_build_artifacts" time="0.005515">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="4: ensure_git_status_clean" time="0.039142">
+      <testcase classname="fastlane.lanes" name="04: ensure_git_status_clean" time="0.037568">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="5: number_of_commits" time="0.048277">
+      <testcase classname="fastlane.lanes" name="05: increment_build_number" time="2.603329">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="6: add_git_tag" time="0.020649">
+      <testcase classname="fastlane.lanes" name="06: Switch to ios test lane" time="0.001641">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="7: push_git_tags" time="1.424492">
+      <testcase classname="fastlane.lanes" name="07: scan" time="624.394945">
         
-          <failure message="/usr/local/lib/ruby/gems/2.4.0/gems/fastlane-2.82.0/fastlane/lib/fastlane/actions/actions_helper.rb:48:in `execute_action'&#10;/usr/local/lib/ruby/gems/2.4.0/gems/fastlane-2.82.0/fastlane/lib/fastlane/runner.rb:235:in `block in execute_action'&#10;/usr/local/lib/ruby/gems/2.4.0/gems/fastlane-2.82.0/fastlane/lib/fastlane/runner.rb:230:in `chdir'&#10;/usr/local/lib/ruby/gems/2.4.0/gems/fastlane-2.82.0/fastlane/lib/fastlane/runner.rb:230:in `execute_action'&#10;/usr/local/lib/ruby/gems/2.4.0/gems/fastlane-2.82.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name'&#10;/usr/local/lib/ruby/gems/2.4.0/gems/fastlane-2.82.0/fastlane/lib/fastlane/fast_file.rb:148:in `method_missing'&#10;Fastfile:24:in `block (2 levels) in parsing_binding'&#10;/usr/local/lib/ruby/gems/2.4.0/gems/fastlane-2.82.0/fastlane/lib/fastlane/lane.rb:33:in `call'&#10;/usr/local/lib/ruby/gems/2.4.0/gems/fastlane-2.82.0/fastlane/lib/fastlane/runner.rb:49:in `block in execute'&#10;/usr/local/lib/ruby/gems/2.4.0/gems/fastlane-2.82.0/fastlane/lib/fastlane/runner.rb:45:in `chdir'&#10;/usr/local/lib/ruby/gems/2.4.0/gems/fastlane-2.82.0/fastlane/lib/fastlane/runner.rb:45:in `execute'&#10;/usr/local/lib/ruby/gems/2.4.0/gems/fastlane-2.82.0/fastlane/lib/fastlane/lane_manager.rb:56:in `cruise_lane'&#10;/usr/local/lib/ruby/gems/2.4.0/gems/fastlane-2.82.0/fastlane/lib/fastlane/command_line_handler.rb:36:in `handle'&#10;/usr/local/lib/ruby/gems/2.4.0/gems/fastlane-2.82.0/fastlane/lib/fastlane/commands_generator.rb:108:in `block (2 levels) in run'&#10;/usr/local/lib/ruby/gems/2.4.0/gems/commander-fastlane-4.4.6/lib/commander/command.rb:178:in `call'&#10;/usr/local/lib/ruby/gems/2.4.0/gems/commander-fastlane-4.4.6/lib/commander/command.rb:153:in `run'&#10;/usr/local/lib/ruby/gems/2.4.0/gems/commander-fastlane-4.4.6/lib/commander/runner.rb:476:in `run_active_command'&#10;/usr/local/lib/ruby/gems/2.4.0/gems/fastlane-2.82.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:75:in `run!'&#10;/usr/local/lib/ruby/gems/2.4.0/gems/commander-fastlane-4.4.6/lib/commander/delegates.rb:15:in `run!'&#10;/usr/local/lib/ruby/gems/2.4.0/gems/fastlane-2.82.0/fastlane/lib/fastlane/commands_generator.rb:337:in `run'&#10;/usr/local/lib/ruby/gems/2.4.0/gems/fastlane-2.82.0/fastlane/lib/fastlane/commands_generator.rb:42:in `start'&#10;/usr/local/lib/ruby/gems/2.4.0/gems/fastlane-2.82.0/fastlane/lib/fastlane/cli_tools_distributor.rb:98:in `take_off'&#10;/usr/local/lib/ruby/gems/2.4.0/gems/fastlane-2.82.0/bin/fastlane:20:in `&lt;top (required)&gt;'&#10;/usr/local/bin/fastlane:22:in `load'&#10;/usr/local/bin/fastlane:22:in `&lt;main&gt;'&#10;&#10;Exit status of command 'git push origin --tags' was 1 instead of 0.&#10;&#10;This repository is configured for Git LFS but 'git-lfs' was not found on your path. If you no longer wish to use Git LFS, remove this hook by deleting .git/hooks/pre-push.&#10;&#10;error: failed to push some refs to 'https://github.com/kvyatkovskys/radar.git'&#10;" />
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="08: match" time="7.731887">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="09: build_app" time="586.193264">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="10: pilot" time="138.146025">
         
       </testcase>
     

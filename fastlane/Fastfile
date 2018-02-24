@@ -12,22 +12,20 @@ platform :ios do
     scan(workspace: "Circle.xcworkspace",
          device: "iPhone 8 (11.2.5)",
          scheme: "Circle",
+         skip_build: true,
          clean: true)
   end
 
   lane :beta do
     ensure_git_status_clean
     increment_build_number(xcodeproj: "Circle.xcodeproj")
-    # commit_version_bump(xcodeproj: "Circle.xcodeproj")
-    # add_git_tag
-    # push_to_git_remote
 
   	test
     match(type: "appstore",
     	  team_id: "P44LMMDHV3")
     build_app(scheme: "Circle",
            	  workspace: "Circle.xcworkspace",
-              include_bitcode: true)
+              include_bitcode: false)
 
     pilot(skip_waiting_for_build_processing: true)
   end
