@@ -6,18 +6,30 @@ platform :ios do
   before_all do
   	clear_derived_data
     clean_build_artifacts
-    cocoapods
   end
 
   lane :test do
-  	swiftlint(mode: :lint,
-  			  strict: false,
-			  ignore_exit_status: false)
-
     scan(workspace: "Circle.xcworkspace",
-            device: "iPhone 8 (11.2.5)",
-            scheme: "Circle",
-            clean: true)
+         device: "iPhone 8 (11.2.5)",
+         scheme: "Circle",
+         clean: true)
+  end
+
+  lane :beta do
+    ensure_git_status_clean
+    increment_build_number(xcodeproj: "Circle.xcodeproj")
+    commit_version_bump(xcodeproj: "Circle.xcodeproj")
+    add_git_tag
+    push_to_git_remote
+
+  	test
+    match(type: "appstore",
+    	  team_id: "P44LMMDHV3")
+    build_app(scheme: "Circle",
+           	  workspace: "Circle.xcworkspace",
+              include_bitcode: true)
+
+    pilot(skip_waiting_for_build_processing: true)
   end
 
 end
