@@ -10,7 +10,7 @@ platform :ios do
 
   lane :test do
     scan(workspace: "Circle.xcworkspace",
-         device: "iPhone 8 (11.2.5)",
+         device: "iPhone 8 (11.2)",
          scheme: "Circle",
          skip_build: true,
          clean: true)
