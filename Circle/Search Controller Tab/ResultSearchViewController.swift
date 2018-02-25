@@ -30,8 +30,7 @@ final class ResultSearchViewController: UIViewController {
         super.updateViewConstraints()
         
         tableView.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(64.0)
-            make.left.right.bottom.equalToSuperview()
+            make.top.left.right.bottom.equalToSuperview()
         }
     }
     

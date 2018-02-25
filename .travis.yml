@@ -5,7 +5,7 @@ xcode_scheme: Circle
 podfile: Podfile
 
 before_install:
-  - cocoapods update
+  - gem install cocoapods -v '1.4.0'
   - bundle install
   - pod repo update
   - pod install

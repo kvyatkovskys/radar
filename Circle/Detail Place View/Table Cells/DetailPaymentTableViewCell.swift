@@ -22,6 +22,7 @@ final class DetailPaymentTableViewCell: UITableViewCell, UICollectionViewDelegat
         let collection = UICollectionView(frame: self.frame, collectionViewLayout: layout)
         collection.backgroundColor = UIColor.clear
         collection.delegate = self
+        collection.showsHorizontalScrollIndicator = false
         return collection
     }()
     

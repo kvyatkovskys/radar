@@ -20,7 +20,7 @@ struct Router {
         return [KingfisherOptionsInfoItem.transition(.fade(0.2))]
     }()
     
-    func showMainTabController(_ locationService: LocationService) -> UITabBarController {
+    func showMainTabController(_ locationService: LocationService, startTab: Int = 0) -> UITabBarController {
         //swiftlint:disable force_cast
         var placesViewController = UIViewController()
         var viewModel = PlaceViewModel(PlaceService())
@@ -45,7 +45,7 @@ struct Router {
                                                                           locationService))
         let locationImage = UIImage(named: "ic_my_location")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         placesViewController.navigationItem.title = "Around here"
-        placesViewController.tabBarItem = UITabBarItem(title: "My location", image: locationImage, tag: 1)
+        placesViewController.tabBarItem = UITabBarItem(title: "My location", image: locationImage, tag: 0)
         placesViewController.navigationController?.navigationBar.isTranslucent = true
         
         // Search Controller
@@ -59,7 +59,7 @@ struct Router {
         searchViewController = SearchViewController(SeacrhPlaceDependecies(searchViewModel, optionKingfisher))
         let searchImage = UIImage(named: "ic_search")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         searchViewController.navigationItem.title = "Find a place"
-        searchViewController.tabBarItem = UITabBarItem(title: "Search", image: searchImage, tag: 2)
+        searchViewController.tabBarItem = UITabBarItem(title: "Search", image: searchImage, tag: 1)
         searchViewController.navigationController?.navigationBar.isTranslucent = true
         
         // Favorites Controller
@@ -73,7 +73,7 @@ struct Router {
         favoritesViewController = FavoritesViewController(FavoritesDependencies(favoritesViewModel, optionKingfisher))
         let favoriteImage = UIImage(named: "ic_favorite")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         favoritesViewController.navigationItem.title = "Favorites"
-        favoritesViewController.tabBarItem = UITabBarItem(title: "Favorites", image: favoriteImage, tag: 3)
+        favoritesViewController.tabBarItem = UITabBarItem(title: "Favorites", image: favoriteImage, tag: 2)
         favoritesViewController.navigationController?.navigationBar.isTranslucent = true
         
         // Setting Controller
@@ -90,7 +90,7 @@ struct Router {
         settingsController = SettingsViewController(SettingsViewDependecies(settingViewModel))
         let settingsImage = UIImage(named: "ic_settings")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         settingsController.navigationItem.title = "Application settings"
-        settingsController.tabBarItem = UITabBarItem(title: "Settings", image: settingsImage, tag: 4)
+        settingsController.tabBarItem = UITabBarItem(title: "Settings", image: settingsImage, tag: 3)
         settingsController.navigationController?.navigationBar.isTranslucent = true
         
         // Tab View Controller
@@ -100,7 +100,7 @@ struct Router {
                                          searchViewController,
                                          favoritesViewController,
                                          settingsController].map({ UINavigationController(rootViewController: $0) })
-
+        tabController.selectedIndex = startTab
         return tabController
     }
     

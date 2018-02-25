@@ -58,8 +58,7 @@ final class PlacesViewController: UIViewController {
     
     fileprivate func updateConstraints() {
         tableView.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(64.0)
-            make.bottom.left.right.equalToSuperview()
+            make.top.bottom.left.right.equalToSuperview()
         }
         
         super.updateViewConstraints()
@@ -126,12 +125,12 @@ final class PlacesViewController: UIViewController {
                 case .initial(let filter):
                     self.searchForMinDistance = filter.first?.searchForMinDistance ?? false
                     guard self.searchForMinDistance else { return }
-                    self.loadPlacesForMinDistance()
+                    self.searchForNewDistance(value: 100.0)
                 case .update(let filter, _, _, _):
                     let searchFilter = filter.first
                     self.searchForMinDistance = searchFilter?.searchForMinDistance ?? false
                     guard self.searchForMinDistance == false else {
-                        self.loadPlacesForMinDistance()
+                        self.searchForNewDistance(value: 100.0)
                         return
                     }
                     self.searchForNewDistance(value: searchFilter?.distance ?? 1000.0)
@@ -147,7 +146,10 @@ final class PlacesViewController: UIViewController {
             .subscribe(onNext: { [unowned self] (location) in
                 self.indicatorView.showIndicator()
                 self.userLocation = location
-                guard self.searchForMinDistance == false else { return }
+                guard self.searchForMinDistance == false else {
+                    self.searchForNewDistance(value: 100.0)
+                    return
+                }
                 self.loadPlacesLocation(location)
             }, onError: { [unowned self] (error) in
                 print(error)
@@ -181,29 +183,6 @@ final class PlacesViewController: UIViewController {
     // MARK: PlaceViewModel
     @objc func openFilter() {
         viewModel.openFilter()
-    }
-    
-    // MARK: Current class func
-    fileprivate func loadPlacesForMinDistance() {
-        indicatorView.showIndicator()
-        viewModel.getPlacesFirMinDistance().asObservable()
-            .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { [unowned self] (model) in
-                self.tableDataSource?.places = [model]
-                self.tableDelegate?.places = [model]
-                self.tableView.reloadData()
-                
-                self.indicatorView.hideIndicator()
-                if self.refreshControl.isRefreshing {
-                    self.refreshControl.endRefreshing()
-                }
-            }, onError: { (error) in
-                print(error)
-                self.indicatorView.hideIndicator()
-                if self.refreshControl.isRefreshing {
-                    self.refreshControl.endRefreshing()
-                }
-            }).disposed(by: disposeBag)
     }
     
     fileprivate func loadMorePlacesLocation(url: URL) {

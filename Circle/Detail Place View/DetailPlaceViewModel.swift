@@ -65,69 +65,22 @@ struct DetailPlaceViewModel {
         }
         
         if let hours = place.hours {
-            var closedDays: [Days] = []
-            var openedDays: [Days] = []
+            let closedDays: [Days] = hours.filter({ $0.key.contains("1") && $0.key.contains("close") })
+                .flatMap({ DetailPlaceViewModel.getWorkDays($0.key, $0.value) })
+                .sorted(by: { $0.day.sortIndex < $1.day.sortIndex })
             
-            hours.filter({ $0.key.contains("1") }).forEach({ (key, value) in
-                switch key {
-                case _ where key.contains(DaysType.monday.shortName):
-                    guard key.contains("close") else {
-                        openedDays.append(Days(day: DaysType.monday, hour: value))
-                        return
-                    }
-                    closedDays.append(Days(day: DaysType.monday, hour: value))
-                case _ where key.contains(DaysType.tuesday.shortName):
-                    guard key.contains("close") else {
-                        openedDays.append(Days(day: DaysType.tuesday, hour: value))
-                        return
-                    }
-                    closedDays.append(Days(day: DaysType.tuesday, hour: value))
-                case _ where key.contains(DaysType.wednesday.shortName):
-                    guard key.contains("close") else {
-                        openedDays.append(Days(day: DaysType.wednesday, hour: value))
-                        return
-                    }
-                    closedDays.append(Days(day: DaysType.wednesday, hour: value))
-                case _ where key.contains(DaysType.thursday.shortName):
-                    guard key.contains("close") else {
-                        openedDays.append(Days(day: DaysType.thursday, hour: value))
-                        return
-                    }
-                    closedDays.append(Days(day: DaysType.thursday, hour: value))
-                case _ where key.contains(DaysType.friday.shortName):
-                    guard key.contains("close") else {
-                        openedDays.append(Days(day: DaysType.friday, hour: value))
-                        return
-                    }
-                    closedDays.append(Days(day: DaysType.friday, hour: value))
-                case _ where key.contains(DaysType.saturday.shortName):
-                    guard key.contains("close") else {
-                        openedDays.append(Days(day: DaysType.saturday, hour: value))
-                        return
-                    }
-                    closedDays.append(Days(day: DaysType.saturday, hour: value))
-                case _ where key.contains(DaysType.sunday.shortName):
-                    guard key.contains("close") else {
-                        openedDays.append(Days(day: DaysType.sunday, hour: value))
-                        return
-                    }
-                    closedDays.append(Days(day: DaysType.sunday, hour: value))
-                default:
-                    break
-                }
-            })
-            
-            let sortedOpenedDays = Array(openedDays).sorted(by: { $0.day.sortIndex < $1.day.sortIndex })
-            let sortedClosedDays = Array(closedDays).sorted(by: { $0.day.sortIndex < $1.day.sortIndex })
+            let openedDays: [Days] = hours.filter({ $0.key.contains("1") && $0.key.contains("open") })
+                .flatMap({ DetailPlaceViewModel.getWorkDays($0.key, $0.value) })
+                .sorted(by: { $0.day.sortIndex < $1.day.sortIndex })
             
             let date = Date()
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat  = "EEEE"
             let dayInWeek = dateFormatter.string(from: date)
-            let index = sortedOpenedDays.index(where: { $0.day.rawValue == dayInWeek })
+            let index = openedDays.index(where: { $0.day.rawValue == dayInWeek })
             
-            let type = TypeDetailCell.workDays((closed: sortedClosedDays,
-                                                opened: sortedOpenedDays,
+            let type = TypeDetailCell.workDays((closed: closedDays,
+                                                opened: openedDays,
                                                 currentDay: CurrentDay(index, color)),
                                                90.0)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
@@ -180,5 +133,28 @@ struct DetailPlaceViewModel {
         }
         
         return items
+    }
+    
+    static fileprivate func getWorkDays(_ key: String, _ value: String) -> [Days] {
+        var days: [Days] = []
+        switch key {
+        case _ where key.contains(DaysType.monday.shortName):
+            days.append(Days(day: DaysType.monday, hour: value))
+        case _ where key.contains(DaysType.tuesday.shortName):
+            days.append(Days(day: DaysType.tuesday, hour: value))
+        case _ where key.contains(DaysType.wednesday.shortName):
+            days.append(Days(day: DaysType.wednesday, hour: value))
+        case _ where key.contains(DaysType.thursday.shortName):
+            days.append(Days(day: DaysType.thursday, hour: value))
+        case _ where key.contains(DaysType.friday.shortName):
+            days.append(Days(day: DaysType.friday, hour: value))
+        case _ where key.contains(DaysType.saturday.shortName):
+            days.append(Days(day: DaysType.saturday, hour: value))
+        case _ where key.contains(DaysType.sunday.shortName):
+            days.append(Days(day: DaysType.sunday, hour: value))
+        default:
+            break
+        }
+        return days
     }
 }

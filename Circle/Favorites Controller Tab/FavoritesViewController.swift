@@ -43,8 +43,7 @@ final class FavoritesViewController: UIViewController {
         super.updateViewConstraints()
         
         tableView.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(64.0)
-            make.bottom.left.right.equalToSuperview()
+            make.top.bottom.left.right.equalToSuperview()
         }
     }
     

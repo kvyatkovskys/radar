@@ -28,10 +28,8 @@ struct PlaceViewModel {
     fileprivate let placeService: PlaceService
     /// open filter controller
     var openFilter: (() -> Void) = { UIImpactFeedbackGenerator().impactOccurred() }
-    
     /// open map controller
     var openMap: (([Places], CLLocation?) -> Void) = {_, _ in UIImpactFeedbackGenerator().impactOccurred() }
-    
     /// open detail place controller
     var openDetailPlace: ((PlaceModel, NSMutableAttributedString?, NSMutableAttributedString?, FavoritesViewModel) -> Void) = {_, _, _, _ in }
     
@@ -39,20 +37,11 @@ struct PlaceViewModel {
         self.placeService = service
     }
     
-    func getPlacesFirMinDistance() -> Observable<Places> {
-        return placeService.loadPlacesForMinDistance().asObservable()
-            .flatMap({ (model) -> Observable<Places> in
-                let (places, ratings, titles) = self.updateResults(model: model)
-                return Observable.just(Places(places, ratings, titles, model.next))
-            })
-    }
-    
     /// load more places
     func getMorePlaces(url: URL) -> Observable<Places> {
         return placeService.loadMorePlaces(url: url).asObservable()
             .flatMap({ (model) -> Observable<Places> in
-                let (places, ratings, titles) = self.updateResults(model: model)
-                return Observable.just(Places(places, ratings, titles, model.next))
+                return Observable.just(self.updateResults(model: model))
             })
     }
     
@@ -74,8 +63,7 @@ struct PlaceViewModel {
         
         return placeService.loadPlaces(location, categories, distance, searchTerm)
             .asObservable().flatMap { (model) -> Observable<Places> in
-                let (places, ratings, titles) = self.updateResults(model: model)
-                return Observable.just(Places(places, ratings, titles, model.next))
+                return Observable.just(self.updateResults(model: model))
         }
     }
     
@@ -92,7 +80,7 @@ struct PlaceViewModel {
         return color
     }
     
-    fileprivate func updateResults(model: PlaceDataModel) -> ([PlaceModel], [NSMutableAttributedString?], [NSMutableAttributedString?]) {
+    fileprivate func updateResults(model: PlaceDataModel) -> (Places) {
         let ratings = model.data.map({ (place) -> NSMutableAttributedString? in
             let ratingStar = NSAttributedString(string: "\(place.ratingStar ?? 0)",
                 attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 19.0),
@@ -118,6 +106,6 @@ struct PlaceViewModel {
             result.append(about)
             return result
         })
-        return (model.data, ratings, titles)
+        return Places(model.data, ratings, titles, model.next)
     }
 }

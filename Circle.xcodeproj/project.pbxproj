@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		2A626B4EC59CF9D4C1080519 /* Pods_Circle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC945378AF2C38ECAC172475 /* Pods_Circle.framework */; };
 		341DD2BF2D4A7408F9B13ED9 /* Pods_CircleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 962081C589226C394F4E0D88 /* Pods_CircleTests.framework */; };
+		8B009D362042B0F6005D3960 /* ShortcutItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B009D352042B0F6005D3960 /* ShortcutItems.swift */; };
+		8B009D382042D4A7005D3960 /* InfoSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B009D372042D4A7005D3960 /* InfoSearchTableViewCell.swift */; };
 		8B105CB120260560006A5BBC /* SearchQueryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B105CB020260560006A5BBC /* SearchQueryTableViewCell.swift */; };
 		8B105CB320288EB3006A5BBC /* LocationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B105CB220288EB3006A5BBC /* LocationModel.swift */; };
 		8B105CB52028A56E006A5BBC /* SearchHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B105CB42028A56E006A5BBC /* SearchHistoryViewController.swift */; };
@@ -126,6 +128,8 @@
 		65187D40B7A35C90F17F99D7 /* Pods-Circle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Circle.release.xcconfig"; path = "Pods/Target Support Files/Pods-Circle/Pods-Circle.release.xcconfig"; sourceTree = "<group>"; };
 		79F55BA9564097FE1F2D7849 /* Pods_CircleUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CircleUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C60842BBC33FD63E648DBC6 /* Pods-Circle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Circle.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Circle/Pods-Circle.debug.xcconfig"; sourceTree = "<group>"; };
+		8B009D352042B0F6005D3960 /* ShortcutItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutItems.swift; sourceTree = "<group>"; };
+		8B009D372042D4A7005D3960 /* InfoSearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoSearchTableViewCell.swift; sourceTree = "<group>"; };
 		8B105CB020260560006A5BBC /* SearchQueryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchQueryTableViewCell.swift; sourceTree = "<group>"; };
 		8B105CB220288EB3006A5BBC /* LocationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationModel.swift; sourceTree = "<group>"; };
 		8B105CB42028A56E006A5BBC /* SearchHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHistoryViewController.swift; sourceTree = "<group>"; };
@@ -451,6 +455,7 @@
 			isa = PBXGroup;
 			children = (
 				8B105CBA202B655A006A5BBC /* KSNotifications.swift */,
+				8B009D352042B0F6005D3960 /* ShortcutItems.swift */,
 				8B2D741020387A520022BDCC /* KSTableView.swift */,
 				8B44C37E1FEFE195003C0754 /* QuickAlertController.swift */,
 				8B4177091FFD5785002A963A /* ActivityIndicatorView.swift */,
@@ -594,6 +599,7 @@
 				8B147BDB2024A3A900EDA2D4 /* SearchViewModel.swift */,
 				8B147BD92024A1AE00EDA2D4 /* ResultSearchViewController.swift */,
 				8B105CB020260560006A5BBC /* SearchQueryTableViewCell.swift */,
+				8B009D372042D4A7005D3960 /* InfoSearchTableViewCell.swift */,
 			);
 			path = "Search Controller Tab";
 			sourceTree = "<group>";
@@ -926,6 +932,7 @@
 				8B6A37A8202DA9A1003CD1A8 /* SettingsModel.swift in Sources */,
 				8B4177191FFD670B002A963A /* DeviceType.swift in Sources */,
 				8B6A37AC202DD484003CD1A8 /* ListFavoritesNoticeViewModel.swift in Sources */,
+				8B009D362042B0F6005D3960 /* ShortcutItems.swift in Sources */,
 				8B44C3831FF012C8003C0754 /* SettingsViewController.swift in Sources */,
 				8B44C37D1FEFDFA5003C0754 /* LocationService.swift in Sources */,
 				8BFBF57F2005187100CE2C8B /* CategoriesTableViewCell.swift in Sources */,
@@ -985,6 +992,7 @@
 				8B6A37AA202DD403003CD1A8 /* ListFavoritesNoticeViewController.swift in Sources */,
 				8BC35060201BB40F00BB375B /* DetailRestaurantServiceTableViewCell.swift in Sources */,
 				8B6A37AE202DD547003CD1A8 /* ListFavoritesNoticeTableViewCell.swift in Sources */,
+				8B009D382042D4A7005D3960 /* InfoSearchTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

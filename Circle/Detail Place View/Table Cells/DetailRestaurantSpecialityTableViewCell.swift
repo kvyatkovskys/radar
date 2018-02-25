@@ -25,6 +25,7 @@ final class DetailRestaurantSpecialityTableViewCell: UITableViewCell, UICollecti
         let collection = UICollectionView(frame: self.frame, collectionViewLayout: layout)
         collection.backgroundColor = UIColor.clear
         collection.delegate = self
+        collection.showsHorizontalScrollIndicator = false
         return collection
     }()
     

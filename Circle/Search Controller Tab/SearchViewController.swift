@@ -43,7 +43,7 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
     
     fileprivate var notificationToken: NotificationToken?
     fileprivate var dataSource: [Places] = []
-    fileprivate var dataSourceQueries: [String]
+    fileprivate var dataSourceQueries: [String] = ["Try to find something!"]
     fileprivate var viewType = ViewType.search
     fileprivate var search: Observable<Places> = Observable.just(Places([], [], [], nil))
     fileprivate let disposeBag = DisposeBag()
@@ -76,11 +76,12 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
                     backgroundview.clipsToBounds = true
                 }
             }
-            controller.searchBar.tintColor = UIColor.white
+            controller.searchBar.tintColor = .white
             UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = .black
-            self.definesPresentationContext = true
+        } else {
+            controller.searchBar.tintColor = .navBarColor
         }
-        
+        self.definesPresentationContext = true
         return controller
     }()
     
@@ -89,17 +90,7 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
         table.tableFooterView = UIView(frame: CGRect.zero)
         table.dataSource = self
         table.delegate = self
-        table.separatorColor = .lightGray
-        table.separatorInset = UIEdgeInsets(top: 0.0, left: 15.0, bottom: 0.0, right: 15.0)
         return table
-    }()
-    
-    fileprivate lazy var titleQuerySearch: UILabel = {
-        let label = UILabel(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 50.0))
-        label.text = "   You recently searched for"
-        label.numberOfLines = 0
-        label.font = .boldSystemFont(ofSize: 17.0)
-        return label
     }()
     
     fileprivate lazy var leftBarButton: UIBarButtonItem = {
@@ -117,15 +108,14 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
         super.updateViewConstraints()
         
         tableView.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(64.0)
-            make.left.right.bottom.equalToSuperview()
+            make.top.left.right.bottom.equalToSuperview()
         }
     }
     
     init(_ dependecies: Dependecies) {
         self.searchViewModel = dependecies.searchViewModel
         self.kingfisherOptions = dependecies.kingfisherOptions
-        self.dataSourceQueries = dependecies.searchViewModel.searchQueries
+        self.dataSourceQueries += dependecies.searchViewModel.searchQueries
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -137,7 +127,6 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
         super.viewDidLoad()
 
         view.addSubview(tableView)
-        tableView.tableHeaderView = titleQuerySearch
         updateViewConstraints()
         
         if #available(iOS 11.0, *) {
@@ -147,7 +136,7 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
             navigationItem.hidesSearchBarWhenScrolling = false
             navigationItem.searchController = searchController
         } else {
-            navigationItem.titleView = searchController.searchBar
+            tableView.tableHeaderView = searchController.searchBar
         }
         
         var isSaveSearchText = false
@@ -192,6 +181,7 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
                 print(error)
             }).disposed(by: disposeBag)
         
+        tableView.register(InfoSearchTableViewCell.self, forCellReuseIdentifier: InfoSearchTableViewCell.cellIdentifier)
         tableView.register(SearchQueryTableViewCell.self, forCellReuseIdentifier: SearchQueryTableViewCell.cellIdentifier)
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
         
@@ -202,21 +192,19 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
             notificationToken = results.observe { [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
                 case .initial:
-                    if self.dataSourceQueries.isEmpty {
-                        self.titleQuerySearch.text = "   Try to find something!"
+                    self.dataSourceQueries[1...] = self.searchViewModel.searchQueries[0...]
+                    if self.searchViewModel.searchQueries.isEmpty {
+                        self.dataSourceQueries.replaceSubrange(0..., with: ["Try to find something!"])
                     }
+                    self.tableView.reloadData()
                 case .update:
-                    self.dataSourceQueries = self.searchViewModel.searchQueries
-                    if self.viewType == .search {
-                        self.tableView.reloadData()
+                    self.dataSourceQueries[1...] = self.searchViewModel.searchQueries[0...]
+                    if self.searchViewModel.searchQueries.isEmpty {
+                        self.dataSourceQueries.replaceSubrange(0..., with: ["Try to find something!"])
+                    } else {
+                        self.dataSourceQueries.replaceSubrange(0..., with: ["You recently searched for"] + self.searchViewModel.searchQueries)
                     }
-                    
-                    guard !self.dataSourceQueries.isEmpty else {
-                        self.titleQuerySearch.text = "   Try to find something!"
-                        return
-                    }
-
-                    self.titleQuerySearch.text = "   You recently searched for"
+                    self.tableView.reloadData()
                 case .error(let error):
                     fatalError("\(error)")
                 }
@@ -235,7 +223,6 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
         navigationItem.leftBarButtonItem = nil
         navigationItem.title = "Find a place"
         viewType = .search
-        tableView.tableHeaderView = titleQuerySearch
         tableView.separatorColor = .lightGray
         tableView.reloadData()
         tableView.scrollsToTop = true
@@ -243,7 +230,7 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
         if #available(iOS 11.0, *) {
             navigationItem.searchController = searchController
         } else {
-            navigationItem.titleView = searchController.searchBar
+            tableView.tableHeaderView = searchController.searchBar
         }
     }
 }
@@ -260,6 +247,15 @@ extension SearchViewController: UITableViewDataSource {
         switch viewType {
         case .search:
             let querySearch = dataSourceQueries[indexPath.row]
+            
+            guard indexPath.row != 0 else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: InfoSearchTableViewCell.cellIdentifier,
+                                                         for: indexPath) as? InfoSearchTableViewCell ?? InfoSearchTableViewCell()
+                
+                cell.title = querySearch
+                return cell
+            }
+            
             let cell = tableView.dequeueReusableCell(withIdentifier: SearchQueryTableViewCell.cellIdentifier,
                                                      for: indexPath) as? SearchQueryTableViewCell ?? SearchQueryTableViewCell()
             
@@ -288,6 +284,20 @@ extension SearchViewController: UITableViewDataSource {
 }
 
 extension SearchViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard viewType == .savedQueries else {
+            guard indexPath.row == 0 else {
+                tableView.separatorColor = .clear
+                return
+            }
+            tableView.separatorInset = UIEdgeInsets(top: 0.0, left: 15.0, bottom: 0.0, right: 15.0)
+            tableView.separatorColor = .lightGray
+            return
+        }
+        tableView.separatorInset = UIEdgeInsets(top: 0.0, left: 10.0, bottom: 0.0, right: 10.0)
+        tableView.separatorColor = .lightGray
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch viewType {
         case .search: return 44.0
@@ -297,14 +307,13 @@ extension SearchViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        guard indexPath.row != 0 else { return }
         
         switch viewType {
         case .search:
-            let query = searchViewModel.searchQueries[indexPath.row]
+            let query = dataSourceQueries[indexPath.row]
             navigationItem.leftBarButtonItem = leftBarButton
             viewType = .savedQueries
-            tableView.tableHeaderView = nil
-            tableView.separatorColor = .clear
             tableView.reloadData()
             indicatorView.showIndicator()
             
@@ -312,7 +321,7 @@ extension SearchViewController: UITableViewDelegate {
                 navigationItem.searchController = nil
                 navigationItem.title = query
             } else {
-                navigationItem.titleView = nil
+                tableView.tableHeaderView = nil
                 navigationItem.title = query
             }
             

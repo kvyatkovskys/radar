@@ -21,6 +21,7 @@ final class SearchQueryTableViewCell: UITableViewCell {
         let label = UILabel()
         label.textColor = UIColor.blueTitle
         label.numberOfLines = 0
+        label.font = .boldSystemFont(ofSize: 16.0)
         return label
     }()
     

@@ -175,9 +175,8 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         super.updateViewConstraints()
         
         tableView.snp.remakeConstraints { (make) in
-            make.top.equalToSuperview().offset(64.0)
-            make.left.right.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.top.equalToSuperview()
+            make.left.right.bottom.equalToSuperview()
         }
         
         imageHeader.snp.remakeConstraints { (make) in
