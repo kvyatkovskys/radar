@@ -285,17 +285,12 @@ extension SearchViewController: UITableViewDataSource {
 
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        tableView.separatorColor = .lightGray
         guard viewType == .savedQueries else {
-            guard indexPath.row == 0 else {
-                tableView.separatorColor = .clear
-                return
-            }
             tableView.separatorInset = UIEdgeInsets(top: 0.0, left: 15.0, bottom: 0.0, right: 15.0)
-            tableView.separatorColor = .lightGray
             return
         }
         tableView.separatorInset = UIEdgeInsets(top: 0.0, left: 10.0, bottom: 0.0, right: 10.0)
-        tableView.separatorColor = .lightGray
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
