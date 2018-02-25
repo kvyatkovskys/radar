@@ -18,14 +18,12 @@ platform :ios do
 
   lane :beta do
     ensure_git_status_clean
-    add_git_tag(
-      grouping: "fastlane-builds",
-      prefix: "v",
-      build_number: number_of_commits
-    )
-    push_git_tags
-    increment_build_number(build_number: number_of_commits,
+  	increment_build_number(build_number: number_of_commits,
     					   xcodeproj: "Circle.xcodeproj")
+
+  	commit_version_bump(xcodeproj: "Circle.xcodeproj")
+  	add_git_tag
+	push_to_git_remote
 
   	#test
     match(type: "appstore",
