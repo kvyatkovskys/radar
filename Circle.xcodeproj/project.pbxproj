@@ -416,7 +416,7 @@
 				8B4115511FDB2CEF00C6614C /* Assets.xcassets */,
 				8B4115531FDB2CEF00C6614C /* LaunchScreen.storyboard */,
 				8B5F71471FF82AAA00E628F9 /* Circle-Bridging-Header.h */,
-				8B5F714B1FF82D8200E628F9 /* Info plist */,
+				8B4115561FDB2CEF00C6614C /* Info.plist */,
 			);
 			path = Circle;
 			sourceTree = "<group>";
@@ -485,14 +485,6 @@
 				8B147BD620246A1100EDA2D4 /* Setting Cells */,
 			);
 			path = "Setting Controller Tab";
-			sourceTree = "<group>";
-		};
-		8B5F714B1FF82D8200E628F9 /* Info plist */ = {
-			isa = PBXGroup;
-			children = (
-				8B4115561FDB2CEF00C6614C /* Info.plist */,
-			);
-			path = "Info plist";
 			sourceTree = "<group>";
 		};
 		8B5F71541FF933AC00E628F9 /* Place Service */ = {
@@ -1148,7 +1140,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				INFOPLIST_FILE = "$(SRCROOT)/Circle/Info plist/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Circle/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kviatkovskii.Circle;
@@ -1177,7 +1169,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				INFOPLIST_FILE = "$(SRCROOT)/Circle/Info plist/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Circle/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kviatkovskii.Circle;
