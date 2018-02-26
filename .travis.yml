@@ -3,6 +3,9 @@ osx_image: xcode9.2
 xcode_workspace: Circle.xcworkspace
 xcode_scheme: Circle
 podfile: Podfile
+env:
+  global:
+    - TERM=dumb
 
 before_install:
   - gem install cocoapods -v '1.4.0'
