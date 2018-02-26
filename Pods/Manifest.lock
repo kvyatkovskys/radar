@@ -1,17 +1,35 @@
 PODS:
-  - Kingfisher (4.6.1)
-  - Realm (3.1.0):
-    - Realm/Headers (= 3.1.0)
-  - Realm/Headers (3.1.0)
-  - RealmSwift (3.1.0):
-    - Realm (= 3.1.0)
-  - RxCocoa (4.1.1):
+  - Bolts (1.9.0):
+    - Bolts/AppLinks (= 1.9.0)
+    - Bolts/Tasks (= 1.9.0)
+  - Bolts/AppLinks (1.9.0):
+    - Bolts/Tasks
+  - Bolts/Tasks (1.9.0)
+  - FBSDKCoreKit (4.30.0):
+    - Bolts (~> 1.7)
+  - FBSDKLoginKit (4.30.0):
+    - FBSDKCoreKit
+  - FBSDKPlacesKit (4.30.0):
+    - FBSDKCoreKit
+  - FBSDKShareKit (4.30.0):
+    - FBSDKCoreKit (~> 4.30.0)
+  - Kingfisher (4.6.2)
+  - Realm (3.1.1):
+    - Realm/Headers (= 3.1.1)
+  - Realm/Headers (3.1.1)
+  - RealmSwift (3.1.1):
+    - Realm (= 3.1.1)
+  - RxCocoa (4.1.2):
     - RxSwift (~> 4.0)
-  - RxSwift (4.1.1)
+  - RxSwift (4.1.2)
   - SnapKit (4.0.0)
   - Unbox (2.5.0)
 
 DEPENDENCIES:
+  - FBSDKCoreKit
+  - FBSDKLoginKit
+  - FBSDKPlacesKit
+  - FBSDKShareKit
   - Kingfisher
   - RealmSwift
   - RxCocoa
@@ -20,14 +38,19 @@ DEPENDENCIES:
   - Unbox
 
 SPEC CHECKSUMS:
-  Kingfisher: 1f9157d9c02b380cbd0b7cc890161195164eb634
-  Realm: 09513d7c054678d65cd02ce09871f805b0d758ac
-  RealmSwift: e868fee9b10e5490ad94b6b6ecd9027944da1824
-  RxCocoa: fd0862fd2df95fa55562ad28ffd2522c25eb4a85
-  RxSwift: c6e3b1c7b325c7d121cd4327e9d98b7ed746b570
+  Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
+  FBSDKCoreKit: 7c4bba2877781a131ab5d54c0a78c405d4307b62
+  FBSDKLoginKit: fe7a7e82373dc5daad92e1623219e86224ab1fb1
+  FBSDKPlacesKit: 88f3da3d7b608acfbd3d9db6121c561a955639f2
+  FBSDKShareKit: a9427574b51bde4f437262c3f118c4ccfddeef6c
+  Kingfisher: 55b9c395bf8d3949676ad3861111923990ab68cf
+  Realm: 42d1c38a5b1bbcc828b48a7ce702cb86fc68adf4
+  RealmSwift: d31937ca6a6ee54acde64ec839523c0a3c04924b
+  RxCocoa: d88ba0f1f6abf040011a9eb4b539324fc426843a
+  RxSwift: e49536837d9901277638493ea537394d4b55f570
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   Unbox: 30e437e6151a6de16139375fd4e8dd9a664cfbf7
 
-PODFILE CHECKSUM: 80af7772bab5e069f69e49512c2b1b42dc119825
+PODFILE CHECKSUM: cb919c7e3e80061e5d0d7d76b2db49e76f0486cf
 
-COCOAPODS: 1.3.1
+COCOAPODS: 1.4.0

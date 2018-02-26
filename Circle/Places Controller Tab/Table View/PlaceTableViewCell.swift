@@ -10,12 +10,6 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-fileprivate extension UIColor {
-    static var shadowGray: UIColor {
-        return UIColor(withHex: 0xecf0f1, alpha: 1.0)
-    }
-}
-
 final class PlaceTableViewCell: UITableViewCell {
     static let cellIndetifier = "PlaceTableViewCell"
     
@@ -23,14 +17,7 @@ final class PlaceTableViewCell: UITableViewCell {
     
     fileprivate let mainView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
-        view.layer.cornerRadius = 5.0
-        view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOpacity = 0.2
-        view.layer.shadowOffset = CGSize(width: -1.0, height: 1.0)
-        view.layer.shadowRadius = 6.0
-        view.layer.shouldRasterize = true
-        view.layer.rasterizationScale = UIScreen.main.scale
+        view.backgroundColor = .clear
         return view
     }()
     
@@ -57,17 +44,17 @@ final class PlaceTableViewCell: UITableViewCell {
     
     fileprivate let categoryLabel: UILabel = {
         let label = UILabel()
-        label.layer.cornerRadius = 8.0
+        label.layer.cornerRadius = 10.0
         label.layer.masksToBounds = true
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 11.0)
+        label.font = .boldSystemFont(ofSize: 13.0)
         label.textColor = .white
         return label
     }()
     
-    var title: NSMutableAttributedString? {
+    var title: String? {
         didSet {
-            titleLabel.attributedText = title
+            titleLabel.text = title
         }
     }
     
@@ -79,6 +66,10 @@ final class PlaceTableViewCell: UITableViewCell {
     
     var colorCategory: UIColor? {
         didSet {
+            guard colorCategory != nil else {
+                categoryLabel.backgroundColor = .clear
+                return
+            }
             categoryLabel.backgroundColor = colorCategory
         }
     }
@@ -92,45 +83,47 @@ final class PlaceTableViewCell: UITableViewCell {
     override func updateConstraints() {
         super.updateConstraints()
         
-        mainView.snp.makeConstraints { (make) in
-            make.top.bottom.left.right.equalToSuperview().inset(10.0)
+        imageCell.snp.makeConstraints { (make) in
+            make.top.equalToSuperview().offset(15.0)
+            make.left.right.equalToSuperview().inset(10.0)
+            make.bottom.equalTo(mainView.snp.top)
         }
         
-        imageCell.snp.makeConstraints { (make) in
-            make.top.left.equalToSuperview().offset(10.0)
-            make.size.equalTo(CGSize(width: 100.0, height: 130.0))
+        mainView.snp.makeConstraints { (make) in
+            make.bottom.equalToSuperview().offset(-10.0)
+            make.left.right.equalTo(imageCell)
+            make.height.equalTo(60.0)
         }
         
         titleLabel.snp.makeConstraints { (make) in
-            make.left.equalTo(imageCell.snp.right).offset(10.0)
-            make.top.equalToSuperview().offset(10.0)
-            make.right.equalToSuperview().inset(10.0)
-            make.bottom.equalTo(ratingLabel.snp.top).offset(-10.0)
+            make.left.right.equalToSuperview()
+            make.top.equalToSuperview()
+            make.height.equalTo(30.0)
         }
-        
+
         ratingLabel.snp.makeConstraints { (make) in
-            make.bottom.equalTo(mainView).offset(-10.0)
-            make.left.equalTo(imageCell.snp.right).offset(10.0)
-            make.width.lessThanOrEqualTo(60.0)
-            make.height.equalTo(15.0)
+            make.top.equalTo(titleLabel.snp.bottom)
+            make.left.equalTo(titleLabel)
+            make.width.lessThanOrEqualTo(100.0)
+            make.bottom.equalToSuperview()
         }
-        
+
         categoryLabel.snp.makeConstraints { (make) in
-            make.bottom.equalTo(ratingLabel)
-            make.width.equalTo(70.0)
-            make.right.equalToSuperview().inset(10.0)
-            make.height.equalTo(ratingLabel)
+            make.right.equalToSuperview()
+            make.size.equalTo(CGSize(width: 80.0, height: 20.0))
+            make.centerY.equalTo(ratingLabel)
         }
     }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        contentView.backgroundColor = UIColor.clear
-        backgroundColor = UIColor.clear
+        contentView.backgroundColor = .clear
+        backgroundColor = .clear
+        selectionStyle = .none
         
+        addSubview(imageCell)
         addSubview(mainView)
-        mainView.addSubview(imageCell)
         mainView.addSubview(titleLabel)
         mainView.addSubview(ratingLabel)
         mainView.addSubview(categoryLabel)

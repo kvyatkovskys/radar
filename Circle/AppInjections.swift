@@ -17,19 +17,25 @@ protocol HasKingfisher {
     var kingfisherOptions: KingfisherOptionsInfo { get }
 }
 
+protocol HasLocationService {
+    var locationService: LocationService { get }
+}
+
 // MARK: MainViewController
 protocol HasPlaceViewModel {
     var viewModel: PlaceViewModel { get }
 }
 
 /// container dependecies injection's for main tab controller
-struct PlacesViewDependecies: HasKingfisher, HasPlaceViewModel {
+struct PlacesViewDependecies: HasKingfisher, HasPlaceViewModel, HasLocationService {
     let kingfisherOptions: KingfisherOptionsInfo
     let viewModel: PlaceViewModel
+    let locationService: LocationService
     
-    init(_ kingfisherOptions: KingfisherOptionsInfo, _ viewModel: PlaceViewModel) {
+    init(_ kingfisherOptions: KingfisherOptionsInfo, _ viewModel: PlaceViewModel, _ locationService: LocationService) {
         self.kingfisherOptions = kingfisherOptions
         self.viewModel = viewModel
+        self.locationService = locationService
     }
 }
 
@@ -53,24 +59,16 @@ protocol HasFilterPlacesViewModel {
     var viewModelCategories: FilterCategoriesViewModel { get }
 }
 
-//swiftlint:disable class_delegate_protocol
-protocol HasFilterPlacesDelegate {
-    weak var delegate: FilterPlacesDelegate? { get }
-}
-
 /// container dependecies injection's for filter view
-struct FilterPlacesDependecies: HasFilterPlacesViewModel, HasFilterPlacesDelegate {
+struct FilterPlacesDependecies: HasFilterPlacesViewModel {
     let viewModel: FilterViewModel
     let viewModelDistance: FilterDistanceViewModel
     let viewModelCategories: FilterCategoriesViewModel
     
-    weak var delegate: FilterPlacesDelegate?
-    
-    init(_ viewModel: FilterViewModel, _ viewModelDistance: FilterDistanceViewModel, _ viewModelCategories: FilterCategoriesViewModel, _ delegate: FilterPlacesDelegate?) {
+    init(_ viewModel: FilterViewModel, _ viewModelDistance: FilterDistanceViewModel, _ viewModelCategories: FilterCategoriesViewModel) {
         self.viewModel = viewModel
         self.viewModelDistance = viewModelDistance
         self.viewModelCategories = viewModelCategories
-        self.delegate = delegate
     }
 }
 
@@ -121,5 +119,51 @@ struct DetailPlaceDependecies: HasDetailPlaceViewModel, HasKingfisher, HasOpenGr
         self.favoritesViewModel = favoritesViewModel
         self.kingfisherOptions = kingfisherOptions
         self.service = service
+    }
+}
+
+protocol HasSearchViewModel {
+    var searchViewModel: SearchViewModel { get }
+}
+
+struct SeacrhPlaceDependecies: HasSearchViewModel, HasKingfisher {
+    let searchViewModel: SearchViewModel
+    let kingfisherOptions: KingfisherOptionsInfo
+    
+    init(_ searchViewModel: SearchViewModel, _ kingfisherOptions: KingfisherOptionsInfo) {
+        self.searchViewModel = searchViewModel
+        self.kingfisherOptions = kingfisherOptions
+    }
+}
+
+struct ResultSearchDependecies: HasKingfisher {
+    let kingfisherOptions: KingfisherOptionsInfo
+    
+    init(_ kingfisherOptions: KingfisherOptionsInfo) {
+        self.kingfisherOptions = kingfisherOptions
+    }
+}
+
+protocol HasSearchHistoryViewModel {
+    var searchHistoryViewModel: SearchHistoryViewModel { get }
+}
+
+struct SearchHistoryDependecies: HasSearchHistoryViewModel {
+    let searchHistoryViewModel: SearchHistoryViewModel
+    
+    init(_ searchHistoryViewModel: SearchHistoryViewModel) {
+        self.searchHistoryViewModel = searchHistoryViewModel
+    }
+}
+
+protocol HasListFavoritesNoticeViewModel {
+    var listFavoritesNoticeViewModel: ListFavoritesNoticeViewModel { get }
+}
+
+struct ListFavoritesNoticeDependecies: HasListFavoritesNoticeViewModel {
+    let listFavoritesNoticeViewModel: ListFavoritesNoticeViewModel
+    
+    init(_ listFavoritesNoticeViewModel: ListFavoritesNoticeViewModel) {
+        self.listFavoritesNoticeViewModel = listFavoritesNoticeViewModel
     }
 }

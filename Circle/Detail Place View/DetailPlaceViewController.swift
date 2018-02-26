@@ -11,21 +11,10 @@ import Kingfisher
 import RxSwift
 import RealmSwift
 
-let heightHeaderTable: CGFloat = 220.0
-
-fileprivate extension UIColor {
-    static var shadowGray: UIColor {
-        return UIColor(withHex: 0xecf0f1, alpha: 0.7)
-    }
-
-    static var mainColor: UIColor {
-        return UIColor(withHex: 0xf82462, alpha: 1.0)
-    }
-}
-
-final class DetailPlaceViewController: UIViewController {
+final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDelegate {
     typealias Dependecies = HasDetailPlaceViewModel & HasKingfisher & HasOpenGraphService & HasFavoritesViewModel
     
+    fileprivate let heightHeader: CGFloat = 385.0
     fileprivate var notificationTokenFavorites: NotificationToken?
     fileprivate var viewModel: DetailPlaceViewModel
     fileprivate let favoritesViewModel: FavoritesViewModel
@@ -33,18 +22,22 @@ final class DetailPlaceViewController: UIViewController {
     fileprivate let sevice: OpenGraphService
     fileprivate let disposeBag = DisposeBag()
     
+    fileprivate var favoriteNotify: FavoritesNotify {
+        return favoritesViewModel.checkAddAndNotify(viewModel.place)
+    }
+    
     fileprivate lazy var headerView: UIView = {
-        let view = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: heightHeaderTable))
+        let view = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: heightHeader))
         view.backgroundColor = .white
         return view
     }()
     
     fileprivate lazy var imageHeader: UIImageView = {
         let image = UIImageView()
-        image.layer.cornerRadius = 5.0
         image.contentMode = .scaleAspectFill
-        image.layer.masksToBounds = true
+        image.clipsToBounds = true
         image.backgroundColor = .shadowGray
+        
         image.kf.indicatorType = .activity
         image.kf.setImage(with: viewModel.place.coverPhoto,
                                 placeholder: nil,
@@ -54,17 +47,41 @@ final class DetailPlaceViewController: UIViewController {
         return image
     }()
     
+    fileprivate lazy var picture: UIImageView = {
+        let image = UIImageView()
+        image.contentMode = .scaleAspectFit
+        image.backgroundColor = .shadowGray
+        image.layer.shadowColor = UIColor.black.cgColor
+        image.layer.shadowRadius = 4.0
+        image.layer.shadowOpacity = 0.4
+        image.layer.shadowOffset = CGSize.zero
+        
+        image.kf.indicatorType = .activity
+        viewModel.getPictureProfile().asObservable()
+            .subscribe(onNext: { [unowned self] (url) in
+                image.kf.setImage(with: url,
+                                  placeholder: nil,
+                                  options: self.kingfisherOptions,
+                                  progressBlock: nil,
+                                  completionHandler: nil)
+            }, onError: { (error) in
+                print(error)
+            }).disposed(by: disposeBag)
+        
+        return image
+    }()
+    
     fileprivate lazy var titlePlace: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = .boldSystemFont(ofSize: 17.0)
         label.attributedText = self.viewModel.title
-        
         return label
     }()
     
     fileprivate lazy var ratingLabel: UILabel = {
         let label = UILabel()
+        label.textAlignment = .center
         label.attributedText = self.viewModel.rating
         return label
     }()
@@ -72,8 +89,16 @@ final class DetailPlaceViewController: UIViewController {
     fileprivate lazy var listSubCategoriesView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
+        
+        let color: UIColor?
+        if (self.viewModel.place.categories ?? []).isEmpty {
+            color = UIColor.mainColor
+        } else {
+            color = self.viewModel.place.categories?.first?.color
+        }
+        
         let listCategories = ListCategoriesViewController(ListSubCategoriesViewModel(self.viewModel.place.subCategories ?? [],
-                                                                                     color: self.viewModel.place.categories?.first?.color))
+                                                                                     color: color))
         
         var frame = listCategories.view.frame
         frame.size.height = view.frame.height
@@ -88,16 +113,16 @@ final class DetailPlaceViewController: UIViewController {
     
     fileprivate lazy var favoriteButton: UIButton = {
         let button = UIButton()
-        let image = UIImage(named: self.favoritesViewModel.checkAddingToFavorites(self.viewModel.place) == true ? "ic_favorite" : "ic_favorite_border")?.withRenderingMode(.alwaysTemplate)
+        let image = UIImage(named: favoriteNotify.addFavorites == true ? "ic_favorite" : "ic_favorite_border")?.withRenderingMode(.alwaysTemplate)
         button.setImage(image, for: .normal)
         button.tintColor = UIColor.mainColor
         button.backgroundColor = UIColor.shadowGray
-        button.setTitle(self.favoritesViewModel.checkAddingToFavorites(self.viewModel.place) == true ? " Remove" : " Add", for: .normal)
+        button.setTitle(favoriteNotify.addFavorites == true ? " Remove" : " Add", for: .normal)
         button.setTitleColor(UIColor.mainColor, for: .normal)
         button.titleLabel?.font = .boldSystemFont(ofSize: 15.0)
         button.layer.cornerRadius = 5.0
         button.addTarget(self, action: #selector(addToFavorites), for: .touchUpInside)
-        button.isSelected = !self.favoritesViewModel.checkAddingToFavorites(self.viewModel.place)
+        button.isSelected = !favoriteNotify.addFavorites
         return button
     }()
     
@@ -133,52 +158,71 @@ final class DetailPlaceViewController: UIViewController {
         return ActivityIndicatorView(container: self.view)
     }()
     
+    fileprivate func rightBarButton() -> UIBarButtonItem {
+        let notifyImage: UIImage?
+        
+        if let allow = favoriteNotify.allowNotify, allow == true {
+            notifyImage = UIImage(named: "ic_notifications_active")
+        } else {
+            notifyImage = UIImage(named: "ic_notifications_off")
+        }
+
+        let button = UIBarButtonItem(image: notifyImage, style: .done, target: self, action: #selector(changeNotify))
+        return button
+    }
+    
     override func updateViewConstraints() {
         super.updateViewConstraints()
         
         tableView.snp.remakeConstraints { (make) in
-            make.top.left.right.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.top.equalToSuperview()
+            make.left.right.bottom.equalToSuperview()
         }
         
         imageHeader.snp.remakeConstraints { (make) in
-            make.top.left.equalTo(self.tableView).offset(10.0)
-            make.width.equalTo(100.0)
-            make.height.equalTo(140.0)
+            make.top.left.equalTo(self.tableView)
+            make.width.equalTo(ScreenSize.SCREEN_WIDTH)
+            make.height.equalTo(160.0)
+        }
+        
+        picture.snp.makeConstraints { (make) in
+            make.top.equalTo(imageHeader.snp.bottom).offset(-15.0)
+            make.left.equalTo(self.view).offset(10.0)
+            make.size.equalTo(CGSize(width: 100.0, height: 100.0))
         }
         
         titlePlace.snp.remakeConstraints { (make) in
-            make.top.equalTo(imageHeader)
-            make.left.equalTo(imageHeader.snp.right).offset(10.0)
+            make.top.equalTo(imageHeader.snp.bottom).offset(10.0)
+            make.left.equalTo(picture.snp.right).offset(10.0)
             make.right.equalTo(self.view).offset(-10.0)
-            make.bottom.equalTo(ratingLabel.snp.top).offset(-10.0)
+            make.bottom.equalTo(ratingLabel)
         }
-        
+
         ratingLabel.snp.remakeConstraints { (make) in
-            make.bottom.equalTo(imageHeader)
-            make.left.equalTo(titlePlace)
-            make.height.equalTo(15.0)
+            make.top.equalTo(picture.snp.bottom).offset(10.0)
+            make.left.right.equalTo(picture)
+            make.height.equalTo(20.0)
         }
-        
+
         listSubCategoriesView.snp.remakeConstraints { (make) in
             make.bottom.equalTo(lineView)
             make.right.equalTo(titlePlace)
-            make.left.equalTo(ratingLabel.snp.right).offset(10.0)
-            make.top.equalTo(titlePlace.snp.bottom)
+            make.left.equalTo(ratingLabel)
+            make.top.equalTo(ratingLabel.snp.bottom).offset(10.0)
         }
-        
+
         lineView.snp.remakeConstraints { (make) in
             make.bottom.equalTo(favoriteButton.snp.top).offset(-10.0)
             make.left.right.equalToSuperview()
             make.height.equalTo(0.1)
         }
-        
+
         favoriteButton.snp.makeConstraints { (make) in
             make.right.equalTo(headerView.snp.centerX).offset(-20.0)
             make.bottom.equalToSuperview().offset(-15.0)
             make.size.equalTo(CGSize(width: 120.0, height: 35.0))
         }
-        
+
         shareButton.snp.makeConstraints { (make) in
             make.left.equalTo(headerView.snp.centerX).offset(20.0)
             make.bottom.equalToSuperview().offset(-15.0)
@@ -203,7 +247,12 @@ final class DetailPlaceViewController: UIViewController {
         
         setTitleNavBar()
         
+        if favoriteNotify.addFavorites {
+            navigationItem.rightBarButtonItem = rightBarButton()
+        }
+        
         headerView.addSubview(imageHeader)
+        headerView.addSubview(picture)
         headerView.addSubview(titlePlace)
         headerView.addSubview(ratingLabel)
         headerView.addSubview(listSubCategoriesView)
@@ -219,14 +268,16 @@ final class DetailPlaceViewController: UIViewController {
             let favorites = realm.objects(Favorites.self)
             notificationTokenFavorites = favorites.observe { [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
-                case .update:
-                    if self.favoritesViewModel.checkAddingToFavorites(self.viewModel.place) {
-                        self.favoriteButton.setTitle(" Remove", for: .normal)
-                        self.favoriteButton.setImage(UIImage(named: "ic_favorite")?.withRenderingMode(.alwaysTemplate), for: .normal)
-                    } else {
+                case .update(let favorites, _, _, _):
+                    guard favorites.contains(where: { $0.id == self.viewModel.place.id }) else {
                         self.favoriteButton.setTitle(" Add", for: .normal)
                         self.favoriteButton.setImage(UIImage(named: "ic_favorite_border")?.withRenderingMode(.alwaysTemplate), for: .normal)
+                        self.navigationItem.rightBarButtonItem = nil
+                        return
                     }
+                    self.favoriteButton.setTitle(" Remove", for: .normal)
+                    self.favoriteButton.setImage(UIImage(named: "ic_favorite")?.withRenderingMode(.alwaysTemplate), for: .normal)
+                    self.navigationItem.rightBarButtonItem = self.rightBarButton()
                 case .error(let error):
                     fatalError("\(error)")
                 case .initial:
@@ -265,6 +316,16 @@ final class DetailPlaceViewController: UIViewController {
         notificationTokenFavorites?.invalidate()
     }
     
+    @objc func changeNotify() {
+        let allow = favoritesViewModel.allowNotify(place: viewModel.place)
+    
+        guard allow else {
+            navigationItem.rightBarButtonItem?.image = UIImage(named: "ic_notifications_off")
+            return
+        }
+        navigationItem.rightBarButtonItem?.image = UIImage(named: "ic_notifications_active")
+    }
+    
     @objc func addToFavorites(sender: UIButton) {
         sender.isSelected = !sender.isSelected
         
@@ -276,6 +337,7 @@ final class DetailPlaceViewController: UIViewController {
     }
     
     @objc func sharePlace() {
+        UIImpactFeedbackGenerator().impactOccurred()
         if let image = imageHeader.image {
             let shareController = UIActivityViewController(activityItems: [image, viewModel.place.name ?? ""],
                                                            applicationActivities: nil)
@@ -384,7 +446,7 @@ extension DetailPlaceViewController: UITableViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard scrollView.contentOffset.y > -23.0 else {
+        guard scrollView.contentOffset.y > 210.0 else {
             setTitleNavBar()
             return
         }

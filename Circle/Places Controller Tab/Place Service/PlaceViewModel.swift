@@ -27,44 +27,43 @@ struct Places {
 struct PlaceViewModel {
     fileprivate let placeService: PlaceService
     /// open filter controller
-    var openFilter: ((_ delegate: FilterPlacesDelegate) -> Void) = {_ in }
-    
+    var openFilter: (() -> Void) = { UIImpactFeedbackGenerator().impactOccurred() }
     /// open map controller
-    var openMap: ((_ places: [Places], _ location: CLLocation?, _ sourceRect: CGRect) -> Void) = {_, _, _ in }
-    
+    var openMap: (([Places], CLLocation?) -> Void) = {_, _ in UIImpactFeedbackGenerator().impactOccurred() }
     /// open detail place controller
-    var openDetailPlace: ((_ place: PlaceModel, _ title: NSMutableAttributedString?, _ rating: NSMutableAttributedString?, _ favoritesViewModel: FavoritesViewModel) -> Void) = {_, _, _, _ in }
+    var openDetailPlace: ((PlaceModel, NSMutableAttributedString?, NSMutableAttributedString?, FavoritesViewModel) -> Void) = {_, _, _, _ in }
     
     init(_ service: PlaceService) {
         self.placeService = service
     }
     
-    func loadMoreInfoPlaces(url: URL) -> Observable<Places> {
+    /// load more places
+    func getMorePlaces(url: URL) -> Observable<Places> {
         return placeService.loadMorePlaces(url: url).asObservable()
             .flatMap({ (model) -> Observable<Places> in
-                let (places, ratings, titles) = self.updateResults(model: model)
-                return Observable.just(Places(places, ratings, titles, model.next))
+                return Observable.just(self.updateResults(model: model))
             })
     }
     
     /// get info about for current location
-    func getInfoPlaces(location: CLLocation, distance: CLLocationDistance) -> Observable<Places> {
-        var selected: [Categories] = [.arts, .education, .fitness, .food, .hotel, .medical, .shopping, .travel]
+    func getPlaces(location: CLLocation?, distance: CLLocationDistance, searchTerm: String? = nil) -> Observable<Places> {
+        var categories = PlaceSetting().allCategories
         
-        do {
-            let realm = try Realm()
-            let selectedCategories = realm.objects(FilterSelectedCategory.self)
-            if !selectedCategories.isEmpty {
-                selected = selectedCategories.map({ Categories(rawValue: $0.category)! })
+        if searchTerm == nil {
+            do {
+                let realm = try Realm()
+                let selectedCategories = realm.objects(FilterSelectedCategory.self)
+                if !selectedCategories.isEmpty {
+                    categories = selectedCategories.map({ Categories(rawValue: $0.category)! })
+                }
+            } catch {
+                print(error)
             }
-        } catch {
-            print(error)
         }
         
-        return placeService.getInfoAboutPlaces(location, selected, distance)
+        return placeService.loadPlaces(location, categories, distance, searchTerm)
             .asObservable().flatMap { (model) -> Observable<Places> in
-                let (places, ratings, titles) = self.updateResults(model: model)
-                return Observable.just(Places(places, ratings, titles, model.next))
+                return Observable.just(self.updateResults(model: model))
         }
     }
     
@@ -81,14 +80,13 @@ struct PlaceViewModel {
         return color
     }
     
-    //swiftlint:disable large_tuple
-    fileprivate func updateResults(model: PlaceDataModel) -> ([PlaceModel], [NSMutableAttributedString?], [NSMutableAttributedString?]) {
+    fileprivate func updateResults(model: PlaceDataModel) -> (Places) {
         let ratings = model.data.map({ (place) -> NSMutableAttributedString? in
             let ratingStar = NSAttributedString(string: "\(place.ratingStar ?? 0)",
-                attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 17.0),
+                attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 19.0),
                              NSAttributedStringKey.foregroundColor: self.colorForRating(place.ratingStar ?? 0)])
             let ratingCount = NSAttributedString(string: " \(place.ratingCount ?? 0)",
-                attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 12.0),
+                attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14.0),
                              NSAttributedStringKey.foregroundColor: UIColor.gray])
             
             let result = NSMutableAttributedString(attributedString: ratingStar)
@@ -98,16 +96,16 @@ struct PlaceViewModel {
         
         let titles = model.data.map({ (place) -> NSMutableAttributedString? in
             let title = NSAttributedString(string: "\(place.name ?? "")",
-                attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 17.0),
+                attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 19.0),
                              NSAttributedStringKey.foregroundColor: UIColor.black])
             let about = NSAttributedString(string: "\n\n\(place.about ?? "")",
-                attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 13.0),
+                attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14.0),
                              NSAttributedStringKey.foregroundColor: UIColor.gray])
             
             let result = NSMutableAttributedString(attributedString: title)
             result.append(about)
             return result
         })
-        return (model.data, ratings, titles)
+        return Places(model.data, ratings, titles, model.next)
     }
 }

@@ -7,6 +7,18 @@
 //
 
 import Foundation
+import Unbox
+
+struct DetailServiceModel {
+    let url: URL?
+}
+
+extension DetailServiceModel: Unboxable {
+    init(unboxer: Unboxer) throws {
+        let urlString: String? = unboxer.unbox(keyPath: "picture.data.url")
+        self.url = urlString != nil ? URL(string: urlString ?? "") : nil
+    }
+}
 
 enum RestaurantSpecialityType: String {
     case lunch, dinner, drinks, breakfast, coffee

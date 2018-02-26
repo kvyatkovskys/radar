@@ -22,6 +22,7 @@ final class DeatilContactsTableViewCell: UITableViewCell {
         
         let collection = UICollectionView(frame: self.frame, collectionViewLayout: layout)
         collection.backgroundColor = UIColor.clear
+        collection.showsHorizontalScrollIndicator = false
         return collection
     }()
     

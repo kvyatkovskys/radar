@@ -17,6 +17,9 @@ struct FavoritesModel {
     let picture: URL?
     let categories: [Categories]?
     let subCategories: [String]?
+    let ratingStar: Float?
+    let ratingCount: Int?
+    let about: String?
 }
 
 class Favorites: Object {
@@ -26,7 +29,10 @@ class Favorites: Object {
     @objc dynamic var picture: String?
     @objc dynamic var ratingStar: Float = 0
     @objc dynamic var ratingCount: Int = 0
-    @objc dynamic var date: Date?
+    @objc dynamic var date: Date = Date()
+    @objc dynamic var latitude: Double = 0
+    @objc dynamic var longitude: Double = 0
     let categories = List<String>()
     let subCategories = List<String>()
+    @objc dynamic var notify: Bool = false
 }

@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import RxSwift
 
 final class SettingsViewController: UIViewController {
     typealias Dependecies = HasSettingsViewModel
     
     fileprivate let viewModel: SettingsViewModel
+    fileprivate let disposeBag = DisposeBag()
     
     fileprivate lazy var tableView: UITableView = {
         let table = UITableView()
@@ -46,6 +48,21 @@ final class SettingsViewController: UIViewController {
         
         tableView.register(FCButtonLoginTableViewCell.self, forCellReuseIdentifier: FCButtonLoginTableViewCell.cellIdentifier)
         tableView.register(StandardSettingTableViewCell.self, forCellReuseIdentifier: StandardSettingTableViewCell.cellIdentifier)
+        tableView.register(SwitchSettingTableViewCell.self, forCellReuseIdentifier: SwitchSettingTableViewCell.cellIdentifier)
+    }
+    
+    func setUpAlertView(title: String, description: String, action: @escaping () -> Void) {
+        let alert = UIAlertController(title: title,
+                                      message: description,
+                                      preferredStyle: UIAlertControllerStyle.alert)
+        let clear = UIAlertAction(title: "Clear", style: .destructive, handler: { _ in
+            action()
+        })
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alert.addAction(clear)
+        alert.addAction(cancel)
+        present(alert, animated: true, completion: nil)
     }
 }
 
@@ -66,11 +83,31 @@ extension SettingsViewController: UITableViewDataSource {
         let typeCell = viewModel.items[indexPath.section].sectionObjects[indexPath.row]
         
         switch typeCell {
+        case .favoriteNotify(let title, let enable, let image, let color):
+            let cell = tableView.dequeueReusableCell(withIdentifier: SwitchSettingTableViewCell.cellIdentifier,
+                                                     for: indexPath) as? SwitchSettingTableViewCell ?? SwitchSettingTableViewCell()
+            
+            cell.title = title
+            cell.img = image
+            cell.imageColor = color
+            cell.enable = enable
+            
+            cell.switchButton.rx.value.asObservable()
+                .subscribe(onNext: { [unowned self] (isOn) in
+                    self.viewModel.disabledNotice(isOn)
+                }, onError: { (error) in
+                    print(error)
+                }).disposed(by: disposeBag)
+            
+            return cell
         case .facebookLogin:
             let cell = tableView.dequeueReusableCell(withIdentifier: FCButtonLoginTableViewCell.cellIdentifier,
                                                      for: indexPath) as? FCButtonLoginTableViewCell ?? FCButtonLoginTableViewCell()
             return cell
-        case .clearFavorites(let title, let image, let color):
+        case .clearFavorites(let title, _, let image, let color),
+             .clearHistorySearch(let title, _, let image, let color),
+             .openSettings(let title, let image, let color):
+            
             let cell = tableView.dequeueReusableCell(withIdentifier: StandardSettingTableViewCell.cellIdentifier,
                                                      for: indexPath) as? StandardSettingTableViewCell ?? StandardSettingTableViewCell()
             
@@ -78,29 +115,56 @@ extension SettingsViewController: UITableViewDataSource {
             cell.img = image
             cell.imageColor = color
             return cell
+        case .listFavoritesNoticy(let title, _, let image, let color),
+             .showSearchHistory(let title, let image, let color):
+            
+            let cell = tableView.dequeueReusableCell(withIdentifier: StandardSettingTableViewCell.cellIdentifier,
+                                                     for: indexPath) as? StandardSettingTableViewCell ?? StandardSettingTableViewCell()
+            
+            cell.title = title
+            cell.img = image
+            cell.imageColor = color
+            cell.accessoryType = .disclosureIndicator
+            return cell
         }
     }
 }
 
 extension SettingsViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let lastSectionIndex = tableView.numberOfSections - 1
+        let lastRowIndex = tableView.numberOfRows(inSection: lastSectionIndex) - 1
+        guard  indexPath.row != lastRowIndex && indexPath.section != lastSectionIndex else {
+            tableView.separatorColor = .lightGray
+            return
+        }
+        tableView.separatorColor = .clear
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 35.0
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let typeCell = viewModel.items[indexPath.section].sectionObjects[indexPath.row]
         
         switch typeCell {
-        case .clearFavorites:
-            let alert = UIAlertController(title: "Clear Favorites",
-                                          message: "Are you sure you want to clear all items in your Favorites?",
-                                          preferredStyle: UIAlertControllerStyle.alert)
-            let clear = UIAlertAction(title: "Clear", style: .destructive, handler: { [unowned self] _ in
+        case .clearFavorites(let title, let description, _, _):
+            setUpAlertView(title: title, description: description, action: { [unowned self] in
                 self.viewModel.deleteAllFavorites()
             })
-            let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-            
-            alert.addAction(clear)
-            alert.addAction(cancel)
-            present(alert, animated: true, completion: nil)
+        case .clearHistorySearch(let title, let description, _, _):
+            setUpAlertView(title: title, description: description, action: { [unowned self] in
+                self.viewModel.deleteSearchHistory()
+            })
+        case .showSearchHistory:
+            viewModel.openSearchHistory()
+        case .listFavoritesNoticy:
+            viewModel.openListFavoritesNotice()
+        case .openSettings:
+            viewModel.openSettingsPhone()
         default:
             break
         }
@@ -110,7 +174,14 @@ extension SettingsViewController: UITableViewDelegate {
         let typeCell = viewModel.items[indexPath.section].sectionObjects[indexPath.row]
         
         switch typeCell {
-        case .facebookLogin, .clearFavorites: return 50.0
+        case .facebookLogin,
+             .clearFavorites,
+             .clearHistorySearch,
+             .showSearchHistory,
+             .favoriteNotify,
+             .listFavoritesNoticy,
+             .openSettings:
+            return 50.0
         }
     }
 }

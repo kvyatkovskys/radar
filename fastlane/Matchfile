@@ -1,0 +1,6 @@
+git_url "https://bitbucket.org/KviatkovskiS/radar-certificates"
+
+type "appstore" # The default type, can be: appstore, adhoc, enterprise or development
+
+app_identifier("com.kviatkovskii.Circle")
+username "sergeikviatkovskii@gmail.com"

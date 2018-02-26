@@ -9,6 +9,7 @@
 import Foundation
 import RxSwift
 import Unbox
+import FBSDKPlacesKit
 
 struct PlaceService {
     fileprivate let placeManager = FBSDKPlacesManager()
@@ -34,11 +35,11 @@ struct PlaceService {
             })
     }
     
-    func getInfoAboutPlaces(_ location: CLLocation, _ categories: [Categories], _ distance: CLLocationDistance) -> Observable<PlaceDataModel> {
+    func loadPlaces(_ location: CLLocation?, _ categories: [Categories], _ distance: CLLocationDistance, _ searchTerm: String? = nil) -> Observable<PlaceDataModel> {
         let request = placeManager.placeSearchRequest(for: location,
-                                                      searchTerm: nil,
+                                                      searchTerm: searchTerm,
                                                       categories: categories.map({ $0.rawValue }),
-                                                      fields: setting.getFields(),
+                                                      fields: setting.fields,
                                                       distance: distance,
                                                       cursor: nil)
         
@@ -48,7 +49,7 @@ struct PlaceService {
                     observable.on(.error(error!))
                     return
                 }
-
+                
                 if let data = result as? [String: Any], let model: PlaceDataModel = try? unbox(dictionary: data) {
                     observable.on(.next(model))
                 }

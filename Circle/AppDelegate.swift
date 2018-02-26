@@ -8,25 +8,21 @@
 
 import UIKit
 import RealmSwift
-
-// color for navigation bar
-fileprivate extension UIColor {
-    static var navBarColor: UIColor {
-        return UIColor(withHex: 0x34495e, alpha: 1.0)
-    }
-}
+import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        migrations(schema: 1)
+        migrations(schema: 6)
+        print(Realm.Configuration.defaultConfiguration.fileURL as Any)
+        
         setupNavigationBar()
         initialViewController()
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
-        print(Realm.Configuration.defaultConfiguration.fileURL as Any)
+        checkAuthNotification(application)
         
         return true
     }
@@ -38,13 +34,48 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                                      annotation: options[UIApplicationOpenURLOptionsKey.annotation])
     }
     
-    fileprivate func initialViewController() {
+    fileprivate func checkAuthNotification(_ application: UIApplication) {
+        let center = UNUserNotificationCenter.current()
+        center.getNotificationSettings { (settings) in
+            switch settings.authorizationStatus {
+            case .denied, .notDetermined:
+                center.requestAuthorization(options: [.alert, .sound, .badge]) { [unowned self] (accept, _) in
+                    if !accept {
+                        print("Something went wrong")
+                        let alertController = UIAlertController(title: "Notifications are disabled.",
+                                                                message: "Open the setting for this application and turn on 'Allow Notifications'.",
+                                                                preferredStyle: .alert)
+                        
+                        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                        alertController.addAction(cancelAction)
+                        
+                        let openAction = UIAlertAction(title: "Open settings", style: .default) { _ in
+                            if let url = URL(string: UIApplicationOpenSettingsURLString) {
+                                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                            }
+                        }
+                        alertController.addAction(openAction)
+                        
+                        self.window?.rootViewController?.present(alertController, animated: true, completion: nil)
+                    }
+                }
+            case .authorized:
+                DispatchQueue.main.async {
+                    guard application.applicationIconBadgeNumber > 0 else { return }
+                    application.applicationIconBadgeNumber = 0
+                }
+            }
+        }
+    }
+    
+    fileprivate func initialViewController(index: Int = 0) {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.backgroundColor = UIColor.white
         window?.makeKeyAndVisible()
         
+        let locationService = LocationService()
         let router = Router()
-        window?.rootViewController = router.showMainTabController()
+        window?.rootViewController = router.showMainTabController(locationService, startTab: index)
     }
     
     fileprivate func setupNavigationBar() {
@@ -56,15 +87,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     fileprivate func migrations(schema: UInt64) {
-        let config = Realm.Configuration(
-            schemaVersion: schema,
-            migrationBlock: { _, oldSchemaVersion in
-                if oldSchemaVersion < schema {
-                    
-                }
+        let config = Realm.Configuration(schemaVersion: schema, migrationBlock: { _, oldSchemaVersion in
+            if oldSchemaVersion < schema { }
         })
-        Realm.Configuration.defaultConfiguration = config
         
+        Realm.Configuration.defaultConfiguration = config
         do {
             _ = try Realm()
         } catch {
@@ -72,6 +99,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
+    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+        guard let type = TypeShortcut(rawValue: shortcutItem.type) else {
+            completionHandler(false)
+            return
+        }
+        initialViewController(index: type.tabIndex)
+        completionHandler(true)
+    }
+    
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
@@ -84,6 +120,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+        checkAuthNotification(application)
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {

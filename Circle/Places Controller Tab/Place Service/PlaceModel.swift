@@ -25,7 +25,7 @@ extension PlaceDataModel: Unboxable {
 struct PlaceModel {
     let id: Int
     let name: String?
-    let phone: Int?
+    let phone: String?
     let ratingStar: Float?
     let ratingCount: Int?
     let hours: [String: String]?
@@ -47,7 +47,7 @@ struct PlaceModel {
     let restaurantSpecialties: [String: Bool]?
     let fromFavorites: Bool
     
-    init(id: Int, name: String? = nil, phone: Int? = nil, ratingStar: Float? = nil, ratingCount: Int? = nil, hours: [String: String]? = nil,
+    init(id: Int, name: String? = nil, phone: String? = nil, ratingStar: Float? = nil, ratingCount: Int? = nil, hours: [String: String]? = nil,
          isAlwaysOpen: Bool? = nil, isClosed: Bool? = nil, address: String? = nil, website: String? = nil, categories: [Categories]? = nil,
          subCategories: [String]? = nil, description: String? = nil, coverPhoto: URL? = nil, about: String? = nil, location: LocationPlace? = nil,
          context: String? = nil, appLink: URL? = nil, paymentOptions: [String: Bool]? = nil, parking: [String: Bool]? = nil,

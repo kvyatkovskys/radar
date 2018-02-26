@@ -13,7 +13,9 @@ final class StandardSettingTableViewCell: UITableViewCell {
     
     fileprivate let imageCell: UIImageView = {
         let image = UIImageView()
-        image.contentMode = .scaleAspectFit
+        image.contentMode = .center
+        image.tintColor = .white
+        image.layer.cornerRadius = 5.0
         return image
     }()
     
@@ -31,7 +33,7 @@ final class StandardSettingTableViewCell: UITableViewCell {
     
     var imageColor: UIColor? {
         didSet {
-            imageCell.tintColor = imageColor
+            imageCell.backgroundColor = imageColor
         }
     }
     
@@ -53,7 +55,7 @@ final class StandardSettingTableViewCell: UITableViewCell {
         titleLabel.snp.makeConstraints { (make) in
             make.left.equalTo(imageCell.snp.right).offset(10.0)
             make.top.bottom.equalToSuperview()
-            make.right.equalToSuperview().offset(-15.0)
+            make.right.equalToSuperview().offset(-40.0)
         }
     }
     

@@ -9,13 +9,14 @@
 import Foundation
 import RxSwift
 import Unbox
+import FBSDKPlacesKit
 
 struct FavoritesService {
     fileprivate let placeManager = FBSDKPlacesManager()
     fileprivate var setting = PlaceSetting()
     
     func loadInfoPlace(id: Int) -> Observable<PlaceModel> {
-        var fields = setting.getFields()
+        var fields = setting.fields
         if let index = fields.index(where: { $0 == FBSDKPlacesResponseKeyMatchedCategories }) {
             fields.remove(at: index)
         }
