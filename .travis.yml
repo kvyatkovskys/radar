@@ -15,7 +15,7 @@ before_install:
 
 script:
   #- set -o pipefail && xcodebuild test -workspace Circle.xcworkspace -scheme Circle -sdk iphonesimulator11.2 -destination 'name=iPhone 8,OS=11.2' ONLY_ACTIVE_ARCH=NO | xcpretty
-  - xcrun xcodebuild test -workspace Circle.xcworkspace -scheme Circle -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.2'
+  - xcrun xcodebuild test -workspace Circle.xcworkspace -scheme Circle -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.2' NLY_ACTIVE_ARCH=NO | xcpretty
   #- ./fastlane/travis.sh
 
 notifications:
