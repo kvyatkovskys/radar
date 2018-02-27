@@ -1,3 +1,5 @@
+![Logo](https://github.com/kvyatkovskys/radar/blob/master/logo.png = 200x200)
+
 # Radar - Search for places
 
-![Logo](https://github.com/kvyatkovskys/radar/blob/master/logo.png)
+The projetc is written in Swift 4.
