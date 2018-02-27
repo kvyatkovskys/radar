@@ -1,4 +1,4 @@
-![Logo](https://github.com/kvyatkovskys/radar/blob/master/logo.png = 200x200)
+![Logo](https://github.com/kvyatkovskys/radar/blob/master/logo.png =200x200)
 
 # Radar - Search for places
 
