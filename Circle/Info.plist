@@ -28,13 +28,15 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>200</string>
+	<string>201</string>
 	<key>FacebookAppID</key>
 	<string>517351968621238</string>
 	<key>FacebookClientToken</key>
 	<string>fa7449e641b75881e3466ca88471d058</string>
 	<key>FacebookDisplayName</key>
 	<string>Place</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
