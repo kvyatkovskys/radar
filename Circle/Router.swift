@@ -31,9 +31,18 @@ struct Router {
                                   toController: FilterPlacesViewController(dependecies))
         }
         
+        var mapController = UIViewController()
         viewModel.openMap = { places, location in
-            let dependecies = MapDependecies(places, location)
-            self.openMap(fromController: placesViewController as! PlacesViewController, toController: MapViewController(dependecies))
+            let dependecies = MapDependecies(places, location, viewModel)
+            mapController = MapViewController(dependecies)
+            self.openMap(fromController: placesViewController, toController: mapController)
+        }
+        
+        viewModel.reloadMap = { places, location in
+            guard let map = mapController as? MapViewController else { return }
+            map.places = places
+            map.userLocation = location
+            map.addPointOnMap(places: places)
         }
         
         viewModel.openDetailPlace = { place, title, rating, favoritesViewModel in
@@ -148,20 +157,10 @@ struct Router {
     }
     
     /// open map controller
-    fileprivate func openMap(fromController: PlacesViewController, toController: UIViewController) {
-        let navigation = UINavigationController(rootViewController: toController)
-        navigation.modalPresentationStyle = UIModalPresentationStyle.popover
-        navigation.isNavigationBarHidden = true
-        
-        let popover = navigation.popoverPresentationController
-        popover?.delegate = fromController
-        popover?.barButtonItem = fromController.leftBarButton
-        popover?.permittedArrowDirections = UIPopoverArrowDirection.any
-        
-        let width = fromController.view.frame.size.width
-        let height = fromController.view.frame.size.height - 130.0
-        toController.preferredContentSize = CGSize(width: width, height: height)
-    
-        fromController.present(navigation, animated: true, completion: nil)
+    fileprivate func openMap(fromController: UIViewController, toController: UIViewController) {
+        fromController.addChildViewController(toController)
+        toController.view.bounds = fromController.view.bounds
+        fromController.view.addSubview(toController.view)
+        toController.didMove(toParentViewController: fromController)
     }
 }

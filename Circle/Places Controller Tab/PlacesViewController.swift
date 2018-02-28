@@ -14,11 +14,16 @@ import RxCocoa
 import Kingfisher
 import RealmSwift
 
+enum TypeView: Int {
+    case table, map
+}
+
 final class PlacesViewController: UIViewController {
     typealias Dependecies = HasKingfisher & HasPlaceViewModel & HasLocationService
     
     fileprivate let heightHeader: CGFloat = 100.0
     fileprivate var searchForMinDistance: Bool = false
+    fileprivate var viewType = TypeView.table
     fileprivate var locationService: LocationService
     fileprivate var userLocation: CLLocation?
     fileprivate var notificationTokenCategories: NotificationToken?
@@ -42,8 +47,24 @@ final class PlacesViewController: UIViewController {
     }()
     
     lazy var leftBarButton: UIBarButtonItem = {
-        let categoriesImage = UIImage(named: "ic_map")?.withRenderingMode(.alwaysTemplate)
-        let button = UIBarButtonItem(image: categoriesImage, style: .done, target: self, action: #selector(showMap))
+        var categoriesImage = UIImage(named: "ic_map")!.withRenderingMode(.alwaysTemplate)
+        
+        do {
+            let realm = try Realm()
+            let settings = realm.objects(Settings.self).first
+            viewType = TypeView(rawValue: settings?.typeViewMainTab ?? 0)!
+            
+            switch viewType {
+            case .table:
+                categoriesImage = UIImage(named: "ic_map")!.withRenderingMode(.alwaysTemplate)
+            case .map:
+                categoriesImage = UIImage(named: "ic_view_list")!.withRenderingMode(.alwaysTemplate)
+            }
+        } catch {
+            print(error)
+        }
+        
+        let button = UIBarButtonItem(image: categoriesImage, style: .done, target: self, action: #selector(changeView))
         return button
     }()
     
@@ -79,12 +100,11 @@ final class PlacesViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .white
-        view.addSubview(tableView)
         tableView.addSubview(refreshControl)
         navigationItem.rightBarButtonItem = rightBarButton
         navigationItem.leftBarButtonItem = leftBarButton
         
-        updateConstraints()
+        changeView()
         locationService.start()
         
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
@@ -169,8 +189,22 @@ final class PlacesViewController: UIViewController {
         locationService.checkAuthorized()
     }
     
-    @objc func showMap() {
+    @objc func changeView() {
+        guard viewType == .table  else {
+            let vc = childViewControllers.last
+            vc?.view.removeFromSuperview()
+            vc?.removeFromParentViewController()
+            viewType = .table
+            view.addSubview(tableView)
+            updateConstraints()
+            navigationItem.leftBarButtonItem?.image = UIImage(named: "ic_map")!.withRenderingMode(.alwaysTemplate)
+            return
+        }
+        
+        view.subviews.forEach({ $0.removeFromSuperview() })
+        viewType = .map
         viewModel.openMap(tableDataSource?.places ?? [], userLocation)
+        navigationItem.leftBarButtonItem?.image = UIImage(named: "ic_view_list")!.withRenderingMode(.alwaysTemplate)
     }
     
     fileprivate func searchForNewDistance(value: Double) {
@@ -200,7 +234,11 @@ final class PlacesViewController: UIViewController {
     fileprivate func loadPlacesLocation(_ location: CLLocation?, distance: Double = FilterDistanceViewModel().defaultDistance) {
         viewModel.getPlaces(location: location, distance: distance).asObservable()
             .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { [unowned self] (model) in
+            .subscribe(onNext: { [unowned self, weak userLocation = self.userLocation!] (model) in
+                if self.viewType == .map {
+                    self.viewModel.reloadMap([model], userLocation)
+                }
+                
                 self.tableDataSource?.places = [model]
                 self.tableDelegate?.places = [model]
                 self.tableView.reloadData()

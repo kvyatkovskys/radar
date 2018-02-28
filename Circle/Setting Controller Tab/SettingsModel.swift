@@ -12,4 +12,5 @@ import RealmSwift
 class Settings: Object {
     @objc dynamic var disabledNotice: Bool = false
     @objc dynamic var cancelNotice: Bool = false
+    @objc dynamic var typeViewMainTab: Int = 0
 }

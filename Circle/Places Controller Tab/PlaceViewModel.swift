@@ -33,6 +33,8 @@ struct PlaceViewModel {
     /// open detail place controller
     var openDetailPlace: ((PlaceModel, NSMutableAttributedString?, NSMutableAttributedString?, FavoritesViewModel) -> Void) = {_, _, _, _ in }
     
+    var reloadMap: (([Places], CLLocation?) -> Void) = {_, _ in}
+    
     init(_ service: PlaceService) {
         self.placeService = service
     }

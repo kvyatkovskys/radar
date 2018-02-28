@@ -468,6 +468,8 @@
 			isa = PBXGroup;
 			children = (
 				8B41154C1FDB2CEF00C6614C /* PlacesViewController.swift */,
+				8B5F71521FF923A700E628F9 /* PlaceModel.swift */,
+				8B18BFD71FFACC6F00C7906D /* PlaceViewModel.swift */,
 				8B5F71541FF933AC00E628F9 /* Place Service */,
 				8B147BD2202399D800EDA2D4 /* Table View */,
 			);
@@ -490,9 +492,7 @@
 		8B5F71541FF933AC00E628F9 /* Place Service */ = {
 			isa = PBXGroup;
 			children = (
-				8B5F71521FF923A700E628F9 /* PlaceModel.swift */,
 				8B5F71501FF916B300E628F9 /* PlaceService.swift */,
-				8B18BFD71FFACC6F00C7906D /* PlaceViewModel.swift */,
 				8BEB4DF21FFAD285008AD1AB /* PlaceSetting.swift */,
 			);
 			path = "Place Service";
