@@ -304,12 +304,13 @@ extension LocationService {
                 try realm.write {
                     guard let oldSettings = settings else {
                         let newSettings = Settings()
-                        newSettings.cancelNotice = status == .authorizedAlways
+                        newSettings.allwaysLocation = status == .authorizedAlways
                         newSettings.disabledNotice = settings?.disabledNotice ?? false
+                        newSettings.typeViewMainTab = settings?.typeViewMainTab ?? 0
                         realm.add(newSettings)
                         return
                     }
-                    oldSettings.cancelNotice = status == .authorizedAlways
+                    oldSettings.allwaysLocation = status == .authorizedAlways
                 }
             } catch {
                 print(error)

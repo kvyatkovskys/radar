@@ -174,14 +174,15 @@ extension SettingsViewController: UITableViewDelegate {
         let typeCell = viewModel.items[indexPath.section].sectionObjects[indexPath.row]
         
         switch typeCell {
-        case .facebookLogin,
-             .clearFavorites,
+        case .clearFavorites,
              .clearHistorySearch,
              .showSearchHistory,
              .favoriteNotify,
              .listFavoritesNoticy,
              .openSettings:
             return 50.0
+        case .facebookLogin:
+            return 60.0
         }
     }
 }

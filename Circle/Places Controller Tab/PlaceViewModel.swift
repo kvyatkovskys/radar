@@ -10,6 +10,10 @@ import Foundation
 import RxSwift
 import RealmSwift
 
+enum TypeView: Int {
+    case table, map
+}
+
 struct Places {
     let items: [PlaceModel]
     let ratings: [NSMutableAttributedString?]
@@ -32,11 +36,42 @@ struct PlaceViewModel {
     var openMap: (([Places], CLLocation?) -> Void) = {_, _ in UIImpactFeedbackGenerator().impactOccurred() }
     /// open detail place controller
     var openDetailPlace: ((PlaceModel, NSMutableAttributedString?, NSMutableAttributedString?, FavoritesViewModel) -> Void) = {_, _, _, _ in }
-    
+    /// reload places on map
     var reloadMap: (([Places], CLLocation?) -> Void) = {_, _ in}
+    
+    var typeView: TypeView {
+        var type = TypeView(rawValue: 0)!
+        do {
+            let realm = try Realm()
+            let settings = realm.objects(Settings.self).first
+            type = TypeView(rawValue: settings?.typeViewMainTab ?? 0)!
+        } catch {
+            print(error)
+        }
+        return type
+    }
     
     init(_ service: PlaceService) {
         self.placeService = service
+    }
+    
+    func changeTypeView(_ type: TypeView) {
+        do {
+            let realm = try Realm()
+            let settings = realm.objects(Settings.self).first
+            
+            try realm.write {
+                guard let oldSettings = settings else {
+                    let newSettings = Settings()
+                    newSettings.typeViewMainTab = type.rawValue
+                    realm.add(newSettings)
+                    return
+                }
+                oldSettings.typeViewMainTab = type.rawValue
+            }
+        } catch {
+            print(error)
+        }
     }
     
     /// load more places

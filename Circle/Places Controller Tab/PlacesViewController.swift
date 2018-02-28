@@ -14,16 +14,11 @@ import RxCocoa
 import Kingfisher
 import RealmSwift
 
-enum TypeView: Int {
-    case table, map
-}
-
 final class PlacesViewController: UIViewController {
     typealias Dependecies = HasKingfisher & HasPlaceViewModel & HasLocationService
     
     fileprivate let heightHeader: CGFloat = 100.0
     fileprivate var searchForMinDistance: Bool = false
-    fileprivate var viewType = TypeView.table
     fileprivate var locationService: LocationService
     fileprivate var userLocation: CLLocation?
     fileprivate var notificationTokenCategories: NotificationToken?
@@ -47,24 +42,18 @@ final class PlacesViewController: UIViewController {
     }()
     
     lazy var leftBarButton: UIBarButtonItem = {
-        var categoriesImage = UIImage(named: "ic_map")!.withRenderingMode(.alwaysTemplate)
+        var categoriesImage = UIImage()
         
-        do {
-            let realm = try Realm()
-            let settings = realm.objects(Settings.self).first
-            viewType = TypeView(rawValue: settings?.typeViewMainTab ?? 0)!
-            
-            switch viewType {
-            case .table:
-                categoriesImage = UIImage(named: "ic_map")!.withRenderingMode(.alwaysTemplate)
-            case .map:
-                categoriesImage = UIImage(named: "ic_view_list")!.withRenderingMode(.alwaysTemplate)
-            }
-        } catch {
-            print(error)
+        switch viewModel.typeView {
+        case .table:
+            categoriesImage = UIImage(named: "ic_map")!.withRenderingMode(.alwaysTemplate)
+        case .map:
+            categoriesImage = UIImage(named: "ic_view_list")!.withRenderingMode(.alwaysTemplate)
         }
-        
-        let button = UIBarButtonItem(image: categoriesImage, style: .done, target: self, action: #selector(changeView))
+
+        let button = UIBarButtonItem(image: categoriesImage, style: .done, target: self, action: #selector(setView))
+        button.tag = viewModel.typeView.rawValue
+        setView(sender: button)
         return button
     }()
     
@@ -104,7 +93,6 @@ final class PlacesViewController: UIViewController {
         navigationItem.rightBarButtonItem = rightBarButton
         navigationItem.leftBarButtonItem = leftBarButton
         
-        changeView()
         locationService.start()
         
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
@@ -189,22 +177,25 @@ final class PlacesViewController: UIViewController {
         locationService.checkAuthorized()
     }
     
-    @objc func changeView() {
-        guard viewType == .table  else {
+    @objc func setView(sender: UIBarButtonItem?) {
+        let type = TypeView(rawValue: sender?.tag ?? 0)!
+        switch type {
+        case .map:
+            sender?.tag = TypeView.table.rawValue
+            view.subviews.forEach({ $0.removeFromSuperview() })
+            viewModel.changeTypeView(.map)
+            viewModel.openMap(tableDataSource?.places ?? [], userLocation)
+            navigationItem.leftBarButtonItem?.image = UIImage(named: "ic_view_list")!.withRenderingMode(.alwaysTemplate)
+        case .table:
+            sender?.tag = TypeView.map.rawValue
             let vc = childViewControllers.last
             vc?.view.removeFromSuperview()
             vc?.removeFromParentViewController()
-            viewType = .table
+            viewModel.changeTypeView(.table)
             view.addSubview(tableView)
             updateConstraints()
             navigationItem.leftBarButtonItem?.image = UIImage(named: "ic_map")!.withRenderingMode(.alwaysTemplate)
-            return
         }
-        
-        view.subviews.forEach({ $0.removeFromSuperview() })
-        viewType = .map
-        viewModel.openMap(tableDataSource?.places ?? [], userLocation)
-        navigationItem.leftBarButtonItem?.image = UIImage(named: "ic_view_list")!.withRenderingMode(.alwaysTemplate)
     }
     
     fileprivate func searchForNewDistance(value: Double) {
@@ -234,8 +225,8 @@ final class PlacesViewController: UIViewController {
     fileprivate func loadPlacesLocation(_ location: CLLocation?, distance: Double = FilterDistanceViewModel().defaultDistance) {
         viewModel.getPlaces(location: location, distance: distance).asObservable()
             .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { [unowned self, weak userLocation = self.userLocation!] (model) in
-                if self.viewType == .map {
+            .subscribe(onNext: { [unowned self, weak userLocation = self.userLocation] (model) in
+                if self.viewModel.typeView == .map {
                     self.viewModel.reloadMap([model], userLocation)
                 }
                 

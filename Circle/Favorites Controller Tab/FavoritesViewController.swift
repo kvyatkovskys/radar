@@ -89,7 +89,7 @@ final class FavoritesViewController: UIViewController {
             notificationSettingsToken = settings.observe { [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
                 case .initial(let collection), .update(let collection, _, _, _):
-                    guard collection.first?.cancelNotice ?? true else {
+                    guard collection.first?.allwaysLocation ?? true else {
                         self.navigationItem.leftBarButtonItem = self.leftBarButton
                         return
                     }
