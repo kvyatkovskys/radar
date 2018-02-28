@@ -1,4 +1,6 @@
-<img src="https://github.com/kvyatkovskys/radar/blob/master/logo.png" width="200" height="=200">
+<p align="center">
+	<img src="https://github.com/kvyatkovskys/radar/blob/master/logo.png" width="400" height="200">
+</p>
 
 # Radar - Search for places
 
