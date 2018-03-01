@@ -10,6 +10,7 @@ import UIKit
 import Kingfisher
 import RxSwift
 import RealmSwift
+import SnapKit
 
 final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDelegate {
     typealias Dependecies = HasDetailPlaceViewModel & HasKingfisher & HasOpenGraphService & HasFavoritesViewModel
@@ -71,11 +72,14 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         return image
     }()
     
-    fileprivate lazy var titlePlace: UILabel = {
+    lazy var titlePlace: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.font = .boldSystemFont(ofSize: 17.0)
         label.attributedText = self.viewModel.title
+        label.isUserInteractionEnabled = true
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(openFullTitle))
+        label.addGestureRecognizer(tap)
         return label
     }()
     
@@ -208,7 +212,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
             make.bottom.equalTo(lineView)
             make.right.equalTo(titlePlace)
             make.left.equalTo(ratingLabel)
-            make.top.equalTo(ratingLabel.snp.bottom).offset(10.0)
+            make.top.equalTo(titlePlace.snp.bottom).offset(10.0)
         }
 
         lineView.snp.remakeConstraints { (make) in
@@ -316,6 +320,15 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         notificationTokenFavorites?.invalidate()
     }
     
+    @objc func openFullTitle() {
+        let router = Router()
+        let popoverLabelController = PopoverLabelViewController(title: viewModel.place.about ?? "")
+        if let height = viewModel.title?.string.height(font: .systemFont(ofSize: 16.0),
+                                                       width: titlePlace.bounds.width), height > titlePlace.bounds.height {
+            router.openPopoverLabel(fromController: self, toController: popoverLabelController, height: height)
+        }
+    }
+    
     @objc func changeNotify() {
         let allow = favoritesViewModel.allowNotify(place: viewModel.place)
     
@@ -338,8 +351,18 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
     
     @objc func sharePlace() {
         UIImpactFeedbackGenerator().impactOccurred()
-        if let image = imageHeader.image {
-            let shareController = UIActivityViewController(activityItems: [image, viewModel.place.name ?? ""],
+        if let image = imageHeader.image, let name = viewModel.place.name {
+            var text = name
+            
+            if let about = viewModel.place.about {
+                text += "\n\n" + about
+            }
+            
+            if let url = viewModel.place.website {
+                text += "\n\n" + url
+            }
+            
+            let shareController = UIActivityViewController(activityItems: [image, text],
                                                            applicationActivities: nil)
             present(shareController, animated: true, completion: nil)
         }

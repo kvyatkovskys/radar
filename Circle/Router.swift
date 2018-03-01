@@ -146,12 +146,12 @@ struct Router {
     /// open filter controller
     fileprivate func openFilterPlaces(fromController: PlacesViewController, toController: UIViewController) {
         let navigation = UINavigationController(rootViewController: toController)
-        navigation.modalPresentationStyle = UIModalPresentationStyle.popover
+        navigation.modalPresentationStyle = .popover
         navigation.isNavigationBarHidden = true
         let popover = navigation.popoverPresentationController
         popover?.delegate = fromController
         popover?.barButtonItem = fromController.rightBarButton
-        popover?.permittedArrowDirections = UIPopoverArrowDirection.any
+        popover?.permittedArrowDirections = .any
         
         fromController.present(navigation, animated: true, completion: nil)
     }
@@ -162,5 +162,23 @@ struct Router {
         toController.view.bounds = fromController.view.bounds
         fromController.view.addSubview(toController.view)
         toController.didMove(toParentViewController: fromController)
+    }
+    
+    func openPopoverLabel(fromController: DetailPlaceViewController, toController: UIViewController, height: CGFloat) {
+        let navigation = UINavigationController(rootViewController: toController)
+        navigation.modalPresentationStyle = .popover
+        navigation.isNavigationBarHidden = true
+        let popover = navigation.popoverPresentationController
+        popover?.delegate = fromController
+        popover?.permittedArrowDirections = .up
+        
+        var rect = fromController.titlePlace.bounds
+        rect.size.height = rect.height - 20.0
+        
+        popover?.sourceRect = rect
+        popover?.sourceView = fromController.titlePlace
+        toController.preferredContentSize = CGSize(width: fromController.view.frame.width, height: height)
+        
+        fromController.present(navigation, animated: true, completion: nil)
     }
 }

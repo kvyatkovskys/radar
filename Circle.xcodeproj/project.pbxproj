@@ -37,6 +37,7 @@
 		8B2940B02018AE94004CB9AD /* ListPaymentsCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2940AF2018AE94004CB9AD /* ListPaymentsCollectionDataSource.swift */; };
 		8B2940B22018B160004CB9AD /* DetailPlaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2940B12018B160004CB9AD /* DetailPlaceModel.swift */; };
 		8B2A3F252030952400D5856E /* DetailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2A3F242030952400D5856E /* DetailService.swift */; };
+		8B2D532C20474D0B0002598C /* PopoverLabelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D532B20474D0B0002598C /* PopoverLabelViewController.swift */; };
 		8B2D741120387A520022BDCC /* KSTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D741020387A520022BDCC /* KSTableView.swift */; };
 		8B3398CC200F61E6002966ED /* DetailPlaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3398CB200F61E6002966ED /* DetailPlaceViewModel.swift */; };
 		8B3398CE200F66B5002966ED /* DetailDescriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3398CD200F66B5002966ED /* DetailDescriptionTableViewCell.swift */; };
@@ -156,6 +157,7 @@
 		8B2940AF2018AE94004CB9AD /* ListPaymentsCollectionDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListPaymentsCollectionDataSource.swift; sourceTree = "<group>"; };
 		8B2940B12018B160004CB9AD /* DetailPlaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPlaceModel.swift; sourceTree = "<group>"; };
 		8B2A3F242030952400D5856E /* DetailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailService.swift; sourceTree = "<group>"; };
+		8B2D532B20474D0B0002598C /* PopoverLabelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverLabelViewController.swift; sourceTree = "<group>"; };
 		8B2D741020387A520022BDCC /* KSTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KSTableView.swift; sourceTree = "<group>"; };
 		8B3398CB200F61E6002966ED /* DetailPlaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPlaceViewModel.swift; sourceTree = "<group>"; };
 		8B3398CD200F66B5002966ED /* DetailDescriptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailDescriptionTableViewCell.swift; sourceTree = "<group>"; };
@@ -455,6 +457,7 @@
 			isa = PBXGroup;
 			children = (
 				8B105CBA202B655A006A5BBC /* KSNotifications.swift */,
+				8B2D532B20474D0B0002598C /* PopoverLabelViewController.swift */,
 				8B009D352042B0F6005D3960 /* ShortcutItems.swift */,
 				8B2D741020387A520022BDCC /* KSTableView.swift */,
 				8B44C37E1FEFE195003C0754 /* QuickAlertController.swift */,
@@ -972,6 +975,7 @@
 				8BE208A31FFD25750048D690 /* FilterPlacesModel.swift in Sources */,
 				8B41154B1FDB2CEF00C6614C /* AppDelegate.swift in Sources */,
 				8B82C39E20150BE600E0CA89 /* WorkDaysCollectionViewCell.swift in Sources */,
+				8B2D532C20474D0B0002598C /* PopoverLabelViewController.swift in Sources */,
 				8BC3506E201DDDA200BB375B /* ListRServiceCollectionViewCell.swift in Sources */,
 				8B105CBB202B655A006A5BBC /* KSNotifications.swift in Sources */,
 				8B18FE0D200A1F1800E637C7 /* MapViewController.swift in Sources */,

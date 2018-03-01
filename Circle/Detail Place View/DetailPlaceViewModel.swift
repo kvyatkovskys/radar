@@ -19,7 +19,7 @@ struct DetailPlaceViewModel {
     let title: NSMutableAttributedString?
     let rating: NSMutableAttributedString?
     var dataSource: [DetailSectionObjects]
-    
+        
     fileprivate let colorCategory: UIColor?
     fileprivate let favoritesService: FavoritesService
     fileprivate let detailService = DetailService()
