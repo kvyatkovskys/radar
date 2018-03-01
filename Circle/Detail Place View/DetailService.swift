@@ -28,4 +28,19 @@ struct DetailService {
             return Disposables.create()
         })
     }
+    
+    func loadPhotos(id: Int) -> Observable<String> {
+        let params: [String: Any] = ["fields": "images,picture.type(large)", "type": "uploaded"]
+        let request = FBSDKGraphRequest(graphPath: "\(id)/photos", parameters: params, httpMethod: "GET")
+        return Observable.create({ (observable) in
+            _ = request?.start(completionHandler: { (_, result, error) in
+                guard error == nil else {
+                    observable.on(.error(error!))
+                    return
+                }
+                print(result)
+            })
+            return Disposables.create()
+        })
+    }
 }

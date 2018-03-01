@@ -314,6 +314,13 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
                     self.indicatorView.hideIndicator()
                 }).disposed(by: disposeBag)
         }
+        
+        viewModel.loadPhotos().asObservable()
+            .subscribe(onNext: { (item) in
+                
+            }, onError: { (error) in
+                print(error)
+            }).disposed(by: disposeBag)
     }
     
     deinit {

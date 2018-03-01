@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <testsuites name='CircleTests.xctest' tests='2' failures='0'>
   <testsuite name='CircleTests.CircleTests' tests='2' failures='0'>
-    <testcase classname='CircleTests.CircleTests' name='testModelDetailPlace' time='1.215'/>
-    <testcase classname='CircleTests.CircleTests' name='testModelPlaces' time='1.089'/>
+    <testcase classname='CircleTests.CircleTests' name='testModelDetailPlace' time='1.842'/>
+    <testcase classname='CircleTests.CircleTests' name='testModelPlaces' time='1.258'/>
   </testsuite>
 </testsuites>

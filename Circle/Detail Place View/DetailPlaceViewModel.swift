@@ -40,6 +40,13 @@ struct DetailPlaceViewModel {
         self.dataSource = DetailPlaceViewModel.updateValue(place: place, color: colorCategory)
     }
     
+    func loadPhotos() -> Observable<String> {
+        return detailService.loadPhotos(id: place.id).asObservable()
+            .flatMap { (item) -> Observable<String> in
+                return Observable.just(item)
+        }
+    }
+    
     func getPictureProfile() -> Observable<URL?> {
         return detailService.loadPicture(id: place.id).asObservable()
             .flatMap { (url) -> Observable<URL?> in
