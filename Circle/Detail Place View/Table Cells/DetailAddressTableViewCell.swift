@@ -22,7 +22,8 @@ final class DetailAddressTableViewCell: UITableViewCell {
     
     fileprivate lazy var mapButton: UIButton = {
         let button = UIButton()
-        button.setTitle(" Map", for: .normal)
+        button.setTitle(NSLocalizedString("map", comment: "The title for button that open map"),
+                        for: .normal)
         button.setImage(UIImage(named: "ic_map")?.withRenderingMode(.alwaysTemplate), for: .normal)
         button.tintColor = UIColor.mainColor
         button.titleLabel?.font = .boldSystemFont(ofSize: 15.0)

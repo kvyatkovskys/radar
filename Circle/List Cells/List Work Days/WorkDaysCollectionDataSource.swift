@@ -33,7 +33,7 @@ extension WorkDaysCollectionDataSource: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let day = workDays.opened[indexPath.row].day.rawValue
+        let day = workDays.opened[indexPath.row].day.title
         let hours = workDays.opened[indexPath.row].hour + " - " + workDays.closed[indexPath.row].hour
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WorkDaysCollectionViewCell.cellIdentifier,
                                                       for: indexPath) as? WorkDaysCollectionViewCell ?? WorkDaysCollectionViewCell()

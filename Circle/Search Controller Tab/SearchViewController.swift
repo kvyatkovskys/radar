@@ -17,7 +17,7 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
     
     fileprivate var notificationToken: NotificationToken?
     fileprivate var dataSource: [Places] = []
-    fileprivate var dataSourceQueries: [String] = ["Try to find something!"]
+    fileprivate var dataSourceQueries: [String] = [NSLocalizedString("tryToFind", comment: "Label when queries empty")]
     fileprivate var viewType = ViewType.search
     fileprivate var search: Observable<Places> = Observable.just(Places([], [], [], nil))
     fileprivate let disposeBag = DisposeBag()
@@ -30,7 +30,7 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
     fileprivate lazy var searchController: UISearchController = {
         let controller = UISearchController(searchResultsController: resultController)
         controller.delegate = self
-        controller.searchBar.placeholder = "Title"
+        controller.searchBar.placeholder = NSLocalizedString("title", comment: "Title for label")
         controller.searchBar.delegate = self
         controller.searchBar.searchBarStyle = .default
         controller.searchBar.scopeButtonTitles = [SearchDistance.oneThousand.title,
@@ -168,15 +168,19 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
                 case .initial:
                     self.dataSourceQueries[1...] = self.searchViewModel.searchQueries[0...]
                     if self.searchViewModel.searchQueries.isEmpty {
-                        self.dataSourceQueries.replaceSubrange(0..., with: ["Try to find something!"])
+                        self.dataSourceQueries.replaceSubrange(0..., with: [NSLocalizedString("tryToFind",
+                                                                                              comment: "Label when queries empty")])
                     }
                     self.tableView.reloadData()
                 case .update:
                     self.dataSourceQueries[1...] = self.searchViewModel.searchQueries[0...]
                     if self.searchViewModel.searchQueries.isEmpty {
-                        self.dataSourceQueries.replaceSubrange(0..., with: ["Try to find something!"])
+                        self.dataSourceQueries.replaceSubrange(0..., with: [NSLocalizedString("tryToFind",
+                                                                                              comment: "Label when queries empty")])
                     } else {
-                        self.dataSourceQueries.replaceSubrange(0..., with: ["You recently searched for"] + self.searchViewModel.searchQueries)
+                        let localized = NSLocalizedString("recentlySearched", comment: "Label when queries not empty")
+                        self.dataSourceQueries.replaceSubrange(0...,
+                                                               with: [localized] + self.searchViewModel.searchQueries)
                     }
                     self.tableView.reloadData()
                 case .error(let error):
@@ -195,7 +199,7 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
     @objc func closeSearchQueries() {
         dataSource = []
         navigationItem.leftBarButtonItem = nil
-        navigationItem.title = "Find a place"
+        navigationItem.title = NSLocalizedString("findPlace", comment: "Title for navigation bar in search tab")
         viewType = .search
         tableView.separatorColor = .lightGray
         tableView.reloadData()

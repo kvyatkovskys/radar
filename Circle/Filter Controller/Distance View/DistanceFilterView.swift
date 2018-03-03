@@ -48,7 +48,7 @@ final class DistanceFilterView: UIView {
     
     fileprivate lazy var titleMinDistance: UILabel = {
         let label = UILabel()
-        label.text = "Find what's nearby"
+        label.text = NSLocalizedString("minDistance", comment: "Text for filter of minimal distance")
         label.textAlignment = .left
         label.font = .systemFont(ofSize: 16.0)
         return label
@@ -106,7 +106,13 @@ final class DistanceFilterView: UIView {
         setConstraints()
         
         slider.rx.value
-            .map({ "\(Int($0)) meters" })
+            .map({ value in
+                let valueConverted = Int(value).formattedWithSeparator
+                let localized = String.localizedStringWithFormat(
+                    NSLocalizedString("%@ meters", comment: "Label for changing the values of the slider"), valueConverted
+                )
+                return localized
+            })
             .distinctUntilChanged()
             .bind(to: titleDistance.rx.text)
             .disposed(by: disposeBag)

@@ -89,7 +89,7 @@ struct DetailPlaceViewModel {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat  = "EEEE"
             let dayInWeek = dateFormatter.string(from: date)
-            let index = openedDays.index(where: { $0.day.rawValue == dayInWeek })
+            let index = openedDays.index(where: { $0.day.title == dayInWeek })
             
             let type = TypeDetailCell.workDays((closed: closedDays,
                                                 opened: openedDays,

@@ -117,11 +117,25 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
     
     fileprivate lazy var favoriteButton: UIButton = {
         let button = UIButton()
-        let image = UIImage(named: favoriteNotify.addFavorites == true ? "ic_favorite" : "ic_favorite_border")?.withRenderingMode(.alwaysTemplate)
+        
+        let image: UIImage
+        if favoriteNotify.addFavorites {
+            image = UIImage(named: "ic_favorite")!.withRenderingMode(.alwaysTemplate)
+        } else {
+            image = UIImage(named: "ic_favorite_border")!.withRenderingMode(.alwaysTemplate)
+        }
+        
+        let localized: String
+        if favoriteNotify.addFavorites {
+            localized = NSLocalizedString("remove", comment: "The title for button that removed from favorite")
+        } else {
+            localized = NSLocalizedString("add", comment: "The title for button that added to favorite")
+        }
+
         button.setImage(image, for: .normal)
         button.tintColor = UIColor.mainColor
         button.backgroundColor = UIColor.shadowGray
-        button.setTitle(favoriteNotify.addFavorites == true ? " Remove" : " Add", for: .normal)
+        button.setTitle(localized, for: .normal)
         button.setTitleColor(UIColor.mainColor, for: .normal)
         button.titleLabel?.font = .boldSystemFont(ofSize: 15.0)
         button.layer.cornerRadius = 5.0
@@ -135,7 +149,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         button.setImage(UIImage(named: "ic_share")?.withRenderingMode(.alwaysTemplate), for: .normal)
         button.tintColor = UIColor.mainColor
         button.backgroundColor = UIColor.shadowGray
-        button.setTitle(" Share", for: .normal)
+        button.setTitle("Share", for: .normal)
         button.setTitleColor(UIColor.mainColor, for: .normal)
         button.titleLabel?.font = .boldSystemFont(ofSize: 15.0)
         button.layer.cornerRadius = 5.0
@@ -274,12 +288,16 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
                 switch changes {
                 case .update(let favorites, _, _, _):
                     guard favorites.contains(where: { $0.id == self.viewModel.place.id }) else {
-                        self.favoriteButton.setTitle(" Add", for: .normal)
+                        self.favoriteButton.setTitle(NSLocalizedString("add",
+                                                                       comment: "The title for button that added to favorite"),
+                                                     for: .normal)
                         self.favoriteButton.setImage(UIImage(named: "ic_favorite_border")?.withRenderingMode(.alwaysTemplate), for: .normal)
                         self.navigationItem.rightBarButtonItem = nil
                         return
                     }
-                    self.favoriteButton.setTitle(" Remove", for: .normal)
+                    self.favoriteButton.setTitle(NSLocalizedString("remove",
+                                                                   comment: "The title for button that removed from favorite"),
+                                                 for: .normal)
                     self.favoriteButton.setImage(UIImage(named: "ic_favorite")?.withRenderingMode(.alwaysTemplate), for: .normal)
                     self.navigationItem.rightBarButtonItem = self.rightBarButton()
                 case .error(let error):

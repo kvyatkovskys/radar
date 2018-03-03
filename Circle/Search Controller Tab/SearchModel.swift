@@ -14,10 +14,10 @@ enum SearchDistance: Int {
     
     var title: String {
         switch self {
-        case .oneThousand: return "1000 m"
-        case .twoThousand: return "2500 m"
-        case .threeThousand: return "3500 m"
-        case .fiveThousand: return "5000 m"
+        case .oneThousand: return NSLocalizedString("1000", comment: "First label section in search bar")
+        case .twoThousand: return NSLocalizedString("2500", comment: "Second label section in search bar")
+        case .threeThousand: return NSLocalizedString("3500", comment: "Third label section in search bar")
+        case .fiveThousand: return NSLocalizedString("5000", comment: "Four label section in search bar")
         }
     }
     

@@ -49,7 +49,7 @@ final class SearchHistoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = "Search History"
+        navigationItem.title = NSLocalizedString("searchHistory", comment: "The title for navigatio bar with a search of history")
         navigationItem.leftBarButtonItem = leftBarButton
         
         view.addSubview(tableView)

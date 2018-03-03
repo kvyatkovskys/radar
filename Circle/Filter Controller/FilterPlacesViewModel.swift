@@ -20,7 +20,8 @@ enum TypeFilter: Int {
 }
 
 struct FilterViewModel {
-    let items: [FilterModel] = ["Distance", "Categories"].map({ FilterModel(title: $0) })
+    let items: [FilterModel] = [NSLocalizedString("distance", comment: "Title for filter of distance"),
+                                NSLocalizedString("categories", comment: "Title for filter of category")].map({ FilterModel(title: $0) })
     var chooseFilter: (() -> Void)?
 }
 

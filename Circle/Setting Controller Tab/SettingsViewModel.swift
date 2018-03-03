@@ -65,15 +65,19 @@ struct SettingsViewModel {
     var openListFavoritesNotice: (() -> Void) = { }
     
     init() {
-        let settingsApp: [SettingRowType] = [.openSettings(title: "Open settings phone",
+        let settingsApp: [SettingRowType] = [.openSettings(title: NSLocalizedString("openSettings",
+                                                                                    comment: "The title for button that open settings"),
                                                            image: UIImage(named: "ic_settings_app")!.withRenderingMode(.alwaysTemplate),
                                                            color: .standardGray)]
         
-        let searchObjects: [SettingRowType] = [.showSearchHistory(title: "Show search history",
+        let searchObjects: [SettingRowType] = [.showSearchHistory(title: NSLocalizedString("showHistory",
+                                                                                           comment: "Thet title for button that show history"),
                                                 image: UIImage(named: "ic_history")!.withRenderingMode(.alwaysTemplate),
                                                 color: .standardGray),
-                             .clearHistorySearch(title: "Clear search history",
-                                                 description: "Are you sure you to clear search history?",
+                             .clearHistorySearch(title: NSLocalizedString("clearHistory",
+                                                                          comment: "The title for button that clear history"),
+                                                 description: NSLocalizedString("alertClearHistory",
+                                                                                comment: "Text for clear history alert"),
                                                  image: UIImage(named: "ic_delete_forever")!.withRenderingMode(.alwaysTemplate),
                                                  color: .deleted)]
         
@@ -88,16 +92,20 @@ struct SettingsViewModel {
             print(error)
         }
         
-        let favoritesObjects: [SettingRowType] = [.listFavoritesNoticy(title: "List of places with notifications",
+        let favoritesObjects: [SettingRowType] = [.listFavoritesNoticy(title: NSLocalizedString("listNotice",
+                                                                                                comment: "The title for button that list notice"),
                                                                        description: "",
                                                                        image: UIImage(named: "ic_list")!.withRenderingMode(.alwaysTemplate),
                                                                        color: .standardGray),
-                                                  .favoriteNotify(title: "Disable all notifications",
+                                                  .favoriteNotify(title: NSLocalizedString("disableNotice",
+                                                                                           comment: "The title for the button that disable notice"),
                                                                   enabled: disabledNotice,
                                                                   image: UIImage(named: "ic_notifications")!.withRenderingMode(.alwaysTemplate),
                                                                   color: .notify),
-                                                  .clearFavorites(title: "Clear favorites",
-                                                                  description: "Are you sure you want to clear all items in your favorites?",
+                                                  .clearFavorites(title: NSLocalizedString("clearFavorites",
+                                                                                           comment: "The title for the button that clear favorates"),
+                                                                  description: NSLocalizedString("alertClearFavorites",
+                                                                                                 comment: "Text for clear favorites alert"),
                                                                   image: UIImage(named: "ic_delete_forever")!.withRenderingMode(.alwaysTemplate),
                                                                   color: .deleted)]
         

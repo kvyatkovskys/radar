@@ -53,8 +53,10 @@ struct Router {
                                                                           viewModel,
                                                                           locationService))
         let locationImage = UIImage(named: "ic_my_location")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
-        placesViewController.navigationItem.title = "Around here"
-        placesViewController.tabBarItem = UITabBarItem(title: "My location", image: locationImage, tag: 0)
+        placesViewController.navigationItem.title = NSLocalizedString("aroundHere", comment: "Title for navigation bar in main tab")
+        placesViewController.tabBarItem = UITabBarItem(title: NSLocalizedString("mylocation", comment: "Title for main tab"),
+                                                       image: locationImage,
+                                                       tag: 0)
         placesViewController.navigationController?.navigationBar.isTranslucent = true
         
         // Search Controller
@@ -67,8 +69,10 @@ struct Router {
         
         searchViewController = SearchViewController(SeacrhPlaceDependecies(searchViewModel, optionKingfisher))
         let searchImage = UIImage(named: "ic_search")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
-        searchViewController.navigationItem.title = "Find a place"
-        searchViewController.tabBarItem = UITabBarItem(title: "Search", image: searchImage, tag: 1)
+        searchViewController.navigationItem.title = NSLocalizedString("findPlace", comment: "Title for navigation bar in search tab")
+        searchViewController.tabBarItem = UITabBarItem(title: NSLocalizedString("search", comment: "Title for search tab"),
+                                                       image: searchImage,
+                                                       tag: 1)
         searchViewController.navigationController?.navigationBar.isTranslucent = true
         
         // Favorites Controller
@@ -81,8 +85,11 @@ struct Router {
         
         favoritesViewController = FavoritesViewController(FavoritesDependencies(favoritesViewModel, optionKingfisher))
         let favoriteImage = UIImage(named: "ic_favorite")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
-        favoritesViewController.navigationItem.title = "Favorites"
-        favoritesViewController.tabBarItem = UITabBarItem(title: "Favorites", image: favoriteImage, tag: 2)
+        favoritesViewController.navigationItem.title = NSLocalizedString("favorites",
+                                                                         comment: "Title for navigation bar in favorites tab")
+        favoritesViewController.tabBarItem = UITabBarItem(title: NSLocalizedString("favorites", comment: "Title for favorites tab"),
+                                                          image: favoriteImage,
+                                                          tag: 2)
         favoritesViewController.navigationController?.navigationBar.isTranslucent = true
         
         // Setting Controller
@@ -98,8 +105,11 @@ struct Router {
         
         settingsController = SettingsViewController(SettingsViewDependecies(settingViewModel))
         let settingsImage = UIImage(named: "ic_settings")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
-        settingsController.navigationItem.title = "Application settings"
-        settingsController.tabBarItem = UITabBarItem(title: "Settings", image: settingsImage, tag: 3)
+        settingsController.navigationItem.title = NSLocalizedString("appSettings",
+                                                                    comment: "Title for navigation bar in settings tab")
+        settingsController.tabBarItem = UITabBarItem(title: NSLocalizedString("settings", comment: "Title for settings tab"),
+                                                     image: settingsImage,
+                                                     tag: 3)
         settingsController.navigationController?.navigationBar.isTranslucent = true
         
         // Tab View Controller

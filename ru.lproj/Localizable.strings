@@ -1,0 +1,15 @@
+/* 
+  Localizable.strings
+  Circle
+
+  Created by Kviatkovskii on 03/03/2018.
+  Copyright © 2018 Kviatkovskii. All rights reserved.
+*/
+
+"aroundHere" = "Вокруг вас";
+"mylocation" = "Моя позиция";
+"findPlace" = "Найдите место";
+"search" = "Поиск";
+"favorites" = "Избранное";
+"appSettings" = "Настройки приложения";
+"settings" = "Настройки";

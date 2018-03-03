@@ -9,8 +9,8 @@
 import UIKit
 
 struct TitleButtonAlert {
-    static let buttonOK = "Done"
-    static let buttonCancel = "Cancel"
+    static let buttonOK = NSLocalizedString("done", comment: "Title for done button")
+    static let buttonCancel = NSLocalizedString("cancel", comment: "Title for cancel button")
 }
 
 extension UIViewController {
