@@ -398,6 +398,7 @@ extension DetailPlaceViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: DetailImagesTableViewCell.cellIdentifier,
                                                      for: indexPath) as? DetailImagesTableViewCell ?? DetailImagesTableViewCell()
             
+            cell.controller = self
             cell.pageImages = PageImages(images, previews, nextImages, kingfisherOptions)
             return cell
         case .description(let text, _):

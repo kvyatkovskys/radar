@@ -11,6 +11,7 @@ def pods
  pod 'FBSDKLoginKit'
  pod 'FBSDKShareKit'
  pod 'FBSDKPlacesKit'
+ pod 'Lightbox'
 end
 
 target 'Circle' do

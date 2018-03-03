@@ -14,7 +14,7 @@ struct DetailSectionObjects {
     var sectionObjects: [TypeDetailCell]
 }
 
-struct DetailPlaceViewModel {
+struct DetailPlaceViewModel {    
     var place: PlaceModel
     let title: NSMutableAttributedString?
     let rating: NSMutableAttributedString?

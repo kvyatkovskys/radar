@@ -5,15 +5,22 @@ PODS:
   - Bolts/AppLinks (1.9.0):
     - Bolts/Tasks
   - Bolts/Tasks (1.9.0)
-  - FBSDKCoreKit (4.30.0):
+  - Cache (4.1.2)
+  - FBSDKCoreKit (4.31.0):
     - Bolts (~> 1.7)
-  - FBSDKLoginKit (4.30.0):
+  - FBSDKLoginKit (4.31.0):
     - FBSDKCoreKit
-  - FBSDKPlacesKit (4.30.0):
+  - FBSDKPlacesKit (4.31.0):
     - FBSDKCoreKit
-  - FBSDKShareKit (4.30.0):
-    - FBSDKCoreKit (~> 4.30.0)
-  - Kingfisher (4.6.2)
+  - FBSDKShareKit (4.31.0):
+    - FBSDKCoreKit (~> 4.31.0)
+  - Hue (3.0.1)
+  - Imaginary (3.0.3):
+    - Cache (~> 4.0)
+  - Kingfisher (4.6.3)
+  - Lightbox (2.1.2):
+    - Hue (~> 3.0)
+    - Imaginary (~> 3.0)
   - Realm (3.1.1):
     - Realm/Headers (= 3.1.1)
   - Realm/Headers (3.1.1)
@@ -31,6 +38,7 @@ DEPENDENCIES:
   - FBSDKPlacesKit
   - FBSDKShareKit
   - Kingfisher
+  - Lightbox
   - RealmSwift
   - RxCocoa
   - RxSwift
@@ -39,11 +47,15 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
-  FBSDKCoreKit: 7c4bba2877781a131ab5d54c0a78c405d4307b62
-  FBSDKLoginKit: fe7a7e82373dc5daad92e1623219e86224ab1fb1
-  FBSDKPlacesKit: 88f3da3d7b608acfbd3d9db6121c561a955639f2
-  FBSDKShareKit: a9427574b51bde4f437262c3f118c4ccfddeef6c
-  Kingfisher: 55b9c395bf8d3949676ad3861111923990ab68cf
+  Cache: bd0233fc688b5e83a27bcd87807db7e6f23adcc5
+  FBSDKCoreKit: 54db4c581123745d25a9f7c1608020b3aeabd118
+  FBSDKLoginKit: 95a252ddffd6919c0f132a02292f0824616d8709
+  FBSDKPlacesKit: a6febe1055a500ba89d679903f393f162e94bf1c
+  FBSDKShareKit: 7c3a2e6bb5be15676aebe256444afb18c5d238b3
+  Hue: 93e852fa6211ab35922ad8c293f51c43d6c79eb2
+  Imaginary: 9b45836a5af881f452a86e0a1215772ae4712d00
+  Kingfisher: 98e6d5b5e807645743e8ed5ececd25d688d38452
+  Lightbox: 2dc267df8be2285bc7724cb11cbbf4aaaf59dced
   Realm: 42d1c38a5b1bbcc828b48a7ce702cb86fc68adf4
   RealmSwift: d31937ca6a6ee54acde64ec839523c0a3c04924b
   RxCocoa: d88ba0f1f6abf040011a9eb4b539324fc426843a
@@ -51,6 +63,6 @@ SPEC CHECKSUMS:
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   Unbox: 30e437e6151a6de16139375fd4e8dd9a664cfbf7
 
-PODFILE CHECKSUM: cb919c7e3e80061e5d0d7d76b2db49e76f0486cf
+PODFILE CHECKSUM: dde250c26c4c26e7a9e433ce5ab1db7d4712e8bd
 
 COCOAPODS: 1.4.0

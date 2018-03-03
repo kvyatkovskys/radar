@@ -13,7 +13,7 @@ typealias PageImages = (images: [Images], previews: [URL?], nextImages: String, 
 
 final class DetailImagesTableViewCell: UITableViewCell {
     static let cellIdentifier = "DetailImagesTableViewCell"
-    
+        
     fileprivate lazy var listImagesViewController: ListImagesViewController = {
         let list = ListImagesViewController()
         list.view.frame = contentView.frame
@@ -21,9 +21,11 @@ final class DetailImagesTableViewCell: UITableViewCell {
         return list
     }()
     
+    var controller: DetailPlaceViewController?
+    
     var pageImages: PageImages? {
         didSet {
-            listImagesViewController.reloadedData(pageImages: pageImages)
+            listImagesViewController.reloadedData(pageImages: pageImages, controller: controller)
         }
     }
     

@@ -8,9 +8,11 @@
 
 import UIKit
 import Kingfisher
+import Lightbox
 
 final class ListImagesViewController: UIViewController {
     var pageImages: PageImages?
+    var controller: DetailPlaceViewController?
     
     fileprivate lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -43,8 +45,9 @@ final class ListImagesViewController: UIViewController {
         collectionView.register(ListImagesCollectionViewCell.self, forCellWithReuseIdentifier: ListImagesCollectionViewCell.cellIdentifier)
     }
     
-    func reloadedData(pageImages: PageImages?) {
+    func reloadedData(pageImages: PageImages?, controller: DetailPlaceViewController?) {
         self.pageImages = pageImages
+        self.controller = controller
         collectionView.reloadData()
     }
 }
@@ -73,5 +76,10 @@ extension ListImagesViewController: UICollectionViewDataSource {
 }
 
 extension ListImagesViewController: UICollectionViewDelegate {
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let lightbox = LightboxController(images: pageImages?.images.map({ LightboxImage(imageURL: URL(string: $0.source)!) }) ?? [],
+                                          startIndex: indexPath.row)
+        lightbox.dynamicBackground = true
+        controller?.present(lightbox, animated: true, completion: nil)
+    }
 }
