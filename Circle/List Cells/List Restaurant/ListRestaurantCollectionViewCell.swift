@@ -1,5 +1,5 @@
 //
-//  ListRServiceCollectionViewCell.swift
+//  ListRestaurantCollectionViewCell.swift
 //  Circle
 //
 //  Created by Kviatkovskii on 28/01/2018.
@@ -8,8 +8,8 @@
 
 import UIKit
 
-final class ListRServiceCollectionViewCell: UICollectionViewCell {
-    static let cellIdentifier = "ListRServiceCollectionViewCell"
+final class ListRestaurantCollectionViewCell: UICollectionViewCell {
+    static let cellIdentifier = "ListRestaurantCollectionViewCell"
     
     fileprivate let titleLabel: UILabel = {
         let label = UILabel()
@@ -28,6 +28,12 @@ final class ListRServiceCollectionViewCell: UICollectionViewCell {
             make.center.equalToSuperview()
             make.height.equalTo(25.0)
             make.left.right.equalToSuperview()
+        }
+    }
+    
+    var speciality: RestaurantSpecialityType? {
+        didSet {
+            titleLabel.text = speciality?.title
         }
     }
     

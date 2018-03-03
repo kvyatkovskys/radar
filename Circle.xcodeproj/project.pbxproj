@@ -33,8 +33,8 @@
 		8B18FE12200A8FFA00E637C7 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18FE11200A8FFA00E637C7 /* SettingsViewModel.swift */; };
 		8B18FE14200A994F00E637C7 /* FCButtonLoginTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B18FE13200A994F00E637C7 /* FCButtonLoginTableViewCell.swift */; };
 		8B1A80A91FFADAED0039C39A /* CategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1A80A81FFADAED0039C39A /* CategoryCollectionViewCell.swift */; };
-		8B21F30920187DE90013E11C /* DetailPaymentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B21F30820187DE90013E11C /* DetailPaymentTableViewCell.swift */; };
-		8B2940B02018AE94004CB9AD /* ListPaymentsCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2940AF2018AE94004CB9AD /* ListPaymentsCollectionDataSource.swift */; };
+		8B21F30920187DE90013E11C /* DetailItemsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B21F30820187DE90013E11C /* DetailItemsTableViewCell.swift */; };
+		8B2940B02018AE94004CB9AD /* ListItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2940AF2018AE94004CB9AD /* ListItemsViewController.swift */; };
 		8B2940B22018B160004CB9AD /* DetailPlaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2940B12018B160004CB9AD /* DetailPlaceModel.swift */; };
 		8B2A3F252030952400D5856E /* DetailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2A3F242030952400D5856E /* DetailService.swift */; };
 		8B2D532C20474D0B0002598C /* PopoverLabelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D532B20474D0B0002598C /* PopoverLabelViewController.swift */; };
@@ -79,19 +79,15 @@
 		8B82C3982014C95000E0CA89 /* DetailWorkDaysTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C3972014C95000E0CA89 /* DetailWorkDaysTableViewCell.swift */; };
 		8B82C39A20150AD000E0CA89 /* WorkDaysCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C39920150AD000E0CA89 /* WorkDaysCollectionDataSource.swift */; };
 		8B82C39E20150BE600E0CA89 /* WorkDaysCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C39D20150BE500E0CA89 /* WorkDaysCollectionViewCell.swift */; };
-		8BC3505C201B9B4E00BB375B /* DetailParkingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC3505B201B9B4E00BB375B /* DetailParkingTableViewCell.swift */; };
-		8BC3505E201BA1EB00BB375B /* ListPrakingCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC3505D201BA1EB00BB375B /* ListPrakingCollectionDataSource.swift */; };
-		8BC35060201BB40F00BB375B /* DetailRestaurantServiceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC3505F201BB40F00BB375B /* DetailRestaurantServiceTableViewCell.swift */; };
-		8BC35063201CF22400BB375B /* ListRServicesCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC35062201CF22400BB375B /* ListRServicesCollectionDataSource.swift */; };
+		8BC35060201BB40F00BB375B /* DetailRestaurantTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC3505F201BB40F00BB375B /* DetailRestaurantTableViewCell.swift */; };
+		8BC35063201CF22400BB375B /* ListRestaurantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC35062201CF22400BB375B /* ListRestaurantViewController.swift */; };
 		8BC35066201CF60700BB375B /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC35065201CF60700BB375B /* FavoritesViewController.swift */; };
 		8BC35069201CF64600BB375B /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC35068201CF64600BB375B /* SearchViewController.swift */; };
 		8BC3506C201D13C800BB375B /* ListContactsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC3506B201D13C800BB375B /* ListContactsCollectionViewCell.swift */; };
-		8BC3506E201DDDA200BB375B /* ListRServiceCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC3506D201DDDA200BB375B /* ListRServiceCollectionViewCell.swift */; };
-		8BC35070201E242D00BB375B /* DetailRestaurantSpecialityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC3506F201E242D00BB375B /* DetailRestaurantSpecialityTableViewCell.swift */; };
-		8BC35072201E248600BB375B /* ListRSpecialtiesCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC35071201E248600BB375B /* ListRSpecialtiesCollectionDataSource.swift */; };
-		8BC35074201E250000BB375B /* ListRSpecialityCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC35073201E250000BB375B /* ListRSpecialityCollectionViewCell.swift */; };
-		8BC35076201E298200BB375B /* ListRSpecialtiesCollectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC35075201E298200BB375B /* ListRSpecialtiesCollectionDelegate.swift */; };
-		8BC35079201E2B1B00BB375B /* ListRServicesCollectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC35078201E2B1B00BB375B /* ListRServicesCollectionDelegate.swift */; };
+		8BC3506E201DDDA200BB375B /* ListRestaurantCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC3506D201DDDA200BB375B /* ListRestaurantCollectionViewCell.swift */; };
+		8BDAA391204AA84E002EAE98 /* DetailImagesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDAA390204AA84E002EAE98 /* DetailImagesTableViewCell.swift */; };
+		8BDAA393204AB3A9002EAE98 /* ListImagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDAA392204AB3A9002EAE98 /* ListImagesViewController.swift */; };
+		8BDAA395204AB3C5002EAE98 /* ListImagesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDAA394204AB3C5002EAE98 /* ListImagesCollectionViewCell.swift */; };
 		8BE2089D1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2089C1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift */; };
 		8BE2089F1FFD17470048D690 /* FilterPlacesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2089E1FFD17470048D690 /* FilterPlacesViewController.swift */; };
 		8BE208A11FFD1D300048D690 /* Controller+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE208A01FFD1D300048D690 /* Controller+Extension.swift */; };
@@ -153,8 +149,8 @@
 		8B18FE11200A8FFA00E637C7 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		8B18FE13200A994F00E637C7 /* FCButtonLoginTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FCButtonLoginTableViewCell.swift; sourceTree = "<group>"; };
 		8B1A80A81FFADAED0039C39A /* CategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollectionViewCell.swift; sourceTree = "<group>"; };
-		8B21F30820187DE90013E11C /* DetailPaymentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPaymentTableViewCell.swift; sourceTree = "<group>"; };
-		8B2940AF2018AE94004CB9AD /* ListPaymentsCollectionDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListPaymentsCollectionDataSource.swift; sourceTree = "<group>"; };
+		8B21F30820187DE90013E11C /* DetailItemsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailItemsTableViewCell.swift; sourceTree = "<group>"; };
+		8B2940AF2018AE94004CB9AD /* ListItemsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemsViewController.swift; sourceTree = "<group>"; };
 		8B2940B12018B160004CB9AD /* DetailPlaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPlaceModel.swift; sourceTree = "<group>"; };
 		8B2A3F242030952400D5856E /* DetailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailService.swift; sourceTree = "<group>"; };
 		8B2D532B20474D0B0002598C /* PopoverLabelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverLabelViewController.swift; sourceTree = "<group>"; };
@@ -204,19 +200,15 @@
 		8B82C3972014C95000E0CA89 /* DetailWorkDaysTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailWorkDaysTableViewCell.swift; sourceTree = "<group>"; };
 		8B82C39920150AD000E0CA89 /* WorkDaysCollectionDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkDaysCollectionDataSource.swift; sourceTree = "<group>"; };
 		8B82C39D20150BE500E0CA89 /* WorkDaysCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkDaysCollectionViewCell.swift; sourceTree = "<group>"; };
-		8BC3505B201B9B4E00BB375B /* DetailParkingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailParkingTableViewCell.swift; sourceTree = "<group>"; };
-		8BC3505D201BA1EB00BB375B /* ListPrakingCollectionDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListPrakingCollectionDataSource.swift; sourceTree = "<group>"; };
-		8BC3505F201BB40F00BB375B /* DetailRestaurantServiceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailRestaurantServiceTableViewCell.swift; sourceTree = "<group>"; };
-		8BC35062201CF22400BB375B /* ListRServicesCollectionDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRServicesCollectionDataSource.swift; sourceTree = "<group>"; };
+		8BC3505F201BB40F00BB375B /* DetailRestaurantTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailRestaurantTableViewCell.swift; sourceTree = "<group>"; };
+		8BC35062201CF22400BB375B /* ListRestaurantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRestaurantViewController.swift; sourceTree = "<group>"; };
 		8BC35065201CF60700BB375B /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		8BC35068201CF64600BB375B /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		8BC3506B201D13C800BB375B /* ListContactsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListContactsCollectionViewCell.swift; sourceTree = "<group>"; };
-		8BC3506D201DDDA200BB375B /* ListRServiceCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRServiceCollectionViewCell.swift; sourceTree = "<group>"; };
-		8BC3506F201E242D00BB375B /* DetailRestaurantSpecialityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailRestaurantSpecialityTableViewCell.swift; sourceTree = "<group>"; };
-		8BC35071201E248600BB375B /* ListRSpecialtiesCollectionDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRSpecialtiesCollectionDataSource.swift; sourceTree = "<group>"; };
-		8BC35073201E250000BB375B /* ListRSpecialityCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRSpecialityCollectionViewCell.swift; sourceTree = "<group>"; };
-		8BC35075201E298200BB375B /* ListRSpecialtiesCollectionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRSpecialtiesCollectionDelegate.swift; sourceTree = "<group>"; };
-		8BC35078201E2B1B00BB375B /* ListRServicesCollectionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRServicesCollectionDelegate.swift; sourceTree = "<group>"; };
+		8BC3506D201DDDA200BB375B /* ListRestaurantCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRestaurantCollectionViewCell.swift; sourceTree = "<group>"; };
+		8BDAA390204AA84E002EAE98 /* DetailImagesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailImagesTableViewCell.swift; sourceTree = "<group>"; };
+		8BDAA392204AB3A9002EAE98 /* ListImagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListImagesViewController.swift; sourceTree = "<group>"; };
+		8BDAA394204AB3C5002EAE98 /* ListImagesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListImagesCollectionViewCell.swift; sourceTree = "<group>"; };
 		8BE2089C1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		8BE2089E1FFD17470048D690 /* FilterPlacesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterPlacesViewController.swift; sourceTree = "<group>"; };
 		8BE208A01FFD1D300048D690 /* Controller+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Controller+Extension.swift"; sourceTree = "<group>"; };
@@ -280,13 +272,11 @@
 		8B147BD52023C68C00EDA2D4 /* List Cells */ = {
 			isa = PBXGroup;
 			children = (
-				8B82C38F20139C9F00E0CA89 /* ListItemCollectionViewCell.swift */,
-				8BC35077201E2AEA00BB375B /* List Restaurant Specialties */,
-				8BC3505A201A6FD900BB375B /* List Payments */,
-				8BC35064201CF5D400BB375B /* List Restaurant Services */,
-				8BC35061201CF17400BB375B /* List Parkings */,
+				8BC35064201CF5D400BB375B /* List Restaurant */,
+				8BC3505A201A6FD900BB375B /* List Items */,
 				8B82C39120139F2D00E0CA89 /* Contact Buttons */,
 				8B21F30720162F980013E11C /* List Work Days */,
+				8BDAA396204ABDA6002EAE98 /* List Images */,
 			);
 			path = "List Cells";
 			sourceTree = "<group>";
@@ -368,10 +358,9 @@
 				8B3398D1200F77E4002966ED /* DeatilContactsTableViewCell.swift */,
 				8B3398D3200FE5E2002966ED /* DetailAddressTableViewCell.swift */,
 				8B82C3972014C95000E0CA89 /* DetailWorkDaysTableViewCell.swift */,
-				8B21F30820187DE90013E11C /* DetailPaymentTableViewCell.swift */,
-				8BC3505B201B9B4E00BB375B /* DetailParkingTableViewCell.swift */,
-				8BC3505F201BB40F00BB375B /* DetailRestaurantServiceTableViewCell.swift */,
-				8BC3506F201E242D00BB375B /* DetailRestaurantSpecialityTableViewCell.swift */,
+				8B21F30820187DE90013E11C /* DetailItemsTableViewCell.swift */,
+				8BC3505F201BB40F00BB375B /* DetailRestaurantTableViewCell.swift */,
+				8BDAA390204AA84E002EAE98 /* DetailImagesTableViewCell.swift */,
 			);
 			path = "Table Cells";
 			sourceTree = "<group>";
@@ -549,30 +538,22 @@
 			path = "Search History Controller";
 			sourceTree = "<group>";
 		};
-		8BC3505A201A6FD900BB375B /* List Payments */ = {
+		8BC3505A201A6FD900BB375B /* List Items */ = {
 			isa = PBXGroup;
 			children = (
-				8B2940AF2018AE94004CB9AD /* ListPaymentsCollectionDataSource.swift */,
+				8B2940AF2018AE94004CB9AD /* ListItemsViewController.swift */,
+				8B82C38F20139C9F00E0CA89 /* ListItemCollectionViewCell.swift */,
 			);
-			path = "List Payments";
+			path = "List Items";
 			sourceTree = "<group>";
 		};
-		8BC35061201CF17400BB375B /* List Parkings */ = {
+		8BC35064201CF5D400BB375B /* List Restaurant */ = {
 			isa = PBXGroup;
 			children = (
-				8BC3505D201BA1EB00BB375B /* ListPrakingCollectionDataSource.swift */,
+				8BC35062201CF22400BB375B /* ListRestaurantViewController.swift */,
+				8BC3506D201DDDA200BB375B /* ListRestaurantCollectionViewCell.swift */,
 			);
-			path = "List Parkings";
-			sourceTree = "<group>";
-		};
-		8BC35064201CF5D400BB375B /* List Restaurant Services */ = {
-			isa = PBXGroup;
-			children = (
-				8BC35062201CF22400BB375B /* ListRServicesCollectionDataSource.swift */,
-				8BC35078201E2B1B00BB375B /* ListRServicesCollectionDelegate.swift */,
-				8BC3506D201DDDA200BB375B /* ListRServiceCollectionViewCell.swift */,
-			);
-			path = "List Restaurant Services";
+			path = "List Restaurant";
 			sourceTree = "<group>";
 		};
 		8BC35067201CF62100BB375B /* Favorites Controller Tab */ = {
@@ -599,14 +580,13 @@
 			path = "Search Controller Tab";
 			sourceTree = "<group>";
 		};
-		8BC35077201E2AEA00BB375B /* List Restaurant Specialties */ = {
+		8BDAA396204ABDA6002EAE98 /* List Images */ = {
 			isa = PBXGroup;
 			children = (
-				8BC35071201E248600BB375B /* ListRSpecialtiesCollectionDataSource.swift */,
-				8BC35075201E298200BB375B /* ListRSpecialtiesCollectionDelegate.swift */,
-				8BC35073201E250000BB375B /* ListRSpecialityCollectionViewCell.swift */,
+				8BDAA392204AB3A9002EAE98 /* ListImagesViewController.swift */,
+				8BDAA394204AB3C5002EAE98 /* ListImagesCollectionViewCell.swift */,
 			);
-			path = "List Restaurant Specialties";
+			path = "List Images";
 			sourceTree = "<group>";
 		};
 		8BFBF58020051C3C00CE2C8B /* Categories View */ = {
@@ -905,16 +885,13 @@
 				8B3398D2200F77E4002966ED /* DeatilContactsTableViewCell.swift in Sources */,
 				8B82C38620133A0200E0CA89 /* Error+Extension.swift in Sources */,
 				8B82C3932014843E00E0CA89 /* OpenGraphService.swift in Sources */,
-				8BC35074201E250000BB375B /* ListRSpecialityCollectionViewCell.swift in Sources */,
 				8B3398CE200F66B5002966ED /* DetailDescriptionTableViewCell.swift in Sources */,
 				8B1A80A91FFADAED0039C39A /* CategoryCollectionViewCell.swift in Sources */,
 				8B41156D1FDC845B00C6614C /* AppInjections.swift in Sources */,
 				8B82C38A20137A0500E0CA89 /* ListSubCategoriesViewModel.swift in Sources */,
 				8B82C3952014B72500E0CA89 /* FriendsModel.swift in Sources */,
 				8B147BDE2025198200EDA2D4 /* SearchModel.swift in Sources */,
-				8BC3505C201B9B4E00BB375B /* DetailParkingTableViewCell.swift in Sources */,
 				8B2940B22018B160004CB9AD /* DetailPlaceModel.swift in Sources */,
-				8BC35079201E2B1B00BB375B /* ListRServicesCollectionDelegate.swift in Sources */,
 				8B147BDA2024A1AE00EDA2D4 /* ResultSearchViewController.swift in Sources */,
 				8B18FE14200A994F00E637C7 /* FCButtonLoginTableViewCell.swift in Sources */,
 				8B3398D620127670002966ED /* DetailSectionTableViewCell.swift in Sources */,
@@ -924,6 +901,7 @@
 				8BEB4DF31FFAD285008AD1AB /* PlaceSetting.swift in Sources */,
 				8B105CB72028A96B006A5BBC /* SearchHistoryTableViewCell.swift in Sources */,
 				8B82C38C2013999B00E0CA89 /* ListContactsCollectionDataSource.swift in Sources */,
+				8BDAA391204AA84E002EAE98 /* DetailImagesTableViewCell.swift in Sources */,
 				8B6A37A8202DA9A1003CD1A8 /* SettingsModel.swift in Sources */,
 				8B4177191FFD670B002A963A /* DeviceType.swift in Sources */,
 				8B6A37AC202DD484003CD1A8 /* ListFavoritesNoticeViewModel.swift in Sources */,
@@ -941,7 +919,6 @@
 				8B6A37B1202E314B003CD1A8 /* DistanceFilterView.swift in Sources */,
 				8BC35069201CF64600BB375B /* SearchViewController.swift in Sources */,
 				8B18FE082007F8E000E637C7 /* View+Extension.swift in Sources */,
-				8BC35072201E248600BB375B /* ListRSpecialtiesCollectionDataSource.swift in Sources */,
 				8B2A3F252030952400D5856E /* DetailService.swift in Sources */,
 				8B147BD42023B13800EDA2D4 /* FavoritesService.swift in Sources */,
 				8B82C39A20150AD000E0CA89 /* WorkDaysCollectionDataSource.swift in Sources */,
@@ -950,9 +927,9 @@
 				8B41156B1FDC83AF00C6614C /* Router.swift in Sources */,
 				8B41770A1FFD5785002A963A /* ActivityIndicatorView.swift in Sources */,
 				8B82C39020139C9F00E0CA89 /* ListItemCollectionViewCell.swift in Sources */,
-				8B21F30920187DE90013E11C /* DetailPaymentTableViewCell.swift in Sources */,
+				8B21F30920187DE90013E11C /* DetailItemsTableViewCell.swift in Sources */,
 				8B105CB120260560006A5BBC /* SearchQueryTableViewCell.swift in Sources */,
-				8BC35063201CF22400BB375B /* ListRServicesCollectionDataSource.swift in Sources */,
+				8BC35063201CF22400BB375B /* ListRestaurantViewController.swift in Sources */,
 				8BE208A51FFD25CB0048D690 /* FilterPlacesViewModel.swift in Sources */,
 				8B105CB320288EB3006A5BBC /* LocationModel.swift in Sources */,
 				8BFBF57D200517D000CE2C8B /* CategoriesTableViewDelegate.swift in Sources */,
@@ -966,8 +943,7 @@
 				8B147BCF2022FD6E00EDA2D4 /* FavoritesModel.swift in Sources */,
 				8B82C3982014C95000E0CA89 /* DetailWorkDaysTableViewCell.swift in Sources */,
 				8BC3506C201D13C800BB375B /* ListContactsCollectionViewCell.swift in Sources */,
-				8BC35076201E298200BB375B /* ListRSpecialtiesCollectionDelegate.swift in Sources */,
-				8B2940B02018AE94004CB9AD /* ListPaymentsCollectionDataSource.swift in Sources */,
+				8B2940B02018AE94004CB9AD /* ListItemsViewController.swift in Sources */,
 				8B3398CC200F61E6002966ED /* DetailPlaceViewModel.swift in Sources */,
 				8B6D4E211FFBA0DC007904D4 /* PlacesTableViewDelegate.swift in Sources */,
 				8BE2089D1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift in Sources */,
@@ -975,20 +951,20 @@
 				8BE208A31FFD25750048D690 /* FilterPlacesModel.swift in Sources */,
 				8B41154B1FDB2CEF00C6614C /* AppDelegate.swift in Sources */,
 				8B82C39E20150BE600E0CA89 /* WorkDaysCollectionViewCell.swift in Sources */,
+				8BDAA395204AB3C5002EAE98 /* ListImagesCollectionViewCell.swift in Sources */,
 				8B2D532C20474D0B0002598C /* PopoverLabelViewController.swift in Sources */,
-				8BC3506E201DDDA200BB375B /* ListRServiceCollectionViewCell.swift in Sources */,
+				8BC3506E201DDDA200BB375B /* ListRestaurantCollectionViewCell.swift in Sources */,
 				8B105CBB202B655A006A5BBC /* KSNotifications.swift in Sources */,
 				8B18FE0D200A1F1800E637C7 /* MapViewController.swift in Sources */,
 				8B105CB52028A56E006A5BBC /* SearchHistoryViewController.swift in Sources */,
 				8B105CB92028AA5C006A5BBC /* SearchHistoryViewModel.swift in Sources */,
 				8B18FE12200A8FFA00E637C7 /* SettingsViewModel.swift in Sources */,
-				8BC3505E201BA1EB00BB375B /* ListPrakingCollectionDataSource.swift in Sources */,
 				8B147BD12023021600EDA2D4 /* FavoritesViewModel.swift in Sources */,
-				8BC35070201E242D00BB375B /* DetailRestaurantSpecialityTableViewCell.swift in Sources */,
 				8B6A37AA202DD403003CD1A8 /* ListFavoritesNoticeViewController.swift in Sources */,
-				8BC35060201BB40F00BB375B /* DetailRestaurantServiceTableViewCell.swift in Sources */,
+				8BC35060201BB40F00BB375B /* DetailRestaurantTableViewCell.swift in Sources */,
 				8B6A37AE202DD547003CD1A8 /* ListFavoritesNoticeTableViewCell.swift in Sources */,
 				8B009D382042D4A7005D3960 /* InfoSearchTableViewCell.swift in Sources */,
+				8BDAA393204AB3A9002EAE98 /* ListImagesViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -40,10 +40,15 @@ struct DetailPlaceViewModel {
         self.dataSource = DetailPlaceViewModel.updateValue(place: place, color: colorCategory)
     }
     
-    func loadPhotos() -> Observable<String> {
+    mutating func loadPhotos() -> Observable<DetailSectionObjects> {
         return detailService.loadPhotos(id: place.id).asObservable()
-            .flatMap { (item) -> Observable<String> in
-                return Observable.just(item)
+            .filter({ !$0.data.isEmpty })
+            .flatMap { (model) -> Observable<DetailSectionObjects> in
+                let images = model.data.flatMap({ $0.images.first })
+                let previews = model.data.map({ URL(string: $0.images.last?.source ?? "") })
+                let nextImages = model.next
+                let type = TypeDetailCell.images(images, previews, nextImages, 90.0)
+                return Observable.just(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
     }
     

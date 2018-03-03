@@ -170,3 +170,23 @@ struct ListFavoritesNoticeDependecies: HasListFavoritesNoticeViewModel {
         self.listFavoritesNoticeViewModel = listFavoritesNoticeViewModel
     }
 }
+
+protocol HasListDetailDataSourceImages {
+    var images: [Images] { get }
+    var previews: [String] { get }
+    var nextImages: String { get }
+}
+
+struct ListDeatilImagesDependecies: HasListDetailDataSourceImages, HasKingfisher {
+    let kingfisherOptions: KingfisherOptionsInfo
+    let images: [Images]
+    let previews: [String]
+    let nextImages: String
+    
+    init(_ images: [Images], _ previews: [String], _ nextImages: String, _ kingfisherOptions: KingfisherOptionsInfo) {
+        self.images = images
+        self.previews = previews
+        self.nextImages = nextImages
+        self.kingfisherOptions = kingfisherOptions
+    }
+}

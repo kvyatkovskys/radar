@@ -9,11 +9,51 @@
 import Foundation
 import Unbox
 
-struct DetailServiceModel {
+struct DetailImagesModel {
+    let data: [DetailDataImages]
+    let next: String
+}
+
+extension DetailImagesModel: Unboxable {
+    init(unboxer: Unboxer) throws {
+        self.data = try unboxer.unbox(key: "data")
+        self.next = try unboxer.unbox(keyPath: "paging.next")
+    }
+}
+
+struct DetailDataImages {
+    let id: Int
+    let images: [Images]
+    let picture: String
+}
+
+extension DetailDataImages: Unboxable {
+    init(unboxer: Unboxer) throws {
+        self.id = try unboxer.unbox(key: "id")
+        self.images = try unboxer.unbox(key: "images")
+        self.picture = try unboxer.unbox(key: "picture")
+    }
+}
+
+struct Images {
+    let height: Int
+    let width: Int
+    let source: String
+}
+
+extension Images: Unboxable {
+    init(unboxer: Unboxer) throws {
+        self.height = try unboxer.unbox(key: "height")
+        self.width = try unboxer.unbox(key: "width")
+        self.source = try unboxer.unbox(key: "source")
+    }
+}
+
+struct DetailPictureModel {
     let url: URL?
 }
 
-extension DetailServiceModel: Unboxable {
+extension DetailPictureModel: Unboxable {
     init(unboxer: Unboxer) throws {
         let urlString: String? = unboxer.unbox(keyPath: "picture.data.url")
         self.url = urlString != nil ? URL(string: urlString ?? "") : nil
@@ -181,6 +221,7 @@ enum TypeDetailCell {
     case parking([ParkingType?], CGFloat)
     case restaurantService([RestaurantServiceType?], CGFloat, UIColor?)
     case restaurantSpeciality([RestaurantSpecialityType?], CGFloat, UIColor?)
+    case images([Images], [URL?], String, CGFloat)
     
     var title: String {
         switch self {
@@ -192,6 +233,7 @@ enum TypeDetailCell {
         case .parking: return "Parking"
         case .restaurantService: return "Restaurant service"
         case .restaurantSpeciality: return "Restaurant specialties"
+        case .images: return "Photos"
         }
     }
 }

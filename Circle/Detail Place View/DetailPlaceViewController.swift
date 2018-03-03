@@ -296,11 +296,9 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         tableView.register(DeatilContactsTableViewCell.self, forCellReuseIdentifier: DeatilContactsTableViewCell.cellIdentifier)
         tableView.register(DetailAddressTableViewCell.self, forCellReuseIdentifier: DetailAddressTableViewCell.cellIdentifier)
         tableView.register(DetailWorkDaysTableViewCell.self, forCellReuseIdentifier: DetailWorkDaysTableViewCell.cellIdentifier)
-        tableView.register(DetailPaymentTableViewCell.self, forCellReuseIdentifier: DetailPaymentTableViewCell.cellIdentifier)
-        tableView.register(DetailParkingTableViewCell.self, forCellReuseIdentifier: DetailParkingTableViewCell.cellIdentifier)
-        tableView.register(DetailRestaurantServiceTableViewCell.self, forCellReuseIdentifier: DetailRestaurantServiceTableViewCell.cellIdentifier)
-        tableView.register(DetailRestaurantSpecialityTableViewCell.self,
-                           forCellReuseIdentifier: DetailRestaurantSpecialityTableViewCell.cellIdentifier)
+        tableView.register(DetailItemsTableViewCell.self, forCellReuseIdentifier: DetailItemsTableViewCell.cellIdentifier)
+        tableView.register(DetailRestaurantTableViewCell.self, forCellReuseIdentifier: DetailRestaurantTableViewCell.cellIdentifier)
+        tableView.register(DetailImagesTableViewCell.self, forCellReuseIdentifier: DetailImagesTableViewCell.cellIdentifier)
         
         if viewModel.place.fromFavorites {
             indicatorView.showIndicator()
@@ -316,8 +314,9 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         }
         
         viewModel.loadPhotos().asObservable()
-            .subscribe(onNext: { (item) in
-                
+            .subscribe(onNext: { [unowned self] (source) in
+                self.viewModel.dataSource.insert(source, at: 0)
+                self.tableView.reloadData()
             }, onError: { (error) in
                 print(error)
             }).disposed(by: disposeBag)
@@ -395,6 +394,12 @@ extension DetailPlaceViewController: UITableViewDataSource {
         let type = viewModel.dataSource[indexPath.section].sectionObjects[indexPath.row]
         
         switch type {
+        case .images(let images, let previews, let nextImages, _):
+            let cell = tableView.dequeueReusableCell(withIdentifier: DetailImagesTableViewCell.cellIdentifier,
+                                                     for: indexPath) as? DetailImagesTableViewCell ?? DetailImagesTableViewCell()
+            
+            cell.pageImages = PageImages(images, previews, nextImages, kingfisherOptions)
+            return cell
         case .description(let text, _):
             let cell = tableView.dequeueReusableCell(withIdentifier: DetailDescriptionTableViewCell.cellIdentifier,
                                                      for: indexPath) as? DetailDescriptionTableViewCell ?? DetailDescriptionTableViewCell()
@@ -421,26 +426,26 @@ extension DetailPlaceViewController: UITableViewDataSource {
             cell.workDays = workDays
             return cell
         case .payment(let payments, _):
-            let cell = tableView.dequeueReusableCell(withIdentifier: DetailPaymentTableViewCell.cellIdentifier,
-                                                     for: indexPath) as? DetailPaymentTableViewCell ?? DetailPaymentTableViewCell()
+            let cell = tableView.dequeueReusableCell(withIdentifier: DetailItemsTableViewCell.cellIdentifier,
+                                                     for: indexPath) as? DetailItemsTableViewCell ?? DetailItemsTableViewCell()
             
             cell.payments = payments
             return cell
         case .parking(let parkings, _):
-            let cell = tableView.dequeueReusableCell(withIdentifier: DetailParkingTableViewCell.cellIdentifier,
-                                                     for: indexPath) as? DetailParkingTableViewCell ?? DetailParkingTableViewCell()
+            let cell = tableView.dequeueReusableCell(withIdentifier: DetailItemsTableViewCell.cellIdentifier,
+                                                     for: indexPath) as? DetailItemsTableViewCell ?? DetailItemsTableViewCell()
             
             cell.parkings = parkings
             return cell
         case .restaurantService(let services, _, let color):
-            let cell = tableView.dequeueReusableCell(withIdentifier: DetailRestaurantServiceTableViewCell.cellIdentifier,
-                                                     for: indexPath) as? DetailRestaurantServiceTableViewCell ?? DetailRestaurantServiceTableViewCell()
+            let cell = tableView.dequeueReusableCell(withIdentifier: DetailRestaurantTableViewCell.cellIdentifier,
+                                                     for: indexPath) as? DetailRestaurantTableViewCell ?? DetailRestaurantTableViewCell()
             
             cell.restaurantService = RestaurantService(services, color)
             return cell
         case .restaurantSpeciality(let specialties, _, let color):
-            let cell = tableView.dequeueReusableCell(withIdentifier: DetailRestaurantSpecialityTableViewCell.cellIdentifier,
-                                                     for: indexPath) as? DetailRestaurantSpecialityTableViewCell ?? DetailRestaurantSpecialityTableViewCell()
+            let cell = tableView.dequeueReusableCell(withIdentifier: DetailRestaurantTableViewCell.cellIdentifier,
+                                                     for: indexPath) as? DetailRestaurantTableViewCell ?? DetailRestaurantTableViewCell()
             
             cell.restaurantSpeciatity = RestaurantSpeciality(specialties, color)
             return cell
@@ -464,14 +469,15 @@ extension DetailPlaceViewController: UITableViewDelegate {
         let type = viewModel.dataSource[indexPath.section].sectionObjects[indexPath.row]
         
         switch type {
-        case .description(_, let height): return height
-        case .contact(_, let height): return height
-        case .address(_, _, let height): return height
-        case .workDays(_, let height): return height
-        case .payment(_, let height): return height
-        case .parking(_, let height): return height
-        case .restaurantService(_, let height, _): return height
-        case .restaurantSpeciality(_, let height, _): return height
+        case .description(_, let height),
+             .contact(_, let height),
+             .address(_, _, let height),
+             .workDays(_, let height),
+             .payment(_, let height),
+             .parking(_, let height),
+             .restaurantService(_, let height, _),
+             .restaurantSpeciality(_, let height, _),
+             .images(_, _, _, let height): return height
         }
     }
     
