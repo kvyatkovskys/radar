@@ -37,7 +37,8 @@ final class WorkDaysCollectionViewCell: UICollectionViewCell {
         super.updateConstraints()
         
         titleLabel.snp.makeConstraints { (make) in
-            make.top.left.right.equalToSuperview().inset(5.0)
+            make.top.equalToSuperview().offset(5.0)
+            make.left.right.equalToSuperview().inset(2.0)
             make.height.equalTo(15.0)
         }
         

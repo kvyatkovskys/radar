@@ -166,14 +166,16 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
             notificationToken = results.observe { [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
                 case .initial:
-                    self.dataSourceQueries[1...] = self.searchViewModel.searchQueries[0...]
                     if self.searchViewModel.searchQueries.isEmpty {
                         self.dataSourceQueries.replaceSubrange(0..., with: [NSLocalizedString("tryToFind",
                                                                                               comment: "Label when queries empty")])
+                    } else {
+                        let localized = NSLocalizedString("recentlySearched", comment: "Label when queries not empty")
+                        self.dataSourceQueries.replaceSubrange(0...,
+                                                               with: [localized] + self.searchViewModel.searchQueries)
                     }
                     self.tableView.reloadData()
                 case .update:
-                    self.dataSourceQueries[1...] = self.searchViewModel.searchQueries[0...]
                     if self.searchViewModel.searchQueries.isEmpty {
                         self.dataSourceQueries.replaceSubrange(0..., with: [NSLocalizedString("tryToFind",
                                                                                               comment: "Label when queries empty")])

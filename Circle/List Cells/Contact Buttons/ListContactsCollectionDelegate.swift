@@ -23,7 +23,8 @@ extension ListContactsCollectionDelegate: UICollectionViewDelegate, UICollection
         let contact = buttons[indexPath.row]
         switch contact.type {
         case .phone:
-            return CGSize(width: 85.0, height: 40.0)
+            let width = contact.type.title.width(font: .boldSystemFont(ofSize: 14.0), height: 40.0)
+            return CGSize(width: width + 50.0, height: 40.0)
         case .website, .facebook:
             return CGSize(width: 120.0, height: 40.0)
         }

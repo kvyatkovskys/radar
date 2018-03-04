@@ -28,9 +28,9 @@ enum SettingType: String {
     
     var title: String {
         switch self {
-        case .facebook: return "Conntect to Facebook"
-        case .favorites: return "Favorites"
-        case .search: return "Search"
+        case .facebook: return NSLocalizedString("fbConnect", comment: "Title for section header of facebook in settings table")
+        case .favorites: return NSLocalizedString("favorites", comment: "Title for section header of favorites in settings table")
+        case .search: return NSLocalizedString("search", comment: "Title for section header of search in settings table")
         case .app: return ""
         }
     }

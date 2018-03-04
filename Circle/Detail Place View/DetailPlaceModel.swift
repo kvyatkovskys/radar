@@ -74,10 +74,7 @@ enum RestaurantSpecialityType: String {
     }
     
     var width: CGFloat {
-        switch self {
-        case .breakfast, .coffee, .dinner, .drinks, .lunch:
-            return self.rawValue.width(font: .boldSystemFont(ofSize: 12.0), height: 25.0) + 25.0
-        }
+        return self.title.width(font: .boldSystemFont(ofSize: 12.0), height: 25.0) + 25.0
     }
 }
 
@@ -100,10 +97,7 @@ enum RestaurantServiceType: String {
     }
     
     var width: CGFloat {
-        switch self {
-        case .catering, .groups, .waiter, .delivery, .outdoor, .kids, .reserve, .takeout, .walkins, .pickup:
-            return self.rawValue.width(font: .boldSystemFont(ofSize: 12.0), height: 25.0) + 25.0
-        }
+        return self.title.width(font: .boldSystemFont(ofSize: 12.0), height: 25.0) + 25.0
     }
 }
 

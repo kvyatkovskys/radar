@@ -149,7 +149,8 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         button.setImage(UIImage(named: "ic_share")?.withRenderingMode(.alwaysTemplate), for: .normal)
         button.tintColor = UIColor.mainColor
         button.backgroundColor = UIColor.shadowGray
-        button.setTitle("Share", for: .normal)
+        button.setTitle(NSLocalizedString("share", comment: "Title for share button"),
+                        for: .normal)
         button.setTitleColor(UIColor.mainColor, for: .normal)
         button.titleLabel?.font = .boldSystemFont(ofSize: 15.0)
         button.layer.cornerRadius = 5.0
@@ -238,13 +239,13 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         favoriteButton.snp.makeConstraints { (make) in
             make.right.equalTo(headerView.snp.centerX).offset(-20.0)
             make.bottom.equalToSuperview().offset(-15.0)
-            make.size.equalTo(CGSize(width: 120.0, height: 35.0))
+            make.size.equalTo(CGSize(width: 130.0, height: 35.0))
         }
 
         shareButton.snp.makeConstraints { (make) in
             make.left.equalTo(headerView.snp.centerX).offset(20.0)
             make.bottom.equalToSuperview().offset(-15.0)
-            make.size.equalTo(CGSize(width: 120.0, height: 35.0))
+            make.size.equalTo(CGSize(width: 130.0, height: 35.0))
         }
     }
     
@@ -320,23 +321,25 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         
         if viewModel.place.fromFavorites {
             indicatorView.showIndicator()
-            viewModel.getInfoAboutPlace(id: viewModel.place.id).asObservable()
-                .subscribe(onNext: { [unowned self] (dataSource) in
-                    self.viewModel.dataSource = dataSource
-                    self.tableView.reloadData()
-                    self.indicatorView.hideIndicator()
-                }, onError: { (error) in
-                    print(error)
-                    self.indicatorView.hideIndicator()
-                }).disposed(by: disposeBag)
         }
         
-        viewModel.loadPhotos().asObservable()
-            .subscribe(onNext: { [unowned self] (source) in
-                self.viewModel.dataSource.insert(source, at: 0)
+        Observable.combineLatest(viewModel.loadPhotos(), viewModel.getInfoAboutPlace(id: viewModel.place.id)).asObservable()
+            .subscribe(onNext: { [unowned self] (sourceImages, sourceForFavorite) in
+                self.viewModel.dataSource.insert(sourceImages, at: 0)
                 self.tableView.reloadData()
+                
+                guard self.viewModel.place.fromFavorites else {
+                    return
+                }
+                
+                self.viewModel.dataSource = sourceForFavorite
+                self.viewModel.dataSource.insert(sourceImages, at: 0)
+                self.tableView.reloadData()
+                self.indicatorView.hideIndicator()
+                
             }, onError: { (error) in
                 print(error)
+                self.indicatorView.hideIndicator()
             }).disposed(by: disposeBag)
     }
     

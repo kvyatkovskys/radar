@@ -16,8 +16,9 @@ final class DetailWorkDaysTableViewCell: UITableViewCell, UICollectionViewDelega
     fileprivate lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = UICollectionViewScrollDirection.horizontal
-        layout.itemSize = CGSize(width: 90.0, height: 50.0)
+        layout.itemSize = CGSize(width: 100.0, height: 50.0)
         layout.sectionInset = UIEdgeInsets(top: 5.0, left: 10.0, bottom: 5.0, right: 10.0)
+        layout.minimumLineSpacing = 3.0
         
         let collection = UICollectionView(frame: self.frame, collectionViewLayout: layout)
         collection.backgroundColor = UIColor.clear

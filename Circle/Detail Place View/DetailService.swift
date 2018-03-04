@@ -41,6 +41,7 @@ struct DetailService {
 
                 if let data = result as? [String: Any], let model: DetailImagesModel = try? unbox(dictionary: data) {
                     observable.on(.next(model))
+                    observable.onCompleted()
                 }
             })
             return Disposables.create()
