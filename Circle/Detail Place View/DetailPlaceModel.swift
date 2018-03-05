@@ -119,6 +119,10 @@ enum ParkingType: String {
         case .valet: return (UIImage(named: "ic_valet_parking")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate))!
         }
     }
+    
+    var width: CGFloat {
+        return self.title.width(font: .systemFont(ofSize: 12.0), height: 15.0) + 20.0
+    }
 }
 
 enum PaymentType: String {
@@ -144,6 +148,9 @@ enum PaymentType: String {
         }
     }
     
+    var width: CGFloat {
+        return self.title.width(font: .systemFont(ofSize: 12.0), height: 15.0) + 20.0
+    }
 }
 
 enum ContactType: String {
@@ -163,6 +170,10 @@ enum ContactType: String {
         case .phone: return (UIImage(named: "ic_phone")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate))!
         case .website: return (UIImage(named: "ic_web")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate))!
         }
+    }
+    
+    var width: CGFloat {
+        return self.title.width(font: .boldSystemFont(ofSize: 14.0), height: 15.0) + 50.0
     }
 }
 
@@ -205,6 +216,10 @@ enum DaysType: String {
         case .saturday: return 5
         case .sunday: return 6
         }
+    }
+    
+    var width: CGFloat {
+        return self.title.width(font: .systemFont(ofSize: 14.0), height: 15.0) + 30.0
     }
 }
 

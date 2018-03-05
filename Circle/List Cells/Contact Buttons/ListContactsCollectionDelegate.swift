@@ -21,13 +21,7 @@ final class ListContactsCollectionDelegate: NSObject {
 extension ListContactsCollectionDelegate: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let contact = buttons[indexPath.row]
-        switch contact.type {
-        case .phone:
-            let width = contact.type.title.width(font: .boldSystemFont(ofSize: 14.0), height: 40.0)
-            return CGSize(width: width + 50.0, height: 40.0)
-        case .website, .facebook:
-            return CGSize(width: 120.0, height: 40.0)
-        }
+        return CGSize(width: contact.type.width, height: 40.0)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

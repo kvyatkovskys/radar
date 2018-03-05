@@ -10,37 +10,17 @@ import UIKit
 
 final class DetailWorkDaysTableViewCell: UITableViewCell, UICollectionViewDelegate {    
     static let cellIdentifier = "DetailWorkDaysTableViewCell"
-    
-    fileprivate var collectionDataSource: WorkDaysCollectionDataSource?
-    
-    fileprivate lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = UICollectionViewScrollDirection.horizontal
-        layout.itemSize = CGSize(width: 100.0, height: 50.0)
-        layout.sectionInset = UIEdgeInsets(top: 5.0, left: 10.0, bottom: 5.0, right: 10.0)
-        layout.minimumLineSpacing = 3.0
-        
-        let collection = UICollectionView(frame: self.frame, collectionViewLayout: layout)
-        collection.backgroundColor = UIColor.clear
-        collection.delegate = self
-        collection.showsHorizontalScrollIndicator = false
-        return collection
+
+    fileprivate lazy var listWorkDaysViewController: WorkDaysViewController = {
+        let list = WorkDaysViewController(workDays: nil)
+        list.view.frame = contentView.frame
+        contentView.addSubview(list.view)
+        return list
     }()
-    
-    override func updateConstraints() {
-        super.updateConstraints()
-        
-        collectionView.snp.remakeConstraints { (make) in
-            make.top.bottom.left.right.equalToSuperview()
-        }
-    }
     
     var workDays: WorkDays? {
         didSet {
-            if let days = workDays {
-                collectionView.register(WorkDaysCollectionViewCell.self, forCellWithReuseIdentifier: WorkDaysCollectionViewCell.cellIdentifier)
-                collectionDataSource = WorkDaysCollectionDataSource(collectionView: collectionView, days)
-            }
+            listWorkDaysViewController.reloadedData(workDays: workDays)
         }
     }
     
@@ -48,8 +28,6 @@ final class DetailWorkDaysTableViewCell: UITableViewCell, UICollectionViewDelega
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         selectionStyle = .none
-        addSubview(collectionView)
-        updateConstraints()
     }
     
     required init?(coder aDecoder: NSCoder) {

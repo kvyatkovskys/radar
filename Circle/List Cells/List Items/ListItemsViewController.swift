@@ -14,8 +14,7 @@ final class ListItemsViewController: UIViewController {
     
     fileprivate lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = UICollectionViewScrollDirection.horizontal
-        layout.itemSize = CGSize(width: 80.0, height: 44.0)
+        layout.scrollDirection = .horizontal
         layout.sectionInset = UIEdgeInsets(top: 0, left: 10.0, bottom: 0, right: 10.0)
         layout.minimumLineSpacing = 5.0
         
@@ -83,6 +82,11 @@ extension ListItemsViewController: UICollectionViewDataSource {
     }
 }
 
-extension ListItemsViewController: UICollectionViewDelegate {
-
+extension ListItemsViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        guard payments.isEmpty else {
+            return CGSize(width: payments[indexPath.row]?.width ?? 80.0, height: 44.0)
+        }
+        return CGSize(width: parkings[indexPath.row]?.width ?? 80.0, height: 44.0)
+    }
 }

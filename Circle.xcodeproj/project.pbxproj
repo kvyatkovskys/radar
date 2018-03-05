@@ -77,7 +77,7 @@
 		8B82C3932014843E00E0CA89 /* OpenGraphService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C3922014843E00E0CA89 /* OpenGraphService.swift */; };
 		8B82C3952014B72500E0CA89 /* FriendsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C3942014B72500E0CA89 /* FriendsModel.swift */; };
 		8B82C3982014C95000E0CA89 /* DetailWorkDaysTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C3972014C95000E0CA89 /* DetailWorkDaysTableViewCell.swift */; };
-		8B82C39A20150AD000E0CA89 /* WorkDaysCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C39920150AD000E0CA89 /* WorkDaysCollectionDataSource.swift */; };
+		8B82C39A20150AD000E0CA89 /* WorkDaysViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C39920150AD000E0CA89 /* WorkDaysViewController.swift */; };
 		8B82C39E20150BE600E0CA89 /* WorkDaysCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82C39D20150BE500E0CA89 /* WorkDaysCollectionViewCell.swift */; };
 		8BC35060201BB40F00BB375B /* DetailRestaurantTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC3505F201BB40F00BB375B /* DetailRestaurantTableViewCell.swift */; };
 		8BC35063201CF22400BB375B /* ListRestaurantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC35062201CF22400BB375B /* ListRestaurantViewController.swift */; };
@@ -200,7 +200,7 @@
 		8B82C3922014843E00E0CA89 /* OpenGraphService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenGraphService.swift; sourceTree = "<group>"; };
 		8B82C3942014B72500E0CA89 /* FriendsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsModel.swift; sourceTree = "<group>"; };
 		8B82C3972014C95000E0CA89 /* DetailWorkDaysTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailWorkDaysTableViewCell.swift; sourceTree = "<group>"; };
-		8B82C39920150AD000E0CA89 /* WorkDaysCollectionDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkDaysCollectionDataSource.swift; sourceTree = "<group>"; };
+		8B82C39920150AD000E0CA89 /* WorkDaysViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkDaysViewController.swift; sourceTree = "<group>"; };
 		8B82C39D20150BE500E0CA89 /* WorkDaysCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkDaysCollectionViewCell.swift; sourceTree = "<group>"; };
 		8BC3505F201BB40F00BB375B /* DetailRestaurantTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailRestaurantTableViewCell.swift; sourceTree = "<group>"; };
 		8BC35062201CF22400BB375B /* ListRestaurantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRestaurantViewController.swift; sourceTree = "<group>"; };
@@ -364,7 +364,7 @@
 		8B21F30720162F980013E11C /* List Work Days */ = {
 			isa = PBXGroup;
 			children = (
-				8B82C39920150AD000E0CA89 /* WorkDaysCollectionDataSource.swift */,
+				8B82C39920150AD000E0CA89 /* WorkDaysViewController.swift */,
 				8B82C39D20150BE500E0CA89 /* WorkDaysCollectionViewCell.swift */,
 			);
 			path = "List Work Days";
@@ -968,7 +968,7 @@
 				8B18FE082007F8E000E637C7 /* View+Extension.swift in Sources */,
 				8B2A3F252030952400D5856E /* DetailService.swift in Sources */,
 				8B147BD42023B13800EDA2D4 /* FavoritesService.swift in Sources */,
-				8B82C39A20150AD000E0CA89 /* WorkDaysCollectionDataSource.swift in Sources */,
+				8B82C39A20150AD000E0CA89 /* WorkDaysViewController.swift in Sources */,
 				8B5F71511FF916B300E628F9 /* PlaceService.swift in Sources */,
 				8B82C38E201399B500E0CA89 /* ListContactsCollectionDelegate.swift in Sources */,
 				8B41156B1FDC83AF00C6614C /* Router.swift in Sources */,
@@ -1188,7 +1188,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 206;
+				CURRENT_PROJECT_VERSION = 208;
 				DEVELOPMENT_TEAM = P44LMMDHV3;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1217,7 +1217,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 206;
+				CURRENT_PROJECT_VERSION = 208;
 				DEVELOPMENT_TEAM = P44LMMDHV3;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

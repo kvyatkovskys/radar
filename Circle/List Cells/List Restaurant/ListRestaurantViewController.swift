@@ -17,6 +17,7 @@ final class ListRestaurantViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = UICollectionViewScrollDirection.horizontal
         layout.sectionInset = UIEdgeInsets(top: 0, left: 10.0, bottom: 0, right: 10.0)
+        layout.minimumLineSpacing = 5.0
         
         let collection = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
         collection.delegate = self

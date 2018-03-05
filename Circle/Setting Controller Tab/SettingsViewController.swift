@@ -54,7 +54,7 @@ final class SettingsViewController: UIViewController {
     func setUpAlertView(title: String, description: String, action: @escaping () -> Void) {
         let alert = UIAlertController(title: title,
                                       message: description,
-                                      preferredStyle: UIAlertControllerStyle.alert)
+                                      preferredStyle: .actionSheet)
         let clear = UIAlertAction(title: NSLocalizedString("clear", comment: "Title for clear button"),
                                   style: .destructive,
                                   handler: { _ in
