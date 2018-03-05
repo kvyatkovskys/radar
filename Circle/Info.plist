@@ -62,7 +62,7 @@
 			<key>UIApplicationShortcutItemIconFile</key>
 			<string>ic_settings</string>
 			<key>UIApplicationShortcutItemTitle</key>
-			<string>Settings</string>
+			<string>SETTINGS_ITEM</string>
 			<key>UIApplicationShortcutItemType</key>
 			<string>settingsTab</string>
 		</dict>
@@ -70,7 +70,7 @@
 			<key>UIApplicationShortcutItemIconFile</key>
 			<string>ic_favorite</string>
 			<key>UIApplicationShortcutItemTitle</key>
-			<string>Favorites</string>
+			<string>FAVORITES_ITEM</string>
 			<key>UIApplicationShortcutItemType</key>
 			<string>favoritesTab</string>
 		</dict>
@@ -78,7 +78,7 @@
 			<key>UIApplicationShortcutItemIconFile</key>
 			<string>ic_search</string>
 			<key>UIApplicationShortcutItemTitle</key>
-			<string>Search</string>
+			<string>SEARCH_ITEM</string>
 			<key>UIApplicationShortcutItemType</key>
 			<string>searchTab</string>
 		</dict>
