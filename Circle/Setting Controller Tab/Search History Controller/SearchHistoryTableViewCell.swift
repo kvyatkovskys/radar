@@ -27,10 +27,10 @@ final class SearchHistoryTableViewCell: UITableViewCell {
         super.updateConstraints()
         
         titleLabel.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(5.0)
+            make.top.equalToSuperview().offset(2.0)
             make.right.equalToSuperview()
             make.left.equalToSuperview().offset(15.0)
-            make.height.equalTo(15.0)
+            make.height.equalTo(20.0)
         }
         
         subTitleLabel.snp.makeConstraints { (make) in

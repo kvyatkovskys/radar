@@ -6,6 +6,6 @@
   Copyright © 2018 Kviatkovskii. All rights reserved.
 */
 
-SETTINGS_ITEM = "Settings";
-SEARCH_ITEM = "Search";
-FAVORITES_ITEM = "Favorites";
+SETTINGS_ITEM = "Configurações";
+SEARCH_ITEM = "Pesquisa";
+FAVORITES_ITEM = "Favoritos";

@@ -9,6 +9,10 @@
 import Foundation
 
 extension String {
+    var capitalizedFirstSymbol: String {
+        return self.replacingCharacters(in: startIndex...startIndex, with: String(self[startIndex]).capitalized)
+    }
+    
     var htmlToString: String? {
         do {
             guard let data = data(using: String.Encoding.utf8) else { return nil }

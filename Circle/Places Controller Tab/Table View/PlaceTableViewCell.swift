@@ -32,7 +32,7 @@ final class PlaceTableViewCell: UITableViewCell {
         return image
     }()
     
-    fileprivate let titleLabel: UILabel = {
+    let titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = .boldSystemFont(ofSize: 17.0)

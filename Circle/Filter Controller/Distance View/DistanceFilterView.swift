@@ -51,6 +51,7 @@ final class DistanceFilterView: UIView {
         label.text = NSLocalizedString("minDistance", comment: "Text for filter of minimal distance")
         label.textAlignment = .left
         label.font = .systemFont(ofSize: 16.0)
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -82,7 +83,7 @@ final class DistanceFilterView: UIView {
         titleMinDistance.snp.makeConstraints { (make) in
             make.top.equalTo(lineView.snp.bottom).offset(25.0)
             make.left.equalToSuperview().offset(12.0)
-            make.right.equalTo(swicthButton.snp.left).inset(10.0)
+            make.right.equalTo(swicthButton.snp.left).offset(-10.0)
             make.height.equalTo(25.0)
         }
         

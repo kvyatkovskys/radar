@@ -237,13 +237,13 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         }
 
         favoriteButton.snp.makeConstraints { (make) in
-            make.right.equalTo(headerView.snp.centerX).offset(-20.0)
+            make.right.equalTo(headerView.snp.centerX).offset(-12.0)
             make.bottom.equalToSuperview().offset(-15.0)
             make.size.equalTo(CGSize(width: 130.0, height: 35.0))
         }
 
         shareButton.snp.makeConstraints { (make) in
-            make.left.equalTo(headerView.snp.centerX).offset(20.0)
+            make.left.equalTo(headerView.snp.centerX).offset(12.0)
             make.bottom.equalToSuperview().offset(-15.0)
             make.size.equalTo(CGSize(width: 130.0, height: 35.0))
         }
