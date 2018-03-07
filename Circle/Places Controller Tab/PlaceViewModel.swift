@@ -1,0 +1,148 @@
+//
+//  PlaceViewModel.swift
+//  Circle
+//
+//  Created by Kviatkovskii on 01/01/2018.
+//  Copyright © 2018 Kviatkovskii. All rights reserved.
+//
+
+import Foundation
+import RxSwift
+import RealmSwift
+
+enum TypeView: Int {
+    case table, map
+}
+
+struct Places {
+    let items: [PlaceModel]
+    let ratings: [NSMutableAttributedString?]
+    let titles: [NSMutableAttributedString?]
+    let next: URL?
+    
+    init(_ places: [PlaceModel] = [], _ ratings: [NSMutableAttributedString?] = [], _ titles: [NSMutableAttributedString?] = [], _ next: URL? = nil) {
+        self.items = places
+        self.ratings = ratings
+        self.titles = titles
+        self.next = next
+    }
+}
+
+struct PlaceViewModel {
+    fileprivate let placeService: PlaceService
+    /// open filter controller
+    var openFilter: (() -> Void) = { UIImpactFeedbackGenerator().impactOccurred() }
+    /// open map controller
+    var openMap: (([Places], CLLocation?) -> Void) = {_, _ in UIImpactFeedbackGenerator().impactOccurred() }
+    /// open detail place controller
+    var openDetailPlace: ((PlaceModel, NSMutableAttributedString?, NSMutableAttributedString?, FavoritesViewModel) -> Void) = {_, _, _, _ in }
+    /// reload places on map
+    var reloadMap: (([Places], CLLocation?) -> Void) = {_, _ in}
+    
+    var typeView: TypeView {
+        var type = TypeView(rawValue: 0)!
+        do {
+            let realm = try Realm()
+            let settings = realm.objects(Settings.self).first
+            type = TypeView(rawValue: settings?.typeViewMainTab ?? 0)!
+        } catch {
+            print(error)
+        }
+        return type
+    }
+    
+    init(_ service: PlaceService) {
+        self.placeService = service
+    }
+    
+    func changeTypeView(_ type: TypeView) {
+        do {
+            let realm = try Realm()
+            let settings = realm.objects(Settings.self).first
+            
+            try realm.write {
+                guard let oldSettings = settings else {
+                    let newSettings = Settings()
+                    newSettings.typeViewMainTab = type.rawValue
+                    realm.add(newSettings)
+                    return
+                }
+                oldSettings.typeViewMainTab = type.rawValue
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
+    /// load more places
+    func getMorePlaces(url: URL) -> Observable<Places> {
+        return placeService.loadMorePlaces(url: url).asObservable()
+            .flatMap({ (model) -> Observable<Places> in
+                return Observable.just(self.updateResults(model: model))
+            })
+    }
+    
+    /// get info about for current location
+    func getPlaces(location: CLLocation?, distance: CLLocationDistance, searchTerm: String? = nil) -> Observable<Places> {
+        var categories = PlaceSetting().allCategories
+        
+        if searchTerm == nil {
+            do {
+                let realm = try Realm()
+                let selectedCategories = realm.objects(FilterSelectedCategory.self)
+                if !selectedCategories.isEmpty {
+                    categories = selectedCategories.map({ Categories(rawValue: $0.category)! })
+                }
+            } catch {
+                print(error)
+            }
+        }
+        
+        return placeService.loadPlaces(location, categories, distance, searchTerm)
+            .asObservable().flatMap { (model) -> Observable<Places> in
+                return Observable.just(self.updateResults(model: model))
+        }
+    }
+    
+    fileprivate func colorForRating(_ rating: Float) -> UIColor {
+        var color = UIColor()
+        switch rating {
+        case 3.4...5.0:
+            color = UIColor(withHex: 0x2ecc71, alpha: 1.0)
+        case 1.8...3.4:
+            color = .black
+        default:
+            color = UIColor(withHex: 0xc0392b, alpha: 1.0)
+        }
+        return color
+    }
+    
+    fileprivate func updateResults(model: PlaceDataModel) -> (Places) {
+        let ratings = model.data.map({ (place) -> NSMutableAttributedString? in
+            let ratingStar = NSAttributedString(string: "\(place.ratingStar ?? 0)",
+                attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 19.0),
+                             NSAttributedStringKey.foregroundColor: self.colorForRating(place.ratingStar ?? 0)])
+            let ratingCount = NSAttributedString(string: " \(place.ratingCount ?? 0)",
+                attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14.0),
+                             NSAttributedStringKey.foregroundColor: UIColor.gray])
+            
+            let result = NSMutableAttributedString(attributedString: ratingStar)
+            result.append(ratingCount)
+            return result
+        })
+        
+        let titles = model.data.map({ (place) -> NSMutableAttributedString? in
+            let title = NSAttributedString(string: "\(place.name ?? "")",
+                attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 19.0),
+                             NSAttributedStringKey.foregroundColor: UIColor.black])
+            let about = NSAttributedString(string: "\n\n\(place.about ?? "")",
+                attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14.0),
+                             NSAttributedStringKey.foregroundColor: UIColor.gray])
+            
+            let result = NSMutableAttributedString(attributedString: title)
+            result.append(about)
+            return result
+        })
+        return Places(model.data, ratings, titles, model.next)
+    }
+}

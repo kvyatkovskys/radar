@@ -42,8 +42,18 @@ final class PlacesViewController: UIViewController {
     }()
     
     lazy var leftBarButton: UIBarButtonItem = {
-        let categoriesImage = UIImage(named: "ic_map")?.withRenderingMode(.alwaysTemplate)
-        let button = UIBarButtonItem(image: categoriesImage, style: .done, target: self, action: #selector(showMap))
+        var categoriesImage = UIImage()
+        
+        switch viewModel.typeView {
+        case .table:
+            categoriesImage = UIImage(named: "ic_map")!.withRenderingMode(.alwaysTemplate)
+        case .map:
+            categoriesImage = UIImage(named: "ic_view_list")!.withRenderingMode(.alwaysTemplate)
+        }
+
+        let button = UIBarButtonItem(image: categoriesImage, style: .done, target: self, action: #selector(setView))
+        button.tag = viewModel.typeView.rawValue
+        setView(sender: button)
         return button
     }()
     
@@ -79,12 +89,10 @@ final class PlacesViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .white
-        view.addSubview(tableView)
         tableView.addSubview(refreshControl)
         navigationItem.rightBarButtonItem = rightBarButton
         navigationItem.leftBarButtonItem = leftBarButton
         
-        updateConstraints()
         locationService.start()
         
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
@@ -169,8 +177,25 @@ final class PlacesViewController: UIViewController {
         locationService.checkAuthorized()
     }
     
-    @objc func showMap() {
-        viewModel.openMap(tableDataSource?.places ?? [], userLocation)
+    @objc func setView(sender: UIBarButtonItem?) {
+        let type = TypeView(rawValue: sender?.tag ?? 0)!
+        switch type {
+        case .map:
+            sender?.tag = TypeView.table.rawValue
+            view.subviews.forEach({ $0.removeFromSuperview() })
+            viewModel.changeTypeView(.map)
+            viewModel.openMap(tableDataSource?.places ?? [], userLocation)
+            navigationItem.leftBarButtonItem?.image = UIImage(named: "ic_view_list")!.withRenderingMode(.alwaysTemplate)
+        case .table:
+            sender?.tag = TypeView.map.rawValue
+            let vc = childViewControllers.last
+            vc?.view.removeFromSuperview()
+            vc?.removeFromParentViewController()
+            viewModel.changeTypeView(.table)
+            view.addSubview(tableView)
+            updateConstraints()
+            navigationItem.leftBarButtonItem?.image = UIImage(named: "ic_map")!.withRenderingMode(.alwaysTemplate)
+        }
     }
     
     fileprivate func searchForNewDistance(value: Double) {
@@ -200,7 +225,11 @@ final class PlacesViewController: UIViewController {
     fileprivate func loadPlacesLocation(_ location: CLLocation?, distance: Double = FilterDistanceViewModel().defaultDistance) {
         viewModel.getPlaces(location: location, distance: distance).asObservable()
             .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { [unowned self] (model) in
+            .subscribe(onNext: { [unowned self, weak userLocation = self.userLocation] (model) in
+                if self.viewModel.typeView == .map {
+                    self.viewModel.reloadMap([model], userLocation)
+                }
+                
                 self.tableDataSource?.places = [model]
                 self.tableDelegate?.places = [model]
                 self.tableView.reloadData()

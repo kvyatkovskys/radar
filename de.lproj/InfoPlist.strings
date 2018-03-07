@@ -1,0 +1,11 @@
+/* 
+  InfoPlist.strings
+  Circle
+
+  Created by Kviatkovskii on 05/03/2018.
+  Copyright © 2018 Kviatkovskii. All rights reserved.
+*/
+
+SETTINGS_ITEM = "Einstellungen";
+SEARCH_ITEM = "Suche";
+FAVORITES_ITEM = "Favoriten";

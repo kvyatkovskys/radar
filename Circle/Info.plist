@@ -28,13 +28,15 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>187</string>
+	<string>208</string>
 	<key>FacebookAppID</key>
 	<string>517351968621238</string>
 	<key>FacebookClientToken</key>
 	<string>fa7449e641b75881e3466ca88471d058</string>
 	<key>FacebookDisplayName</key>
 	<string>Place</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
@@ -60,7 +62,7 @@
 			<key>UIApplicationShortcutItemIconFile</key>
 			<string>ic_settings</string>
 			<key>UIApplicationShortcutItemTitle</key>
-			<string>Settings</string>
+			<string>SETTINGS_ITEM</string>
 			<key>UIApplicationShortcutItemType</key>
 			<string>settingsTab</string>
 		</dict>
@@ -68,7 +70,7 @@
 			<key>UIApplicationShortcutItemIconFile</key>
 			<string>ic_favorite</string>
 			<key>UIApplicationShortcutItemTitle</key>
-			<string>Favorites</string>
+			<string>FAVORITES_ITEM</string>
 			<key>UIApplicationShortcutItemType</key>
 			<string>favoritesTab</string>
 		</dict>
@@ -76,7 +78,7 @@
 			<key>UIApplicationShortcutItemIconFile</key>
 			<string>ic_search</string>
 			<key>UIApplicationShortcutItemTitle</key>
-			<string>Search</string>
+			<string>SEARCH_ITEM</string>
 			<key>UIApplicationShortcutItemType</key>
 			<string>searchTab</string>
 		</dict>

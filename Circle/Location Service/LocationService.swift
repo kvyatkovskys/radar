@@ -96,14 +96,17 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
             locationManager.stopUpdatingLocation()
         case .restricted, .denied:
             let alertController = UIAlertController(
-                title: "Access to the location is disabled.",
-                message: "To locate the location automatically, open the setting for this application and set i to 'When using the application' or 'Always usage'.",
+                title: NSLocalizedString("locationDisabled", comment: "Title for alert that location is disabled"),
+                message: NSLocalizedString("textAccessToLocation", comment: "Text for alert that location is disabled"),
                 preferredStyle: .alert)
             
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: "Title for button cancel"),
+                                             style: .cancel,
+                                             handler: nil)
             alertController.addAction(cancelAction)
             
-            let openAction = UIAlertAction(title: "Open settings", style: .default) { _ in
+            let openAction = UIAlertAction(title: NSLocalizedString("openSettings", comment: "Title for button that to open settings"),
+                                           style: .default) { _ in
                 if let url = URL(string: UIApplicationOpenSettingsURLString) {
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 }
@@ -118,14 +121,19 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
     func checkAuthorized() {
         switch CLLocationManager.authorizationStatus() {
         case .restricted, .denied:
-            let alertController = UIAlertController(title: "Access to the location is disabled.",
-                                                    message: "To locate the location automatically, open the setting for this application and set to 'When using the application' or 'Always usage'.",
+            let alertController = UIAlertController(title: NSLocalizedString("locationDisabled",
+                                                                             comment: "Title for alert that location is disabled"),
+                                                    message: NSLocalizedString("textAccessToLocation",
+                                                                               comment: "Text for alert that location is disabled"),
                                                     preferredStyle: .alert)
             
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: "Title for button cancel"),
+                                             style: .cancel,
+                                             handler: nil)
             alertController.addAction(cancelAction)
             
-            let openAction = UIAlertAction(title: "Open settings", style: .default) { _ in
+            let openAction = UIAlertAction(title: NSLocalizedString("openSettings", comment: "Title for button that to open settings"),
+                                           style: .default) { _ in
                 if let url = URL(string: UIApplicationOpenSettingsURLString) {
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 }
@@ -166,7 +174,9 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
     
     fileprivate func startMonitoring(locationRegion: CLLocation, radius: Double, identifier: String) {
         if !CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self) {
-            window?.rootViewController?.showAlertLight(title: "Error", message: "Geofencing is not supported on this device!")
+            window?.rootViewController?.showAlertLight(title: NSLocalizedString("error", comment: "Title for error"),
+                                                       message: NSLocalizedString("geofencingNotSupport",
+                                                                                  comment: "Text for alert when geofencinh not supporting"))
             return
         }
         
@@ -204,7 +214,8 @@ extension LocationService {
                 if let favorite = favorites.first {
                     let notification = KSNotifications(center: UNUserNotificationCenter.current())
                     notification.center.delegate = self
-                    notification.showNotification(title: "You are near your favorite place!",
+                    notification.showNotification(title: NSLocalizedString("notifyNearPlace",
+                                                                           comment: "The text fro notify when user near a place"),
                                                   subTitle: favorite.title ?? "",
                                                   body: favorite.about ?? "" + "\n",
                                                   imageUrl: favorite.picture)
@@ -227,7 +238,10 @@ extension LocationService {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         geocoder.cancelGeocode()
         userLocation.onNext(nil)
-        window?.rootViewController?.showAlertLight(title: "Error", message: "We can't determine your location!\n")
+        window?.rootViewController?.showAlertLight(title: NSLocalizedString("error",
+                                                                            comment: "Error when the manager didn't detect the current position"),
+                                                   message: NSLocalizedString("notDetermineLocation",
+                                                                              comment: "Text for alert when the manager didn't detect the current position"))
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -304,12 +318,13 @@ extension LocationService {
                 try realm.write {
                     guard let oldSettings = settings else {
                         let newSettings = Settings()
-                        newSettings.cancelNotice = status == .authorizedAlways
+                        newSettings.allwaysLocation = status == .authorizedAlways
                         newSettings.disabledNotice = settings?.disabledNotice ?? false
+                        newSettings.typeViewMainTab = settings?.typeViewMainTab ?? 0
                         realm.add(newSettings)
                         return
                     }
-                    oldSettings.cancelNotice = status == .authorizedAlways
+                    oldSettings.allwaysLocation = status == .authorizedAlways
                 }
             } catch {
                 print(error)

@@ -9,11 +9,51 @@
 import Foundation
 import Unbox
 
-struct DetailServiceModel {
+struct DetailImagesModel {
+    let data: [DetailDataImages]
+    let next: String
+}
+
+extension DetailImagesModel: Unboxable {
+    init(unboxer: Unboxer) throws {
+        self.data = try unboxer.unbox(key: "data")
+        self.next = try unboxer.unbox(keyPath: "paging.next")
+    }
+}
+
+struct DetailDataImages {
+    let id: Int
+    let images: [Images]
+    let picture: String
+}
+
+extension DetailDataImages: Unboxable {
+    init(unboxer: Unboxer) throws {
+        self.id = try unboxer.unbox(key: "id")
+        self.images = try unboxer.unbox(key: "images")
+        self.picture = try unboxer.unbox(key: "picture")
+    }
+}
+
+struct Images {
+    let height: Int
+    let width: Int
+    let source: String
+}
+
+extension Images: Unboxable {
+    init(unboxer: Unboxer) throws {
+        self.height = try unboxer.unbox(key: "height")
+        self.width = try unboxer.unbox(key: "width")
+        self.source = try unboxer.unbox(key: "source")
+    }
+}
+
+struct DetailPictureModel {
     let url: URL?
 }
 
-extension DetailServiceModel: Unboxable {
+extension DetailPictureModel: Unboxable {
     init(unboxer: Unboxer) throws {
         let urlString: String? = unboxer.unbox(keyPath: "picture.data.url")
         self.url = urlString != nil ? URL(string: urlString ?? "") : nil
@@ -25,19 +65,16 @@ enum RestaurantSpecialityType: String {
     
     var title: String {
         switch self {
-        case .breakfast: return "Breakfast"
-        case .lunch: return "Lunch"
-        case .dinner: return "Dinner"
-        case .drinks: return "Drinks"
-        case .coffee: return "Coffee"
+        case .breakfast: return NSLocalizedString("breakfast", comment: "Title for the restaurant speciality")
+        case .lunch: return NSLocalizedString("lunch", comment: "Title for the restaurant speciality")
+        case .dinner: return NSLocalizedString("dinner", comment: "Title for the restaurant speciality")
+        case .drinks: return NSLocalizedString("drinks", comment: "Title for the restaurant speciality")
+        case .coffee: return NSLocalizedString("coffee", comment: "Title for the restaurant speciality")
         }
     }
     
     var width: CGFloat {
-        switch self {
-        case .breakfast, .coffee, .dinner, .drinks, .lunch:
-            return self.rawValue.width(font: .boldSystemFont(ofSize: 12.0), height: 25.0) + 25.0
-        }
+        return self.title.width(font: .boldSystemFont(ofSize: 12.0), height: 25.0) + 25.0
     }
 }
 
@@ -46,24 +83,21 @@ enum RestaurantServiceType: String {
     
     var title: String {
         switch self {
-        case .catering: return "Catering"
-        case .groups: return "Groups"
-        case .waiter: return "Waiter"
-        case .delivery: return "Delivery"
-        case .outdoor: return "Outdoor"
-        case .kids: return "Kids"
-        case .reserve: return "Reserve"
-        case .takeout: return "Takeout"
-        case .walkins: return "Walkins"
-        case .pickup: return "Pickup"
+        case .catering: return NSLocalizedString("catering", comment: "Title for the restaurant service")
+        case .groups: return NSLocalizedString("groups", comment: "Title for the restaurant service")
+        case .waiter: return NSLocalizedString("waiter", comment: "Title for the restaurant service")
+        case .delivery: return NSLocalizedString("delivery", comment: "Title for the restaurant service")
+        case .outdoor: return NSLocalizedString("outdoor", comment: "Title for the restaurant service")
+        case .kids: return NSLocalizedString("kids", comment: "Title for the restaurant service")
+        case .reserve: return NSLocalizedString("reserve", comment: "Title for the restaurant service")
+        case .takeout: return NSLocalizedString("takeout", comment: "Title for the restaurant service")
+        case .walkins: return NSLocalizedString("walkins", comment: "Title for the restaurant service")
+        case .pickup: return NSLocalizedString("pickup", comment: "Title for the restaurant service")
         }
     }
     
     var width: CGFloat {
-        switch self {
-        case .catering, .groups, .waiter, .delivery, .outdoor, .kids, .reserve, .takeout, .walkins, .pickup:
-            return self.rawValue.width(font: .boldSystemFont(ofSize: 12.0), height: 25.0) + 25.0
-        }
+        return self.title.width(font: .boldSystemFont(ofSize: 12.0), height: 25.0) + 25.0
     }
 }
 
@@ -72,9 +106,9 @@ enum ParkingType: String {
     
     var title: String {
         switch self {
-        case .lot: return "Parking lot"
-        case .street: return "On-street"
-        case .valet: return "Valet parking"
+        case .lot: return NSLocalizedString("parkingLot", comment: "Title for the parking type")
+        case .street: return NSLocalizedString("onStreet", comment: "Title for the parking type")
+        case .valet: return NSLocalizedString("valetParking", comment: "Title for the parking type")
         }
     }
     
@@ -85,6 +119,10 @@ enum ParkingType: String {
         case .valet: return (UIImage(named: "ic_valet_parking")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate))!
         }
     }
+    
+    var width: CGFloat {
+        return self.title.width(font: .systemFont(ofSize: 12.0), height: 15.0) + 20.0
+    }
 }
 
 enum PaymentType: String {
@@ -94,7 +132,7 @@ enum PaymentType: String {
         switch self {
         case .amex: return "AMEX"
         case .visa: return "VISA"
-        case .cash: return "Cash"
+        case .cash: return NSLocalizedString("cash", comment: "Title for the payment type")
         case .discover: return "Discover"
         case .mastercard: return "Mastercard"
         }
@@ -110,6 +148,9 @@ enum PaymentType: String {
         }
     }
     
+    var width: CGFloat {
+        return self.title.width(font: .systemFont(ofSize: 12.0), height: 15.0) + 20.0
+    }
 }
 
 enum ContactType: String {
@@ -118,8 +159,8 @@ enum ContactType: String {
     var title: String {
         switch self {
         case .facebook: return "Facebook"
-        case .phone: return "Call"
-        case .website: return "Website"
+        case .phone: return NSLocalizedString("call", comment: "Title for the contact type")
+        case .website: return NSLocalizedString("website", comment: "Title for the contact type")
         }
     }
     
@@ -130,18 +171,28 @@ enum ContactType: String {
         case .website: return (UIImage(named: "ic_web")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate))!
         }
     }
+    
+    var width: CGFloat {
+        return self.title.width(font: .boldSystemFont(ofSize: 14.0), height: 15.0) + 50.0
+    }
 }
 
 typealias Contact = (type: ContactType, value: Any?)
 
 enum DaysType: String {
-    case monday = "Monday"
-    case tuesday = "Tuesday"
-    case wednesday = "Wednesday"
-    case thursday = "Thursday"
-    case friday = "Friday"
-    case saturday = "Saturday"
-    case sunday = "Sunday"
+    case monday, tuesday, wednesday, thursday, friday, saturday, sunday
+    
+    var title: String {
+        switch self {
+        case .monday: return NSLocalizedString("monday", comment: "Title for the day type")
+        case .tuesday: return NSLocalizedString("tuesday", comment: "Title for the day type")
+        case .wednesday: return NSLocalizedString("wednesday", comment: "Title for the day type")
+        case .thursday: return NSLocalizedString("thursday", comment: "Title for the day type")
+        case .friday: return NSLocalizedString("friday", comment: "Title for the day type")
+        case .saturday: return NSLocalizedString("saturday", comment: "Title for the day type")
+        case .sunday: return NSLocalizedString("sunday", comment: "Title for the day type")
+        }
+    }
     
     var shortName: String {
         switch self {
@@ -166,6 +217,10 @@ enum DaysType: String {
         case .sunday: return 6
         }
     }
+    
+    var width: CGFloat {
+        return self.title.width(font: .systemFont(ofSize: 14.0), height: 15.0) + 30.0
+    }
 }
 
 typealias Days = (day: DaysType, hour: String)
@@ -181,17 +236,19 @@ enum TypeDetailCell {
     case parking([ParkingType?], CGFloat)
     case restaurantService([RestaurantServiceType?], CGFloat, UIColor?)
     case restaurantSpeciality([RestaurantSpecialityType?], CGFloat, UIColor?)
+    case images([Images], [URL?], String, CGFloat)
     
     var title: String {
         switch self {
-        case .workDays: return "Openig hours"
-        case .description: return "Description"
-        case .contact: return "Contacts"
-        case .address: return "Address"
-        case .payment: return "Payment"
-        case .parking: return "Parking"
-        case .restaurantService: return "Restaurant service"
-        case .restaurantSpeciality: return "Restaurant specialties"
+        case .workDays: return NSLocalizedString("openHours", comment: "Title for the cell type")
+        case .description: return NSLocalizedString("description", comment: "Title for the cell type")
+        case .contact: return NSLocalizedString("contacts", comment: "Title for the cell type")
+        case .address: return NSLocalizedString("address", comment: "Title for the cell type")
+        case .payment: return NSLocalizedString("payment", comment: "Title for the cell type")
+        case .parking: return NSLocalizedString("parking", comment: "Title for the cell type")
+        case .restaurantService: return NSLocalizedString("restaurantService", comment: "Title for the cell type")
+        case .restaurantSpeciality: return NSLocalizedString("restaurantSpecialties", comment: "Title for the cell type")
+        case .images: return NSLocalizedString("photos", comment: "Title for the cell type")
         }
     }
 }

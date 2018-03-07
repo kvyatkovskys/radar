@@ -13,7 +13,7 @@ final class InfoSearchTableViewCell: UITableViewCell {
     
     fileprivate let titleQuerySearch: UILabel = {
         let label = UILabel()
-        label.text = "   You recently searched for"
+        label.text = NSLocalizedString("recentlySearched", comment: "Label when queries not empty")
         label.numberOfLines = 0
         label.font = .boldSystemFont(ofSize: 17.0)
         return label

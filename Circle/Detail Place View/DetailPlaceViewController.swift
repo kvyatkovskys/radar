@@ -10,6 +10,7 @@ import UIKit
 import Kingfisher
 import RxSwift
 import RealmSwift
+import SnapKit
 
 final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDelegate {
     typealias Dependecies = HasDetailPlaceViewModel & HasKingfisher & HasOpenGraphService & HasFavoritesViewModel
@@ -71,11 +72,14 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         return image
     }()
     
-    fileprivate lazy var titlePlace: UILabel = {
+    lazy var titlePlace: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.font = .boldSystemFont(ofSize: 17.0)
         label.attributedText = self.viewModel.title
+        label.isUserInteractionEnabled = true
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(openFullTitle))
+        label.addGestureRecognizer(tap)
         return label
     }()
     
@@ -113,11 +117,25 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
     
     fileprivate lazy var favoriteButton: UIButton = {
         let button = UIButton()
-        let image = UIImage(named: favoriteNotify.addFavorites == true ? "ic_favorite" : "ic_favorite_border")?.withRenderingMode(.alwaysTemplate)
+        
+        let image: UIImage
+        if favoriteNotify.addFavorites {
+            image = UIImage(named: "ic_favorite")!.withRenderingMode(.alwaysTemplate)
+        } else {
+            image = UIImage(named: "ic_favorite_border")!.withRenderingMode(.alwaysTemplate)
+        }
+        
+        let localized: String
+        if favoriteNotify.addFavorites {
+            localized = NSLocalizedString("remove", comment: "The title for button that removed from favorite")
+        } else {
+            localized = NSLocalizedString("add", comment: "The title for button that added to favorite")
+        }
+
         button.setImage(image, for: .normal)
         button.tintColor = UIColor.mainColor
         button.backgroundColor = UIColor.shadowGray
-        button.setTitle(favoriteNotify.addFavorites == true ? " Remove" : " Add", for: .normal)
+        button.setTitle(localized, for: .normal)
         button.setTitleColor(UIColor.mainColor, for: .normal)
         button.titleLabel?.font = .boldSystemFont(ofSize: 15.0)
         button.layer.cornerRadius = 5.0
@@ -131,7 +149,8 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         button.setImage(UIImage(named: "ic_share")?.withRenderingMode(.alwaysTemplate), for: .normal)
         button.tintColor = UIColor.mainColor
         button.backgroundColor = UIColor.shadowGray
-        button.setTitle(" Share", for: .normal)
+        button.setTitle(NSLocalizedString("share", comment: "Title for share button"),
+                        for: .normal)
         button.setTitleColor(UIColor.mainColor, for: .normal)
         button.titleLabel?.font = .boldSystemFont(ofSize: 15.0)
         button.layer.cornerRadius = 5.0
@@ -208,7 +227,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
             make.bottom.equalTo(lineView)
             make.right.equalTo(titlePlace)
             make.left.equalTo(ratingLabel)
-            make.top.equalTo(ratingLabel.snp.bottom).offset(10.0)
+            make.top.equalTo(titlePlace.snp.bottom).offset(10.0)
         }
 
         lineView.snp.remakeConstraints { (make) in
@@ -218,15 +237,15 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         }
 
         favoriteButton.snp.makeConstraints { (make) in
-            make.right.equalTo(headerView.snp.centerX).offset(-20.0)
+            make.right.equalTo(headerView.snp.centerX).offset(-12.0)
             make.bottom.equalToSuperview().offset(-15.0)
-            make.size.equalTo(CGSize(width: 120.0, height: 35.0))
+            make.size.equalTo(CGSize(width: 130.0, height: 35.0))
         }
 
         shareButton.snp.makeConstraints { (make) in
-            make.left.equalTo(headerView.snp.centerX).offset(20.0)
+            make.left.equalTo(headerView.snp.centerX).offset(12.0)
             make.bottom.equalToSuperview().offset(-15.0)
-            make.size.equalTo(CGSize(width: 120.0, height: 35.0))
+            make.size.equalTo(CGSize(width: 130.0, height: 35.0))
         }
     }
     
@@ -270,12 +289,16 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
                 switch changes {
                 case .update(let favorites, _, _, _):
                     guard favorites.contains(where: { $0.id == self.viewModel.place.id }) else {
-                        self.favoriteButton.setTitle(" Add", for: .normal)
+                        self.favoriteButton.setTitle(NSLocalizedString("add",
+                                                                       comment: "The title for button that added to favorite"),
+                                                     for: .normal)
                         self.favoriteButton.setImage(UIImage(named: "ic_favorite_border")?.withRenderingMode(.alwaysTemplate), for: .normal)
                         self.navigationItem.rightBarButtonItem = nil
                         return
                     }
-                    self.favoriteButton.setTitle(" Remove", for: .normal)
+                    self.favoriteButton.setTitle(NSLocalizedString("remove",
+                                                                   comment: "The title for button that removed from favorite"),
+                                                 for: .normal)
                     self.favoriteButton.setImage(UIImage(named: "ic_favorite")?.withRenderingMode(.alwaysTemplate), for: .normal)
                     self.navigationItem.rightBarButtonItem = self.rightBarButton()
                 case .error(let error):
@@ -292,28 +315,45 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         tableView.register(DeatilContactsTableViewCell.self, forCellReuseIdentifier: DeatilContactsTableViewCell.cellIdentifier)
         tableView.register(DetailAddressTableViewCell.self, forCellReuseIdentifier: DetailAddressTableViewCell.cellIdentifier)
         tableView.register(DetailWorkDaysTableViewCell.self, forCellReuseIdentifier: DetailWorkDaysTableViewCell.cellIdentifier)
-        tableView.register(DetailPaymentTableViewCell.self, forCellReuseIdentifier: DetailPaymentTableViewCell.cellIdentifier)
-        tableView.register(DetailParkingTableViewCell.self, forCellReuseIdentifier: DetailParkingTableViewCell.cellIdentifier)
-        tableView.register(DetailRestaurantServiceTableViewCell.self, forCellReuseIdentifier: DetailRestaurantServiceTableViewCell.cellIdentifier)
-        tableView.register(DetailRestaurantSpecialityTableViewCell.self,
-                           forCellReuseIdentifier: DetailRestaurantSpecialityTableViewCell.cellIdentifier)
+        tableView.register(DetailItemsTableViewCell.self, forCellReuseIdentifier: DetailItemsTableViewCell.cellIdentifier)
+        tableView.register(DetailRestaurantTableViewCell.self, forCellReuseIdentifier: DetailRestaurantTableViewCell.cellIdentifier)
+        tableView.register(DetailImagesTableViewCell.self, forCellReuseIdentifier: DetailImagesTableViewCell.cellIdentifier)
         
         if viewModel.place.fromFavorites {
             indicatorView.showIndicator()
-            viewModel.getInfoAboutPlace(id: viewModel.place.id).asObservable()
-                .subscribe(onNext: { [unowned self] (dataSource) in
-                    self.viewModel.dataSource = dataSource
-                    self.tableView.reloadData()
-                    self.indicatorView.hideIndicator()
-                }, onError: { (error) in
-                    print(error)
-                    self.indicatorView.hideIndicator()
-                }).disposed(by: disposeBag)
         }
+        
+        Observable.combineLatest(viewModel.loadPhotos(), viewModel.getInfoAboutPlace(id: viewModel.place.id)).asObservable()
+            .subscribe(onNext: { [unowned self] (sourceImages, sourceForFavorite) in
+                self.viewModel.dataSource.insert(sourceImages, at: 0)
+                self.tableView.reloadData()
+                
+                guard self.viewModel.place.fromFavorites else {
+                    return
+                }
+                
+                self.viewModel.dataSource = sourceForFavorite
+                self.viewModel.dataSource.insert(sourceImages, at: 0)
+                self.tableView.reloadData()
+                self.indicatorView.hideIndicator()
+                
+            }, onError: { (error) in
+                print(error)
+                self.indicatorView.hideIndicator()
+            }).disposed(by: disposeBag)
     }
     
     deinit {
         notificationTokenFavorites?.invalidate()
+    }
+    
+    @objc func openFullTitle() {
+        let router = Router()
+        let popoverLabelController = PopoverLabelViewController(title: viewModel.place.about ?? "")
+        if let height = viewModel.title?.string.height(font: .systemFont(ofSize: 16.0),
+                                                       width: titlePlace.bounds.width), height > titlePlace.bounds.height {
+            router.openPopoverLabel(fromController: self, toController: popoverLabelController, height: height)
+        }
     }
     
     @objc func changeNotify() {
@@ -338,8 +378,18 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
     
     @objc func sharePlace() {
         UIImpactFeedbackGenerator().impactOccurred()
-        if let image = imageHeader.image {
-            let shareController = UIActivityViewController(activityItems: [image, viewModel.place.name ?? ""],
+        if let image = imageHeader.image, let name = viewModel.place.name {
+            var text = name
+            
+            if let about = viewModel.place.about {
+                text += "\n\n" + about
+            }
+            
+            if let url = viewModel.place.website {
+                text += "\n\n" + url
+            }
+            
+            let shareController = UIActivityViewController(activityItems: [image, text],
                                                            applicationActivities: nil)
             present(shareController, animated: true, completion: nil)
         }
@@ -365,6 +415,13 @@ extension DetailPlaceViewController: UITableViewDataSource {
         let type = viewModel.dataSource[indexPath.section].sectionObjects[indexPath.row]
         
         switch type {
+        case .images(let images, let previews, let nextImages, _):
+            let cell = tableView.dequeueReusableCell(withIdentifier: DetailImagesTableViewCell.cellIdentifier,
+                                                     for: indexPath) as? DetailImagesTableViewCell ?? DetailImagesTableViewCell()
+            
+            cell.controller = self
+            cell.pageImages = PageImages(images, previews, nextImages, kingfisherOptions)
+            return cell
         case .description(let text, _):
             let cell = tableView.dequeueReusableCell(withIdentifier: DetailDescriptionTableViewCell.cellIdentifier,
                                                      for: indexPath) as? DetailDescriptionTableViewCell ?? DetailDescriptionTableViewCell()
@@ -391,26 +448,26 @@ extension DetailPlaceViewController: UITableViewDataSource {
             cell.workDays = workDays
             return cell
         case .payment(let payments, _):
-            let cell = tableView.dequeueReusableCell(withIdentifier: DetailPaymentTableViewCell.cellIdentifier,
-                                                     for: indexPath) as? DetailPaymentTableViewCell ?? DetailPaymentTableViewCell()
+            let cell = tableView.dequeueReusableCell(withIdentifier: DetailItemsTableViewCell.cellIdentifier,
+                                                     for: indexPath) as? DetailItemsTableViewCell ?? DetailItemsTableViewCell()
             
             cell.payments = payments
             return cell
         case .parking(let parkings, _):
-            let cell = tableView.dequeueReusableCell(withIdentifier: DetailParkingTableViewCell.cellIdentifier,
-                                                     for: indexPath) as? DetailParkingTableViewCell ?? DetailParkingTableViewCell()
+            let cell = tableView.dequeueReusableCell(withIdentifier: DetailItemsTableViewCell.cellIdentifier,
+                                                     for: indexPath) as? DetailItemsTableViewCell ?? DetailItemsTableViewCell()
             
             cell.parkings = parkings
             return cell
         case .restaurantService(let services, _, let color):
-            let cell = tableView.dequeueReusableCell(withIdentifier: DetailRestaurantServiceTableViewCell.cellIdentifier,
-                                                     for: indexPath) as? DetailRestaurantServiceTableViewCell ?? DetailRestaurantServiceTableViewCell()
+            let cell = tableView.dequeueReusableCell(withIdentifier: DetailRestaurantTableViewCell.cellIdentifier,
+                                                     for: indexPath) as? DetailRestaurantTableViewCell ?? DetailRestaurantTableViewCell()
             
             cell.restaurantService = RestaurantService(services, color)
             return cell
         case .restaurantSpeciality(let specialties, _, let color):
-            let cell = tableView.dequeueReusableCell(withIdentifier: DetailRestaurantSpecialityTableViewCell.cellIdentifier,
-                                                     for: indexPath) as? DetailRestaurantSpecialityTableViewCell ?? DetailRestaurantSpecialityTableViewCell()
+            let cell = tableView.dequeueReusableCell(withIdentifier: DetailRestaurantTableViewCell.cellIdentifier,
+                                                     for: indexPath) as? DetailRestaurantTableViewCell ?? DetailRestaurantTableViewCell()
             
             cell.restaurantSpeciatity = RestaurantSpeciality(specialties, color)
             return cell
@@ -434,14 +491,15 @@ extension DetailPlaceViewController: UITableViewDelegate {
         let type = viewModel.dataSource[indexPath.section].sectionObjects[indexPath.row]
         
         switch type {
-        case .description(_, let height): return height
-        case .contact(_, let height): return height
-        case .address(_, _, let height): return height
-        case .workDays(_, let height): return height
-        case .payment(_, let height): return height
-        case .parking(_, let height): return height
-        case .restaurantService(_, let height, _): return height
-        case .restaurantSpeciality(_, let height, _): return height
+        case .description(_, let height),
+             .contact(_, let height),
+             .address(_, _, let height),
+             .workDays(_, let height),
+             .payment(_, let height),
+             .parking(_, let height),
+             .restaurantService(_, let height, _),
+             .restaurantSpeciality(_, let height, _),
+             .images(_, _, _, let height): return height
         }
     }
     

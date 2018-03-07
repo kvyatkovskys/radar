@@ -9,10 +9,12 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import SnapKit
 
 final class PlaceTableViewCell: UITableViewCell {
     static let cellIndetifier = "PlaceTableViewCell"
     
+    fileprivate var widthCategory: Constraint?
     fileprivate let disposeBag = DisposeBag()
     
     fileprivate let mainView: UIView = {
@@ -30,7 +32,7 @@ final class PlaceTableViewCell: UITableViewCell {
         return image
     }()
     
-    fileprivate let titleLabel: UILabel = {
+    let titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = .boldSystemFont(ofSize: 17.0)
@@ -77,6 +79,10 @@ final class PlaceTableViewCell: UITableViewCell {
     var titleCategory: String? {
         didSet {
             categoryLabel.text = titleCategory
+            if let width = titleCategory?.width(font: .boldSystemFont(ofSize: 13.0), height: 20.0) {
+                widthCategory?.update(offset: width + 25.0)
+                layoutIfNeeded()
+            }
         }
     }
     
@@ -108,10 +114,11 @@ final class PlaceTableViewCell: UITableViewCell {
             make.bottom.equalToSuperview()
         }
 
-        categoryLabel.snp.makeConstraints { (make) in
+        categoryLabel.snp.remakeConstraints { (make) in
             make.right.equalToSuperview()
-            make.size.equalTo(CGSize(width: 80.0, height: 20.0))
+            make.height.equalTo(20.0)
             make.centerY.equalTo(ratingLabel)
+            widthCategory = make.width.equalTo(80.0).constraint
         }
     }
     

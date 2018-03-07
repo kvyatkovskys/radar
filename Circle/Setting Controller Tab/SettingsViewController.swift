@@ -54,11 +54,15 @@ final class SettingsViewController: UIViewController {
     func setUpAlertView(title: String, description: String, action: @escaping () -> Void) {
         let alert = UIAlertController(title: title,
                                       message: description,
-                                      preferredStyle: UIAlertControllerStyle.alert)
-        let clear = UIAlertAction(title: "Clear", style: .destructive, handler: { _ in
+                                      preferredStyle: .actionSheet)
+        let clear = UIAlertAction(title: NSLocalizedString("clear", comment: "Title for clear button"),
+                                  style: .destructive,
+                                  handler: { _ in
             action()
         })
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancel = UIAlertAction(title: NSLocalizedString("cancel", comment: "Title for cancel button"),
+                                   style: .cancel,
+                                   handler: nil)
         
         alert.addAction(clear)
         alert.addAction(cancel)
@@ -174,14 +178,15 @@ extension SettingsViewController: UITableViewDelegate {
         let typeCell = viewModel.items[indexPath.section].sectionObjects[indexPath.row]
         
         switch typeCell {
-        case .facebookLogin,
-             .clearFavorites,
+        case .clearFavorites,
              .clearHistorySearch,
              .showSearchHistory,
              .favoriteNotify,
              .listFavoritesNoticy,
              .openSettings:
             return 50.0
+        case .facebookLogin:
+            return 60.0
         }
     }
 }

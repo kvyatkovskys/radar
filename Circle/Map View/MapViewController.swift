@@ -10,10 +10,11 @@ import UIKit
 import MapKit
 
 final class MapViewController: UIViewController, MKMapViewDelegate {
-    typealias Dependecies = HasMapModel
+    typealias Dependecies = HasMapModel & HasPlaceViewModel
     
-    fileprivate let places: [Places]
-    fileprivate let location: CLLocation?
+    var places: [Places]
+    var userLocation: CLLocation?
+    fileprivate let placeViewModel: PlaceViewModel
     
     fileprivate lazy var mapView: MKMapView = {
         let map = MKMapView()
@@ -41,7 +42,8 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
     
     init(_ dependecies: Dependecies) {
         self.places = dependecies.places
-        self.location = dependecies.location
+        self.userLocation = dependecies.location
+        self.placeViewModel = dependecies.viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -54,32 +56,31 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
         
         view.addSubview(mapView)
         updateViewConstraints()
-        
-        if let location = location {
-            centerMapOnLocation(location)
-            addPointOnMap(places: places)
-        }
+        addPointOnMap(places: places)
     }
     
-    fileprivate func addPointOnMap(places: [Places]) {
+    func addPointOnMap(places: [Places]) {
+        if let location = userLocation {
+            centerMapOnLocation(location)
+        }
         mapView.removeAnnotations(mapView.annotations)
         
         typealias MapLocations = (location: CLLocationCoordinate2D, title: String?, subTitle: String?)
-        var locations: [MapLocations] = []
-        places.forEach { (item) in
-            item.items.forEach({ place in
-                locations.append(MapLocations(location: CLLocationCoordinate2D(latitude: place.location?.latitude ?? 0,
-                                                                               longitude: place.location?.longitude ?? 0),
-                                              title: place.name,
-                                              subTitle: place.location?.street))
-            })
-        }
+        let locations = places.flatMap({ $0.items.flatMap({ (place) -> [MapLocations] in
+            var locations: [MapLocations] = []
+            locations.append(MapLocations(location: CLLocationCoordinate2D(latitude: place.location?.latitude ?? 0,
+                                                                           longitude: place.location?.longitude ?? 0),
+                                          title: place.name,
+                                          subTitle: place.location?.street))
+            return locations
+        })})
         
         locations.forEach { (item) in
             let annotation = MKPointAnnotation()
             annotation.coordinate = item.location
             annotation.title = item.title
             annotation.subtitle = item.subTitle
+            
             DispatchQueue.main.async { [unowned self] in
                 self.mapView.addAnnotation(annotation)
                 self.mapView.add(MKCircle(center: item.location, radius: 100.0))
@@ -90,17 +91,33 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
     fileprivate func centerMapOnLocation(_ location: CLLocation, radius: Double = FilterDistanceViewModel().defaultDistance) {
         let regionRadius: CLLocationDistance = radius
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius, regionRadius)
-        mapView.setRegion(coordinateRegion, animated: false)
+        mapView.setRegion(coordinateRegion, animated: true)
     }
     
-    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        if overlay is MKCircle {
-            let circleRenderer = MKCircleRenderer(overlay: overlay)
-            circleRenderer.lineWidth = 1.0
-            circleRenderer.strokeColor = UIColor.black.withAlphaComponent(0.1)
-            circleRenderer.fillColor = UIColor.lightGray.withAlphaComponent(0.1)
-            return circleRenderer
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard !(annotation is MKUserLocation) else {
+            return nil
         }
-        return MKOverlayRenderer(overlay: overlay)
+        let pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: String(annotation.hash))
+        
+        let rightButton = UIButton(type: .detailDisclosure)
+        rightButton.tag = annotation.hash
+        
+        pinView.animatesDrop = true
+        pinView.canShowCallout = true
+        pinView.rightCalloutAccessoryView = rightButton
+        
+        return pinView
+    }
+    
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        if (control as? UIButton)?.buttonType == .detailDisclosure {
+            dismiss(animated: true, completion: nil)
+            places.forEach ({ [unowned self] place in
+                if let index = place.items.index(where: { $0.name == view.annotation?.title ?? "" }) {
+                    self.placeViewModel.openDetailPlace(place.items[index], place.titles[index], place.ratings[index], FavoritesViewModel())
+                }
+            })
+        }
     }
 }

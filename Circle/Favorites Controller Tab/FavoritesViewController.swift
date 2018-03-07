@@ -89,7 +89,7 @@ final class FavoritesViewController: UIViewController {
             notificationSettingsToken = settings.observe { [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
                 case .initial(let collection), .update(let collection, _, _, _):
-                    guard collection.first?.cancelNotice ?? true else {
+                    guard collection.first?.allwaysLocation ?? true else {
                         self.navigationItem.leftBarButtonItem = self.leftBarButton
                         return
                     }
@@ -109,14 +109,18 @@ final class FavoritesViewController: UIViewController {
     }
     
     @objc func showAlert() {
-        let alertController = UIAlertController(title: "Warning",
-                                                message: "To receive notifications when you are near a place, open the setting for this application and set the location as 'Always usage'",
+        let alertController = UIAlertController(title: NSLocalizedString("warning", comment: "Title for warning"),
+                                                message: NSLocalizedString("recieveNotifyFromFavorites",
+                                                                           comment: "Text when location not equal always"),
                                                 preferredStyle: .alert)
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: "Title for cancel"),
+                                         style: .cancel,
+                                         handler: nil)
         alertController.addAction(cancelAction)
         
-        let openAction = UIAlertAction(title: "Open settings", style: .default) { _ in
+        let openAction = UIAlertAction(title: NSLocalizedString("openSettings",
+                                                                comment: "Title for button to open settings"), style: .default) { _ in
             if let url = URL(string: UIApplicationOpenSettingsURLString) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
@@ -151,7 +155,8 @@ extension FavoritesViewController: UITableViewDataSource {
 
 extension FavoritesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let delete = UITableViewRowAction(style: .destructive, title: "Remove") { [unowned self] (_, indexPath) in
+        let delete = UITableViewRowAction(style: .destructive,
+                                          title: NSLocalizedString("remove", comment: "Title for remove")) { [unowned self] (_, indexPath) in
             self.viewModel.deleteFromFavorites(id: self.dataSource[indexPath.row].id)
         }
         return [delete]

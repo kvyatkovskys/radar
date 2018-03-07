@@ -85,21 +85,21 @@ enum Categories: String {
     var title: String {
         switch self {
         case .arts:
-            return "Arts"
+            return NSLocalizedString("arts", comment: "Title for art category")
         case .education:
-            return "Education"
+            return NSLocalizedString("education", comment: "Title for education category")
         case .fitness:
-            return "Fitness"
+            return NSLocalizedString("fitness", comment: "Title for fitness category")
         case .food:
-            return "Food"
+            return NSLocalizedString("food", comment: "Title for food category")
         case .hotel:
-            return "Hotel"
+            return NSLocalizedString("hotel", comment: "Title for hotel category")
         case .medical:
-            return "Medical"
+            return NSLocalizedString("medical", comment: "Title for medical category")
         case .shopping:
-            return "Shopping"
+            return NSLocalizedString("shopping", comment: "Title for shopping category")
         case .travel:
-            return "Travel"
+            return NSLocalizedString("travel", comment: "Title for travel category")
         }
     }
 }

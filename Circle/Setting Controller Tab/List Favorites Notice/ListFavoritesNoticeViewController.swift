@@ -51,7 +51,7 @@ final class ListFavoritesNoticeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = "List Favorites"
+        navigationItem.title = NSLocalizedString("listFavorites", comment: "The title for navigation bar with a list of favorites")
         navigationItem.leftBarButtonItem = leftBarButton
         
         view.addSubview(tableView)

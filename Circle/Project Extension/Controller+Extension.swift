@@ -12,6 +12,14 @@ extension PlacesViewController: UIPopoverPresentationControllerDelegate {
     // MARK: UINavigationControllerDelegate
     public func adaptivePresentationStyle(for controller: UIPresentationController,
                                           traitCollection: UITraitCollection) -> UIModalPresentationStyle {
-        return UIModalPresentationStyle.none
+        return .none
+    }
+}
+
+extension DetailPlaceViewController: UIPopoverPresentationControllerDelegate {
+    // MARK: UINavigationControllerDelegate
+    public func adaptivePresentationStyle(for controller: UIPresentationController,
+                                          traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        return .none
     }
 }

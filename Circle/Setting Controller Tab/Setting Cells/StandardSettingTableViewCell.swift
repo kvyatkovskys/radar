@@ -22,6 +22,7 @@ final class StandardSettingTableViewCell: UITableViewCell {
     fileprivate let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16.0)
+        label.numberOfLines = 0
         return label
     }()
     
