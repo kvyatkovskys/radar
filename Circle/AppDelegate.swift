@@ -9,6 +9,7 @@
 import UIKit
 import RealmSwift
 import UserNotifications
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         setupNavigationBar()
         initialViewController()
+        FirebaseApp.configure()
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         checkAuthNotification(application)
         

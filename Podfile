@@ -12,6 +12,7 @@ def pods
  pod 'FBSDKShareKit'
  pod 'FBSDKPlacesKit'
  pod 'Lightbox'
+ pod 'Firebase/Core'
 end
 
 target 'Circle' do

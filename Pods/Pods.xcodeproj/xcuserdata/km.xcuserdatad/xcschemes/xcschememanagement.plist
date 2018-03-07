@@ -34,6 +34,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>GoogleToolboxForMac.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Hue.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -90,6 +95,11 @@
 			<false/>
 		</dict>
 		<key>Unbox.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>nanopb.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
