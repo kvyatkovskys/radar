@@ -2,3 +2,4 @@ Pods/FirebaseAnalytics/Frameworks/FirebaseAnalytics.framework/FirebaseAnalytics 
 Pods/FirebaseAnalytics/Frameworks/FirebaseCoreDiagnostics.framework/FirebaseCoreDiagnostics filter=lfs diff=lfs merge=lfs -text
 Pods/FirebaseCore/Frameworks/FirebaseCore.framework/FirebaseCore filter=lfs diff=lfs merge=lfs -text
 Pods/FirebaseInstanceID/Frameworks/FirebaseInstanceID.framework/FirebaseInstanceID filter=lfs diff=lfs merge=lfs -text
+screenshots/screen\#2.png filter=lfs diff=lfs merge=lfs -text

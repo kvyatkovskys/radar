@@ -49,15 +49,15 @@ final class WorkDaysViewController: UIViewController {
         updateViewConstraints()
         
         collectionView.register(WorkDaysCollectionViewCell.self, forCellWithReuseIdentifier: WorkDaysCollectionViewCell.cellIdentifier)
-        let indexPath = IndexPath(row: workDays?.currentDay.index ?? 0, section: 0)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [unowned self] in
-            self.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
-        }
     }
     
     func reloadedData(workDays: WorkDays?) {
         self.workDays = workDays
         collectionView.reloadData()
+        let indexPath = IndexPath(row: workDays?.currentDay.index ?? 0, section: 0)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [unowned self] in
+            self.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
+        }
     }
 }
 
