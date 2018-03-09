@@ -6,29 +6,14 @@ PODS:
     - Bolts/Tasks
   - Bolts/Tasks (1.9.0)
   - Cache (4.1.2)
-  - FBSDKCoreKit (4.31.0):
+  - FBSDKCoreKit (4.31.1):
     - Bolts (~> 1.7)
-  - FBSDKLoginKit (4.31.0):
+  - FBSDKLoginKit (4.31.1):
     - FBSDKCoreKit
-  - FBSDKPlacesKit (4.31.0):
+  - FBSDKPlacesKit (4.31.1):
     - FBSDKCoreKit
-  - FBSDKShareKit (4.31.0):
-    - FBSDKCoreKit (~> 4.31.0)
-  - Firebase/Core (4.10.0):
-    - FirebaseAnalytics (= 4.1.0)
-    - FirebaseCore (= 4.0.16)
-  - FirebaseAnalytics (4.1.0):
-    - FirebaseCore (~> 4.0)
-    - FirebaseInstanceID (~> 2.0)
-    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
-    - nanopb (~> 0.3)
-  - FirebaseCore (4.0.16):
-    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
-  - FirebaseInstanceID (2.0.9):
-    - FirebaseCore (~> 4.0)
-  - GoogleToolboxForMac/Defines (2.1.3)
-  - GoogleToolboxForMac/NSData+zlib (2.1.3):
-    - GoogleToolboxForMac/Defines (= 2.1.3)
+  - FBSDKShareKit (4.31.1):
+    - FBSDKCoreKit (~> 4.31.1)
   - Hue (3.0.1)
   - Imaginary (3.0.3):
     - Cache (~> 4.0)
@@ -36,11 +21,6 @@ PODS:
   - Lightbox (2.1.2):
     - Hue (~> 3.0)
     - Imaginary (~> 3.0)
-  - nanopb (0.3.8):
-    - nanopb/decode (= 0.3.8)
-    - nanopb/encode (= 0.3.8)
-  - nanopb/decode (0.3.8)
-  - nanopb/encode (0.3.8)
   - Realm (3.1.1):
     - Realm/Headers (= 3.1.1)
   - Realm/Headers (3.1.1)
@@ -57,7 +37,6 @@ DEPENDENCIES:
   - FBSDKLoginKit
   - FBSDKPlacesKit
   - FBSDKShareKit
-  - Firebase/Core
   - Kingfisher
   - Lightbox
   - RealmSwift
@@ -69,20 +48,14 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
   Cache: bd0233fc688b5e83a27bcd87807db7e6f23adcc5
-  FBSDKCoreKit: 54db4c581123745d25a9f7c1608020b3aeabd118
-  FBSDKLoginKit: 95a252ddffd6919c0f132a02292f0824616d8709
-  FBSDKPlacesKit: a6febe1055a500ba89d679903f393f162e94bf1c
-  FBSDKShareKit: 7c3a2e6bb5be15676aebe256444afb18c5d238b3
-  Firebase: c98c8b1fbcbdccd82539a36c2b17a9b1bb0ee798
-  FirebaseAnalytics: 3dfae28d4a5e06f86c4fae830efc2ad3fadb19bc
-  FirebaseCore: eb9e1a56733ff1094ecf3e28af9069c344b25239
-  FirebaseInstanceID: d2058a35e9bebda1b6dd42486b84917bde552a9d
-  GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
+  FBSDKCoreKit: e08ccfcefa7bc1347a07c276dac9bf6c7fe57024
+  FBSDKLoginKit: 99797ac39252fef6f72600b886f6ee60b4b29cab
+  FBSDKPlacesKit: c5cafcbcdc9d92820e152e049057838b1bc78088
+  FBSDKShareKit: e640c41c9fcd61929eeb3d0c21ad335103e7cb62
   Hue: 93e852fa6211ab35922ad8c293f51c43d6c79eb2
   Imaginary: 9b45836a5af881f452a86e0a1215772ae4712d00
   Kingfisher: 98e6d5b5e807645743e8ed5ececd25d688d38452
   Lightbox: 2dc267df8be2285bc7724cb11cbbf4aaaf59dced
-  nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   Realm: 42d1c38a5b1bbcc828b48a7ce702cb86fc68adf4
   RealmSwift: d31937ca6a6ee54acde64ec839523c0a3c04924b
   RxCocoa: d88ba0f1f6abf040011a9eb4b539324fc426843a
@@ -90,6 +63,6 @@ SPEC CHECKSUMS:
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   Unbox: 30e437e6151a6de16139375fd4e8dd9a664cfbf7
 
-PODFILE CHECKSUM: b15bfb09e49567c4b6ed452e6e8088d25b9960ee
+PODFILE CHECKSUM: dde250c26c4c26e7a9e433ce5ab1db7d4712e8bd
 
 COCOAPODS: 1.4.0

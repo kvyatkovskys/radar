@@ -58,7 +58,8 @@ final class DistanceFilterView: UIView {
     fileprivate lazy var swicthButton: UISwitch = {
         let swicth = UISwitch()
         swicth.setOn(filterDistance.searchForMinDistance, animated: false)
-        swicth.onTintColor = UIColor.sliderColor
+        swicth.onTintColor = .sliderColor
+        swicth.tintColor = .lightGray
         return swicth
     }()
     

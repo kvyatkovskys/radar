@@ -35,6 +35,8 @@
 	<string>fa7449e641b75881e3466ca88471d058</string>
 	<key>FacebookDisplayName</key>
 	<string>Place</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
