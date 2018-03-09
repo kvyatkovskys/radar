@@ -9,4 +9,4 @@
 *.html
 *.junit
 librealmcore-ios.a
-GoogleService-Info.plist
+Keys.swift

@@ -13,11 +13,13 @@ import RealmSwift
 import UserNotifications
 
 final class LocationService: NSObject, CLLocationManagerDelegate {
+    typealias LocationMonitoring = (location: CLLocation?, monitoring: Bool)
+    
     fileprivate var locationManager: CLLocationManager
     fileprivate let window = UIApplication.shared.keyWindow
     fileprivate var notificationTokenSettings: NotificationToken?
     fileprivate var notificationTokenFavorites: NotificationToken?
-    let userLocation = PublishSubject<CLLocation?>()
+    let userLocation = PublishSubject<LocationMonitoring>()
     
     fileprivate let geocoder: CLGeocoder = {
         return CLGeocoder()
@@ -237,7 +239,7 @@ extension LocationService {
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         geocoder.cancelGeocode()
-        userLocation.onNext(nil)
+        userLocation.onError(error)
         window?.rootViewController?.showAlertLight(title: NSLocalizedString("error",
                                                                             comment: "Error when the manager didn't detect the current position"),
                                                    message: NSLocalizedString("notDetermineLocation",
@@ -266,13 +268,11 @@ extension LocationService {
             }
 
             guard (50.0..<100.0).contains(distance) || distance > 100.0 else {
-                userLocation.onNext(oldLocation)
-                stop()
+                userLocation.onNext(LocationMonitoring(oldLocation, false))
                 return
             }
             
-            userLocation.onNext(currentLocation)
-            stop()
+            userLocation.onNext(LocationMonitoring(currentLocation, true))
             
             let location = Location()
             location.latitude = currentLocation.coordinate.latitude

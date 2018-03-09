@@ -91,6 +91,7 @@
 		8BDAA39B204B0FF8002EAE98 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8BDAA39D204B0FF8002EAE98 /* Localizable.strings */; };
 		8BDAA3A2204B3216002EAE98 /* ThousandsSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDAA3A1204B3216002EAE98 /* ThousandsSeparator.swift */; };
 		8BDAA3B3204D7117002EAE98 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8BDAA3B5204D7117002EAE98 /* InfoPlist.strings */; };
+		8BDAA3C12052C0EC002EAE98 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDAA3C02052C0EC002EAE98 /* Keys.swift */; };
 		8BE2089D1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2089C1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift */; };
 		8BE2089F1FFD17470048D690 /* FilterPlacesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2089E1FFD17470048D690 /* FilterPlacesViewController.swift */; };
 		8BE208A11FFD1D300048D690 /* Controller+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE208A01FFD1D300048D690 /* Controller+Extension.swift */; };
@@ -239,6 +240,7 @@
 		8BDAA3BB204D7127002EAE98 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8BDAA3BC204D7129002EAE98 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8BDAA3BD204D712A002EAE98 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		8BDAA3C02052C0EC002EAE98 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		8BE2089C1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		8BE2089E1FFD17470048D690 /* FilterPlacesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterPlacesViewController.swift; sourceTree = "<group>"; };
 		8BE208A01FFD1D300048D690 /* Controller+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Controller+Extension.swift"; sourceTree = "<group>"; };
@@ -485,6 +487,7 @@
 				8B44C37E1FEFE195003C0754 /* QuickAlertController.swift */,
 				8B4177091FFD5785002A963A /* ActivityIndicatorView.swift */,
 				8B4177181FFD670B002A963A /* DeviceType.swift */,
+				8BDAA3C02052C0EC002EAE98 /* Keys.swift */,
 			);
 			path = "Project Settings";
 			sourceTree = "<group>";
@@ -781,6 +784,7 @@
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Unbox/Unbox.framework",
+				"${PODS_ROOT}/YandexMobileMetrica/dynamic/YandexMobileMetrica.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -800,6 +804,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Unbox.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YandexMobileMetrica.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -844,6 +849,7 @@
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Unbox/Unbox.framework",
+				"${PODS_ROOT}/YandexMobileMetrica/dynamic/YandexMobileMetrica.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -863,6 +869,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Unbox.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YandexMobileMetrica.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -951,6 +958,7 @@
 				8B82C3952014B72500E0CA89 /* FriendsModel.swift in Sources */,
 				8B147BDE2025198200EDA2D4 /* SearchModel.swift in Sources */,
 				8B2940B22018B160004CB9AD /* DetailPlaceModel.swift in Sources */,
+				8BDAA3C12052C0EC002EAE98 /* Keys.swift in Sources */,
 				8B147BDA2024A1AE00EDA2D4 /* ResultSearchViewController.swift in Sources */,
 				8B18FE14200A994F00E637C7 /* FCButtonLoginTableViewCell.swift in Sources */,
 				8B3398D620127670002966ED /* DetailSectionTableViewCell.swift in Sources */,

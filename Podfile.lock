@@ -31,6 +31,7 @@ PODS:
   - RxSwift (4.1.2)
   - SnapKit (4.0.0)
   - Unbox (2.5.0)
+  - YandexMobileMetrica/Dynamic (2.9.6)
 
 DEPENDENCIES:
   - FBSDKCoreKit
@@ -44,6 +45,7 @@ DEPENDENCIES:
   - RxSwift
   - SnapKit
   - Unbox
+  - YandexMobileMetrica/Dynamic
 
 SPEC CHECKSUMS:
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
@@ -62,7 +64,8 @@ SPEC CHECKSUMS:
   RxSwift: e49536837d9901277638493ea537394d4b55f570
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   Unbox: 30e437e6151a6de16139375fd4e8dd9a664cfbf7
+  YandexMobileMetrica: 330c11f9e4b8b3b72454c0cd80f61b4231467ebe
 
-PODFILE CHECKSUM: dde250c26c4c26e7a9e433ce5ab1db7d4712e8bd
+PODFILE CHECKSUM: 1a4b12a2f9679cefe66743676e57b8290ed6349f
 
 COCOAPODS: 1.4.0

@@ -9,6 +9,7 @@
 import UIKit
 import RealmSwift
 import UserNotifications
+import YandexMobileMetrica
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         setupNavigationBar()
         initialViewController()
+        YMMYandexMetrica.activate(withApiKey: yandexKey)
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         checkAuthNotification(application)
         
