@@ -12,7 +12,6 @@ before_install:
   - bundle install
   - pod repo update
   - pod install
-  - brew upgrade swiftlint
 
 script:
   #- set -o pipefail && xcodebuild test -workspace Circle.xcworkspace -scheme Circle -sdk iphonesimulator11.2 -destination 'name=iPhone 8,OS=11.2' ONLY_ACTIVE_ARCH=NO | xcpretty

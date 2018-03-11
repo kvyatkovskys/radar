@@ -120,7 +120,12 @@ final class PlacesViewController: UIViewController {
             notificationTokenCategories = selectedCategories.observe({ [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
                 case .update:
-                    self.locationService.start()
+                    self.indicatorView.showIndicator()
+                    guard self.searchForMinDistance == false else {
+                        self.loadPlacesLocation(self.userLocation, distance: 100.0)
+                        return
+                    }
+                    self.loadPlacesLocation(self.userLocation)
                 case .error(let error):
                     fatalError("\(error)")
                 case .initial:
@@ -130,11 +135,10 @@ final class PlacesViewController: UIViewController {
             
             notificationTokenDistance = filterDistance.observe({ [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
-                case .initial(let filter):
-                    self.searchForMinDistance = filter.first?.searchForMinDistance ?? false
-                    guard self.searchForMinDistance else { return }
-                    self.loadPlacesLocation(self.userLocation, distance: 100.0)
+                case .initial:
+                    break
                 case .update(let filter, _, _, _):
+                    self.indicatorView.showIndicator()
                     let searchFilter = filter.first
                     self.searchForMinDistance = searchFilter?.searchForMinDistance ?? false
                     guard self.searchForMinDistance == false else {
@@ -161,7 +165,7 @@ final class PlacesViewController: UIViewController {
                 self.indicatorView.showIndicator()
                 self.userLocation = locationMonitoring.location
                 guard self.searchForMinDistance == false else {
-                    self.loadPlacesLocation(self.userLocation, distance: 100.0)
+                    self.loadPlacesLocation(locationMonitoring.location, distance: 100.0)
                     return
                 }
                 self.loadPlacesLocation(locationMonitoring.location)
