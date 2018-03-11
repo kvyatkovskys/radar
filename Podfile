@@ -12,7 +12,7 @@ def pods
  pod 'FBSDKShareKit'
  pod 'FBSDKPlacesKit'
  pod 'Lightbox'
- pod 'Firebase/Core'
+ pod 'YandexMobileMetrica/Dynamic'
 end
 
 target 'Circle' do

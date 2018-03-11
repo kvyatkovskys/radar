@@ -120,7 +120,12 @@ final class PlacesViewController: UIViewController {
             notificationTokenCategories = selectedCategories.observe({ [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
                 case .update:
-                    self.locationService.start()
+                    self.indicatorView.showIndicator()
+                    guard self.searchForMinDistance == false else {
+                        self.loadPlacesLocation(self.userLocation, distance: 100.0)
+                        return
+                    }
+                    self.loadPlacesLocation(self.userLocation)
                 case .error(let error):
                     fatalError("\(error)")
                 case .initial:
@@ -130,18 +135,17 @@ final class PlacesViewController: UIViewController {
             
             notificationTokenDistance = filterDistance.observe({ [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
-                case .initial(let filter):
-                    self.searchForMinDistance = filter.first?.searchForMinDistance ?? false
-                    guard self.searchForMinDistance else { return }
-                    self.searchForNewDistance(value: 100.0)
+                case .initial:
+                    break
                 case .update(let filter, _, _, _):
+                    self.indicatorView.showIndicator()
                     let searchFilter = filter.first
                     self.searchForMinDistance = searchFilter?.searchForMinDistance ?? false
                     guard self.searchForMinDistance == false else {
-                        self.searchForNewDistance(value: 100.0)
+                        self.loadPlacesLocation(self.userLocation, distance: 100.0)
                         return
                     }
-                    self.searchForNewDistance(value: searchFilter?.distance ?? 1000.0)
+                    self.loadPlacesLocation(self.userLocation, distance: searchFilter?.distance ?? 1000.0)
                 case .error(let error):
                     fatalError("\(error)")
                 }
@@ -151,16 +155,23 @@ final class PlacesViewController: UIViewController {
         }
         
         locationService.userLocation.asObserver()
-            .subscribe(onNext: { [unowned self] (location) in
+            .filter({ (locationMonitoring) -> Bool in
+                if self.refreshControl.isRefreshing {
+                    self.refreshControl.endRefreshing()
+                }
+                return self.userLocation == nil || locationMonitoring.monitoring
+            })
+            .subscribe(onNext: { [unowned self] (locationMonitoring) in
                 self.indicatorView.showIndicator()
-                self.userLocation = location
+                self.userLocation = locationMonitoring.location
                 guard self.searchForMinDistance == false else {
-                    self.searchForNewDistance(value: 100.0)
+                    self.loadPlacesLocation(locationMonitoring.location, distance: 100.0)
                     return
                 }
-                self.loadPlacesLocation(location)
+                self.loadPlacesLocation(locationMonitoring.location)
             }, onError: { [unowned self] (error) in
                 print(error)
+                self.indicatorView.hideIndicator()
                 if self.refreshControl.isRefreshing {
                     self.refreshControl.endRefreshing()
                 }
@@ -195,13 +206,6 @@ final class PlacesViewController: UIViewController {
             view.addSubview(tableView)
             updateConstraints()
             navigationItem.leftBarButtonItem?.image = UIImage(named: "ic_map")!.withRenderingMode(.alwaysTemplate)
-        }
-    }
-    
-    fileprivate func searchForNewDistance(value: Double) {
-        if let location = userLocation {
-            indicatorView.showIndicator()
-            loadPlacesLocation(location, distance: value)
         }
     }
     
