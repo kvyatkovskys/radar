@@ -323,20 +323,24 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
             indicatorView.showIndicator()
         }
         
-        Observable.combineLatest(viewModel.loadPhotos(), viewModel.getInfoAboutPlace(id: viewModel.place.id)).asObservable()
-            .subscribe(onNext: { [unowned self] (sourceImages, sourceForFavorite) in
-                self.viewModel.dataSource.insert(sourceImages, at: 0)
-                self.tableView.reloadData()
+        Observable.combineLatest(viewModel.loadPhotos(), viewModel.getInfoAboutPlace(id: viewModel.place.id))
+            .flatMapLatest { [unowned self] (sourceImages, sourceForFavorite) -> Observable<[DetailSectionObjects]> in
+                var dataSource = self.viewModel.dataSource
+                dataSource.insert(sourceImages, at: 0)
                 
                 guard self.viewModel.place.fromFavorites else {
-                    return
+                    return Observable.just(dataSource)
                 }
                 
-                self.viewModel.dataSource = sourceForFavorite
-                self.viewModel.dataSource.insert(sourceImages, at: 0)
-                self.tableView.reloadData()
+                dataSource = sourceForFavorite
+                dataSource.insert(sourceImages, at: 0)
                 self.indicatorView.hideIndicator()
-                
+                return Observable.just(dataSource)
+            }
+            .asObservable()
+            .subscribe(onNext: { [unowned self] (dataSource) in
+                self.viewModel.dataSource = dataSource
+                self.tableView.reloadData()
             }, onError: { (error) in
                 print(error)
                 self.indicatorView.hideIndicator()
