@@ -288,6 +288,16 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
             notificationTokenFavorites = favorites.observe { [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
                 case .update(let favorites, _, _, _):
+                    if let url = URL(string: favorites.filter("id = \(self.viewModel.place.id)").first?.picture ?? ""),
+                        self.viewModel.place.fromFavorites {
+                        
+                        self.imageHeader.kf.indicatorType = .activity
+                        self.imageHeader.kf.setImage(with: url,
+                            placeholder: nil,
+                            options: self.kingfisherOptions,
+                            progressBlock: nil,
+                            completionHandler: nil)
+                    }
                     guard favorites.contains(where: { $0.id == self.viewModel.place.id }) else {
                         self.favoriteButton.setTitle(NSLocalizedString("add",
                                                                        comment: "The title for button that added to favorite"),

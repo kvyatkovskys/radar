@@ -5,47 +5,47 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.035093">
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.015839">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: clear_derived_data" time="0.031693">
+      <testcase classname="fastlane.lanes" name="1: clear_derived_data" time="4.07519">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: clean_build_artifacts" time="0.006133">
+      <testcase classname="fastlane.lanes" name="2: clean_build_artifacts" time="0.002511">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="3: ensure_git_status_clean" time="0.101358">
+      <testcase classname="fastlane.lanes" name="3: ensure_git_status_clean" time="0.199399">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="4: number_of_commits" time="0.055155">
+      <testcase classname="fastlane.lanes" name="4: number_of_commits" time="0.041401">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="5: increment_build_number" time="3.472252">
+      <testcase classname="fastlane.lanes" name="5: increment_build_number" time="2.899839">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="6: match" time="21.563255">
+      <testcase classname="fastlane.lanes" name="6: match" time="9.225737">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="7: build_app" time="724.151074">
+      <testcase classname="fastlane.lanes" name="7: build_app" time="652.51115">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="8: upload_to_testflight" time="152.13443">
+      <testcase classname="fastlane.lanes" name="8: upload_to_testflight" time="164.006144">
         
       </testcase>
     

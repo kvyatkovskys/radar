@@ -8,6 +8,7 @@
 
 import Foundation
 import RxSwift
+import RealmSwift
 
 struct DetailSectionObjects {
     var sectionName: String
@@ -61,8 +62,23 @@ struct DetailPlaceViewModel {
     
     func getInfoAboutPlace(id: Int) -> Observable<[DetailSectionObjects]> {
         return favoritesService.loadInfoPlace(id: id).flatMap({ (model) -> Observable<[DetailSectionObjects]> in
+            if self.place.fromFavorites {
+                 self.updateCoverPhoto(url: model.coverPhoto)
+            }
             return Observable.just(DetailPlaceViewModel.updateValue(place: model, color: self.colorCategory))
         })
+    }
+    
+    fileprivate func updateCoverPhoto(url: URL?) {
+        do {
+            let realm = try Realm()
+            let favorites = realm.objects(Favorites.self).filter("id = \(place.id)").first
+            try realm.write {
+                favorites?.picture = url?.absoluteString
+            }
+        } catch {
+            print(error)
+        }
     }
     
     static fileprivate func updateValue(place: PlaceModel, color: UIColor?) -> [DetailSectionObjects] {
