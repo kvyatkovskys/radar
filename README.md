@@ -1,5 +1,5 @@
 <p align="center">
-	<img src="https://github.com/kvyatkovskys/radar/blob/master/screenshots/logo.png" width="400" height="200">
+	<img src="https://raw.githubusercontent.com/kvyatkovskys/radar/master/screenshots/logo.png" width="400" height="200">
 </p>
 
 # Radar - Search for places
