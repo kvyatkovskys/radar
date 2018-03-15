@@ -41,10 +41,29 @@ struct DetailService {
 
                 if let data = result as? [String: Any], let model: DetailImagesModel = try? unbox(dictionary: data) {
                     observable.on(.next(model))
-                    observable.onCompleted()
                 }
             })
             return Disposables.create()
+        })
+    }
+    
+    func loadMorePhotos(url: URL) -> Observable<DetailImagesModel> {
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        return URLSession.shared.rx.response(request: request)
+            .flatMap({ (response, data) -> Observable<DetailImagesModel> in
+                guard 200 == response.statusCode else {
+                    let error = NSError(type: .other, info: "Recieved a response not 200")
+                    return Observable.error(error)
+                }
+                
+                if let model: DetailImagesModel = try? unbox(data: data) {
+                    return Observable.just(model)
+                } else {
+                    let error = NSError(type: .other, info: "Parsing error")
+                    return Observable.error(error)
+                }
         })
     }
 }

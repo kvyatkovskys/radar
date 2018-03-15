@@ -101,8 +101,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
             color = self.viewModel.place.categories?.first?.color
         }
         
-        let listCategories = ListCategoriesViewController(ListSubCategoriesViewModel(self.viewModel.place.subCategories ?? [],
-                                                                                     color: color))
+        let listCategories = ListCategoriesViewController(ListSubCategoriesViewModel(self.viewModel.place.subCategories ?? [], color: color))
         
         var frame = listCategories.view.frame
         frame.size.height = view.frame.height
@@ -131,7 +130,8 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         } else {
             localized = NSLocalizedString("add", comment: "The title for button that added to favorite")
         }
-
+        
+        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10.0)
         button.setImage(image, for: .normal)
         button.tintColor = UIColor.mainColor
         button.backgroundColor = UIColor.shadowGray
@@ -146,11 +146,11 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
     
     fileprivate lazy var shareButton: UIButton = {
         let button = UIButton()
+        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10.0)
         button.setImage(UIImage(named: "ic_share")?.withRenderingMode(.alwaysTemplate), for: .normal)
         button.tintColor = UIColor.mainColor
         button.backgroundColor = UIColor.shadowGray
-        button.setTitle(NSLocalizedString("share", comment: "Title for share button"),
-                        for: .normal)
+        button.setTitle(NSLocalizedString("share", comment: "Title for share button"), for: .normal)
         button.setTitleColor(UIColor.mainColor, for: .normal)
         button.titleLabel?.font = .boldSystemFont(ofSize: 15.0)
         button.layer.cornerRadius = 5.0
@@ -238,14 +238,14 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
 
         favoriteButton.snp.makeConstraints { (make) in
             make.right.equalTo(headerView.snp.centerX).offset(-12.0)
-            make.bottom.equalToSuperview().offset(-15.0)
-            make.size.equalTo(CGSize(width: 130.0, height: 35.0))
+            make.bottom.equalToSuperview().offset(-10.0)
+            make.size.equalTo(CGSize(width: 130.0, height: 40.0))
         }
 
         shareButton.snp.makeConstraints { (make) in
             make.left.equalTo(headerView.snp.centerX).offset(12.0)
-            make.bottom.equalToSuperview().offset(-15.0)
-            make.size.equalTo(CGSize(width: 130.0, height: 35.0))
+            make.bottom.equalTo(favoriteButton)
+            make.size.equalTo(favoriteButton)
         }
     }
     
@@ -263,7 +263,6 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setTitleNavBar()
         
         if favoriteNotify.addFavorites {
@@ -364,8 +363,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
     @objc func openFullTitle() {
         let router = Router()
         let popoverLabelController = PopoverLabelViewController(title: viewModel.place.about ?? "")
-        if let height = viewModel.title?.string.height(font: .systemFont(ofSize: 16.0),
-                                                       width: titlePlace.bounds.width), height > titlePlace.bounds.height {
+        if let height = viewModel.title?.string.height(font: .systemFont(ofSize: 16.0), width: titlePlace.bounds.width), height > titlePlace.bounds.height {
             router.openPopoverLabel(fromController: self, toController: popoverLabelController, height: height)
         }
     }
@@ -434,6 +432,7 @@ extension DetailPlaceViewController: UITableViewDataSource {
                                                      for: indexPath) as? DetailImagesTableViewCell ?? DetailImagesTableViewCell()
             
             cell.controller = self
+            cell.viewModel = viewModel
             cell.pageImages = PageImages(images, previews, nextImages, kingfisherOptions)
             return cell
         case .description(let text, _):
@@ -492,7 +491,6 @@ extension DetailPlaceViewController: UITableViewDataSource {
 extension DetailPlaceViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = tableView.dequeueReusableCell(withIdentifier: DetailSectionTableViewCell.cellIdentifier) as? DetailSectionTableViewCell ?? DetailSectionTableViewCell()
-        
         header.title = viewModel.dataSource[section].sectionName
         return header
     }

@@ -96,3 +96,5 @@
 "%@ meters" = "%@ 미터";
 "done" = "끝난";
 "fbConnect" = "Facebook에 연결";
+"noticeDisabled" = "Notifications are disabled";
+"allowNotice" = "Open the setting for this application and turn on 'Allow Notifications'";

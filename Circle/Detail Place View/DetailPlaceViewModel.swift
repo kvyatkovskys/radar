@@ -53,6 +53,17 @@ struct DetailPlaceViewModel {
         }
     }
     
+    func loadMorePhotos(url: URL) -> Observable<PageImages> {
+        return detailService.loadMorePhotos(url: url).asObservable()
+            .filter({ !$0.data.isEmpty })
+            .flatMap { (model) -> Observable<PageImages> in
+                let images = model.data.flatMap({ $0.images.first })
+                let previews = model.data.map({ URL(string: $0.images.last?.source ?? "") })
+                let nextImages = model.next
+                return Observable.just(PageImages(images, previews, nextImages, nil))
+        }
+    }
+    
     func getPictureProfile() -> Observable<URL?> {
         return detailService.loadPicture(id: place.id).asObservable()
             .flatMap { (url) -> Observable<URL?> in

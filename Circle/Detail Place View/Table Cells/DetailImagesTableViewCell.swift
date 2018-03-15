@@ -9,7 +9,7 @@
 import UIKit
 import Kingfisher
 
-typealias PageImages = (images: [Images], previews: [URL?], nextImages: String, kingfisherOptions: KingfisherOptionsInfo)
+typealias PageImages = (images: [Images], previews: [URL?], nextImages: String, kingfisherOptions: KingfisherOptionsInfo?)
 
 final class DetailImagesTableViewCell: UITableViewCell {
     static let cellIdentifier = "DetailImagesTableViewCell"
@@ -22,10 +22,11 @@ final class DetailImagesTableViewCell: UITableViewCell {
     }()
     
     var controller: DetailPlaceViewController?
+    var viewModel: DetailPlaceViewModel?
     
     var pageImages: PageImages? {
         didSet {
-            listImagesViewController.reloadedData(pageImages: pageImages, controller: controller)
+            listImagesViewController.reloadedData(pageImages: pageImages, controller: controller, viewModel: viewModel)
         }
     }
     

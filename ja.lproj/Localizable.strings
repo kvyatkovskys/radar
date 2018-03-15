@@ -96,3 +96,5 @@
 "%@ meters" = "%@ メートル";
 "done" = "完了";
 "fbConnect" = "Facebookに接続";
+"noticeDisabled" = "Notifications are disabled";
+"allowNotice" = "Open the setting for this application and turn on 'Allow Notifications'";

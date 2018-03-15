@@ -1,15 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<testsuites name='CircleTests.xctest' tests='6' failures='2'>
-  <testsuite name='CircleTests.CircleTests' tests='6' failures='2'>
-    <testcase classname='CircleTests.CircleTests' name='testLoadPhotos'>
-      <failure message='Asynchronous wait failed: Exceeded timeout of 10 seconds, with unfulfilled expectations: &quot;Ожидаем ответ от сервера&quot;.'>CircleTests/CircleTests.swift:40</failure>
-    </testcase>
-    <testcase classname='CircleTests.CircleTests' name='testLoadPhotos'>
-      <failure message='failed - Не дождались результатов: Error Domain=com.apple.XCTestErrorDomain Code=0 &quot;(null)&quot;'>CircleTests/CircleTests.swift:38</failure>
-    </testcase>
-    <testcase classname='CircleTests.CircleTests' name='testLoadPicture' time='1.020'/>
-    <testcase classname='CircleTests.CircleTests' name='testModelDetailPlace' time='0.696'/>
-    <testcase classname='CircleTests.CircleTests' name='testModelPlaces' time='0.854'/>
-    <testcase classname='CircleTests.CircleTests' name='testMoreLoadedPlaces' time='1.570'/>
+<testsuites name='CircleTests.xctest' tests='5' failures='0'>
+  <testsuite name='CircleTests.CircleTests' tests='5' failures='0'>
+    <testcase classname='CircleTests.CircleTests' name='testLoadPhotos' time='1.331'/>
+    <testcase classname='CircleTests.CircleTests' name='testLoadPicture' time='0.945'/>
+    <testcase classname='CircleTests.CircleTests' name='testModelDetailPlace' time='0.653'/>
+    <testcase classname='CircleTests.CircleTests' name='testModelPlaces' time='0.596'/>
+    <testcase classname='CircleTests.CircleTests' name='testMoreLoadedPlaces' time='1.441'/>
   </testsuite>
 </testsuites>

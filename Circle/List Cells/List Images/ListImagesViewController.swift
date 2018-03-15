@@ -9,10 +9,15 @@
 import UIKit
 import Kingfisher
 import Lightbox
+import RxSwift
 
-final class ListImagesViewController: UIViewController {
-    var pageImages: PageImages?
-    var controller: DetailPlaceViewController?
+final class ListImagesViewController: UIViewController, LightboxControllerPageDelegate {
+    fileprivate var pageImages: PageImages?
+    fileprivate var controller: DetailPlaceViewController?
+    fileprivate var viewModel: DetailPlaceViewModel?
+    fileprivate let disposeBag = DisposeBag()
+    fileprivate var lightBox = LightboxController()
+    fileprivate let loadMore = PublishSubject<URL>()
     
     fileprivate lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -39,16 +44,40 @@ final class ListImagesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         view.addSubview(collectionView)
         updateViewConstraints()
         collectionView.register(ListImagesCollectionViewCell.self, forCellWithReuseIdentifier: ListImagesCollectionViewCell.cellIdentifier)
+        
+        loadMore.flatMap { [unowned self] (url) -> Observable<PageImages> in
+            return self.viewModel!.loadMorePhotos(url: url)
+            }
+            .observeOn(MainScheduler.instance)
+            .asObservable()
+            .subscribe(onNext: { [unowned self] (model) in
+                self.pageImages?.images += model.images
+                self.pageImages?.previews += model.previews
+                self.pageImages?.nextImages = model.nextImages
+                self.collectionView.reloadData()
+                self.lightBox.images = self.pageImages?.images.map({ LightboxImage(imageURL: URL(string: $0.source)!) }) ?? []
+                }, onError: { (error) in
+                    print(error)
+            }).disposed(by: disposeBag)
     }
     
-    func reloadedData(pageImages: PageImages?, controller: DetailPlaceViewController?) {
+    func reloadedData(pageImages: PageImages?, controller: DetailPlaceViewController?, viewModel: DetailPlaceViewModel?) {
         self.pageImages = pageImages
         self.controller = controller
+        self.viewModel = viewModel
         collectionView.reloadData()
+        lightBox = LightboxController(images: pageImages?.images.map({ LightboxImage(imageURL: URL(string: $0.source)!) }) ?? [],
+                                      startIndex: 0)
+    }
+    
+    func lightboxController(_ controller: LightboxController, didMoveToPage page: Int) {
+        if page == (pageImages?.images.count ?? 0) - 5, let url = URL(string: pageImages?.nextImages ?? "") {
+            loadMore.onNext(url)
+        }
     }
 }
 
@@ -76,10 +105,18 @@ extension ListImagesViewController: UICollectionViewDataSource {
 }
 
 extension ListImagesViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard indexPath.row == (pageImages?.images.count ?? 0) - 5 && indexPath.section == 0, let url = URL(string: pageImages?.nextImages ?? "") else {
+            return
+        }
+        loadMore.onNext(url)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let lightbox = LightboxController(images: pageImages?.images.map({ LightboxImage(imageURL: URL(string: $0.source)!) }) ?? [],
-                                          startIndex: indexPath.row)
-        lightbox.dynamicBackground = true
-        controller?.present(lightbox, animated: true, completion: nil)
+        lightBox = LightboxController(images: pageImages?.images.map({ LightboxImage(imageURL: URL(string: $0.source)!) }) ?? [],
+                                      startIndex: indexPath.row)
+        lightBox.pageDelegate = self
+        lightBox.dynamicBackground = true
+        controller?.present(lightBox, animated: true, completion: nil)
     }
 }

@@ -96,3 +96,5 @@
 "%@ meters" = "%@ meters";
 "done" = "Done";
 "fbConnect" = "Connect to Facebook";
+"noticeDisabled" = "Notifications are disabled";
+"allowNotice" = "Open the setting for this application and turn on 'Allow Notifications'";
