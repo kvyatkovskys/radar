@@ -96,5 +96,5 @@
 "%@ meters" = "%@ 米";
 "done" = "完成";
 "fbConnect" = "连接到Facebook";
-"noticeDisabled" = "Notifications are disabled";
-"allowNotice" = "Open the setting for this application and turn on 'Allow Notifications'";
+"noticeDisabled" = "通知被禁用";
+"allowNotice" = "打开此应用程序的设置并打开“允许通知”";
