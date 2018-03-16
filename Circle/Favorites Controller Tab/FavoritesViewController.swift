@@ -174,6 +174,7 @@ extension FavoritesViewController: UITableViewDelegate {
                                name: favorite.name,
                                ratingStar: favorite.ratingStar,
                                ratingCount: favorite.ratingCount,
+                               website: favorite.website,
                                categories: favorite.categories,
                                subCategories: favorite.subCategories,
                                coverPhoto: favorite.picture,

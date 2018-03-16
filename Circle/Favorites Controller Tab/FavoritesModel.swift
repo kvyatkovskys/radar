@@ -20,6 +20,7 @@ struct FavoritesModel {
     let ratingStar: Float?
     let ratingCount: Int?
     let about: String?
+    let website: String?
 }
 
 class Favorites: Object {
@@ -35,4 +36,5 @@ class Favorites: Object {
     let categories = List<String>()
     let subCategories = List<String>()
     @objc dynamic var notify: Bool = false
+    @objc dynamic var website: String?
 }

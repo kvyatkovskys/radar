@@ -32,7 +32,7 @@ struct PlaceModel {
     let isAlwaysOpen: Bool?
     let isClosed: Bool?
     let address: String?
-    let website: String?
+    var website: String?
     let categories: [Categories]?
     let subCategories: [String]?
     let description: String?

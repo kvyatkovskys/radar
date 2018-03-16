@@ -38,7 +38,7 @@ struct DetailPlaceViewModel {
             colorCategory = place.categories?.first?.color
         }
         
-        self.dataSource = DetailPlaceViewModel.updateValue(place: place, color: colorCategory)
+        self.dataSource = DetailPlaceViewModel.createDataSource(place: place, color: colorCategory)
     }
     
     mutating func loadPhotos() -> Observable<DetailSectionObjects> {
@@ -74,25 +74,26 @@ struct DetailPlaceViewModel {
     func getInfoAboutPlace(id: Int) -> Observable<[DetailSectionObjects]> {
         return favoritesService.loadInfoPlace(id: id).flatMap({ (model) -> Observable<[DetailSectionObjects]> in
             if self.place.fromFavorites {
-                 self.updateCoverPhoto(url: model.coverPhoto)
+                self.updateValues(model)
             }
-            return Observable.just(DetailPlaceViewModel.updateValue(place: model, color: self.colorCategory))
+            return Observable.just(DetailPlaceViewModel.createDataSource(place: model, color: self.colorCategory))
         })
     }
     
-    fileprivate func updateCoverPhoto(url: URL?) {
+    fileprivate func updateValues(_ model: PlaceModel) {
         do {
             let realm = try Realm()
             let favorites = realm.objects(Favorites.self).filter("id = \(place.id)").first
             try realm.write {
-                favorites?.picture = url?.absoluteString
+                favorites?.picture = model.coverPhoto?.absoluteString
+                favorites?.website = model.website
             }
         } catch {
             print(error)
         }
     }
     
-    static fileprivate func updateValue(place: PlaceModel, color: UIColor?) -> [DetailSectionObjects] {
+    static fileprivate func createDataSource(place: PlaceModel, color: UIColor?) -> [DetailSectionObjects] {
         var items: [DetailSectionObjects] = []
         
         if (place.phone != nil) || (place.website != nil) || (place.appLink != nil) {

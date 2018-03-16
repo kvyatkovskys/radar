@@ -283,31 +283,28 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         
         do {
             let realm = try Realm()
-            let favorites = realm.objects(Favorites.self)
+            let favorites = realm.objects(Favorites.self).filter("id = \(self.viewModel.place.id)")
             notificationTokenFavorites = favorites.observe { [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
                 case .update(let favorites, _, _, _):
-                    if let url = URL(string: favorites.filter("id = \(self.viewModel.place.id)").first?.picture ?? ""),
-                        self.viewModel.place.fromFavorites {
-                        
+                    if let favorite = favorites.first, let url = URL(string: favorite.picture ?? ""), self.viewModel.place.fromFavorites {
+                        self.viewModel.place.website = favorite.website
                         self.imageHeader.kf.indicatorType = .activity
                         self.imageHeader.kf.setImage(with: url,
-                            placeholder: nil,
-                            options: self.kingfisherOptions,
-                            progressBlock: nil,
-                            completionHandler: nil)
+                                                     placeholder: nil,
+                                                     options: self.kingfisherOptions,
+                                                     progressBlock: nil,
+                                                     completionHandler: nil)
                     }
-                    guard favorites.contains(where: { $0.id == self.viewModel.place.id }) else {
-                        self.favoriteButton.setTitle(NSLocalizedString("add",
-                                                                       comment: "The title for button that added to favorite"),
-                                                     for: .normal)
+                    
+                    guard self.favoritesViewModel.checkAddAndNotify(self.viewModel.place).addFavorites else {
+                        self.favoriteButton.setTitle(NSLocalizedString("add", comment: "The title for button that added to favorite"), for: .normal)
                         self.favoriteButton.setImage(UIImage(named: "ic_favorite_border")?.withRenderingMode(.alwaysTemplate), for: .normal)
                         self.navigationItem.rightBarButtonItem = nil
                         return
                     }
-                    self.favoriteButton.setTitle(NSLocalizedString("remove",
-                                                                   comment: "The title for button that removed from favorite"),
-                                                 for: .normal)
+                    
+                    self.favoriteButton.setTitle(NSLocalizedString("remove", comment: "The title for button that removed from favorite"), for: .normal)
                     self.favoriteButton.setImage(UIImage(named: "ic_favorite")?.withRenderingMode(.alwaysTemplate), for: .normal)
                     self.navigationItem.rightBarButtonItem = self.rightBarButton()
                 case .error(let error):
@@ -396,13 +393,12 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
             if let about = viewModel.place.about {
                 text += "\n\n" + about
             }
-            
+
             if let url = viewModel.place.website {
                 text += "\n\n" + url
             }
-            
-            let shareController = UIActivityViewController(activityItems: [image, text],
-                                                           applicationActivities: nil)
+
+            let shareController = UIActivityViewController(activityItems: [image, text], applicationActivities: nil)
             present(shareController, animated: true, completion: nil)
         }
     }
