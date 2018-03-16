@@ -1,10 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<testsuites name='CircleTests.xctest' tests='5' failures='0'>
-  <testsuite name='CircleTests.CircleTests' tests='5' failures='0'>
-    <testcase classname='CircleTests.CircleTests' name='testLoadPhotos' time='2.539'/>
-    <testcase classname='CircleTests.CircleTests' name='testLoadPicture' time='0.867'/>
-    <testcase classname='CircleTests.CircleTests' name='testModelDetailPlace' time='0.599'/>
-    <testcase classname='CircleTests.CircleTests' name='testModelPlaces' time='1.099'/>
-    <testcase classname='CircleTests.CircleTests' name='testMoreLoadedPlaces' time='1.250'/>
+<testsuites name='CircleTests.xctest' tests='1' failures='0'>
+  <testsuite name='CircleTests.CircleTests' tests='1' failures='0'>
+    <testcase classname='CircleTests.CircleTests' name='testModelPlaces' time='0.351'/>
   </testsuite>
 </testsuites>
