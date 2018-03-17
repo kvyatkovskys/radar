@@ -264,7 +264,7 @@ extension LocationService {
                 print(error)
             }
 
-            guard (50.0..<100.0).contains(distance) || distance > 100.0 else {
+            guard distance > 500.0 else {
                 userLocation.onNext(LocationMonitoring(oldLocation, false))
                 return
             }
