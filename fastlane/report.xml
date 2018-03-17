@@ -5,47 +5,57 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.035093">
+      <testcase classname="fastlane.lanes" name="00: default_platform" time="0.015876">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: clear_derived_data" time="0.031693">
+      <testcase classname="fastlane.lanes" name="01: clear_derived_data" time="2.772168">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: clean_build_artifacts" time="0.006133">
+      <testcase classname="fastlane.lanes" name="02: clean_build_artifacts" time="0.002031">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="3: ensure_git_status_clean" time="0.101358">
+      <testcase classname="fastlane.lanes" name="03: ensure_git_status_clean" time="0.069306">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="4: number_of_commits" time="0.055155">
+      <testcase classname="fastlane.lanes" name="04: number_of_commits" time="0.038111">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="5: increment_build_number" time="3.472252">
+      <testcase classname="fastlane.lanes" name="05: increment_build_number" time="2.664094">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="6: match" time="21.563255">
+      <testcase classname="fastlane.lanes" name="06: Switch to ios test lane" time="0.001901">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="7: build_app" time="724.151074">
+      <testcase classname="fastlane.lanes" name="07: scan" time="463.445068">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="8: upload_to_testflight" time="152.13443">
+      <testcase classname="fastlane.lanes" name="08: match" time="13.293761">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="09: build_app" time="716.073118">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="10: upload_to_testflight" time="139.711197">
         
       </testcase>
     

@@ -8,6 +8,7 @@
 
 import Foundation
 import RxSwift
+import RealmSwift
 
 struct DetailSectionObjects {
     var sectionName: String
@@ -37,7 +38,7 @@ struct DetailPlaceViewModel {
             colorCategory = place.categories?.first?.color
         }
         
-        self.dataSource = DetailPlaceViewModel.updateValue(place: place, color: colorCategory)
+        self.dataSource = DetailPlaceViewModel.createDataSource(place: place, color: colorCategory)
     }
     
     mutating func loadPhotos() -> Observable<DetailSectionObjects> {
@@ -52,6 +53,17 @@ struct DetailPlaceViewModel {
         }
     }
     
+    func loadMorePhotos(url: URL) -> Observable<PageImages> {
+        return detailService.loadMorePhotos(url: url).asObservable()
+            .filter({ !$0.data.isEmpty })
+            .flatMap { (model) -> Observable<PageImages> in
+                let images = model.data.flatMap({ $0.images.first })
+                let previews = model.data.map({ URL(string: $0.images.last?.source ?? "") })
+                let nextImages = model.next
+                return Observable.just(PageImages(images, previews, nextImages, nil))
+        }
+    }
+    
     func getPictureProfile() -> Observable<URL?> {
         return detailService.loadPicture(id: place.id).asObservable()
             .flatMap { (url) -> Observable<URL?> in
@@ -61,11 +73,27 @@ struct DetailPlaceViewModel {
     
     func getInfoAboutPlace(id: Int) -> Observable<[DetailSectionObjects]> {
         return favoritesService.loadInfoPlace(id: id).flatMap({ (model) -> Observable<[DetailSectionObjects]> in
-            return Observable.just(DetailPlaceViewModel.updateValue(place: model, color: self.colorCategory))
+            if self.place.fromFavorites {
+                self.updateValues(model)
+            }
+            return Observable.just(DetailPlaceViewModel.createDataSource(place: model, color: self.colorCategory))
         })
     }
     
-    static fileprivate func updateValue(place: PlaceModel, color: UIColor?) -> [DetailSectionObjects] {
+    fileprivate func updateValues(_ model: PlaceModel) {
+        do {
+            let realm = try Realm()
+            let favorites = realm.objects(Favorites.self).filter("id = \(place.id)").first
+            try realm.write {
+                favorites?.picture = model.coverPhoto?.absoluteString
+                favorites?.website = model.website
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
+    static fileprivate func createDataSource(place: PlaceModel, color: UIColor?) -> [DetailSectionObjects] {
         var items: [DetailSectionObjects] = []
         
         if (place.phone != nil) || (place.website != nil) || (place.appLink != nil) {

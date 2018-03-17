@@ -75,11 +75,12 @@ final class FavoritesViewController: UIViewController {
                 case .initial(let collection):
                     self.dataSource = self.viewModel.updateValue(collection.map({ $0 }))
                     self.tableView.reloadData()
-                case .update(let collection, let deletions, let insertions, _):
+                case .update(let collection, let deletions, let insertions, let modifications):
                     self.dataSource = self.viewModel.updateValue(collection.map({ $0 }))
                     self.tableView.beginUpdates()
                     self.tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0) }), with: .automatic)
                     self.tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }), with: .automatic)
+                    self.tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0) }), with: .automatic)
                     self.tableView.endUpdates()
                 case .error(let error):
                     fatalError("\(error)")
@@ -173,6 +174,7 @@ extension FavoritesViewController: UITableViewDelegate {
                                name: favorite.name,
                                ratingStar: favorite.ratingStar,
                                ratingCount: favorite.ratingCount,
+                               website: favorite.website,
                                categories: favorite.categories,
                                subCategories: favorite.subCategories,
                                coverPhoto: favorite.picture,

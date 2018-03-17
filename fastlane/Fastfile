@@ -9,10 +9,10 @@ platform :ios do
 
   lane :test do
     scan(workspace: "Circle.xcworkspace",
-         device: "iPhone 8 (11.2)",
-         scheme: "Circle",
-         skip_build: true,
-         clean: true)
+        device: "iPhone 8 (11.2)",
+        scheme: "Circle",
+        skip_build: true,
+        clean: true)
   end
 
   lane :beta do
@@ -20,12 +20,12 @@ platform :ios do
   	increment_build_number(build_number: number_of_commits,
     					   xcodeproj: "Circle.xcodeproj")
 
-  	#test
+  	test
     match(type: "appstore",
-    	  team_id: "P44LMMDHV3")
+    	team_id: "P44LMMDHV3")
     build_app(scheme: "Circle",
-           	  workspace: "Circle.xcworkspace",
-              include_bitcode: false)
+           	workspace: "Circle.xcworkspace",
+            include_bitcode: false)
 
     upload_to_testflight(skip_waiting_for_build_processing: true)
   end

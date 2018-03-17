@@ -34,8 +34,7 @@ final class ListFavoritesNoticeViewController: UIViewController {
         super.updateViewConstraints()
         
         tableView.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(64.0)
-            make.left.bottom.right.equalToSuperview()
+            make.top.left.bottom.right.equalToSuperview()
         }
     }
     

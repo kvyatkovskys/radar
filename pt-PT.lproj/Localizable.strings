@@ -96,3 +96,5 @@
 "%@ meters" = "%@ metros";
 "done" = "Feito";
 "fbConnect" = "Conecte ao Facebook";
+"noticeDisabled" = "As notificações estão desativadas";
+"allowNotice" = "Abra a configuração deste aplicativo e ative 'Permitir notificações'";

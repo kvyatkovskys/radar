@@ -96,3 +96,5 @@
 "%@ meters" = "%@ mètres";
 "done" = "Terminé";
 "fbConnect" = "Connectez-vous à Facebook";
+"noticeDisabled" = "Les notifications sont désactivées";
+"allowNotice" = "Ouvrez le paramètre pour cette application et activez l'option 'Autoriser les notifications'";

@@ -96,3 +96,5 @@
 "%@ meters" = "%@ 미터";
 "done" = "끝난";
 "fbConnect" = "Facebook에 연결";
+"noticeDisabled" = "알림을 사용할 수 없습니다.";
+"allowNotice" = "이 애플리케이션의 설정을 열고 '알림 허용'을 사용 설정합니다.";

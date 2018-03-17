@@ -60,7 +60,8 @@ struct FavoritesViewModel {
                                          subCategories: item.subCategories.map({ $0 }),
                                          ratingStar: item.ratingStar,
                                          ratingCount: item.ratingCount,
-                                         about: item.about))
+                                         about: item.about,
+                                         website: item.website))
         }
         
         return result
@@ -138,9 +139,8 @@ struct FavoritesViewModel {
                 favorite.subCategories.append(subCategiry)
             })
             
-            if let url = place.coverPhoto {
-                favorite.picture = url.absoluteString
-            }
+            favorite.picture = place.coverPhoto?.absoluteString
+            favorite.website = place.website
             
             try realm.write {
                 realm.add(favorite)

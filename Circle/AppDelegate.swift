@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        migrations(schema: 8)
+        migrations(schema: 9)
         print(Realm.Configuration.defaultConfiguration.fileURL as Any)
         
         setupNavigationBar()
@@ -43,15 +43,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             case .denied, .notDetermined:
                 center.requestAuthorization(options: [.alert, .sound, .badge]) { [unowned self] (accept, _) in
                     if !accept {
-                        print("Something went wrong")
-                        let alertController = UIAlertController(title: "Notifications are disabled.",
-                                                                message: "Open the setting for this application and turn on 'Allow Notifications'.",
+                        let alertController = UIAlertController(title: NSLocalizedString("noticeDisabled",
+                                                                                         comment: "title for alert when disabled notice"),
+                                                                message: NSLocalizedString("allowNotice", comment: "text for allow notice"),
                                                                 preferredStyle: .alert)
                         
-                        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                        let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: "button for alert notification"),
+                                                         style: .cancel,
+                                                         handler: nil)
                         alertController.addAction(cancelAction)
                         
-                        let openAction = UIAlertAction(title: "Open settings", style: .default) { _ in
+                        let openAction = UIAlertAction(title: NSLocalizedString("openSettings", comment: "button for open settings"),
+                                                       style: .default) { _ in
                             if let url = URL(string: UIApplicationOpenSettingsURLString) {
                                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
                             }

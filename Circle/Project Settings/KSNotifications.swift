@@ -19,23 +19,24 @@ final class KSNotifications: NSObject {
         super.init()
     }
     
-    func showNotification(title: String, subTitle: String, body: String, imageUrl: String? = nil) {
+    func showNotification(favorite: Favorites) {
         let content = UNMutableNotificationContent()
-        content.title = title
-        content.subtitle = subTitle
-        content.body = body
+        content.title = NSLocalizedString("notifyNearPlace", comment: "The text fro notify when user near a place")
+        content.subtitle = favorite.title ?? ""
+        content.body = favorite.about ?? "" + "\n"
         content.sound = UNNotificationSound.default()
+        content.userInfo = ["idPlace": favorite.id]
+        
         if UIApplication.shared.applicationState != .active {
             content.badge = UIApplication.shared.applicationIconBadgeNumber + 1 as NSNumber
         }
-        content.userInfo = ["url_image": imageUrl ?? ""]
         
         let identifier = ProcessInfo.processInfo.globallyUniqueString
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)
         
         center.removeAllPendingNotificationRequests()
         
-        guard let url = URL(string: imageUrl ?? "") else {
+        guard let url = URL(string: favorite.picture ?? "") else {
             let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
             center.add(request) { (error) in
                 if let error = error {

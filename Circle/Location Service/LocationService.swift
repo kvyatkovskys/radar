@@ -203,6 +203,7 @@ extension LocationService: UNUserNotificationCenterDelegate {
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        print(response.notification.request.content.userInfo)
         completionHandler()
     }
 }
@@ -216,11 +217,7 @@ extension LocationService {
                 if let favorite = favorites.first {
                     let notification = KSNotifications(center: UNUserNotificationCenter.current())
                     notification.center.delegate = self
-                    notification.showNotification(title: NSLocalizedString("notifyNearPlace",
-                                                                           comment: "The text fro notify when user near a place"),
-                                                  subTitle: favorite.title ?? "",
-                                                  body: favorite.about ?? "" + "\n",
-                                                  imageUrl: favorite.picture)
+                    notification.showNotification(favorite: favorite)
                 }
             } catch {
                 print(error)
@@ -267,7 +264,7 @@ extension LocationService {
                 print(error)
             }
 
-            guard (50.0..<100.0).contains(distance) || distance > 100.0 else {
+            guard distance > 500.0 else {
                 userLocation.onNext(LocationMonitoring(oldLocation, false))
                 return
             }

@@ -96,3 +96,5 @@
 "%@ meters" = "%@ meters";
 "done" = "Erledigt";
 "fbConnect" = "Verbinde dich mit Facebook";
+"noticeDisabled" = "Benachrichtigungen sind deaktiviert";
+"allowNotice" = "Öffnen Sie die Einstellung für diese Anwendung und aktivieren Sie 'Benachrichtigungen zulassen'";
