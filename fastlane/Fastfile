@@ -8,6 +8,9 @@ platform :ios do
   end
 
   lane :test do
+    swiftlint(mode: :lint,
+	      strict: false,
+	      ignore_exit_status: true)
     scan(workspace: "Circle.xcworkspace",
         device: "iPhone 8 (11.2)",
         scheme: "Circle",
