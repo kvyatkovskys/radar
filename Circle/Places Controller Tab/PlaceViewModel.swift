@@ -8,36 +8,31 @@
 
 import Foundation
 import RxSwift
+import RxCocoa
 import RealmSwift
+import Kingfisher
 
 enum TypeView: Int {
     case table, map
 }
 
-struct Places {
-    let items: [PlaceModel]
-    let ratings: [NSMutableAttributedString?]
-    let titles: [NSMutableAttributedString?]
-    let next: URL?
+struct PlaceViewModel: Place {
+    fileprivate let disposeBag = DisposeBag()
     
-    init(_ places: [PlaceModel] = [], _ ratings: [NSMutableAttributedString?] = [], _ titles: [NSMutableAttributedString?] = [], _ next: URL? = nil) {
-        self.items = places
-        self.ratings = ratings
-        self.titles = titles
-        self.next = next
-    }
-}
-
-struct PlaceViewModel {
-    fileprivate let placeService: PlaceService
+    let placeService: PlaceService
     /// open filter controller
     var openFilter: (() -> Void) = { UIImpactFeedbackGenerator().impactOccurred() }
     /// open map controller
-    var openMap: (([Places], CLLocation?) -> Void) = {_, _ in UIImpactFeedbackGenerator().impactOccurred() }
+    var openMap: (([PlaceModel], CLLocation?) -> Void) = { _, _ in UIImpactFeedbackGenerator().impactOccurred() }
     /// open detail place controller
-    var openDetailPlace: ((PlaceModel, NSMutableAttributedString?, NSMutableAttributedString?, FavoritesViewModel) -> Void) = {_, _, _, _ in }
+    var openDetailPlace: ((PlaceModel, NSMutableAttributedString?, NSMutableAttributedString?, FavoritesViewModel) -> Void) = { _, _, _, _ in }
     /// reload places on map
-    var reloadMap: (([Places], CLLocation?) -> Void) = {_, _ in}
+    var reloadMap: (([PlaceModel], CLLocation?) -> Void) = { _, _ in }
+    
+    var places: BehaviorRelay<PlaceDataModel> = BehaviorRelay<PlaceDataModel>(value: PlaceDataModel(data: [], next: nil))
+    var heightHeader: CGFloat = 100.0
+    var searchForMinDistance: Bool = false
+    let kingfisherOptions: KingfisherOptionsInfo
     
     var typeView: TypeView {
         var type = TypeView(rawValue: 0)!
@@ -51,8 +46,9 @@ struct PlaceViewModel {
         return type
     }
     
-    init(_ service: PlaceService) {
+    init(_ service: PlaceService, kingfisher: KingfisherOptionsInfo) {
         self.placeService = service
+        self.kingfisherOptions = kingfisher
     }
     
     func changeTypeView(_ type: TypeView) {
@@ -75,15 +71,20 @@ struct PlaceViewModel {
     }
     
     /// load more places
-    func getMorePlaces(url: URL) -> Observable<Places> {
-        return placeService.loadMorePlaces(url: url).asObservable()
-            .flatMap({ (model) -> Observable<Places> in
-                return Observable.just(self.updateResults(model: model))
+    func getMorePlaces(url: URL) {
+        placeService.loadMorePlaces(url: url)
+            .asObservable()
+            .subscribe(onNext: { (newPlaces) in
+                var oldPlaces = self.places.value
+                oldPlaces.data += newPlaces.data
+                oldPlaces.next = newPlaces.next
+                self.places.accept(oldPlaces)
             })
+            .disposed(by: disposeBag)
     }
     
     /// get info about for current location
-    func getPlaces(location: CLLocation?, distance: CLLocationDistance, searchTerm: String? = nil) -> Observable<Places> {
+    func getPlaces(location: CLLocation?, distance: CLLocationDistance, searchTerm: String? = nil) {
         var categories = PlaceSetting().allCategories
         
         if searchTerm == nil {
@@ -98,51 +99,28 @@ struct PlaceViewModel {
             }
         }
         
-        return placeService.loadPlaces(location, categories, distance, searchTerm)
-            .asObservable().flatMap { (model) -> Observable<Places> in
-                return Observable.just(self.updateResults(model: model))
-        }
+        placeService.loadPlaces(location, categories, distance, searchTerm)
+            .asObservable()
+            .bind(to: places)
+            .disposed(by: disposeBag)
     }
+}
+
+protocol Place {
+    /// open filter controller
+    var openFilter: (() -> Void) { get set }
+    /// open map controller
+    var openMap: (([PlaceModel], CLLocation?) -> Void) { get set }
+    /// open detail place controller
+    var openDetailPlace: ((PlaceModel, NSMutableAttributedString?, NSMutableAttributedString?, FavoritesViewModel) -> Void) { get set }
+    /// reload places on map
+    var reloadMap: (([PlaceModel], CLLocation?) -> Void) { get set }
     
-    fileprivate func colorForRating(_ rating: Float) -> UIColor {
-        var color = UIColor()
-        switch rating {
-        case 3.4...5.0:
-            color = UIColor(withHex: 0x2ecc71, alpha: 1.0)
-        case 1.8...3.4:
-            color = .black
-        default:
-            color = UIColor(withHex: 0xc0392b, alpha: 1.0)
-        }
-        return color
-    }
-    
-    fileprivate func updateResults(model: PlaceDataModel) -> (Places) {
-        let ratings = model.data.map({ (place) -> NSMutableAttributedString? in
-            let ratingStar = NSAttributedString(string: "\(place.ratingStar ?? 0)",
-                attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 19.0),
-                             NSAttributedStringKey.foregroundColor: self.colorForRating(place.ratingStar ?? 0)])
-            let ratingCount = NSAttributedString(string: " \(place.ratingCount ?? 0)",
-                attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14.0),
-                             NSAttributedStringKey.foregroundColor: UIColor.gray])
-            
-            let result = NSMutableAttributedString(attributedString: ratingStar)
-            result.append(ratingCount)
-            return result
-        })
-        
-        let titles = model.data.map({ (place) -> NSMutableAttributedString? in
-            let title = NSAttributedString(string: "\(place.name ?? "")",
-                attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 19.0),
-                             NSAttributedStringKey.foregroundColor: UIColor.black])
-            let about = NSAttributedString(string: "\n\n\(place.about ?? "")",
-                attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14.0),
-                             NSAttributedStringKey.foregroundColor: UIColor.gray])
-            
-            let result = NSMutableAttributedString(attributedString: title)
-            result.append(about)
-            return result
-        })
-        return Places(model.data, ratings, titles, model.next)
-    }
+    var typeView: TypeView { get }
+    var placeService: PlaceService { get }
+    var places: BehaviorRelay<PlaceDataModel> { get }
+    var heightHeader: CGFloat { get }
+    var searchForMinDistance: Bool { get }
+    var kingfisherOptions: KingfisherOptionsInfo { get }
+
 }

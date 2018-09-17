@@ -10,8 +10,8 @@ import Foundation
 import Unbox
 
 struct PlaceDataModel {
-    let data: [PlaceModel]
-    let next: URL?
+    var data: [PlaceModel]
+    var next: URL?
 }
 
 extension PlaceDataModel: Unboxable {
@@ -28,6 +28,30 @@ struct PlaceModel {
     let phone: String?
     let ratingStar: Float?
     let ratingCount: Int?
+    var rating: NSMutableAttributedString? {
+        let ratingStar = NSAttributedString(string: "\(self.ratingStar ?? 0)",
+            attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 19.0),
+                         NSAttributedStringKey.foregroundColor: self.colorForRating(self.ratingStar ?? 0)])
+        let ratingCount = NSAttributedString(string: " \(self.ratingCount ?? 0)",
+            attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14.0),
+                         NSAttributedStringKey.foregroundColor: UIColor.gray])
+        
+        let result = NSMutableAttributedString(attributedString: ratingStar)
+        result.append(ratingCount)
+        return result
+    }
+    var title: NSMutableAttributedString? {
+        let title = NSAttributedString(string: "\(self.name ?? "")",
+            attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 19.0),
+                         NSAttributedStringKey.foregroundColor: UIColor.black])
+        let about = NSAttributedString(string: "\n\n\(self.about ?? "")",
+            attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14.0),
+                         NSAttributedStringKey.foregroundColor: UIColor.gray])
+        
+        let result = NSMutableAttributedString(attributedString: title)
+        result.append(about)
+        return result
+    }
     let hours: [String: String]?
     let isAlwaysOpen: Bool?
     let isClosed: Bool?
@@ -75,6 +99,19 @@ struct PlaceModel {
         self.restaurantServices = restaurantServices
         self.restaurantSpecialties = restaurantSpecialties
         self.fromFavorites = fromFavorites
+    }
+    
+    fileprivate func colorForRating(_ rating: Float) -> UIColor {
+        var color = UIColor()
+        switch rating {
+        case 3.4...5.0:
+            color = UIColor(withHex: 0x2ecc71, alpha: 1.0)
+        case 1.8...3.4:
+            color = .black
+        default:
+            color = UIColor(withHex: 0xc0392b, alpha: 1.0)
+        }
+        return color
     }
 }
 

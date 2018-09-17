@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         setupNavigationBar()
         initialViewController()
-        YMMYandexMetrica.activate(withApiKey: yandexKey)
+        YMMYandexMetrica.activate(with: YMMYandexMetricaConfiguration(apiKey: "97b3bd5d-84cc-4288-8742-20f159ab1701")!)
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         checkAuthNotification(application)
         
@@ -42,6 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             switch settings.authorizationStatus {
             case .denied, .notDetermined:
                 center.requestAuthorization(options: [.alert, .sound, .badge]) { [unowned self] (accept, _) in
+                
                     if !accept {
                         let alertController = UIAlertController(title: NSLocalizedString("noticeDisabled",
                                                                                          comment: "title for alert when disabled notice"),

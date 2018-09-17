@@ -45,7 +45,7 @@ struct DetailPlaceViewModel {
         return detailService.loadPhotos(id: place.id).asObservable()
             .filter({ !$0.data.isEmpty })
             .flatMap { (model) -> Observable<DetailSectionObjects> in
-                let images = model.data.flatMap({ $0.images.first })
+                let images = model.data.compactMap({ $0.images.first })
                 let previews = model.data.map({ URL(string: $0.images.last?.source ?? "") })
                 let nextImages = model.next
                 let type = TypeDetailCell.images(images, previews, nextImages, 90.0)
@@ -57,7 +57,7 @@ struct DetailPlaceViewModel {
         return detailService.loadMorePhotos(url: url).asObservable()
             .filter({ !$0.data.isEmpty })
             .flatMap { (model) -> Observable<PageImages> in
-                let images = model.data.flatMap({ $0.images.first })
+                let images = model.data.compactMap({ $0.images.first })
                 let previews = model.data.map({ URL(string: $0.images.last?.source ?? "") })
                 let nextImages = model.next
                 return Observable.just(PageImages(images, previews, nextImages, nil))

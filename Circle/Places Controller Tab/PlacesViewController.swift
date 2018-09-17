@@ -13,25 +13,18 @@ import RxSwift
 import RxCocoa
 import Kingfisher
 import RealmSwift
+import Swinject
 
 final class PlacesViewController: UIViewController {
-    typealias Dependecies = HasKingfisher & HasPlaceViewModel & HasLocationService
-    
-    fileprivate let heightHeader: CGFloat = 100.0
-    fileprivate var searchForMinDistance: Bool = false
     fileprivate var locationService: LocationService
     fileprivate var userLocation: CLLocation?
     fileprivate var notificationTokenCategories: NotificationToken?
     fileprivate var notificationTokenDistance: NotificationToken?
     fileprivate var viewModel: PlaceViewModel
-    fileprivate let kingfisherOptions: KingfisherOptionsInfo
     fileprivate let disposeBag = DisposeBag()
-    fileprivate var tableDataSource: PlacesTableViewDataSource?
-    //swiftlint:disable weak_delegate
-    fileprivate var tableDelegate: PlacesTableViewDelegate?
-        
-    fileprivate lazy var tableView: KSTableView = {
+    fileprivate let tableView: KSTableView = {
         let table = KSTableView()
+        table.isEnabledRefresh = true
         return table
     }()
     
@@ -61,11 +54,6 @@ final class PlacesViewController: UIViewController {
         return ActivityIndicatorView(container: self.view)
     }()
     
-    fileprivate lazy var refreshControl: UIRefreshControl = {
-        let refreshControl = UIRefreshControl()
-        return refreshControl
-    }()
-    
     fileprivate func updateConstraints() {
         tableView.snp.makeConstraints { (make) in
             make.top.bottom.left.right.equalToSuperview()
@@ -74,10 +62,9 @@ final class PlacesViewController: UIViewController {
         super.updateViewConstraints()
     }
     
-    init(_ dependencies: Dependecies) {
-        self.kingfisherOptions = dependencies.kingfisherOptions
-        self.viewModel = dependencies.viewModel
-        self.locationService = dependencies.locationService
+    init(_ container: Container) {
+        self.viewModel = container.resolve(PlaceViewModel.self)!
+        self.locationService = container.resolve(LocationService.self)!
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -89,28 +76,62 @@ final class PlacesViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .white
-        tableView.addSubview(refreshControl)
         navigationItem.rightBarButtonItem = rightBarButton
         navigationItem.leftBarButtonItem = leftBarButton
         
         locationService.start()
         
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
-        tableDataSource = PlacesTableViewDataSource(tableView, kingfisherOptions: kingfisherOptions)
-        tableDelegate = PlacesTableViewDelegate(tableView, viewModel: viewModel)
+        tableView.rx.setDelegate(self).disposed(by: disposeBag)
         
-        refreshControl.rx.controlEvent(.valueChanged).asObservable()
+        tableView.refresh.rx.controlEvent(.valueChanged)
             .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { [unowned self] _ in
+            .flatMapLatest({ [unowned self] _ -> Observable<PlaceDataModel> in
                 self.locationService.start()
-            }).disposed(by: disposeBag)
+                return self.viewModel.places.asObservable()
+                    .do(onError: { (error) in
+                        print(error)
+                        self.tableView.refresh.endRefreshing()
+                    }, onCompleted: {
+                        self.tableView.refresh.endRefreshing()
+                    })
+            })
+            .subscribe()
+            .disposed(by: disposeBag)
         
-        tableDelegate?.nextUrl.asObserver()
-            .subscribe(onNext: { [unowned self] (url) in
-                self.loadMorePlacesLocation(url: url)
-            }, onError: { (error) in
-                print(error)
-            }).disposed(by: disposeBag)
+        viewModel.places.asObservable()
+            .flatMap({ (places) -> Observable<[PlaceModel]>in
+                return Observable.just(places.data)
+            })
+            .filter({ [unowned self, weak userLocation = self.userLocation] (places) -> Bool in
+                self.indicatorView.hideIndicator()
+                guard self.viewModel.typeView == .map else {
+                    return true
+                }
+                self.viewModel.reloadMap(places, userLocation)
+                return false
+            })
+            .bind(to: tableView.rx
+                .items(cellIdentifier: PlaceTableViewCell.cellIndetifier,
+                       cellType: PlaceTableViewCell.self)) { (_, place, cell) in
+                        cell.title = place.name
+                        cell.rating = place.rating
+                        cell.titleCategory = place.categories?.first?.title
+                        cell.colorCategory = place.categories?.first?.color
+                        cell.imageCell.kf.indicatorType = .activity
+                        cell.imageCell.kf.setImage(with: place.coverPhoto,
+                                                   placeholder: nil,
+                                                   options: self.viewModel.kingfisherOptions,
+                                                   progressBlock: nil,
+                                                   completionHandler: nil)
+            }
+            .disposed(by: disposeBag)
+        
+        tableView.rx.modelSelected(PlaceModel.self)
+            .subscribe(onNext: { [unowned self] (place) in
+                self.viewModel.openDetailPlace(place, place.title, place.rating, FavoritesViewModel())
+            })
+            .disposed(by: disposeBag)
         
         do {
             let realm = try Realm()
@@ -121,7 +142,7 @@ final class PlacesViewController: UIViewController {
                 switch changes {
                 case .update:
                     self.indicatorView.showIndicator()
-                    guard self.searchForMinDistance == false else {
+                    guard self.viewModel.searchForMinDistance == false else {
                         self.loadPlacesLocation(self.userLocation, distance: 100.0)
                         return
                     }
@@ -140,8 +161,8 @@ final class PlacesViewController: UIViewController {
                 case .update(let filter, _, _, _):
                     self.indicatorView.showIndicator()
                     let searchFilter = filter.first
-                    self.searchForMinDistance = searchFilter?.searchForMinDistance ?? false
-                    guard self.searchForMinDistance == false else {
+                    self.viewModel.searchForMinDistance = searchFilter?.searchForMinDistance ?? false
+                    guard self.viewModel.searchForMinDistance == false else {
                         self.loadPlacesLocation(self.userLocation, distance: 100.0)
                         return
                     }
@@ -156,26 +177,22 @@ final class PlacesViewController: UIViewController {
         
         locationService.userLocation.asObserver()
             .filter({ (locationMonitoring) -> Bool in
-                if self.refreshControl.isRefreshing {
-                    self.refreshControl.endRefreshing()
+                if self.tableView.refresh.isRefreshing {
+                    self.tableView.refresh.endRefreshing()
                 }
                 return self.userLocation == nil || locationMonitoring.monitoring
             })
-            .subscribe(onNext: { [unowned self] (locationMonitoring) in
+            .map({ [unowned self] (locationMonitoring) in
                 self.indicatorView.showIndicator()
                 self.userLocation = locationMonitoring.location
-                guard self.searchForMinDistance == false else {
+                guard self.viewModel.searchForMinDistance == false else {
                     self.loadPlacesLocation(locationMonitoring.location, distance: 100.0)
                     return
                 }
                 self.loadPlacesLocation(locationMonitoring.location)
-            }, onError: { [unowned self] (error) in
-                print(error)
-                self.indicatorView.hideIndicator()
-                if self.refreshControl.isRefreshing {
-                    self.refreshControl.endRefreshing()
-                }
-            }).disposed(by: disposeBag)
+            })
+            .subscribe()
+            .disposed(by: disposeBag)
     }
     
     deinit {
@@ -195,7 +212,7 @@ final class PlacesViewController: UIViewController {
             sender?.tag = TypeView.table.rawValue
             view.subviews.forEach({ $0.removeFromSuperview() })
             viewModel.changeTypeView(.map)
-            viewModel.openMap(tableDataSource?.places ?? [], userLocation)
+            viewModel.openMap(viewModel.places.value.data, userLocation)
             navigationItem.leftBarButtonItem?.image = UIImage(named: "ic_view_list")!.withRenderingMode(.alwaysTemplate)
         case .table:
             sender?.tag = TypeView.map.rawValue
@@ -215,39 +232,24 @@ final class PlacesViewController: UIViewController {
     }
     
     fileprivate func loadMorePlacesLocation(url: URL) {
-        viewModel.getMorePlaces(url: url).asObservable()
-            .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { [unowned self] (model) in
-                self.tableDataSource?.places += [model]
-                self.tableDelegate?.places += [model]
-                self.tableView.reloadData()
-            }, onError: { (error) in
-                print(error)
-            }).disposed(by: disposeBag)
+        viewModel.getMorePlaces(url: url)
     }
     
     fileprivate func loadPlacesLocation(_ location: CLLocation?, distance: Double = FilterDistanceViewModel().defaultDistance) {
-        viewModel.getPlaces(location: location, distance: distance).asObservable()
-            .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { [unowned self, weak userLocation = self.userLocation] (model) in
-                if self.viewModel.typeView == .map {
-                    self.viewModel.reloadMap([model], userLocation)
-                }
-                
-                self.tableDataSource?.places = [model]
-                self.tableDelegate?.places = [model]
-                self.tableView.reloadData()
+        viewModel.getPlaces(location: location, distance: distance)
+    }
+}
 
-                self.indicatorView.hideIndicator()
-                if self.refreshControl.isRefreshing {
-                    self.refreshControl.endRefreshing()
-                }
-                }, onError: { [unowned self] (error) in
-                    print(error)
-                    self.indicatorView.hideIndicator()
-                    if self.refreshControl.isRefreshing {
-                        self.refreshControl.endRefreshing()
-                    }
-            }).disposed(by: disposeBag)
+extension PlacesViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return heightTableCell
+    }
+
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let lastRowIndex = tableView.numberOfRows(inSection: 0) - 3
+        if let url = viewModel.places.value.next, indexPath.row == lastRowIndex {
+            loadMorePlacesLocation(url: url)
+            print("yes")
+        }
     }
 }

@@ -10,16 +10,14 @@ import UIKit
 import RxSwift
 import Kingfisher
 import RealmSwift
+import Swinject
 
 final class SearchViewController: UIViewController, UISearchControllerDelegate, UISearchBarDelegate {
-
-    typealias Dependecies = HasSearchViewModel & HasKingfisher
-    
     fileprivate var notificationToken: NotificationToken?
-    fileprivate var dataSource: [Places] = []
+    fileprivate var dataSource: [PlaceModel] = []
     fileprivate var dataSourceQueries: [String] = [NSLocalizedString("tryToFind", comment: "Label when queries empty")]
     fileprivate var viewType = ViewType.search
-    fileprivate var search: Observable<Places> = Observable.just(Places([], [], [], nil))
+    fileprivate var search: Observable<PlaceModel?> = Observable.just(nil)
     fileprivate let disposeBag = DisposeBag()
     fileprivate let searchViewModel: SearchViewModel
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
@@ -86,10 +84,10 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
         }
     }
     
-    init(_ dependecies: Dependecies) {
-        self.searchViewModel = dependecies.searchViewModel
-        self.kingfisherOptions = dependecies.kingfisherOptions
-        self.dataSourceQueries += dependecies.searchViewModel.searchQueries
+    init(_ container: Container) {
+        self.searchViewModel = container.resolve(SearchViewModel.self)!
+        self.kingfisherOptions = container.resolve(KingfisherOptionsInfo.self)!
+        self.dataSourceQueries += self.searchViewModel.searchQueries
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -124,8 +122,8 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
             .filter({ !$0.isEmpty })
         
         Observable.combineLatest(searchDistance, searchQuery)
-            .flatMapLatest { [unowned self] (distance, query) -> Observable<Places> in
-                return self.searchViewModel.searchQuery(query, distance?.value ?? 0.0).catchErrorJustReturn(Places([], [], [], nil))
+            .flatMapLatest { [unowned self] (distance, query) -> Observable<[PlaceModel]> in
+                return self.searchViewModel.searchQuery(query, distance?.value ?? 0.0).catchErrorJustReturn([])
             }
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] (model) in
@@ -219,7 +217,7 @@ extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch viewType {
         case .search: return dataSourceQueries.count
-        case .savedQueries: return dataSource.isEmpty ? 0 : dataSource[section].items.count
+        case .savedQueries: return dataSource.isEmpty ? 0 : 0//dataSource[section].items.count
         }
     }
     
@@ -242,23 +240,24 @@ extension SearchViewController: UITableViewDataSource {
             cell.title = querySearch
             return cell
         case .savedQueries:
-            let place = dataSource[indexPath.section].items[indexPath.row]
-            let rating = dataSource[indexPath.section].ratings[indexPath.row]
-            let cell = tableView.dequeueReusableCell(withIdentifier: PlaceTableViewCell.cellIndetifier,
-                                                     for: indexPath) as? PlaceTableViewCell ?? PlaceTableViewCell()
+//            let place = dataSource[indexPath.section].items[indexPath.row]
+//            let rating = dataSource[indexPath.section].ratings[indexPath.row]
+//            let cell = tableView.dequeueReusableCell(withIdentifier: PlaceTableViewCell.cellIndetifier,
+//                                                     for: indexPath) as? PlaceTableViewCell ?? PlaceTableViewCell()
+//
+//            cell.rating = rating
+//            cell.title = place.name
+//            cell.titleCategory = place.categories?.first?.title
+//            cell.colorCategory = place.categories?.first?.color
+//            cell.imageCell.kf.indicatorType = .activity
+//            cell.imageCell.kf.setImage(with: place.coverPhoto,
+//                                       placeholder: nil,
+//                                       options: self.kingfisherOptions,
+//                                       progressBlock: nil,
+//                                       completionHandler: nil)
             
-            cell.rating = rating
-            cell.title = place.name
-            cell.titleCategory = place.categories?.first?.title
-            cell.colorCategory = place.categories?.first?.color
-            cell.imageCell.kf.indicatorType = .activity
-            cell.imageCell.kf.setImage(with: place.coverPhoto,
-                                       placeholder: nil,
-                                       options: self.kingfisherOptions,
-                                       progressBlock: nil,
-                                       completionHandler: nil)
-            
-            return cell
+            //return cell
+            return UITableViewCell()
         }
     }
 }
@@ -302,7 +301,7 @@ extension SearchViewController: UITableViewDelegate {
             
             searchViewModel.searchQuery(query, SearchDistance.fiveThousand.value).asObservable()
                 .subscribe(onNext: { [unowned self] (model) in
-                    self.dataSource = [model]
+                    self.dataSource = model
                     tableView.reloadData()
                     self.indicatorView.hideIndicator()
                     }, onError: { [unowned self] (error) in
@@ -310,11 +309,12 @@ extension SearchViewController: UITableViewDelegate {
                         self.indicatorView.hideIndicator()
                 }).disposed(by: disposeBag)
         case .savedQueries:
-            let place = dataSource[indexPath.section].items[indexPath.row]
-            let title = dataSource[indexPath.section].titles[indexPath.row]
-            let rating = dataSource[indexPath.section].ratings[indexPath.row]
-            
-            searchViewModel.openDetailPlace(place, title, rating, FavoritesViewModel())
+            break
+//            let place = dataSource[indexPath.section].items[indexPath.row]
+//            let title = dataSource[indexPath.section].titles[indexPath.row]
+//            let rating = dataSource[indexPath.section].ratings[indexPath.row]
+//
+//            searchViewModel.openDetailPlace(place, title, rating, FavoritesViewModel())
         }
     }
 }

@@ -16,7 +16,7 @@ final class ResultSearchViewController: UIViewController {
     typealias Result = (place: PlaceModel, title: NSMutableAttributedString?, rating: NSMutableAttributedString?)
     
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
-    fileprivate var dataSource: [Places] = [Places([], [], [], nil)]
+    fileprivate var dataSource: [PlaceModel] = []
     let selectResult = PublishSubject<Result>()
     
     fileprivate lazy var tableView: KSTableView = {
@@ -52,37 +52,33 @@ final class ResultSearchViewController: UIViewController {
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
     }
     
-    func updateTable(places: Places) {
-        dataSource = [places]
+    func updateTable(places: [PlaceModel]) {
+        dataSource = places
         tableView.reloadData()
     }
 }
 
 extension ResultSearchViewController: UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataSource.count
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataSource[section].items.count
-    }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let place = dataSource[indexPath.section].items[indexPath.row]
-        let rating = dataSource[indexPath.section].ratings[indexPath.row]
+//        let place = dataSource[indexPath.section].items[indexPath.row]
+//        let rating = dataSource[indexPath.section].ratings[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: PlaceTableViewCell.cellIndetifier,
                                                  for: indexPath) as? PlaceTableViewCell ?? PlaceTableViewCell()
         
-        cell.rating = rating
-        cell.title = place.name
-        cell.titleCategory = place.categories?.first?.title
-        cell.colorCategory = place.categories?.first?.color
-        cell.imageCell.kf.indicatorType = .activity
-        cell.imageCell.kf.setImage(with: place.coverPhoto,
-                                   placeholder: nil,
-                                   options: self.kingfisherOptions,
-                                   progressBlock: nil,
-                                   completionHandler: nil)
+//        cell.rating = rating
+//        cell.title = place.name
+//        cell.titleCategory = place.categories?.first?.title
+//        cell.colorCategory = place.categories?.first?.color
+//        cell.imageCell.kf.indicatorType = .activity
+//        cell.imageCell.kf.setImage(with: place.coverPhoto,
+//                                   placeholder: nil,
+//                                   options: self.kingfisherOptions,
+//                                   progressBlock: nil,
+//                                   completionHandler: nil)
         
         return cell
     }
@@ -95,9 +91,9 @@ extension ResultSearchViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let place = dataSource[indexPath.section].items[indexPath.row]
-        let title = dataSource[indexPath.section].titles[indexPath.row]
-        let rating = dataSource[indexPath.section].ratings[indexPath.row]
-        selectResult.onNext(Result(place, title, rating))
+//        let place = dataSource[indexPath.section].items[indexPath.row]
+//        let title = dataSource[indexPath.section].titles[indexPath.row]
+//        let rating = dataSource[indexPath.section].ratings[indexPath.row]
+//        selectResult.onNext(Result(place, title, rating))
     }
 }

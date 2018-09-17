@@ -27,13 +27,11 @@ protocol HasPlaceViewModel {
 }
 
 /// container dependecies injection's for main tab controller
-struct PlacesViewDependecies: HasKingfisher, HasPlaceViewModel, HasLocationService {
-    let kingfisherOptions: KingfisherOptionsInfo
+struct PlacesViewDependecies: HasPlaceViewModel, HasLocationService {
     let viewModel: PlaceViewModel
     let locationService: LocationService
     
-    init(_ kingfisherOptions: KingfisherOptionsInfo, _ viewModel: PlaceViewModel, _ locationService: LocationService) {
-        self.kingfisherOptions = kingfisherOptions
+    init(_ viewModel: PlaceViewModel, _ locationService: LocationService) {
         self.viewModel = viewModel
         self.locationService = locationService
     }
@@ -72,24 +70,23 @@ struct FilterPlacesDependecies: HasFilterPlacesViewModel {
     }
 }
 
-protocol HasMapModel {
-    var places: [Places] { get }
-    var location: CLLocation? { get }
-
-}
+//protocol HasMapModel {
+//    var places: [Places] { get }
+//    var location: CLLocation? { get }
+//}
 
 /// container dependecies injection's for map controller
-struct MapDependecies: HasMapModel, HasPlaceViewModel {
-    let places: [Places]
-    let location: CLLocation?
-    let viewModel: PlaceViewModel
-    
-    init(_ places: [Places], _ location: CLLocation?, _ placeViewModel: PlaceViewModel) {
-        self.places = places
-        self.location = location
-        self.viewModel = placeViewModel
-    }
-}
+//struct MapDependecies: HasMapModel, HasPlaceViewModel {
+//    let places: [Places]
+//    let location: CLLocation?
+//    let viewModel: PlaceViewModel
+//    
+//    init(_ places: [Places], _ location: CLLocation?, _ placeViewModel: PlaceViewModel) {
+//        self.places = places
+//        self.location = location
+//        self.viewModel = placeViewModel
+//    }
+//}
 
 protocol HasFavoritesViewModel {
     var favoritesViewModel: FavoritesViewModel { get }

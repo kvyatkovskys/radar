@@ -8,6 +8,7 @@
 
 import UIKit
 import Kingfisher
+import Swinject
 
 fileprivate extension UIColor {
     static var tabColor: UIColor {
@@ -23,35 +24,54 @@ struct Router {
     func showMainTabController(_ locationService: LocationService, startTab: Int = 0) -> UITabBarController {
         //swiftlint:disable force_cast
         var placesViewController = UIViewController()
-        var viewModel = PlaceViewModel(PlaceService())
+        let container = Container()
         
-        viewModel.openFilter = {
-            let dependecies = FilterPlacesDependecies(FilterViewModel(), FilterDistanceViewModel(), FilterCategoriesViewModel())
-            self.openFilterPlaces(fromController: placesViewController as! PlacesViewController,
-                                  toController: FilterPlacesViewController(dependecies))
+        container.register(KingfisherOptionsInfo.self) { _ in
+            self.optionKingfisher
         }
         
-        var mapController = UIViewController()
-        viewModel.openMap = { places, location in
-            let dependecies = MapDependecies(places, location, viewModel)
-            mapController = MapViewController(dependecies)
-            self.openMap(fromController: placesViewController, toController: mapController)
+        container.register(PlaceViewModel.self) { (r) in
+            var viewModel = PlaceViewModel(PlaceService(), kingfisher: r.resolve(KingfisherOptionsInfo.self)!)
+            
+            viewModel.openFilter = {
+                let dependecies = FilterPlacesDependecies(FilterViewModel(), FilterDistanceViewModel(), FilterCategoriesViewModel())
+                self.openFilterPlaces(fromController: placesViewController as! PlacesViewController,
+                                      toController: FilterPlacesViewController(dependecies))
+            }
+            
+            var mapController = UIViewController()
+            viewModel.openMap = { places, location in
+                container.register([PlaceModel].self, factory: { _ in
+                    places
+                })
+                
+                container.register(CLLocation?.self, factory: { _ in
+                    location
+                })
+                
+                mapController = MapViewController(container)
+                self.openMap(fromController: placesViewController, toController: mapController)
+            }
+            
+            viewModel.reloadMap = { places, location in
+                guard let map = mapController as? MapViewController else { return }
+                map.places = places
+                map.userLocation = location
+                map.addPointOnMap(places: places)
+            }
+            
+            viewModel.openDetailPlace = { place, title, rating, favoritesViewModel in
+                self.openDetailPlace(place, title, rating, favoritesViewModel, placesViewController)
+            }
+            
+            return viewModel
         }
         
-        viewModel.reloadMap = { places, location in
-            guard let map = mapController as? MapViewController else { return }
-            map.places = places
-            map.userLocation = location
-            map.addPointOnMap(places: places)
+        container.register(LocationService.self) { _ in
+            locationService
         }
         
-        viewModel.openDetailPlace = { place, title, rating, favoritesViewModel in
-            self.openDetailPlace(place, title, rating, favoritesViewModel, placesViewController)
-        }
-        
-        placesViewController = PlacesViewController(PlacesViewDependecies(optionKingfisher,
-                                                                          viewModel,
-                                                                          locationService))
+        placesViewController = PlacesViewController(container)
         let locationImage = UIImage(named: "ic_my_location")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         placesViewController.navigationItem.title = NSLocalizedString("aroundHere", comment: "Title for navigation bar in main tab")
         placesViewController.tabBarItem = UITabBarItem(title: NSLocalizedString("mylocation", comment: "Title for main tab"),
@@ -61,13 +81,18 @@ struct Router {
         
         // Search Controller
         var searchViewController = UIViewController()
-        var searchViewModel = SearchViewModel(viewModel)
         
-        searchViewModel.openDetailPlace = { place, title, rating, favoritesViewModel in
-            self.openDetailPlace(place, title, rating, favoritesViewModel, searchViewController)
+        container.register(SearchViewModel.self) { _ in
+            var viewModel = SearchViewModel(container)
+            
+            viewModel.openDetailPlace = { place, title, rating, favoritesViewModel in
+                self.openDetailPlace(place, title, rating, favoritesViewModel, searchViewController)
+            }
+            
+            return viewModel
         }
         
-        searchViewController = SearchViewController(SeacrhPlaceDependecies(searchViewModel, optionKingfisher))
+        searchViewController = SearchViewController(container)
         let searchImage = UIImage(named: "ic_search")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         searchViewController.navigationItem.title = NSLocalizedString("findPlace", comment: "Title for navigation bar in search tab")
         searchViewController.tabBarItem = UITabBarItem(title: NSLocalizedString("search", comment: "Title for search tab"),

@@ -13,6 +13,7 @@ def pods
  pod 'FBSDKPlacesKit'
  pod 'Lightbox'
  pod 'YandexMobileMetrica/Dynamic'
+ pod 'Swinject'
 end
 
 target 'Circle' do

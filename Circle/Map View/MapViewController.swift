@@ -8,11 +8,12 @@
 
 import UIKit
 import MapKit
+import Swinject
 
 final class MapViewController: UIViewController, MKMapViewDelegate {
-    typealias Dependecies = HasMapModel & HasPlaceViewModel
+    typealias MapLocations = (location: CLLocationCoordinate2D, title: String?, subTitle: String?)
     
-    var places: [Places]
+    var places: [PlaceModel]
     var userLocation: CLLocation?
     fileprivate let placeViewModel: PlaceViewModel
     
@@ -40,10 +41,10 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    init(_ dependecies: Dependecies) {
-        self.places = dependecies.places
-        self.userLocation = dependecies.location
-        self.placeViewModel = dependecies.viewModel
+    init(_ container: Container) {
+        self.places = container.resolve([PlaceModel].self)!
+        self.userLocation = container.resolve(CLLocation.self)
+        self.placeViewModel = container.resolve(PlaceViewModel.self)!
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -59,21 +60,20 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
         addPointOnMap(places: places)
     }
     
-    func addPointOnMap(places: [Places]) {
+    func addPointOnMap(places: [PlaceModel]) {
         if let location = userLocation {
             centerMapOnLocation(location)
         }
         mapView.removeAnnotations(mapView.annotations)
         
-        typealias MapLocations = (location: CLLocationCoordinate2D, title: String?, subTitle: String?)
-        let locations = places.flatMap({ $0.items.flatMap({ (place) -> [MapLocations] in
+        let locations = places.flatMap({ (place) -> [MapLocations] in
             var locations: [MapLocations] = []
             locations.append(MapLocations(location: CLLocationCoordinate2D(latitude: place.location?.latitude ?? 0,
                                                                            longitude: place.location?.longitude ?? 0),
                                           title: place.name,
                                           subTitle: place.location?.street))
             return locations
-        })})
+        })
         
         locations.forEach { (item) in
             let annotation = MKPointAnnotation()
@@ -114,8 +114,8 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
         if (control as? UIButton)?.buttonType == .detailDisclosure {
             dismiss(animated: true, completion: nil)
             places.forEach ({ [unowned self] place in
-                if let index = place.items.index(where: { $0.name == view.annotation?.title ?? "" }) {
-                    self.placeViewModel.openDetailPlace(place.items[index], place.titles[index], place.ratings[index], FavoritesViewModel())
+                if let index = places.index(where: { $0.name == view.annotation?.title ?? "" }) {
+                    //self.placeViewModel.openDetailPlace(places[index], place.titles[index], place.ratings[index], FavoritesViewModel())
                 }
             })
         }

@@ -39,8 +39,8 @@ final class PlaceSetting {
          place, or who liked to its page. This field requires authentication with a user token.
          An error will be thrown if this field is requested using a client token.
          */
-        guard fileds.contains(FBSDKPlacesFieldKeyContext) else {
-            fileds.append(FBSDKPlacesFieldKeyContext)
+        guard fileds.contains(FBSDKPlacesFieldKeyPhone) else {
+            fileds.append(FBSDKPlacesFieldKeyPhone)
             return fileds
         }
         return fileds

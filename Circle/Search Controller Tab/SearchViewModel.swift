@@ -9,6 +9,7 @@
 import Foundation
 import RealmSwift
 import RxSwift
+import Swinject
 
 struct SearchViewModel {
     fileprivate let placeViewModel: PlaceViewModel
@@ -33,11 +34,11 @@ struct SearchViewModel {
     /// open detail place controller
     var openDetailPlace: ((PlaceModel, NSMutableAttributedString?, NSMutableAttributedString?, FavoritesViewModel) -> Void) = {_, _, _, _ in }
     
-    init(_ placeViewModel: PlaceViewModel) {
-        self.placeViewModel = placeViewModel
+    init(_ container: Container) {
+        self.placeViewModel = container.resolve(PlaceViewModel.self)!
     }
     
-    func searchQuery(_ query: String, _ distance: Double) -> Observable<Places> {
+    func searchQuery(_ query: String, _ distance: Double) -> Observable<[PlaceModel]> {
         var location = CLLocation()
         
         do {
@@ -47,13 +48,13 @@ struct SearchViewModel {
         } catch {
             print(error)
         }
-        
-        return placeViewModel.getPlaces(location: location, distance: distance, searchTerm: query)
-            .asObservable()
-            .flatMap({ (model) -> Observable<Places> in
-                return Observable.just(model)
-            })
-        .share(replay: 1, scope: .forever)
+        return Observable.empty()
+//        return placeViewModel.getPlaces(location: location, distance: distance, searchTerm: query)
+//            .asObservable()
+//            .flatMap({ (model) -> Observable<Places> in
+//                return Observable.just(model)
+//            })
+//        .share(replay: 1, scope: .forever)
     }
     
     func saveQuerySearch(_ query: String) {
