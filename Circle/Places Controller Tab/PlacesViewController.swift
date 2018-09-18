@@ -16,8 +16,6 @@ import RealmSwift
 import Swinject
 
 final class PlacesViewController: UIViewController {
-    fileprivate var locationService: LocationService
-    fileprivate var userLocation: CLLocation?
     fileprivate var notificationTokenCategories: NotificationToken?
     fileprivate var notificationTokenDistance: NotificationToken?
     fileprivate var viewModel: PlaceViewModel
@@ -64,7 +62,6 @@ final class PlacesViewController: UIViewController {
     
     init(_ container: Container) {
         self.viewModel = container.resolve(PlaceViewModel.self)!
-        self.locationService = container.resolve(LocationService.self)!
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -79,7 +76,7 @@ final class PlacesViewController: UIViewController {
         navigationItem.rightBarButtonItem = rightBarButton
         navigationItem.leftBarButtonItem = leftBarButton
         
-        locationService.start()
+        viewModel.locationService.start()
         
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
@@ -87,7 +84,7 @@ final class PlacesViewController: UIViewController {
         tableView.refresh.rx.controlEvent(.valueChanged)
             .observeOn(MainScheduler.instance)
             .flatMapLatest({ [unowned self] _ -> Observable<PlaceDataModel> in
-                self.locationService.start()
+                self.viewModel.locationService.start()
                 return self.viewModel.places.asObservable()
                     .do(onError: { (error) in
                         print(error)
@@ -103,7 +100,7 @@ final class PlacesViewController: UIViewController {
             .flatMap({ (places) -> Observable<[PlaceModel]>in
                 return Observable.just(places.data)
             })
-            .filter({ [unowned self, weak userLocation = self.userLocation] (places) -> Bool in
+            .filter({ [unowned self, weak userLocation = self.viewModel.userLocation] (places) -> Bool in
                 self.indicatorView.hideIndicator()
                 guard self.viewModel.typeView == .map else {
                     return true
@@ -129,7 +126,7 @@ final class PlacesViewController: UIViewController {
         
         tableView.rx.modelSelected(PlaceModel.self)
             .subscribe(onNext: { [unowned self] (place) in
-                self.viewModel.openDetailPlace(place, place.title, place.rating, FavoritesViewModel())
+                self.viewModel.openDetailPlace(place, FavoritesViewModel())
             })
             .disposed(by: disposeBag)
         
@@ -143,10 +140,10 @@ final class PlacesViewController: UIViewController {
                 case .update:
                     self.indicatorView.showIndicator()
                     guard self.viewModel.searchForMinDistance == false else {
-                        self.loadPlacesLocation(self.userLocation, distance: 100.0)
+                        self.loadPlacesLocation(self.viewModel.userLocation, distance: 100.0)
                         return
                     }
-                    self.loadPlacesLocation(self.userLocation)
+                    self.loadPlacesLocation(self.viewModel.userLocation)
                 case .error(let error):
                     fatalError("\(error)")
                 case .initial:
@@ -163,10 +160,10 @@ final class PlacesViewController: UIViewController {
                     let searchFilter = filter.first
                     self.viewModel.searchForMinDistance = searchFilter?.searchForMinDistance ?? false
                     guard self.viewModel.searchForMinDistance == false else {
-                        self.loadPlacesLocation(self.userLocation, distance: 100.0)
+                        self.loadPlacesLocation(self.viewModel.userLocation, distance: 100.0)
                         return
                     }
-                    self.loadPlacesLocation(self.userLocation, distance: searchFilter?.distance ?? 1000.0)
+                    self.loadPlacesLocation(self.viewModel.userLocation, distance: searchFilter?.distance ?? 1000.0)
                 case .error(let error):
                     fatalError("\(error)")
                 }
@@ -175,16 +172,16 @@ final class PlacesViewController: UIViewController {
             print(error)
         }
         
-        locationService.userLocation.asObserver()
+        viewModel.locationService.userLocation.asObserver()
             .filter({ (locationMonitoring) -> Bool in
                 if self.tableView.refresh.isRefreshing {
                     self.tableView.refresh.endRefreshing()
                 }
-                return self.userLocation == nil || locationMonitoring.monitoring
+                return self.viewModel.userLocation == nil || locationMonitoring.monitoring
             })
             .map({ [unowned self] (locationMonitoring) in
                 self.indicatorView.showIndicator()
-                self.userLocation = locationMonitoring.location
+                self.viewModel.userLocation = locationMonitoring.location
                 guard self.viewModel.searchForMinDistance == false else {
                     self.loadPlacesLocation(locationMonitoring.location, distance: 100.0)
                     return
@@ -202,7 +199,7 @@ final class PlacesViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        locationService.checkAuthorized()
+        viewModel.locationService.checkAuthorized()
     }
     
     @objc func setView(sender: UIBarButtonItem?) {
@@ -212,7 +209,7 @@ final class PlacesViewController: UIViewController {
             sender?.tag = TypeView.table.rawValue
             view.subviews.forEach({ $0.removeFromSuperview() })
             viewModel.changeTypeView(.map)
-            viewModel.openMap(viewModel.places.value.data, userLocation)
+            viewModel.openMap(viewModel.places.value.data, viewModel.userLocation)
             navigationItem.leftBarButtonItem?.image = UIImage(named: "ic_view_list")!.withRenderingMode(.alwaysTemplate)
         case .table:
             sender?.tag = TypeView.map.rawValue
@@ -249,7 +246,24 @@ extension PlacesViewController: UITableViewDelegate {
         let lastRowIndex = tableView.numberOfRows(inSection: 0) - 3
         if let url = viewModel.places.value.next, indexPath.row == lastRowIndex {
             loadMorePlacesLocation(url: url)
-            print("yes")
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath)
+        UIView.animate(withDuration: 0.4,
+                       delay: 0,
+                       usingSpringWithDamping: 0.3,
+                       initialSpringVelocity: 0.8,
+                       options: .curveLinear,
+                       animations: { cell?.transform = CGAffineTransform(scaleX: 0.96, y: 0.96) },
+                       completion: nil)
+    }
+    
+    func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath)
+        UIView.animate(withDuration: 0.1) {
+            cell?.transform = CGAffineTransform(scaleX: 1, y: 1)
         }
     }
 }

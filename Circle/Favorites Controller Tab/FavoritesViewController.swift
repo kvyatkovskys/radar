@@ -182,6 +182,6 @@ extension FavoritesViewController: UITableViewDelegate {
                                fromFavorites: true)
         let title = favorite.title
         let rating = favorite.rating
-        viewModel.openDetailPlace(place, title, rating, viewModel)
+        viewModel.openDetailPlace(place, viewModel)
     }
 }

@@ -9,28 +9,35 @@
 import Foundation
 import RxSwift
 import RealmSwift
+import Kingfisher
+import Swinject
 
 struct DetailSectionObjects {
     var sectionName: String
     var sectionObjects: [TypeDetailCell]
 }
 
-struct DetailPlaceViewModel {    
+struct DetailPlaceViewModel: DetailPlace {
+    var kingfisherOptions: KingfisherOptionsInfo
+    var sevice: OpenGraphService
     var place: PlaceModel
     let title: NSMutableAttributedString?
     let rating: NSMutableAttributedString?
     var dataSource: [DetailSectionObjects]
+    let heightHeader: CGFloat = 340
         
     fileprivate let colorCategory: UIColor?
     fileprivate let favoritesService: FavoritesService
     fileprivate let detailService = DetailService()
     fileprivate let disposeBag = DisposeBag()
 
-    init(_ place: PlaceModel, _ title: NSMutableAttributedString?, _ rating: NSMutableAttributedString?, _ favoritesService: FavoritesService) {
-        self.favoritesService = favoritesService
-        self.place = place
-        self.title = title
-        self.rating = rating
+    init(_ container: Container) {
+        self.kingfisherOptions = container.resolve(KingfisherOptionsInfo.self)!
+        self.sevice = container.resolve(OpenGraphService.self)!
+        self.favoritesService = container.resolve(FavoritesService.self)!
+        self.place = container.resolve(PlaceModel.self)!
+        self.title = self.place.title
+        self.rating = self.place.rating
         
         if (place.categories ?? []).isEmpty {
             colorCategory = UIColor.mainColor
@@ -197,4 +204,14 @@ struct DetailPlaceViewModel {
         }
         return days
     }
+}
+
+protocol DetailPlace {
+    var kingfisherOptions: KingfisherOptionsInfo { get }
+    var sevice: OpenGraphService { get }
+    var place: PlaceModel { get }
+    var title: NSMutableAttributedString? { get }
+    var rating: NSMutableAttributedString? { get }
+    var dataSource: [DetailSectionObjects] { get }
+    var heightHeader: CGFloat { get }
 }

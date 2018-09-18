@@ -25,7 +25,7 @@ struct PlaceViewModel: Place {
     /// open map controller
     var openMap: (([PlaceModel], CLLocation?) -> Void) = { _, _ in UIImpactFeedbackGenerator().impactOccurred() }
     /// open detail place controller
-    var openDetailPlace: ((PlaceModel, NSMutableAttributedString?, NSMutableAttributedString?, FavoritesViewModel) -> Void) = { _, _, _, _ in }
+    var openDetailPlace: ((PlaceModel, FavoritesViewModel) -> Void) = { _, _ in }
     /// reload places on map
     var reloadMap: (([PlaceModel], CLLocation?) -> Void) = { _, _ in }
     
@@ -33,6 +33,8 @@ struct PlaceViewModel: Place {
     var heightHeader: CGFloat = 100.0
     var searchForMinDistance: Bool = false
     let kingfisherOptions: KingfisherOptionsInfo
+    var locationService: LocationService
+    var userLocation: CLLocation?
     
     var typeView: TypeView {
         var type = TypeView(rawValue: 0)!
@@ -46,9 +48,10 @@ struct PlaceViewModel: Place {
         return type
     }
     
-    init(_ service: PlaceService, kingfisher: KingfisherOptionsInfo) {
+    init(_ service: PlaceService, kingfisher: KingfisherOptionsInfo, locationService: LocationService) {
         self.placeService = service
         self.kingfisherOptions = kingfisher
+        self.locationService = locationService
     }
     
     func changeTypeView(_ type: TypeView) {
@@ -112,7 +115,7 @@ protocol Place {
     /// open map controller
     var openMap: (([PlaceModel], CLLocation?) -> Void) { get set }
     /// open detail place controller
-    var openDetailPlace: ((PlaceModel, NSMutableAttributedString?, NSMutableAttributedString?, FavoritesViewModel) -> Void) { get set }
+    var openDetailPlace: ((PlaceModel, FavoritesViewModel) -> Void) { get set }
     /// reload places on map
     var reloadMap: (([PlaceModel], CLLocation?) -> Void) { get set }
     
@@ -122,5 +125,6 @@ protocol Place {
     var heightHeader: CGFloat { get }
     var searchForMinDistance: Bool { get }
     var kingfisherOptions: KingfisherOptionsInfo { get }
-
+    var locationService: LocationService { get }
+    var userLocation: CLLocation? { get }
 }

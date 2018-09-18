@@ -9,17 +9,20 @@
 import UIKit
 import RxSwift
 import RxCocoa
-import SnapKit
 
 final class PlaceTableViewCell: UITableViewCell {
     static let cellIndetifier = "PlaceTableViewCell"
     
-    fileprivate var widthCategory: Constraint?
     fileprivate let disposeBag = DisposeBag()
     
     fileprivate let mainView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
+        return view
+    }()
+    
+    fileprivate let viewImage: KSView = {
+        let view = KSView()
         return view
     }()
     
@@ -36,6 +39,7 @@ final class PlaceTableViewCell: UITableViewCell {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = .boldSystemFont(ofSize: 17.0)
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -79,24 +83,24 @@ final class PlaceTableViewCell: UITableViewCell {
     var titleCategory: String? {
         didSet {
             categoryLabel.text = titleCategory
-            if let width = titleCategory?.width(font: .boldSystemFont(ofSize: 13.0), height: 20.0) {
-                widthCategory?.update(offset: width + 25.0)
-                layoutIfNeeded()
-            }
         }
     }
     
     override func updateConstraints() {
         super.updateConstraints()
         
-        imageCell.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(15.0)
+        viewImage.snp.makeConstraints { (make) in
+            make.top.equalToSuperview().offset(10.0)
             make.left.right.equalToSuperview().inset(10.0)
             make.bottom.equalTo(mainView.snp.top)
         }
         
+        imageCell.snp.makeConstraints { (make) in
+            make.top.left.bottom.right.equalTo(viewImage)
+        }
+        
         mainView.snp.makeConstraints { (make) in
-            make.bottom.equalToSuperview().offset(-10.0)
+            make.bottom.equalToSuperview()
             make.left.right.equalTo(imageCell)
             make.height.equalTo(60.0)
         }
@@ -115,10 +119,10 @@ final class PlaceTableViewCell: UITableViewCell {
         }
 
         categoryLabel.snp.remakeConstraints { (make) in
-            make.right.equalToSuperview()
+            make.right.equalTo(imageCell).offset(-24)
             make.height.equalTo(20.0)
-            make.centerY.equalTo(ratingLabel)
-            widthCategory = make.width.equalTo(80.0).constraint
+            make.bottom.equalTo(imageCell)
+            make.width.equalTo(82)
         }
     }
     
@@ -129,11 +133,12 @@ final class PlaceTableViewCell: UITableViewCell {
         backgroundColor = .clear
         selectionStyle = .none
         
-        addSubview(imageCell)
+        addSubview(viewImage)
+        viewImage.addSubview(imageCell)
         addSubview(mainView)
         mainView.addSubview(titleLabel)
         mainView.addSubview(ratingLabel)
-        mainView.addSubview(categoryLabel)
+        addSubview(categoryLabel)
         
         updateConstraints()
     }

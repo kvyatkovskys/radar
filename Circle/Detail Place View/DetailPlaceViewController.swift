@@ -7,20 +7,15 @@
 //
 
 import UIKit
-import Kingfisher
 import RxSwift
 import RealmSwift
 import SnapKit
+import Swinject
 
 final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDelegate {
-    typealias Dependecies = HasDetailPlaceViewModel & HasKingfisher & HasOpenGraphService & HasFavoritesViewModel
-    
-    fileprivate let heightHeader: CGFloat = 385.0
     fileprivate var notificationTokenFavorites: NotificationToken?
     fileprivate var viewModel: DetailPlaceViewModel
     fileprivate let favoritesViewModel: FavoritesViewModel
-    fileprivate let kingfisherOptions: KingfisherOptionsInfo
-    fileprivate let sevice: OpenGraphService
     fileprivate let disposeBag = DisposeBag()
     
     fileprivate var favoriteNotify: FavoritesNotify {
@@ -28,7 +23,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
     }
     
     fileprivate lazy var headerView: UIView = {
-        let view = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: heightHeader))
+        let view = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: viewModel.heightHeader))
         view.backgroundColor = .white
         return view
     }()
@@ -42,7 +37,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         image.kf.indicatorType = .activity
         image.kf.setImage(with: viewModel.place.coverPhoto,
                                 placeholder: nil,
-                                options: self.kingfisherOptions,
+                                options: viewModel.kingfisherOptions,
                                 progressBlock: nil,
                                 completionHandler: nil)
         return image
@@ -62,7 +57,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
             .subscribe(onNext: { [unowned self] (url) in
                 image.kf.setImage(with: url,
                                   placeholder: nil,
-                                  options: self.kingfisherOptions,
+                                  options: self.viewModel.kingfisherOptions,
                                   progressBlock: nil,
                                   completionHandler: nil)
             }, onError: { (error) in
@@ -224,36 +219,16 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         }
 
         listSubCategoriesView.snp.remakeConstraints { (make) in
-            make.bottom.equalTo(lineView)
+            make.bottom.equalToSuperview()
             make.right.equalTo(titlePlace)
             make.left.equalTo(ratingLabel)
             make.top.equalTo(titlePlace.snp.bottom).offset(10.0)
         }
-
-        lineView.snp.remakeConstraints { (make) in
-            make.bottom.equalTo(favoriteButton.snp.top).offset(-10.0)
-            make.left.right.equalToSuperview()
-            make.height.equalTo(0.1)
-        }
-
-        favoriteButton.snp.makeConstraints { (make) in
-            make.right.equalTo(headerView.snp.centerX).offset(-12.0)
-            make.bottom.equalToSuperview().offset(-10.0)
-            make.size.equalTo(CGSize(width: 130.0, height: 40.0))
-        }
-
-        shareButton.snp.makeConstraints { (make) in
-            make.left.equalTo(headerView.snp.centerX).offset(12.0)
-            make.bottom.equalTo(favoriteButton)
-            make.size.equalTo(favoriteButton)
-        }
     }
     
-    init(_ dependecies: Dependecies) {
-        self.viewModel = dependecies.detailViewModel
-        self.favoritesViewModel = dependecies.favoritesViewModel
-        self.kingfisherOptions = dependecies.kingfisherOptions
-        self.sevice = dependecies.service
+    init(_ container: Container) {
+        self.viewModel = container.resolve(DetailPlaceViewModel.self)!
+        self.favoritesViewModel = container.resolve(FavoritesViewModel.self)!
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -274,9 +249,6 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         headerView.addSubview(titlePlace)
         headerView.addSubview(ratingLabel)
         headerView.addSubview(listSubCategoriesView)
-        headerView.addSubview(lineView)
-        headerView.addSubview(favoriteButton)
-        headerView.addSubview(shareButton)
         tableView.tableHeaderView = headerView
         view.addSubview(tableView)
         updateViewConstraints()
@@ -292,7 +264,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
                         self.imageHeader.kf.indicatorType = .activity
                         self.imageHeader.kf.setImage(with: url,
                                                      placeholder: nil,
-                                                     options: self.kingfisherOptions,
+                                                     options: self.viewModel.kingfisherOptions,
                                                      progressBlock: nil,
                                                      completionHandler: nil)
                     }
@@ -429,7 +401,7 @@ extension DetailPlaceViewController: UITableViewDataSource {
             
             cell.controller = self
             cell.viewModel = viewModel
-            cell.pageImages = PageImages(images, previews, nextImages, kingfisherOptions)
+            cell.pageImages = PageImages(images, previews, nextImages, viewModel.kingfisherOptions)
             return cell
         case .description(let text, _):
             let cell = tableView.dequeueReusableCell(withIdentifier: DetailDescriptionTableViewCell.cellIdentifier,

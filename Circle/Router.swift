@@ -31,7 +31,7 @@ struct Router {
         }
         
         container.register(PlaceViewModel.self) { (r) in
-            var viewModel = PlaceViewModel(PlaceService(), kingfisher: r.resolve(KingfisherOptionsInfo.self)!)
+            var viewModel = PlaceViewModel(PlaceService(), kingfisher: r.resolve(KingfisherOptionsInfo.self)!, locationService: locationService)
             
             viewModel.openFilter = {
                 let dependecies = FilterPlacesDependecies(FilterViewModel(), FilterDistanceViewModel(), FilterCategoriesViewModel())
@@ -60,8 +60,8 @@ struct Router {
                 map.addPointOnMap(places: places)
             }
             
-            viewModel.openDetailPlace = { place, title, rating, favoritesViewModel in
-                self.openDetailPlace(place, title, rating, favoritesViewModel, placesViewController)
+            viewModel.openDetailPlace = { place, favoritesViewModel in
+                self.openDetailPlace(place, favoritesViewModel, placesViewController)
             }
             
             return viewModel
@@ -85,8 +85,8 @@ struct Router {
         container.register(SearchViewModel.self) { _ in
             var viewModel = SearchViewModel(container)
             
-            viewModel.openDetailPlace = { place, title, rating, favoritesViewModel in
-                self.openDetailPlace(place, title, rating, favoritesViewModel, searchViewController)
+            viewModel.openDetailPlace = { place, favoritesViewModel in
+                self.openDetailPlace(place, favoritesViewModel, searchViewController)
             }
             
             return viewModel
@@ -104,8 +104,8 @@ struct Router {
         var favoritesViewController = UIViewController()
         var favoritesViewModel = FavoritesViewModel()
         
-        favoritesViewModel.openDetailPlace = { place, title, rating, viewModel in
-            self.openDetailPlace(place, title, rating, viewModel, favoritesViewController)
+        favoritesViewModel.openDetailPlace = { place, viewModel in
+            self.openDetailPlace(place, viewModel, favoritesViewController)
         }
         
         favoritesViewController = FavoritesViewController(FavoritesDependencies(favoritesViewModel, optionKingfisher))
@@ -163,16 +163,29 @@ struct Router {
     }
     
     /// open detail controller about place
-    fileprivate func openDetailPlace(_ place: PlaceModel,
-                                     _ title: NSMutableAttributedString?,
-                                     _ rating: NSMutableAttributedString?,
-                                     _ favoritesViewModel: FavoritesViewModel,
-                                     _ fromController: UIViewController) {
-        let dependecies = DetailPlaceDependecies(DetailPlaceViewModel(place, title, rating, FavoritesService()),
-                                                 favoritesViewModel,
-                                                 optionKingfisher,
-                                                 OpenGraphService())
-        let detailPlaceController = DetailPlaceViewController(dependecies)
+    fileprivate func openDetailPlace(_ place: PlaceModel, _ favoritesViewModel: FavoritesViewModel, _ fromController: UIViewController) {
+        let container = Container()
+        container.register(PlaceModel.self) { _ in
+            place
+        }
+        container.register(FavoritesService.self) { _ in
+            FavoritesService()
+        }
+        container.register(KingfisherOptionsInfo.self) { _ in
+            self.optionKingfisher
+        }
+        container.register(OpenGraphService.self) { _ in
+            OpenGraphService()
+        }
+        container.register(FavoritesViewModel.self) { _ in
+            favoritesViewModel
+        }
+        
+        container.register(DetailPlaceViewModel.self) { _ in
+            DetailPlaceViewModel(container)
+        }
+        
+        let detailPlaceController = DetailPlaceViewController(container)
         detailPlaceController.hidesBottomBarWhenPushed = true
         fromController.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
         fromController.navigationController?.pushViewController(detailPlaceController, animated: true)

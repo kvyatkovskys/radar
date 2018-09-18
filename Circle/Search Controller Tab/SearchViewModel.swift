@@ -32,7 +32,7 @@ struct SearchViewModel {
     }
     
     /// open detail place controller
-    var openDetailPlace: ((PlaceModel, NSMutableAttributedString?, NSMutableAttributedString?, FavoritesViewModel) -> Void) = {_, _, _, _ in }
+    var openDetailPlace: ((PlaceModel, FavoritesViewModel) -> Void) = { _, _ in }
     
     init(_ container: Container) {
         self.placeViewModel = container.resolve(PlaceViewModel.self)!

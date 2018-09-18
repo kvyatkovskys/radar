@@ -97,6 +97,7 @@
 		8BEB4DF31FFAD285008AD1AB /* PlaceSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEB4DF21FFAD285008AD1AB /* PlaceSetting.swift */; };
 		8BFBF57D200517D000CE2C8B /* CategoriesTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFBF57C200517D000CE2C8B /* CategoriesTableViewDelegate.swift */; };
 		8BFBF57F2005187100CE2C8B /* CategoriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFBF57E2005187100CE2C8B /* CategoriesTableViewCell.swift */; };
+		F9BA084521500C970072562E /* KSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BA084421500C970072562E /* KSView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -249,6 +250,7 @@
 		EC945378AF2C38ECAC172475 /* Pods_Circle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Circle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F492590FA08D8B776535C3C1 /* Pods-CircleUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CircleUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CircleUITests/Pods-CircleUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		F8A689D0A03FBE0C3621184D /* Pods-CircleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CircleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CircleTests/Pods-CircleTests.release.xcconfig"; sourceTree = "<group>"; };
+		F9BA084421500C970072562E /* KSView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KSView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -476,6 +478,7 @@
 				8B2D532B20474D0B0002598C /* PopoverLabelViewController.swift */,
 				8B009D352042B0F6005D3960 /* ShortcutItems.swift */,
 				8B2D741020387A520022BDCC /* KSTableView.swift */,
+				F9BA084421500C970072562E /* KSView.swift */,
 				8B44C37E1FEFE195003C0754 /* QuickAlertController.swift */,
 				8B4177091FFD5785002A963A /* ActivityIndicatorView.swift */,
 				8B4177181FFD670B002A963A /* DeviceType.swift */,
@@ -930,6 +933,7 @@
 				8BEB4DF31FFAD285008AD1AB /* PlaceSetting.swift in Sources */,
 				8B105CB72028A96B006A5BBC /* SearchHistoryTableViewCell.swift in Sources */,
 				8B82C38C2013999B00E0CA89 /* ListContactsCollectionDataSource.swift in Sources */,
+				F9BA084521500C970072562E /* KSView.swift in Sources */,
 				8BDAA391204AA84E002EAE98 /* DetailImagesTableViewCell.swift in Sources */,
 				8B6A37A8202DA9A1003CD1A8 /* SettingsModel.swift in Sources */,
 				8B4177191FFD670B002A963A /* DeviceType.swift in Sources */,

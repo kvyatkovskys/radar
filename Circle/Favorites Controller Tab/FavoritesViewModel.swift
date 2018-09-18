@@ -25,7 +25,7 @@ struct FavoritesViewModel {
     }
     
     /// open detail place controller
-    var openDetailPlace: ((PlaceModel, NSMutableAttributedString?, NSMutableAttributedString?, FavoritesViewModel) -> Void) = {_, _, _, _ in }
+    var openDetailPlace: ((PlaceModel, FavoritesViewModel) -> Void) = { _, _ in }
     
     func updateValue(_ favorites: [Favorites]) -> [FavoritesModel] {
         var result: [FavoritesModel] = []

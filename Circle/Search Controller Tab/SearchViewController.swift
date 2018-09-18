@@ -143,7 +143,7 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
         
         resultController.selectResult.asObservable()
             .subscribe(onNext: { [unowned self] (result) in
-                self.searchViewModel.openDetailPlace(result.place, result.title, result.rating, FavoritesViewModel())
+                self.searchViewModel.openDetailPlace(result.place, FavoritesViewModel())
                 
                 if !isSaveSearchText {
                     isSaveSearchText = true

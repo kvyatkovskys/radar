@@ -70,6 +70,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     guard application.applicationIconBadgeNumber > 0 else { return }
                     application.applicationIconBadgeNumber = 0
                 }
+            default:
+                break
             }
         }
     }
