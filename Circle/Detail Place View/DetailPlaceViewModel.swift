@@ -106,7 +106,7 @@ struct DetailPlaceViewModel: DetailPlace {
         if (place.phone != nil) || (place.website != nil) || (place.appLink != nil) {
             let itemsContact = [Contact(type: ContactType.phone, value: place.phone),
                                 Contact(type: ContactType.website, value: place.website),
-                                Contact(type: ContactType.facebook, value: place.appLink)]
+                                Contact(type: ContactType.facebook, value: place.id)]
             let type = TypeDetailCell.contact(itemsContact, 50.0)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
@@ -135,8 +135,8 @@ struct DetailPlaceViewModel: DetailPlace {
         
         if let street = place.location?.street, let city = place.location?.city {
             let height = (city + " - " + street).height(font: .boldSystemFont(ofSize: 15.0),
-                                                        width: ScreenSize.SCREEN_WIDTH) + 60.0
-            let type = TypeDetailCell.address(city + " - " + street, place.location, height)
+                                                        width: ScreenSize.SCREEN_WIDTH)
+            let type = TypeDetailCell.address(city + " - " + street, place.location, height + 150)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }
         

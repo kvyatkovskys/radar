@@ -109,47 +109,20 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         return view
     }()
     
-    fileprivate lazy var favoriteButton: UIButton = {
-        let button = UIButton()
-        
+    fileprivate lazy var favoriteButton: UIBarButtonItem = {
         let image: UIImage
         if favoriteNotify.addFavorites {
             image = UIImage(named: "ic_favorite")!.withRenderingMode(.alwaysTemplate)
         } else {
             image = UIImage(named: "ic_favorite_border")!.withRenderingMode(.alwaysTemplate)
         }
-        
-        let localized: String
-        if favoriteNotify.addFavorites {
-            localized = NSLocalizedString("remove", comment: "The title for button that removed from favorite")
-        } else {
-            localized = NSLocalizedString("add", comment: "The title for button that added to favorite")
-        }
-        
-        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10.0)
-        button.setImage(image, for: .normal)
-        button.tintColor = UIColor.mainColor
-        button.backgroundColor = UIColor.shadowGray
-        button.setTitle(localized, for: .normal)
-        button.setTitleColor(UIColor.mainColor, for: .normal)
-        button.titleLabel?.font = .boldSystemFont(ofSize: 15.0)
-        button.layer.cornerRadius = 5.0
-        button.addTarget(self, action: #selector(addToFavorites), for: .touchUpInside)
-        button.isSelected = !favoriteNotify.addFavorites
+        let button = UIBarButtonItem(image: image, style: .done, target: self, action: #selector(addToFavorites))
         return button
     }()
     
-    fileprivate lazy var shareButton: UIButton = {
-        let button = UIButton()
-        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10.0)
-        button.setImage(UIImage(named: "ic_share")?.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.tintColor = UIColor.mainColor
-        button.backgroundColor = UIColor.shadowGray
-        button.setTitle(NSLocalizedString("share", comment: "Title for share button"), for: .normal)
-        button.setTitleColor(UIColor.mainColor, for: .normal)
-        button.titleLabel?.font = .boldSystemFont(ofSize: 15.0)
-        button.layer.cornerRadius = 5.0
-        button.addTarget(self, action: #selector(sharePlace), for: .touchUpInside)
+    fileprivate lazy var shareButton: UIBarButtonItem = {
+        let image = UIImage(named: "ic_share")?.withRenderingMode(.alwaysTemplate)
+        let button = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(sharePlace))
         return button
     }()
     
@@ -181,7 +154,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
             notifyImage = UIImage(named: "ic_notifications_off")
         }
 
-        let button = UIBarButtonItem(image: notifyImage, style: .done, target: self, action: #selector(changeNotify))
+        let button = UIBarButtonItem(image: notifyImage, style: .plain, target: self, action: #selector(changeNotify))
         return button
     }
     
@@ -194,21 +167,21 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         }
         
         imageHeader.snp.remakeConstraints { (make) in
-            make.top.left.equalTo(self.tableView)
+            make.top.left.equalTo(tableView)
             make.width.equalTo(ScreenSize.SCREEN_WIDTH)
             make.height.equalTo(160.0)
         }
         
         picture.snp.makeConstraints { (make) in
             make.top.equalTo(imageHeader.snp.bottom).offset(-15.0)
-            make.left.equalTo(self.view).offset(10.0)
+            make.left.equalTo(view).offset(10.0)
             make.size.equalTo(CGSize(width: 100.0, height: 100.0))
         }
         
         titlePlace.snp.remakeConstraints { (make) in
             make.top.equalTo(imageHeader.snp.bottom).offset(10.0)
             make.left.equalTo(picture.snp.right).offset(10.0)
-            make.right.equalTo(self.view).offset(-10.0)
+            make.right.equalTo(view).offset(-10.0)
             make.bottom.equalTo(ratingLabel)
         }
 
@@ -241,7 +214,9 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         setTitleNavBar()
         
         if favoriteNotify.addFavorites {
-            navigationItem.rightBarButtonItem = rightBarButton()
+            navigationItem.rightBarButtonItems = [shareButton, favoriteButton, rightBarButton()]
+        } else {
+            navigationItem.rightBarButtonItems = [shareButton, favoriteButton]
         }
         
         headerView.addSubview(imageHeader)
@@ -270,15 +245,13 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
                     }
                     
                     guard self.favoritesViewModel.checkAddAndNotify(self.viewModel.place).addFavorites else {
-                        self.favoriteButton.setTitle(NSLocalizedString("add", comment: "The title for button that added to favorite"), for: .normal)
-                        self.favoriteButton.setImage(UIImage(named: "ic_favorite_border")?.withRenderingMode(.alwaysTemplate), for: .normal)
-                        self.navigationItem.rightBarButtonItem = nil
+                        self.favoriteButton.image = UIImage(named: "ic_favorite_border")?.withRenderingMode(.alwaysTemplate)
+                        self.navigationItem.rightBarButtonItems = [self.shareButton, self.favoriteButton]
                         return
                     }
                     
-                    self.favoriteButton.setTitle(NSLocalizedString("remove", comment: "The title for button that removed from favorite"), for: .normal)
-                    self.favoriteButton.setImage(UIImage(named: "ic_favorite")?.withRenderingMode(.alwaysTemplate), for: .normal)
-                    self.navigationItem.rightBarButtonItem = self.rightBarButton()
+                    self.favoriteButton.image = UIImage(named: "ic_favorite")?.withRenderingMode(.alwaysTemplate)
+                    self.navigationItem.rightBarButtonItems = [self.shareButton, self.favoriteButton, self.rightBarButton()]
                 case .error(let error):
                     fatalError("\(error)")
                 case .initial:
@@ -341,16 +314,14 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         let allow = favoritesViewModel.allowNotify(place: viewModel.place)
     
         guard allow else {
-            navigationItem.rightBarButtonItem?.image = UIImage(named: "ic_notifications_off")
+            navigationItem.rightBarButtonItems?.last?.image = UIImage(named: "ic_notifications_off")
             return
         }
-        navigationItem.rightBarButtonItem?.image = UIImage(named: "ic_notifications_active")
+        navigationItem.rightBarButtonItems?.last?.image = UIImage(named: "ic_notifications_active")
     }
     
-    @objc func addToFavorites(sender: UIButton) {
-        sender.isSelected = !sender.isSelected
-        
-        guard sender.isSelected else {
+    @objc func addToFavorites() {
+        guard favoriteNotify.addFavorites else {
             favoritesViewModel.addToFavorite(place: viewModel.place)
             return
         }
@@ -419,6 +390,7 @@ extension DetailPlaceViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: DetailAddressTableViewCell.cellIdentifier,
                                                      for: indexPath) as? DetailAddressTableViewCell ?? DetailAddressTableViewCell()
             
+            cell.title = viewModel.place.name
             cell.address = address
             cell.location = location
             return cell
@@ -484,7 +456,7 @@ extension DetailPlaceViewController: UITableViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard scrollView.contentOffset.y > 210.0 else {
+        guard scrollView.contentOffset.y > 200.0 else {
             setTitleNavBar()
             return
         }

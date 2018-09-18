@@ -34,10 +34,18 @@ extension ListContactsCollectionDelegate: UICollectionViewDelegate, UICollection
                 let localized = NSLocalizedString("telephone", comment: "Title for teh alert show phone")
                 UIApplication.shared.keyWindow?.rootViewController?.showAlertLight(title: localized, message: "\(contact.value ?? "")")
             }
-        case .website, .facebook:
+        case .website:
             if let url = URL(string: "\(contact.value ?? "")"), UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
+        case .facebook:
+            let urlApp = URL(string: "fb://page/?id=\(contact.value ?? "")")!
+            let urlWeb = URL(string: "https://facebook.com/\(contact.value ?? "")")!
+            guard UIApplication.shared.canOpenURL(urlApp) else {
+                UIApplication.shared.open(urlWeb, options: [:], completionHandler: nil)
+                return
+            }
+            UIApplication.shared.open(urlApp, options: [:], completionHandler: nil)
         }
     }
 }

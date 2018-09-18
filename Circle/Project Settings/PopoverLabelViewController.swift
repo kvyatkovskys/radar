@@ -12,18 +12,19 @@ final class PopoverLabelViewController: UIViewController {
 
     fileprivate let fullTitle: String
     
-    fileprivate let titlePlace: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.textColor = .black
-        return label
+    fileprivate let titlePlace: UITextView = {
+        let text = UITextView()
+        text.font = UIFont.systemFont(ofSize: 17)
+        text.isUserInteractionEnabled = true
+        text.isEditable = false
+        return text
     }()
     
     override func updateViewConstraints() {
         super.updateViewConstraints()
         
         titlePlace.snp.makeConstraints { (make) in
-            make.top.left.bottom.right.equalToSuperview().inset(10.0)
+            make.top.left.bottom.right.equalToSuperview().inset(10)
         }
     }
     
