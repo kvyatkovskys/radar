@@ -8,9 +8,7 @@ platform :ios do
   end
 
   lane :test do
-    swiftlint(mode: :lint,
-	      strict: false,
-	      ignore_exit_status: true)
+    swiftlint(mode: :lint, strict: false, ignore_exit_status: true)
     scan(workspace: "Circle.xcworkspace",
         device: "iPhone 8 (12.0)",
         scheme: "Circle",
@@ -20,16 +18,11 @@ platform :ios do
 
   lane :beta do
     ensure_git_status_clean
-  	#increment_build_number(build_number: number_of_commits,
-    	#				   xcodeproj: "Circle.xcodeproj")
+  	#increment_build_number(build_number: number_of_commits, xcodeproj: "Circle.xcodeproj")
 
   	#test
-    match(type: "appstore",
-    	team_id: "P44LMMDHV3")
-    build_app(scheme: "Circle",
-           	workspace: "Circle.xcworkspace",
-            include_bitcode: false)
-
+    match(type: "appstore", team_id: "P44LMMDHV3")
+    build_app(scheme: "Circle", workspace: "Circle.xcworkspace", include_bitcode: true)
     upload_to_testflight(skip_waiting_for_build_processing: true)
   end
 
