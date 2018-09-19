@@ -12,7 +12,7 @@ platform :ios do
 	      strict: false,
 	      ignore_exit_status: true)
     scan(workspace: "Circle.xcworkspace",
-        device: "iPhone 8 (11.2)",
+        device: "iPhone 8 (12.0)",
         scheme: "Circle",
         skip_build: true,
         clean: true)
@@ -23,7 +23,7 @@ platform :ios do
   	increment_build_number(build_number: number_of_commits,
     					   xcodeproj: "Circle.xcodeproj")
 
-  	test
+  	#test
     match(type: "appstore",
     	team_id: "P44LMMDHV3")
     build_app(scheme: "Circle",
