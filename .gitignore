@@ -3,6 +3,7 @@
 *.xcuserdata
 *.scannerwork
 *.mobileprovision
+*.xcuserstate
 *.zip
 *.ipa
 *.cer
