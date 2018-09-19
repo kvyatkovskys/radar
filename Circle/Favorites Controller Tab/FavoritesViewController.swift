@@ -180,8 +180,6 @@ extension FavoritesViewController: UITableViewDelegate {
                                coverPhoto: favorite.picture,
                                about: favorite.about,
                                fromFavorites: true)
-        let title = favorite.title
-        let rating = favorite.rating
         viewModel.openDetailPlace(place, viewModel)
     }
 }
