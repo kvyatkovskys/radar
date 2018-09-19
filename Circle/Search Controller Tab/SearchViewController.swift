@@ -217,7 +217,7 @@ extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch viewType {
         case .search: return dataSourceQueries.count
-        case .savedQueries: return dataSource.isEmpty ? 0 : 0//dataSource[section].items.count
+        case .savedQueries: return dataSource.isEmpty ? 0 : dataSource.count
         }
     }
     
@@ -229,14 +229,12 @@ extension SearchViewController: UITableViewDataSource {
             guard indexPath.row != 0 else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: InfoSearchTableViewCell.cellIdentifier,
                                                          for: indexPath) as? InfoSearchTableViewCell ?? InfoSearchTableViewCell()
-                
                 cell.title = querySearch
                 return cell
             }
             
             let cell = tableView.dequeueReusableCell(withIdentifier: SearchQueryTableViewCell.cellIdentifier,
                                                      for: indexPath) as? SearchQueryTableViewCell ?? SearchQueryTableViewCell()
-            
             cell.title = querySearch
             return cell
         case .savedQueries:

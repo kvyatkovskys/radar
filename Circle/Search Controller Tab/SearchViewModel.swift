@@ -12,7 +12,7 @@ import RxSwift
 import Swinject
 
 struct SearchViewModel {
-    fileprivate let placeViewModel: PlaceViewModel
+    let placeViewModel: PlaceViewModel
     
     var searchQueries: [String] {
         var queries: [String] = []
@@ -48,13 +48,8 @@ struct SearchViewModel {
         } catch {
             print(error)
         }
-        return Observable.empty()
-//        return placeViewModel.getPlaces(location: location, distance: distance, searchTerm: query)
-//            .asObservable()
-//            .flatMap({ (model) -> Observable<Places> in
-//                return Observable.just(model)
-//            })
-//        .share(replay: 1, scope: .forever)
+        placeViewModel.getPlaces(location: location, distance: distance, searchTerm: query)
+        return Observable.just(placeViewModel.places.value.data)
     }
     
     func saveQuerySearch(_ query: String) {
