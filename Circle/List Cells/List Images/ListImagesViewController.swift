@@ -62,7 +62,8 @@ final class ListImagesViewController: UIViewController, LightboxControllerPageDe
                 self.lightBox.images = self.pageImages?.images.map({ LightboxImage(imageURL: URL(string: $0.source)!) }) ?? []
                 }, onError: { (error) in
                     print(error)
-            }).disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
     }
     
     func reloadedData(pageImages: PageImages?, controller: DetailPlaceViewController?, viewModel: DetailPlaceViewModel?) {

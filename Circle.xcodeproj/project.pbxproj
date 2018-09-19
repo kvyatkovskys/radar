@@ -95,8 +95,8 @@
 		8BE208A31FFD25750048D690 /* FilterPlacesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE208A21FFD25750048D690 /* FilterPlacesModel.swift */; };
 		8BE208A51FFD25CB0048D690 /* FilterPlacesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE208A41FFD25CB0048D690 /* FilterPlacesViewModel.swift */; };
 		8BEB4DF31FFAD285008AD1AB /* PlaceSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEB4DF21FFAD285008AD1AB /* PlaceSetting.swift */; };
-		8BFBF57D200517D000CE2C8B /* CategoriesTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFBF57C200517D000CE2C8B /* CategoriesTableViewDelegate.swift */; };
 		8BFBF57F2005187100CE2C8B /* CategoriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFBF57E2005187100CE2C8B /* CategoriesTableViewCell.swift */; };
+		F96E32CE215234C200ED84F6 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F96E32CD215234C200ED84F6 /* WebViewController.swift */; };
 		F9BA084521500C970072562E /* KSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BA084421500C970072562E /* KSView.swift */; };
 /* End PBXBuildFile section */
 
@@ -242,7 +242,6 @@
 		8BE208A21FFD25750048D690 /* FilterPlacesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterPlacesModel.swift; sourceTree = "<group>"; };
 		8BE208A41FFD25CB0048D690 /* FilterPlacesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterPlacesViewModel.swift; sourceTree = "<group>"; };
 		8BEB4DF21FFAD285008AD1AB /* PlaceSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceSetting.swift; sourceTree = "<group>"; };
-		8BFBF57C200517D000CE2C8B /* CategoriesTableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesTableViewDelegate.swift; sourceTree = "<group>"; };
 		8BFBF57E2005187100CE2C8B /* CategoriesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesTableViewCell.swift; sourceTree = "<group>"; };
 		962081C589226C394F4E0D88 /* Pods_CircleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CircleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0DF7CDED56C3712288ED366 /* Pods-CircleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CircleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CircleTests/Pods-CircleTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -250,6 +249,7 @@
 		EC945378AF2C38ECAC172475 /* Pods_Circle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Circle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F492590FA08D8B776535C3C1 /* Pods-CircleUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CircleUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CircleUITests/Pods-CircleUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		F8A689D0A03FBE0C3621184D /* Pods-CircleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CircleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CircleTests/Pods-CircleTests.release.xcconfig"; sourceTree = "<group>"; };
+		F96E32CD215234C200ED84F6 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		F9BA084421500C970072562E /* KSView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KSView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -419,6 +419,7 @@
 				8B41154A1FDB2CEF00C6614C /* AppDelegate.swift */,
 				8B41156A1FDC83AF00C6614C /* Router.swift */,
 				8B41156C1FDC845B00C6614C /* AppInjections.swift */,
+				F96E32CD215234C200ED84F6 /* WebViewController.swift */,
 				8BC3506A201CF64F00BB375B /* Search Controller Tab */,
 				8BC35067201CF62100BB375B /* Favorites Controller Tab */,
 				8B44C3841FF012E1003C0754 /* Setting Controller Tab */,
@@ -622,7 +623,6 @@
 		8BFBF58020051C3C00CE2C8B /* Categories View */ = {
 			isa = PBXGroup;
 			children = (
-				8BFBF57C200517D000CE2C8B /* CategoriesTableViewDelegate.swift */,
 				8BFBF57E2005187100CE2C8B /* CategoriesTableViewCell.swift */,
 			);
 			path = "Categories View";
@@ -964,7 +964,6 @@
 				8BC35063201CF22400BB375B /* ListRestaurantViewController.swift in Sources */,
 				8BE208A51FFD25CB0048D690 /* FilterPlacesViewModel.swift in Sources */,
 				8B105CB320288EB3006A5BBC /* LocationModel.swift in Sources */,
-				8BFBF57D200517D000CE2C8B /* CategoriesTableViewDelegate.swift in Sources */,
 				8B5F71531FF923A700E628F9 /* PlaceModel.swift in Sources */,
 				8B6A37A5202B96C8003CD1A8 /* SwitchSettingTableViewCell.swift in Sources */,
 				8B147BD820246A4000EDA2D4 /* StandardSettingTableViewCell.swift in Sources */,
@@ -976,6 +975,7 @@
 				8B82C3982014C95000E0CA89 /* DetailWorkDaysTableViewCell.swift in Sources */,
 				8BC3506C201D13C800BB375B /* ListContactsCollectionViewCell.swift in Sources */,
 				8B2940B02018AE94004CB9AD /* ListItemsViewController.swift in Sources */,
+				F96E32CE215234C200ED84F6 /* WebViewController.swift in Sources */,
 				8B3398CC200F61E6002966ED /* DetailPlaceViewModel.swift in Sources */,
 				8BDAA3A2204B3216002EAE98 /* ThousandsSeparator.swift in Sources */,
 				8BE2089D1FFCD21E0048D690 /* PlaceHeaderTableViewCell.swift in Sources */,

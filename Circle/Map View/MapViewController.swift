@@ -8,12 +8,15 @@
 
 import UIKit
 import MapKit
-import Swinject
 
 final class MapViewController: UIViewController, MKMapViewDelegate {
     typealias MapLocations = (location: CLLocationCoordinate2D, title: String?, subTitle: String?)
     
-    var places: [PlaceModel]
+    var places: [PlaceModel] {
+        didSet {
+            addPointOnMap(places: places)
+        }
+    }
     var userLocation: CLLocation?
     fileprivate let placeViewModel: PlaceViewModel
     
@@ -41,10 +44,10 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    init(_ container: Container) {
-        self.places = container.resolve([PlaceModel].self)!
-        self.userLocation = container.resolve(CLLocation.self)
-        self.placeViewModel = container.resolve(PlaceViewModel.self)!
+    init(places: [PlaceModel], userLocation: CLLocation?, placeViewModel: PlaceViewModel) {
+        self.places = places
+        self.userLocation = userLocation
+        self.placeViewModel = placeViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -54,7 +57,6 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.addSubview(mapView)
         updateViewConstraints()
         addPointOnMap(places: places)
@@ -113,11 +115,10 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if (control as? UIButton)?.buttonType == .detailDisclosure {
             dismiss(animated: true, completion: nil)
-            places.forEach ({ [unowned self] place in
-                if let index = places.index(where: { $0.name == view.annotation?.title ?? "" }) {
-                    //self.placeViewModel.openDetailPlace(places[index], place.titles[index], place.ratings[index], FavoritesViewModel())
-                }
-            })
+            if let index = places.index(where: { $0.location?.latitude == view.annotation?.coordinate.latitude
+                && $0.location?.longitude == view.annotation?.coordinate.longitude }) {
+                self.placeViewModel.openDetailPlace(places[index], FavoritesViewModel())
+            }
         }
     }
 }

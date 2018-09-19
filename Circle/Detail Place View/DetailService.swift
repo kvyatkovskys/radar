@@ -30,7 +30,7 @@ struct DetailService {
     }
     
     func loadPhotos(id: Int) -> Observable<DetailImagesModel> {
-        let params: [String: Any] = ["fields": "images,picture.type(large)", "type": "uploaded"]
+        let params: [String: String] = ["fields": "images,picture.type(large)", "type": "profile"]
         let request = FBSDKGraphRequest(graphPath: "\(id)/photos", parameters: params, httpMethod: "GET")
         return Observable.create({ (observable) in
             _ = request?.start(completionHandler: { (_, result, error) in
@@ -38,7 +38,6 @@ struct DetailService {
                     observable.on(.error(error!))
                     return
                 }
-
                 if let data = result as? [String: Any], let model: DetailImagesModel = try? unbox(dictionary: data) {
                     observable.on(.next(model))
                 }

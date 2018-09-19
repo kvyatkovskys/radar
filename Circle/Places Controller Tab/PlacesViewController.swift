@@ -33,16 +33,8 @@ final class PlacesViewController: UIViewController {
     }()
     
     lazy var leftBarButton: UIBarButtonItem = {
-        var categoriesImage = UIImage()
-        
-        switch viewModel.typeView {
-        case .table:
-            categoriesImage = UIImage(named: "ic_map")!.withRenderingMode(.alwaysTemplate)
-        case .map:
-            categoriesImage = UIImage(named: "ic_view_list")!.withRenderingMode(.alwaysTemplate)
-        }
-
-        let button = UIBarButtonItem(image: categoriesImage, style: .done, target: self, action: #selector(setView))
+        let image = UIImage(named: "ic_view_list")!.withRenderingMode(.alwaysTemplate)
+        let button = UIBarButtonItem(image: image, style: .done, target: self, action: #selector(setView))
         button.tag = viewModel.typeView.rawValue
         setView(sender: button)
         return button
@@ -208,7 +200,7 @@ final class PlacesViewController: UIViewController {
         case .map:
             sender?.tag = TypeView.table.rawValue
             view.subviews.forEach({ $0.removeFromSuperview() })
-            viewModel.changeTypeView(.map)
+            viewModel.typeView = .map
             viewModel.openMap(viewModel.places.value.data, viewModel.userLocation)
             navigationItem.leftBarButtonItem?.image = UIImage(named: "ic_view_list")!.withRenderingMode(.alwaysTemplate)
         case .table:
@@ -216,7 +208,7 @@ final class PlacesViewController: UIViewController {
             let vc = childViewControllers.last
             vc?.view.removeFromSuperview()
             vc?.removeFromParentViewController()
-            viewModel.changeTypeView(.table)
+            viewModel.typeView = .table
             view.addSubview(tableView)
             updateConstraints()
             navigationItem.leftBarButtonItem?.image = UIImage(named: "ic_map")!.withRenderingMode(.alwaysTemplate)

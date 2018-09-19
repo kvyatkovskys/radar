@@ -34,22 +34,24 @@ struct Router {
             var viewModel = PlaceViewModel(PlaceService(), kingfisher: r.resolve(KingfisherOptionsInfo.self)!, locationService: locationService)
             
             viewModel.openFilter = {
-                let dependecies = FilterPlacesDependecies(FilterViewModel(), FilterDistanceViewModel(), FilterCategoriesViewModel())
-                self.openFilterPlaces(fromController: placesViewController as! PlacesViewController,
-                                      toController: FilterPlacesViewController(dependecies))
+                UIImpactFeedbackGenerator().impactOccurred()
+                let containerFilter = Container()
+                containerFilter.register(FilterViewModel.self) { _ in
+                    FilterViewModel()
+                }
+                containerFilter.register(FilterDistanceViewModel.self) { _ in
+                    FilterDistanceViewModel()
+                }
+                containerFilter.register(FilterCategoriesViewModel.self) { _ in
+                    FilterCategoriesViewModel()
+                }
+                self.openFilterPlaces(fromController: placesViewController as! PlacesViewController, toController: FilterPlacesViewController(containerFilter))
             }
             
             var mapController = UIViewController()
             viewModel.openMap = { places, location in
-                container.register([PlaceModel].self, factory: { _ in
-                    places
-                })
-                
-                container.register(CLLocation?.self, factory: { _ in
-                    location
-                })
-                
-                mapController = MapViewController(container)
+                UIImpactFeedbackGenerator().impactOccurred()
+                mapController = MapViewController(places: places, userLocation: location, placeViewModel: viewModel)
                 self.openMap(fromController: placesViewController, toController: mapController)
             }
             
@@ -57,7 +59,6 @@ struct Router {
                 guard let map = mapController as? MapViewController else { return }
                 map.places = places
                 map.userLocation = location
-                map.addPointOnMap(places: places)
             }
             
             viewModel.openDetailPlace = { place, favoritesViewModel in

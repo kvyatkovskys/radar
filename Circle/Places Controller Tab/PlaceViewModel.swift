@@ -21,9 +21,9 @@ struct PlaceViewModel: Place {
     
     let placeService: PlaceService
     /// open filter controller
-    var openFilter: (() -> Void) = { UIImpactFeedbackGenerator().impactOccurred() }
+    var openFilter: (() -> Void) = {}
     /// open map controller
-    var openMap: (([PlaceModel], CLLocation?) -> Void) = { _, _ in UIImpactFeedbackGenerator().impactOccurred() }
+    var openMap: (([PlaceModel], CLLocation?) -> Void) = { _, _ in }
     /// open detail place controller
     var openDetailPlace: ((PlaceModel, FavoritesViewModel) -> Void) = { _, _ in }
     /// reload places on map
@@ -35,18 +35,7 @@ struct PlaceViewModel: Place {
     let kingfisherOptions: KingfisherOptionsInfo
     var locationService: LocationService
     var userLocation: CLLocation?
-    
-    var typeView: TypeView {
-        var type = TypeView(rawValue: 0)!
-        do {
-            let realm = try Realm()
-            let settings = realm.objects(Settings.self).first
-            type = TypeView(rawValue: settings?.typeViewMainTab ?? 0)!
-        } catch {
-            print(error)
-        }
-        return type
-    }
+    var typeView: TypeView = .table
     
     init(_ service: PlaceService, kingfisher: KingfisherOptionsInfo, locationService: LocationService) {
         self.placeService = service
@@ -54,24 +43,24 @@ struct PlaceViewModel: Place {
         self.locationService = locationService
     }
     
-    func changeTypeView(_ type: TypeView) {
-        do {
-            let realm = try Realm()
-            let settings = realm.objects(Settings.self).first
-            
-            try realm.write {
-                guard let oldSettings = settings else {
-                    let newSettings = Settings()
-                    newSettings.typeViewMainTab = type.rawValue
-                    realm.add(newSettings)
-                    return
-                }
-                oldSettings.typeViewMainTab = type.rawValue
-            }
-        } catch {
-            print(error)
-        }
-    }
+//    func changeTypeView(_ type: TypeView) {
+//        do {
+//            let realm = try Realm()
+//            let settings = realm.objects(Settings.self).first
+//            
+//            try realm.write {
+//                guard let oldSettings = settings else {
+//                    let newSettings = Settings()
+//                    newSettings.typeViewMainTab = type.rawValue
+//                    realm.add(newSettings)
+//                    return
+//                }
+//                oldSettings.typeViewMainTab = type.rawValue
+//            }
+//        } catch {
+//            print(error)
+//        }
+//    }
     
     /// load more places
     func getMorePlaces(url: URL) {

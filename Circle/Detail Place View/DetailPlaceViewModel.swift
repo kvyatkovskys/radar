@@ -173,8 +173,7 @@ struct DetailPlaceViewModel: DetailPlace {
         }
         
         if let description = place.description {
-            let height = description.height(font: .systemFont(ofSize: 14.0),
-                                            width: ScreenSize.SCREEN_WIDTH)
+            let height = description.height(font: .boldSystemFont(ofSize: 17.0), width: ScreenSize.SCREEN_WIDTH)
             let type = TypeDetailCell.description(description, height)
             items.append(DetailSectionObjects(sectionName: type.title, sectionObjects: [type]))
         }

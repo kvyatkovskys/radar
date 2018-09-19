@@ -17,7 +17,7 @@ struct DetailImagesModel {
 extension DetailImagesModel: Unboxable {
     init(unboxer: Unboxer) throws {
         self.data = try unboxer.unbox(key: "data")
-        self.next = try unboxer.unbox(keyPath: "paging.next")
+        self.next = try unboxer.unbox(keyPath: "paging.cursors.after")
     }
 }
 
