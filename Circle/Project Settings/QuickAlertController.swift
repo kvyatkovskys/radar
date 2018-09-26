@@ -17,9 +17,9 @@ extension UIViewController {
     func showAlertLight(title: String, message: String, buttonTitle: String = TitleButtonAlert.buttonOK) {
         let alert = UIAlertController(title: title,
                                       message: message,
-                                      preferredStyle: UIAlertControllerStyle.alert)
+                                      preferredStyle: UIAlertController.Style.alert)
         let button = UIAlertAction(title: buttonTitle,
-                                   style: UIAlertActionStyle.default, handler: nil)
+                                   style: UIAlertAction.Style.default, handler: nil)
         alert.addAction(button)
         
         DispatchQueue.main.async { [unowned self] in

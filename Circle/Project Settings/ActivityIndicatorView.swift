@@ -10,10 +10,10 @@ import Foundation
 
 final class ActivityIndicatorView: UIView {
     fileprivate let activityIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.white)
+        let indicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.white)
         indicator.color = UIColor.white
         indicator.hidesWhenStopped = true
-        indicator.activityIndicatorViewStyle = .whiteLarge
+        indicator.style = .whiteLarge
         return indicator
     }()
     

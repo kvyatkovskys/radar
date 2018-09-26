@@ -73,7 +73,7 @@ struct Router {
         }
         
         placesViewController = PlacesViewController(container)
-        let locationImage = UIImage(named: "ic_my_location")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        let locationImage = UIImage(named: "ic_my_location")?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
         placesViewController.navigationItem.title = NSLocalizedString("aroundHere", comment: "Title for navigation bar in main tab")
         placesViewController.tabBarItem = UITabBarItem(title: NSLocalizedString("mylocation", comment: "Title for main tab"),
                                                        image: locationImage,
@@ -94,7 +94,7 @@ struct Router {
         }
         
         searchViewController = SearchViewController(container)
-        let searchImage = UIImage(named: "ic_search")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        let searchImage = UIImage(named: "ic_search")?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
         searchViewController.navigationItem.title = NSLocalizedString("findPlace", comment: "Title for navigation bar in search tab")
         searchViewController.tabBarItem = UITabBarItem(title: NSLocalizedString("search", comment: "Title for search tab"),
                                                        image: searchImage,
@@ -103,14 +103,15 @@ struct Router {
         
         // Favorites Controller
         var favoritesViewController = UIViewController()
-        var favoritesViewModel = FavoritesViewModel()
-        
-        favoritesViewModel.openDetailPlace = { place, viewModel in
-            self.openDetailPlace(place, viewModel, favoritesViewController)
+        container.register(FavoritesViewModel.self) { _ in
+            var favoritesViewModel = FavoritesViewModel(container: container)
+            favoritesViewModel.openDetailPlace = { place, viewModel in
+                self.openDetailPlace(place, viewModel, favoritesViewController)
+            }
+            return favoritesViewModel
         }
-        
-        favoritesViewController = FavoritesViewController(FavoritesDependencies(favoritesViewModel, optionKingfisher))
-        let favoriteImage = UIImage(named: "ic_favorite")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        favoritesViewController = FavoritesViewController(container)
+        let favoriteImage = UIImage(named: "ic_favorite")?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
         favoritesViewController.navigationItem.title = NSLocalizedString("favorites",
                                                                          comment: "Title for navigation bar in favorites tab")
         favoritesViewController.tabBarItem = UITabBarItem(title: NSLocalizedString("favorites", comment: "Title for favorites tab"),
@@ -120,17 +121,18 @@ struct Router {
         
         // Setting Controller
         var settingsController = UIViewController()
-        var settingViewModel = SettingsViewModel()
-        settingViewModel.openSearchHistory = {
-            self.openSearchHistory(settingsController)
+        container.register(SettingsViewModel.self) { _ in
+            var settingViewModel = SettingsViewModel()
+            settingViewModel.openSearchHistory = {
+                self.openSearchHistory(settingsController)
+            }
+            settingViewModel.openListFavoritesNotice = {
+                self.openListFavoritesNotice(settingsController)
+            }
+            return settingViewModel
         }
-        
-        settingViewModel.openListFavoritesNotice = {
-            self.openListFavoritesNotice(settingsController)
-        }
-        
-        settingsController = SettingsViewController(SettingsViewDependecies(settingViewModel))
-        let settingsImage = UIImage(named: "ic_settings")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        settingsController = SettingsViewController(container)
+        let settingsImage = UIImage(named: "ic_settings")?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
         settingsController.navigationItem.title = NSLocalizedString("appSettings",
                                                                     comment: "Title for navigation bar in settings tab")
         settingsController.tabBarItem = UITabBarItem(title: NSLocalizedString("settings", comment: "Title for settings tab"),
@@ -207,10 +209,10 @@ struct Router {
     
     /// open map controller
     fileprivate func openMap(fromController: UIViewController, toController: UIViewController) {
-        fromController.addChildViewController(toController)
+        fromController.addChild(toController)
         toController.view.bounds = fromController.view.bounds
         fromController.view.addSubview(toController.view)
-        toController.didMove(toParentViewController: fromController)
+        toController.didMove(toParent: fromController)
     }
     
     func openPopoverLabel(fromController: DetailPlaceViewController, toController: UIViewController, height: CGFloat) {

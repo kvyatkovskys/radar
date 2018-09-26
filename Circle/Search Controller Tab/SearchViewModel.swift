@@ -9,12 +9,13 @@
 import Foundation
 import RealmSwift
 import RxSwift
+import RxCocoa
 import Swinject
+import Kingfisher
 
 struct SearchViewModel {
     let placeViewModel: PlaceViewModel
-    
-    var searchQueries: [String] {
+    var dataSourceQueries: BehaviorRelay<[String]> = {
         var queries: [String] = []
         do {
             let realm = try Realm()
@@ -28,28 +29,32 @@ struct SearchViewModel {
         }
 
         let endRange = queries.count >= 6 ? 6 : queries.count
-        return queries[0..<endRange].map({ $0.localizedCapitalized })
-    }
+        queries = queries[0..<endRange].map({ $0.localizedCapitalized })
+        queries.insert(NSLocalizedString("tryToFind", comment: "Label when queries empty"), at: 0)
+        return BehaviorRelay(value: queries)
+    }()
+    var dataSource: BehaviorRelay<[PlaceModel]> = BehaviorRelay(value: [])
+    var viewType = ViewType.search
+    let kingfisherOptions: KingfisherOptionsInfo?
     
     /// open detail place controller
     var openDetailPlace: ((PlaceModel, FavoritesViewModel) -> Void) = { _, _ in }
     
     init(_ container: Container) {
         self.placeViewModel = container.resolve(PlaceViewModel.self)!
+        self.kingfisherOptions = container.resolve(KingfisherOptionsInfo.self)
     }
     
-    func searchQuery(_ query: String, _ distance: Double) -> Observable<[PlaceModel]> {
+    func searchQuery(_ query: String, _ distance: Double) {
         var location = CLLocation()
-        
         do {
             let realm = try Realm()
             let locationModel = realm.objects(Location.self).last
             location = CLLocation(latitude: locationModel?.latitude ?? 0.0, longitude: locationModel?.longitude ?? 0.0)
+            placeViewModel.getPlaces(location: location, distance: distance, searchTerm: query)
         } catch {
             print(error)
         }
-        placeViewModel.getPlaces(location: location, distance: distance, searchTerm: query)
-        return Observable.just(placeViewModel.places.value.data)
     }
     
     func saveQuerySearch(_ query: String) {

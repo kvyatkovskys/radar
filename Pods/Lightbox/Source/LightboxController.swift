@@ -25,7 +25,7 @@ open class LightboxController: UIViewController {
     scrollView.isPagingEnabled = false
     scrollView.delegate = self
     scrollView.showsHorizontalScrollIndicator = false
-    scrollView.decelerationRate = UIScrollViewDecelerationRateFast
+    scrollView.decelerationRate = UIScrollView.DecelerationRate.fast
 
     return scrollView
   }()
@@ -299,7 +299,7 @@ open class LightboxController: UIViewController {
 
   fileprivate func loadDynamicBackground(_ image: UIImage) {
     backgroundView.image = image
-    backgroundView.layer.add(CATransition(), forKey: kCATransitionFade)
+    backgroundView.layer.add(CATransition(), forKey: convertFromCATransitionType(CATransitionType.fade))
   }
 
   func toggleControls(pageView: PageView?, visible: Bool, duration: TimeInterval = 0.1, delay: TimeInterval = 0) {
@@ -427,4 +427,9 @@ extension LightboxController: FooterViewDelegate {
       self.headerView.deleteButton.alpha = expanded ? 0.0 : 1.0
     })
   }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromCATransitionType(_ input: CATransitionType) -> String {
+	return input.rawValue
 }

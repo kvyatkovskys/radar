@@ -22,7 +22,7 @@ class PageView: UIScrollView {
   lazy var playButton: UIButton = {
     let button = UIButton(type: .custom)
     button.frame.size = CGSize(width: 60, height: 60)
-    button.setBackgroundImage(AssetManager.image("lightbox_play"), for: UIControlState())
+    button.setBackgroundImage(AssetManager.image("lightbox_play"), for: UIControl.State())
     button.addTarget(self, action: #selector(playButtonTouched(_:)), for: .touchUpInside)
 
     button.layer.shadowOffset = CGSize(width: 1, height: 1)

@@ -103,9 +103,9 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         frame.size.width = view.frame.width
         listCategories.view.frame = frame
         
-        addChildViewController(listCategories)
+        addChild(listCategories)
         view.addSubview(listCategories.view)
-        listCategories.didMove(toParentViewController: listCategories)
+        listCategories.didMove(toParent: listCategories)
         return view
     }()
     

@@ -13,7 +13,7 @@ final class ListCategoriesViewController: UIViewController, UICollectionViewDele
     
     fileprivate lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = UICollectionViewScrollDirection.horizontal
+        layout.scrollDirection = UICollectionView.ScrollDirection.horizontal
         
         let collection = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
         collection.backgroundColor = UIColor.clear

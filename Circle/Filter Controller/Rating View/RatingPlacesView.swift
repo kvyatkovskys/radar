@@ -19,7 +19,7 @@ final class RatingPlacesView: UIView {
     
     fileprivate lazy var upButton: UIButton = {
         let button = UIButton()
-        let arrowImage = UIImage(named: "ic_arrow_up")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        let arrowImage = UIImage(named: "ic_arrow_up")?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
         button.setImage(arrowImage, for: .normal)
         button.tintColor = .lightGray
         button.tag = 1
@@ -29,7 +29,7 @@ final class RatingPlacesView: UIView {
     
     fileprivate lazy var downButton: UIButton = {
         let button = UIButton()
-        let arrowImage = UIImage(named: "ic_arrow_down")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        let arrowImage = UIImage(named: "ic_arrow_down")?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
         button.setImage(arrowImage, for: .normal)
         button.tintColor = .lightGray
         button.tag = 2

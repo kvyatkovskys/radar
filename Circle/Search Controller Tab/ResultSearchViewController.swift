@@ -9,22 +9,15 @@
 import UIKit
 import Kingfisher
 import RxSwift
+import Swinject
 
 final class ResultSearchViewController: UIViewController {
-
-    typealias Dependecies = HasKingfisher
-    typealias Result = (place: PlaceModel, title: NSMutableAttributedString?, rating: NSMutableAttributedString?)
     
     fileprivate let kingfisherOptions: KingfisherOptionsInfo
     fileprivate var dataSource: [PlaceModel] = []
-    let selectResult = PublishSubject<Result>()
-    
-    fileprivate lazy var tableView: KSTableView = {
-        let table = KSTableView()
-        table.delegate = self
-        table.dataSource = self
-        return table
-    }()
+    fileprivate let disposeBag = DisposeBag()
+    let selectResult = PublishSubject<PlaceModel>()
+    let tableView = KSTableView()
     
     override func updateViewConstraints() {
         super.updateViewConstraints()
@@ -34,8 +27,8 @@ final class ResultSearchViewController: UIViewController {
         }
     }
     
-    init(_ dependecies: Dependecies) {
-        self.kingfisherOptions = dependecies.kingfisherOptions
+    init(_ container: Container) {
+        self.kingfisherOptions = container.resolve(KingfisherOptionsInfo.self)!
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -50,50 +43,20 @@ final class ResultSearchViewController: UIViewController {
         updateViewConstraints()
         
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
-    }
-    
-    func updateTable(places: [PlaceModel]) {
-        dataSource = places
-        tableView.reloadData()
-    }
-}
-
-extension ResultSearchViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataSource.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let place = dataSource[indexPath.section].items[indexPath.row]
-//        let rating = dataSource[indexPath.section].ratings[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: PlaceTableViewCell.cellIndetifier,
-                                                 for: indexPath) as? PlaceTableViewCell ?? PlaceTableViewCell()
+        tableView.rx.setDelegate(self).disposed(by: disposeBag)
         
-//        cell.rating = rating
-//        cell.title = place.name
-//        cell.titleCategory = place.categories?.first?.title
-//        cell.colorCategory = place.categories?.first?.color
-//        cell.imageCell.kf.indicatorType = .activity
-//        cell.imageCell.kf.setImage(with: place.coverPhoto,
-//                                   placeholder: nil,
-//                                   options: self.kingfisherOptions,
-//                                   progressBlock: nil,
-//                                   completionHandler: nil)
-        
-        return cell
+        tableView.rx.modelSelected(PlaceModel.self)
+            .subscribe(onNext: { [unowned self] (place) in
+                self.selectResult.onNext(place)
+            }, onError: { (error) in
+                print(error)
+            })
+            .disposed(by: disposeBag)
     }
 }
 
 extension ResultSearchViewController: UITableViewDelegate {    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return heightTableCell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-//        let place = dataSource[indexPath.section].items[indexPath.row]
-//        let title = dataSource[indexPath.section].titles[indexPath.row]
-//        let rating = dataSource[indexPath.section].ratings[indexPath.row]
-//        selectResult.onNext(Result(place, title, rating))
     }
 }

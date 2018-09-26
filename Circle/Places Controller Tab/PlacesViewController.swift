@@ -20,6 +20,8 @@ final class PlacesViewController: UIViewController {
     fileprivate var notificationTokenDistance: NotificationToken?
     fileprivate var viewModel: PlaceViewModel
     fileprivate let disposeBag = DisposeBag()
+    fileprivate let container: Container
+    
     fileprivate let tableView: KSTableView = {
         let table = KSTableView()
         table.isEnabledRefresh = true
@@ -53,6 +55,7 @@ final class PlacesViewController: UIViewController {
     }
     
     init(_ container: Container) {
+        self.container = container
         self.viewModel = container.resolve(PlaceViewModel.self)!
         super.init(nibName: nil, bundle: nil)
     }
@@ -118,7 +121,7 @@ final class PlacesViewController: UIViewController {
         
         tableView.rx.modelSelected(PlaceModel.self)
             .subscribe(onNext: { [unowned self] (place) in
-                self.viewModel.openDetailPlace(place, FavoritesViewModel())
+                self.viewModel.openDetailPlace(place, FavoritesViewModel(container: self.container))
             })
             .disposed(by: disposeBag)
         
@@ -205,9 +208,9 @@ final class PlacesViewController: UIViewController {
             navigationItem.leftBarButtonItem?.image = UIImage(named: "ic_view_list")!.withRenderingMode(.alwaysTemplate)
         case .table:
             sender?.tag = TypeView.map.rawValue
-            let vc = childViewControllers.last
+            let vc = children.last
             vc?.view.removeFromSuperview()
-            vc?.removeFromParentViewController()
+            vc?.removeFromParent()
             viewModel.typeView = .table
             view.addSubview(tableView)
             updateConstraints()

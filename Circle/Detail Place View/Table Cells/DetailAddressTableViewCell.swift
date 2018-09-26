@@ -77,7 +77,7 @@ final class DetailAddressTableViewCell: UITableViewCell, MKMapViewDelegate {
         }
     }
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         selectionStyle = .none
@@ -97,7 +97,7 @@ final class DetailAddressTableViewCell: UITableViewCell, MKMapViewDelegate {
         
         let regionDistance: CLLocationDistance = 1000
         let coordinates = CLLocationCoordinate2DMake(latitude, longitude)
-        let regionSpan = MKCoordinateRegionMakeWithDistance(coordinates, regionDistance, regionDistance)
+        let regionSpan = MKCoordinateRegion.init(center: coordinates, latitudinalMeters: regionDistance, longitudinalMeters: regionDistance)
         let options = [MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center),
                        MKLaunchOptionsMapSpanKey: NSValue(mkCoordinateSpan: regionSpan.span)]
 
@@ -124,13 +124,13 @@ final class DetailAddressTableViewCell: UITableViewCell, MKMapViewDelegate {
         
         DispatchQueue.main.async { [unowned self] in
             self.mapView.addAnnotation(annotation)
-            self.mapView.add(MKCircle(center: coordinate2D, radius: 100.0))
+            self.mapView.addOverlay(MKCircle(center: coordinate2D, radius: 100.0))
         }
     }
     
     fileprivate func centerMapOnLocation(_ location: CLLocation) {
         let regionRadius: CLLocationDistance = 200
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius, regionRadius)
+        let coordinateRegion = MKCoordinateRegion.init(center: location.coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
         mapView.setRegion(coordinateRegion, animated: true)
     }
 }

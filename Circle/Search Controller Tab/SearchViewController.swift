@@ -8,21 +8,16 @@
 
 import UIKit
 import RxSwift
-import Kingfisher
 import RealmSwift
 import Swinject
 
 final class SearchViewController: UIViewController, UISearchControllerDelegate, UISearchBarDelegate {
     fileprivate var notificationToken: NotificationToken?
-    fileprivate var dataSource: [PlaceModel] = []
-    fileprivate var dataSourceQueries: [String] = [NSLocalizedString("tryToFind", comment: "Label when queries empty")]
-    fileprivate var viewType = ViewType.search
-    fileprivate var search: Observable<PlaceModel?> = Observable.just(nil)
     fileprivate let disposeBag = DisposeBag()
-    fileprivate let searchViewModel: SearchViewModel
-    fileprivate let kingfisherOptions: KingfisherOptionsInfo
+    fileprivate var searchViewModel: SearchViewModel
+    fileprivate let container: Container
     fileprivate lazy var resultController: ResultSearchViewController = {
-        return ResultSearchViewController(ResultSearchDependecies(self.kingfisherOptions))
+        return ResultSearchViewController(container)
     }()
     
     fileprivate lazy var searchController: UISearchController = {
@@ -66,7 +61,7 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
     }()
     
     fileprivate lazy var leftBarButton: UIBarButtonItem = {
-        let closeImage = UIImage(named: "ic_close")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        let closeImage = UIImage(named: "ic_close")?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
         let button = UIBarButtonItem(image: closeImage, style: .done, target: self, action: #selector(closeSearchQueries))
         button.tintColor = .white
         return button
@@ -85,9 +80,8 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
     }
     
     init(_ container: Container) {
+        self.container = container
         self.searchViewModel = container.resolve(SearchViewModel.self)!
-        self.kingfisherOptions = container.resolve(KingfisherOptionsInfo.self)!
-        self.dataSourceQueries += self.searchViewModel.searchQueries
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -123,35 +117,43 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
         
         Observable.combineLatest(searchDistance, searchQuery)
             .flatMapLatest { [unowned self] (distance, query) -> Observable<[PlaceModel]> in
-                return self.searchViewModel.searchQuery(query, distance?.value ?? 0.0).catchErrorJustReturn([])
+                self.searchViewModel.searchQuery(query, distance?.value ?? 0.0)
+                return Observable.just(self.searchViewModel.placeViewModel.places.value.data)
             }
-            .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { [unowned self] (model) in
-                isSaveSearchText = false
-                self.resultController.updateTable(places: model)
-                }, onError: { (error) in
-                    print(error)
-            })
+            .bind(to: resultController.tableView.rx
+                .items(cellIdentifier: PlaceTableViewCell.cellIndetifier, cellType: PlaceTableViewCell.self)) { (_, result, cell) in
+                    cell.rating = result.rating
+                    cell.title = result.name
+                    cell.titleCategory = result.categories?.first?.title
+                    cell.colorCategory = result.categories?.first?.color
+                    cell.imageCell.kf.indicatorType = .activity
+                    cell.imageCell.kf.setImage(with: result.coverPhoto,
+                                               placeholder: nil,
+                                               options: self.searchViewModel.kingfisherOptions,
+                                               progressBlock: nil,
+                                               completionHandler: nil)
+            }
             .disposed(by: disposeBag)
         
-        searchController.searchBar.rx.textDidEndEditing.asObservable()
-            .subscribe(onNext: { [unowned self] (_) in
-                self.tableView.reloadData()
-            }, onError: { (error) in
-                print(error)
-            }).disposed(by: disposeBag)
+//        searchController.searchBar.rx.textDidEndEditing.asObservable()
+//            .subscribe(onNext: { [unowned self] (_) in
+//                self.tableView.reloadData()
+//            }, onError: { (error) in
+//                print(error)
+//            })
+//            .disposed(by: disposeBag)
         
         resultController.selectResult.asObservable()
-            .subscribe(onNext: { [unowned self] (result) in
-                self.searchViewModel.openDetailPlace(result.place, FavoritesViewModel())
-                
+            .subscribe(onNext: { [unowned self] (place) in
+                self.searchViewModel.openDetailPlace(place, FavoritesViewModel(container: self.container))
                 if !isSaveSearchText {
                     isSaveSearchText = true
                     self.searchViewModel.saveQuerySearch(self.searchController.searchBar.text ?? "")
                 }
             }, onError: { (error) in
                 print(error)
-            }).disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
         
         tableView.register(InfoSearchTableViewCell.self, forCellReuseIdentifier: InfoSearchTableViewCell.cellIdentifier)
         tableView.register(SearchQueryTableViewCell.self, forCellReuseIdentifier: SearchQueryTableViewCell.cellIdentifier)
@@ -163,25 +165,7 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
             
             notificationToken = results.observe { [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
-                case .initial:
-                    if self.searchViewModel.searchQueries.isEmpty {
-                        self.dataSourceQueries.replaceSubrange(0..., with: [NSLocalizedString("tryToFind",
-                                                                                              comment: "Label when queries empty")])
-                    } else {
-                        let localized = NSLocalizedString("recentlySearched", comment: "Label when queries not empty")
-                        self.dataSourceQueries.replaceSubrange(0...,
-                                                               with: [localized] + self.searchViewModel.searchQueries)
-                    }
-                    self.tableView.reloadData()
-                case .update:
-                    if self.searchViewModel.searchQueries.isEmpty {
-                        self.dataSourceQueries.replaceSubrange(0..., with: [NSLocalizedString("tryToFind",
-                                                                                              comment: "Label when queries empty")])
-                    } else {
-                        let localized = NSLocalizedString("recentlySearched", comment: "Label when queries not empty")
-                        self.dataSourceQueries.replaceSubrange(0...,
-                                                               with: [localized] + self.searchViewModel.searchQueries)
-                    }
+                case .update, .initial:
                     self.tableView.reloadData()
                 case .error(let error):
                     fatalError("\(error)")
@@ -197,10 +181,10 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
     }
     
     @objc func closeSearchQueries() {
-        dataSource = []
+        searchViewModel.dataSource.accept([])
         navigationItem.leftBarButtonItem = nil
         navigationItem.title = NSLocalizedString("findPlace", comment: "Title for navigation bar in search tab")
-        viewType = .search
+        searchViewModel.viewType = .search
         tableView.separatorColor = .lightGray
         tableView.reloadData()
         tableView.scrollsToTop = true
@@ -215,16 +199,16 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
 
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch viewType {
-        case .search: return dataSourceQueries.count
-        case .savedQueries: return dataSource.isEmpty ? 0 : dataSource.count
+        switch searchViewModel.viewType {
+        case .search: return searchViewModel.dataSourceQueries.value.count
+        case .savedQueries: return searchViewModel.dataSource.value.isEmpty ? 0 : searchViewModel.dataSource.value.count
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch viewType {
+        switch searchViewModel.viewType {
         case .search:
-            let querySearch = dataSourceQueries[indexPath.row]
+            let querySearch = searchViewModel.dataSourceQueries.value[indexPath.row]
             
             guard indexPath.row != 0 else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: InfoSearchTableViewCell.cellIdentifier,
@@ -238,24 +222,22 @@ extension SearchViewController: UITableViewDataSource {
             cell.title = querySearch
             return cell
         case .savedQueries:
-//            let place = dataSource[indexPath.section].items[indexPath.row]
-//            let rating = dataSource[indexPath.section].ratings[indexPath.row]
-//            let cell = tableView.dequeueReusableCell(withIdentifier: PlaceTableViewCell.cellIndetifier,
-//                                                     for: indexPath) as? PlaceTableViewCell ?? PlaceTableViewCell()
-//
-//            cell.rating = rating
-//            cell.title = place.name
-//            cell.titleCategory = place.categories?.first?.title
-//            cell.colorCategory = place.categories?.first?.color
-//            cell.imageCell.kf.indicatorType = .activity
-//            cell.imageCell.kf.setImage(with: place.coverPhoto,
-//                                       placeholder: nil,
-//                                       options: self.kingfisherOptions,
-//                                       progressBlock: nil,
-//                                       completionHandler: nil)
+            let place = searchViewModel.dataSource.value[indexPath.row]
+            let cell = tableView.dequeueReusableCell(withIdentifier: PlaceTableViewCell.cellIndetifier,
+                                                     for: indexPath) as? PlaceTableViewCell ?? PlaceTableViewCell()
+
+            cell.rating = place.rating
+            cell.title = place.name
+            cell.titleCategory = place.categories?.first?.title
+            cell.colorCategory = place.categories?.first?.color
+            cell.imageCell.kf.indicatorType = .activity
+            cell.imageCell.kf.setImage(with: place.coverPhoto,
+                                       placeholder: nil,
+                                       options: self.searchViewModel.kingfisherOptions,
+                                       progressBlock: nil,
+                                       completionHandler: nil)
             
-            //return cell
-            return UITableViewCell()
+            return cell
         }
     }
 }
@@ -263,7 +245,7 @@ extension SearchViewController: UITableViewDataSource {
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         tableView.separatorColor = .lightGray
-        guard viewType == .savedQueries else {
+        guard searchViewModel.viewType == .savedQueries else {
             tableView.separatorInset = UIEdgeInsets(top: 0.0, left: 15.0, bottom: 0.0, right: 15.0)
             return
         }
@@ -271,7 +253,7 @@ extension SearchViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch viewType {
+        switch searchViewModel.viewType {
         case .search: return 44.0
         case .savedQueries: return heightTableCell
         }
@@ -281,11 +263,11 @@ extension SearchViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         guard indexPath.row != 0 else { return }
         
-        switch viewType {
+        switch searchViewModel.viewType {
         case .search:
-            let query = dataSourceQueries[indexPath.row]
+            let query = searchViewModel.dataSourceQueries.value[indexPath.row]
             navigationItem.leftBarButtonItem = leftBarButton
-            viewType = .savedQueries
+            searchViewModel.viewType = .savedQueries
             tableView.reloadData()
             indicatorView.showIndicator()
             
@@ -296,23 +278,10 @@ extension SearchViewController: UITableViewDelegate {
                 tableView.tableHeaderView = nil
                 navigationItem.title = query
             }
-            
-            searchViewModel.searchQuery(query, SearchDistance.fiveThousand.value).asObservable()
-                .subscribe(onNext: { [unowned self] (model) in
-                    self.dataSource = model
-                    tableView.reloadData()
-                    self.indicatorView.hideIndicator()
-                    }, onError: { [unowned self] (error) in
-                        print(error)
-                        self.indicatorView.hideIndicator()
-                }).disposed(by: disposeBag)
+           searchViewModel.searchQuery(query, SearchDistance.fiveThousand.value)
         case .savedQueries:
-            break
-//            let place = dataSource[indexPath.section].items[indexPath.row]
-//            let title = dataSource[indexPath.section].titles[indexPath.row]
-//            let rating = dataSource[indexPath.section].ratings[indexPath.row]
-//
-//            searchViewModel.openDetailPlace(place, title, rating, FavoritesViewModel())
+            let place = searchViewModel.dataSource.value[indexPath.row]
+            searchViewModel.openDetailPlace(place, FavoritesViewModel(container: container))
         }
     }
 }

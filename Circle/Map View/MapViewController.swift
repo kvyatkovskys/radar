@@ -8,6 +8,8 @@
 
 import UIKit
 import MapKit
+import Swinject
+import Kingfisher
 
 final class MapViewController: UIViewController, MKMapViewDelegate {
     typealias MapLocations = (location: CLLocationCoordinate2D, title: String?, subTitle: String?)
@@ -85,14 +87,14 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
             
             DispatchQueue.main.async { [unowned self] in
                 self.mapView.addAnnotation(annotation)
-                self.mapView.add(MKCircle(center: item.location, radius: 100.0))
+                self.mapView.addOverlay(MKCircle(center: item.location, radius: 100.0))
             }
         }
     }
     
     fileprivate func centerMapOnLocation(_ location: CLLocation, radius: Double = FilterDistanceViewModel().defaultDistance) {
         let regionRadius: CLLocationDistance = radius
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius, regionRadius)
+        let coordinateRegion = MKCoordinateRegion.init(center: location.coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
         mapView.setRegion(coordinateRegion, animated: true)
     }
     
@@ -117,7 +119,11 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
             dismiss(animated: true, completion: nil)
             if let index = places.index(where: { $0.location?.latitude == view.annotation?.coordinate.latitude
                 && $0.location?.longitude == view.annotation?.coordinate.longitude }) {
-                self.placeViewModel.openDetailPlace(places[index], FavoritesViewModel())
+                let container = Container()
+                container.register(KingfisherOptionsInfo.self) { _ in
+                    KingfisherOptionsInfo()
+                }
+                placeViewModel.openDetailPlace(places[index], FavoritesViewModel(container: container))
             }
         }
     }

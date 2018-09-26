@@ -114,9 +114,9 @@ enum ParkingType: String {
     
     var image: UIImage {
         switch self {
-        case .lot: return (UIImage(named: "ic_place_parking")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate))!
-        case .street: return (UIImage(named: "ic_parking")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate))!
-        case .valet: return (UIImage(named: "ic_valet_parking")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate))!
+        case .lot: return (UIImage(named: "ic_place_parking")?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate))!
+        case .street: return (UIImage(named: "ic_parking")?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate))!
+        case .valet: return (UIImage(named: "ic_valet_parking")?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate))!
         }
     }
     
@@ -166,9 +166,9 @@ enum ContactType: String {
     
     var image: UIImage {
         switch self {
-        case .facebook: return (UIImage(named: "ic_facebook")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate))!
-        case .phone: return (UIImage(named: "ic_phone")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate))!
-        case .website: return (UIImage(named: "ic_web")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate))!
+        case .facebook: return (UIImage(named: "ic_facebook")?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate))!
+        case .phone: return (UIImage(named: "ic_phone")?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate))!
+        case .website: return (UIImage(named: "ic_web")?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate))!
         }
     }
     

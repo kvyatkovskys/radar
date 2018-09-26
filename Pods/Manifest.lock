@@ -17,20 +17,20 @@ PODS:
   - Hue (3.0.1)
   - Imaginary (3.0.3):
     - Cache (~> 4.0)
-  - Kingfisher (4.9.0)
+  - Kingfisher (4.10.0)
   - Lightbox (2.1.2):
     - Hue (~> 3.0)
     - Imaginary (~> 3.0)
-  - Realm (3.9.0):
-    - Realm/Headers (= 3.9.0)
-  - Realm/Headers (3.9.0)
-  - RealmSwift (3.9.0):
-    - Realm (= 3.9.0)
-  - RxCocoa (4.3.0):
+  - Realm (3.10.0):
+    - Realm/Headers (= 3.10.0)
+  - Realm/Headers (3.10.0)
+  - RealmSwift (3.10.0):
+    - Realm (= 3.10.0)
+  - RxCocoa (4.3.1):
     - RxSwift (~> 4.0)
-  - RxSwift (4.3.0)
-  - SnapKit (4.0.0)
-  - Swinject (2.4.1)
+  - RxSwift (4.3.1)
+  - SnapKit (4.0.1)
+  - Swinject (2.5.0)
   - Unbox (3.0.0)
   - YandexMobileMetrica/Dynamic (3.3.0)
 
@@ -79,14 +79,14 @@ SPEC CHECKSUMS:
   FBSDKShareKit: 7090fdd55c39b03941efddb64c83a64ff6b3949f
   Hue: 93e852fa6211ab35922ad8c293f51c43d6c79eb2
   Imaginary: 9b45836a5af881f452a86e0a1215772ae4712d00
-  Kingfisher: 64539b51826b778206daa6ed815d12653caa69dd
+  Kingfisher: 43c4b802d8b5256cf1f4379e9cd10b329be6d3e2
   Lightbox: 2dc267df8be2285bc7724cb11cbbf4aaaf59dced
-  Realm: 3d36f208bf3aff8335dc3298742140182bde4edb
-  RealmSwift: aa4d11917bfcfaa3ed51f219102a487ecd895447
-  RxCocoa: 71b9cce833fbcb89a8eec11816dd225830c2bd3c
-  RxSwift: a9717a34df3179fe63563f76e046ad345078dd3a
-  SnapKit: a42d492c16e80209130a3379f73596c3454b7694
-  Swinject: f7f15a9672e99328c1f07f277091087917215700
+  Realm: 85ab9e4f779d66f6e9ffeb118dc25b7f130c96ac
+  RealmSwift: 69121c8b86d0ae005fb779efdb10e606732e1c74
+  RxCocoa: 78763c7b07d02455598d9fc3c1ad091a28b73635
+  RxSwift: fe0fd770a43acdb7d0a53da411c9b892e69bb6e4
+  SnapKit: 0de968a9fec17499afa29683b05d0c775b6d1c29
+  Swinject: 82cdb851f63f91bba974e3eca1d69780f2f7677e
   Unbox: 9ed33b2a31f7a8a049f54b94d40c4a52a28c4d9d
   YandexMobileMetrica: 415e4e8a7a23121a3d086958a655f444dd340edb
 

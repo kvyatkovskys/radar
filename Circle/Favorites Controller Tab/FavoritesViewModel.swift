@@ -9,11 +9,13 @@
 import Foundation
 import RealmSwift
 import RxSwift
+import Swinject
+import Kingfisher
 
 typealias FavoritesNotify = (addFavorites: Bool, allowNotify: Bool?)
 
 struct FavoritesViewModel {
-    var favoritePlaces: [FavoritesModel] {
+    lazy var dataSource: [FavoritesModel] = {
         var favorites: [Favorites] = []
         do {
             let realm = try Realm()
@@ -22,31 +24,35 @@ struct FavoritesViewModel {
             print(error)
         }
         return updateValue(favorites)
-    }
-    
+    }()
     /// open detail place controller
     var openDetailPlace: ((PlaceModel, FavoritesViewModel) -> Void) = { _, _ in }
+    let optionsKingfisher: KingfisherOptionsInfo
+    
+    init(container: Container) {
+        self.optionsKingfisher = container.resolve(KingfisherOptionsInfo.self)!
+    }
     
     func updateValue(_ favorites: [Favorites]) -> [FavoritesModel] {
         var result: [FavoritesModel] = []
         
         favorites.forEach { (item) in
             let ratingStar = NSAttributedString(string: "\(item.ratingStar)",
-                attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 18.0),
-                             NSAttributedStringKey.foregroundColor: colorForRating(item.ratingStar)])
+                attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18.0),
+                             NSAttributedString.Key.foregroundColor: colorForRating(item.ratingStar)])
             let ratingCount = NSAttributedString(string: " \(item.ratingCount)",
-                attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 13.0),
-                             NSAttributedStringKey.foregroundColor: UIColor.gray])
+                attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13.0),
+                             NSAttributedString.Key.foregroundColor: UIColor.gray])
             
             let resultRating = NSMutableAttributedString(attributedString: ratingStar)
             resultRating.append(ratingCount)
             
             let title = NSAttributedString(string: "\(item.title ?? "")",
-                attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 17.0),
-                             NSAttributedStringKey.foregroundColor: UIColor.black])
+                attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 17.0),
+                             NSAttributedString.Key.foregroundColor: UIColor.black])
             let about = NSAttributedString(string: "\n\n\(item.about ?? "")",
-                attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 13.0),
-                             NSAttributedStringKey.foregroundColor: UIColor.gray])
+                attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13.0),
+                             NSAttributedString.Key.foregroundColor: UIColor.gray])
             
             let resultTitle = NSMutableAttributedString(attributedString: title)
             resultTitle.append(about)

@@ -109,8 +109,8 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
             
             let openAction = UIAlertAction(title: NSLocalizedString("openSettings", comment: "Title for button that to open settings"),
                                            style: .default) { _ in
-                if let url = URL(string: UIApplicationOpenSettingsURLString) {
-                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
                 }
             }
             alertController.addAction(openAction)
@@ -136,8 +136,8 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
             
             let openAction = UIAlertAction(title: NSLocalizedString("openSettings", comment: "Title for button that to open settings"),
                                            style: .default) { _ in
-                if let url = URL(string: UIApplicationOpenSettingsURLString) {
-                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
                 }
             }
             alertController.addAction(openAction)
@@ -328,4 +328,9 @@ extension LocationService {
             }
         }
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+private func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }

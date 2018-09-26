@@ -30,11 +30,11 @@ struct PlaceModel {
     let ratingCount: Int?
     var rating: NSMutableAttributedString? {
         let ratingStar = NSAttributedString(string: "\(self.ratingStar ?? 0)",
-            attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 19.0),
-                         NSAttributedStringKey.foregroundColor: self.colorForRating(self.ratingStar ?? 0)])
+            attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 19.0),
+                         NSAttributedString.Key.foregroundColor: self.colorForRating(self.ratingStar ?? 0)])
         let ratingCount = NSAttributedString(string: " \(self.ratingCount ?? 0)",
-            attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14.0),
-                         NSAttributedStringKey.foregroundColor: UIColor.gray])
+            attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14.0),
+                         NSAttributedString.Key.foregroundColor: UIColor.gray])
         
         let result = NSMutableAttributedString(attributedString: ratingStar)
         result.append(ratingCount)
@@ -42,11 +42,11 @@ struct PlaceModel {
     }
     var title: NSMutableAttributedString? {
         let title = NSAttributedString(string: "\(self.name ?? "")",
-            attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 19.0),
-                         NSAttributedStringKey.foregroundColor: UIColor.black])
+            attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 19.0),
+                         NSAttributedString.Key.foregroundColor: UIColor.black])
         let about = NSAttributedString(string: "\n\n\(self.about ?? "")",
-            attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14.0),
-                         NSAttributedStringKey.foregroundColor: UIColor.gray])
+            attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14.0),
+                         NSAttributedString.Key.foregroundColor: UIColor.gray])
         
         let result = NSMutableAttributedString(attributedString: title)
         result.append(about)

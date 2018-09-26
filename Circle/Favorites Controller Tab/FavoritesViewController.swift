@@ -9,6 +9,7 @@
 import UIKit
 import Kingfisher
 import RealmSwift
+import Swinject
 
 fileprivate extension UIColor {
     static var alert: UIColor {
@@ -17,11 +18,8 @@ fileprivate extension UIColor {
 }
 
 final class FavoritesViewController: UIViewController {
-    typealias Dependecies = HasFavoritesViewModel & HasKingfisher
 
     fileprivate var viewModel: FavoritesViewModel
-    fileprivate var dataSource: [FavoritesModel]
-    fileprivate let optionsKingfisher: KingfisherOptionsInfo
     fileprivate var notificationToken: NotificationToken?
     fileprivate var notificationSettingsToken: NotificationToken?
     
@@ -47,10 +45,8 @@ final class FavoritesViewController: UIViewController {
         }
     }
     
-    init(_ dependecies: Dependecies) {
-        self.viewModel = dependecies.favoritesViewModel
-        self.optionsKingfisher = dependecies.kingfisherOptions
-        self.dataSource = dependecies.favoritesViewModel.favoritePlaces
+    init(_ container: Container) {
+        self.viewModel = container.resolve(FavoritesViewModel.self)!
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -73,10 +69,10 @@ final class FavoritesViewController: UIViewController {
             notificationToken = results.observe { [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
                 case .initial(let collection):
-                    self.dataSource = self.viewModel.updateValue(collection.map({ $0 }))
+                    self.viewModel.dataSource = self.viewModel.updateValue(collection.map({ $0 }))
                     self.tableView.reloadData()
                 case .update(let collection, let deletions, let insertions, let modifications):
-                    self.dataSource = self.viewModel.updateValue(collection.map({ $0 }))
+                    self.viewModel.dataSource = self.viewModel.updateValue(collection.map({ $0 }))
                     self.tableView.beginUpdates()
                     self.tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0) }), with: .automatic)
                     self.tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }), with: .automatic)
@@ -122,8 +118,8 @@ final class FavoritesViewController: UIViewController {
         
         let openAction = UIAlertAction(title: NSLocalizedString("openSettings",
                                                                 comment: "Title for button to open settings"), style: .default) { _ in
-            if let url = URL(string: UIApplicationOpenSettingsURLString) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            if let url = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
             }
         }
         alertController.addAction(openAction)
@@ -133,21 +129,21 @@ final class FavoritesViewController: UIViewController {
 
 extension FavoritesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataSource.count
+        return viewModel.dataSource.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PlaceTableViewCell.cellIndetifier,
                                                  for: indexPath) as? PlaceTableViewCell ?? PlaceTableViewCell()
 
-        cell.title = dataSource[indexPath.row].name
-        cell.rating = dataSource[indexPath.row].rating
-        cell.titleCategory = dataSource[indexPath.row].categories?.first?.title
-        cell.colorCategory = dataSource[indexPath.row].categories?.first?.color
+        cell.title = viewModel.dataSource[indexPath.row].name
+        cell.rating = viewModel.dataSource[indexPath.row].rating
+        cell.titleCategory = viewModel.dataSource[indexPath.row].categories?.first?.title
+        cell.colorCategory = viewModel.dataSource[indexPath.row].categories?.first?.color
         cell.imageCell.kf.indicatorType = .activity
-        cell.imageCell.kf.setImage(with: dataSource[indexPath.row].picture,
+        cell.imageCell.kf.setImage(with: viewModel.dataSource[indexPath.row].picture,
                                    placeholder: nil,
-                                   options: optionsKingfisher,
+                                   options: viewModel.optionsKingfisher,
                                    progressBlock: nil,
                                    completionHandler: nil)
         return cell
@@ -158,7 +154,7 @@ extension FavoritesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let delete = UITableViewRowAction(style: .destructive,
                                           title: NSLocalizedString("remove", comment: "Title for remove")) { [unowned self] (_, indexPath) in
-            self.viewModel.deleteFromFavorites(id: self.dataSource[indexPath.row].id)
+            self.viewModel.deleteFromFavorites(id: self.viewModel.dataSource[indexPath.row].id)
         }
         return [delete]
     }
@@ -169,7 +165,7 @@ extension FavoritesViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let favorite = dataSource[indexPath.row]
+        let favorite = viewModel.dataSource[indexPath.row]
         let place = PlaceModel(id: favorite.id,
                                name: favorite.name,
                                ratingStar: favorite.ratingStar,
@@ -182,4 +178,9 @@ extension FavoritesViewController: UITableViewDelegate {
                                fromFavorites: true)
         viewModel.openDetailPlace(place, viewModel)
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+private func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }

@@ -24,7 +24,7 @@ final class KSNotifications: NSObject {
         content.title = NSLocalizedString("notifyNearPlace", comment: "The text fro notify when user near a place")
         content.subtitle = favorite.title ?? ""
         content.body = favorite.about ?? "" + "\n"
-        content.sound = UNNotificationSound.default()
+        content.sound = UNNotificationSound.default
         content.userInfo = ["idPlace": favorite.id]
         
         if UIApplication.shared.applicationState != .active {
@@ -86,7 +86,7 @@ extension UNNotificationAttachment {
             try fileManager.createDirectory(at: subFolderURL, withIntermediateDirectories: true, attributes: nil)
             let imageFileIdentifier = identifier + ".jpg"
             let fileURL = subFolderURL.appendingPathComponent(imageFileIdentifier)
-            guard let imageData = UIImagePNGRepresentation(image) else {
+            guard let imageData = image.pngData() else {
                 return nil
             }
             try imageData.write(to: fileURL)
