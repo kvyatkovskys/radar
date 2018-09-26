@@ -8,12 +8,12 @@
 
 import Foundation
 import RealmSwift
+import RxCocoa
 
 struct SearchHistoryViewModel {
     typealias SearchHistory = (query: String?, date: String?)
-    let dataSource: [SearchHistory]
     
-    init() {
+    let dataSource: BehaviorRelay<[SearchHistory]> = {
         var searchHistory: [SearchHistory] = []
         
         do {
@@ -29,6 +29,6 @@ struct SearchHistoryViewModel {
             print(error)
         }
         
-        self.dataSource = searchHistory.sorted(by: { $0.date! > $1.date! })
-    }
+        return BehaviorRelay(value: searchHistory.sorted(by: { $0.date! > $1.date! }))
+    }()
 }

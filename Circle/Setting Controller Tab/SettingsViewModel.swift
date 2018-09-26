@@ -57,11 +57,9 @@ struct SettingsObject {
 }
 
 struct SettingsViewModel {
-    let items: [SettingsObject]
-    
+    let items: [SettingsObject]    
     /// open search history modal view
     var openSearchHistory: (() -> Void) = { }
-    
     var openListFavoritesNotice: (() -> Void) = { }
     
     init() {

@@ -8,11 +8,10 @@
 
 import Foundation
 import RealmSwift
+import RxCocoa
 
 struct ListFavoritesNoticeViewModel {
-    var dataSource: [Favorites]
-    
-    init() {
+    let dataSource: BehaviorRelay<[Favorites]> = {
         var favorites: [Favorites] = []
         
         do {
@@ -21,9 +20,8 @@ struct ListFavoritesNoticeViewModel {
         } catch {
             print(error)
         }
-        
-        self.dataSource = favorites
-    }
+        return BehaviorRelay(value: favorites)
+    }()
     
     func selectNotify(_ favorite: Favorites) {
         do {

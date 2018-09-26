@@ -152,14 +152,22 @@ struct Router {
     }
     
     fileprivate func openListFavoritesNotice(_ fromController: UIViewController) {
-        let listNoticeController = ListFavoritesNoticeViewController(ListFavoritesNoticeDependecies(ListFavoritesNoticeViewModel()))
+        let container = Container()
+        container.register(ListFavoritesNoticeViewModel.self) { _ in
+            ListFavoritesNoticeViewModel()
+        }
+        let listNoticeController = ListFavoritesNoticeViewController(container)
         let newNavController = UINavigationController(rootViewController: listNoticeController)
         newNavController.navigationBar.isTranslucent = true
         fromController.present(newNavController, animated: true, completion: nil)
     }
     
     fileprivate func openSearchHistory(_ fromController: UIViewController) {
-        let showHistoryController = SearchHistoryViewController(SearchHistoryDependecies(SearchHistoryViewModel()))
+        let container = Container()
+        container.register(SearchHistoryViewModel.self) { _ in
+            SearchHistoryViewModel()
+        }
+        let showHistoryController = SearchHistoryViewController(container)
         let newNavController = UINavigationController(rootViewController: showHistoryController)
         newNavController.navigationBar.isTranslucent = true
         fromController.present(newNavController, animated: true, completion: nil)
