@@ -5,37 +5,7 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.023525">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="1: clear_derived_data" time="0.037845">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="2: clean_build_artifacts" time="0.00353">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="3: ensure_git_status_clean" time="0.024438">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="4: match" time="7.275485">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="5: build_app" time="213.147256">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="6: upload_to_testflight" time="336.362618">
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.009891">
         
       </testcase>
     
