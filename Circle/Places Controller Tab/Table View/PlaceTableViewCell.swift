@@ -45,6 +45,8 @@ final class PlaceTableViewCell: UITableViewCell {
     
     fileprivate let ratingLabel: UILabel = {
         let label = UILabel()
+        label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -106,16 +108,14 @@ final class PlaceTableViewCell: UITableViewCell {
         }
         
         titleLabel.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview()
-            make.top.equalToSuperview()
-            make.height.equalTo(30.0)
+            make.left.bottom.top.equalToSuperview()
         }
 
         ratingLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(titleLabel.snp.bottom)
-            make.left.equalTo(titleLabel)
-            make.width.lessThanOrEqualTo(100.0)
-            make.bottom.equalToSuperview()
+            make.centerY.equalTo(titleLabel)
+            make.left.equalTo(titleLabel.snp.right)
+            make.right.equalToSuperview()
+            make.width.equalTo(100.0)
         }
 
         categoryLabel.snp.remakeConstraints { (make) in

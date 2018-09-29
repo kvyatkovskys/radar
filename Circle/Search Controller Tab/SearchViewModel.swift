@@ -14,6 +14,7 @@ import Swinject
 import Kingfisher
 
 struct SearchViewModel {
+    fileprivate let disposeBag = DisposeBag()
     let placeViewModel: PlaceViewModel
     var dataSourceQueries: BehaviorRelay<[String]> = {
         var queries: [String] = []
@@ -33,9 +34,9 @@ struct SearchViewModel {
         queries.insert(NSLocalizedString("tryToFind", comment: "Label when queries empty"), at: 0)
         return BehaviorRelay(value: queries)
     }()
-    var dataSource: BehaviorRelay<[PlaceModel]> = BehaviorRelay(value: [])
     var viewType = ViewType.search
     let kingfisherOptions: KingfisherOptionsInfo?
+    let searchQuery = BehaviorRelay(value: "")
     
     /// open detail place controller
     var openDetailPlace: ((PlaceModel, FavoritesViewModel) -> Void) = { _, _ in }
