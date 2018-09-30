@@ -45,7 +45,7 @@ final class PlaceTableViewCell: UITableViewCell {
     
     fileprivate let ratingLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .center
+        label.textAlignment = .right
         label.adjustsFontSizeToFitWidth = true
         return label
     }()

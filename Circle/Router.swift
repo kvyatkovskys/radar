@@ -50,7 +50,6 @@ struct Router {
             
             var mapController = UIViewController()
             viewModel.openMap = { places, location in
-                UIImpactFeedbackGenerator().impactOccurred()
                 mapController = MapViewController(places: places, userLocation: location, placeViewModel: viewModel)
                 self.openMap(fromController: placesViewController, toController: mapController)
             }

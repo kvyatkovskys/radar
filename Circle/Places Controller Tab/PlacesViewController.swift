@@ -192,12 +192,13 @@ final class PlacesViewController: UIViewController {
         notificationTokenDistance?.invalidate()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         viewModel.locationService.checkAuthorized()
     }
     
     @objc func setView(sender: UIBarButtonItem?) {
+        UIImpactFeedbackGenerator().impactOccurred()
         let type = TypeView(rawValue: sender?.tag ?? 0)!
         switch type {
         case .map:
