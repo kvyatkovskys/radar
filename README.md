@@ -10,7 +10,7 @@ Through the application you will be able to see a large list of establishments f
 
 <p align="center">
 	<img src="https://github.com/kvyatkovskys/radar/blob/master/screenshots/screen%231.png" width="220" height="400">
-	<img src="https://raw.githubusercontent.com/kvyatkovskys/radar/master/screenshots/screen%235.png" width="220" height="400">
+	<img src="https://github.com/kvyatkovskys/radar/blob/master/screenshots/screen%233.png" width="220" height="400">
 </p>
 
 With the help of the application you will be able to:
@@ -22,6 +22,6 @@ With the help of the application you will be able to:
 - save an interesting place in your favorites
 
 <p align="center">
-	<img src="https://raw.githubusercontent.com/kvyatkovskys/radar/master/screenshots/screen%233.png" width="220" height="400">
-	<img src="https://raw.githubusercontent.com/kvyatkovskys/radar/master/screenshots/screen%234.png" width="220" height="400">
+	<img src="https://github.com/kvyatkovskys/radar/blob/master/screenshots/screen%234.png" width="220" height="400">
+	<img src="https://github.com/kvyatkovskys/radar/blob/master/screenshots/screen%235.png" width="220" height="400">
 </p>
