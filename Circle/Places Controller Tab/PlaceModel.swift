@@ -52,7 +52,7 @@ struct PlaceModel {
         result.append(about)
         return result
     }
-    let hours: [String: String]?
+    let hours: [[String: String]]?
     let isAlwaysOpen: Bool?
     let isClosed: Bool?
     let address: String?
@@ -71,7 +71,7 @@ struct PlaceModel {
     let restaurantSpecialties: [String: Bool]?
     let fromFavorites: Bool
     
-    init(id: Int, name: String? = nil, phone: String? = nil, ratingStar: Float? = nil, ratingCount: Int? = nil, hours: [String: String]? = nil,
+    init(id: Int, name: String? = nil, phone: String? = nil, ratingStar: Float? = nil, ratingCount: Int? = nil, hours: [[String: String]]? = nil,
          isAlwaysOpen: Bool? = nil, isClosed: Bool? = nil, address: String? = nil, website: String? = nil, categories: [Categories]? = nil,
          subCategories: [String]? = nil, description: String? = nil, coverPhoto: URL? = nil, about: String? = nil, location: LocationPlace? = nil,
          context: String? = nil, appLink: URL? = nil, paymentOptions: [String: Bool]? = nil, parking: [String: Bool]? = nil,

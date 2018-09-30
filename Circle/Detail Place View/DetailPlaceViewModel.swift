@@ -112,11 +112,13 @@ struct DetailPlaceViewModel: DetailPlace {
         }
         
         if let hours = place.hours {
-            let closedDays: [Days] = hours.filter({ $0.key.contains("1") && $0.key.contains("close") })
+            let closedDays = hours.flatMap({ [$0["key"] ?? "": $0["value"] ?? ""] })
+                .filter({ $0.key.contains("1_close") })
                 .flatMap({ DetailPlaceViewModel.getWorkDays($0.key, $0.value) })
                 .sorted(by: { $0.day.sortIndex < $1.day.sortIndex })
             
-            let openedDays: [Days] = hours.filter({ $0.key.contains("1") && $0.key.contains("open") })
+            let openedDays = hours.flatMap({ [$0["key"] ?? "": $0["value"] ?? ""] })
+                .filter({ $0.key.contains("1_open") })
                 .flatMap({ DetailPlaceViewModel.getWorkDays($0.key, $0.value) })
                 .sorted(by: { $0.day.sortIndex < $1.day.sortIndex })
             
