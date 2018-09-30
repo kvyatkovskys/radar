@@ -7,17 +7,17 @@
 //
 
 import UIKit
+import RxSwift
+import Swinject
 
 final class SearchHistoryViewController: UIViewController {
-    typealias Dependecies = HasSearchHistoryViewModel
     
     fileprivate let viewModel: SearchHistoryViewModel
+    fileprivate let disposeBag = DisposeBag()
     
     fileprivate lazy var tableView: UITableView = {
         let table = UITableView()
         table.tableFooterView = UIView(frame: CGRect.zero)
-        table.delegate = self
-        table.dataSource = self
         return table
     }()
     
@@ -36,8 +36,8 @@ final class SearchHistoryViewController: UIViewController {
         }
     }
     
-    init(_ dependecies: Dependecies) {
-        self.viewModel = dependecies.searchHistoryViewModel
+    init(_ container: Container) {
+        self.viewModel = container.resolve(SearchHistoryViewModel.self)!
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -55,27 +55,19 @@ final class SearchHistoryViewController: UIViewController {
         updateViewConstraints()
         
         tableView.register(SearchHistoryTableViewCell.self, forCellReuseIdentifier: SearchHistoryTableViewCell.cellIdentifier)
+        tableView.rx.setDelegate(self).disposed(by: disposeBag)
+        
+        viewModel.dataSource.asObservable()
+        .bind(to: tableView.rx
+            .items(cellIdentifier: SearchHistoryTableViewCell.cellIdentifier, cellType: SearchHistoryTableViewCell.self)) { (_, item, cell) in
+                cell.title = item.query
+                cell.subTitle = item.date
+        }
+        .disposed(by: disposeBag)
     }
     
     @objc func closeController() {
         dismiss(animated: true, completion: nil)
-    }
-}
-
-extension SearchHistoryViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.dataSource.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = viewModel.dataSource[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: SearchHistoryTableViewCell.cellIdentifier,
-                                                 for: indexPath) as? SearchHistoryTableViewCell ?? SearchHistoryTableViewCell()
-        
-        cell.title = item.query
-        cell.subTitle = item.date
-        
-        return cell
     }
 }
 

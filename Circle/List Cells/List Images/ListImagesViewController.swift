@@ -21,7 +21,7 @@ final class ListImagesViewController: UIViewController, LightboxControllerPageDe
     
     fileprivate lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = UICollectionViewScrollDirection.horizontal
+        layout.scrollDirection = UICollectionView.ScrollDirection.horizontal
         layout.itemSize = CGSize(width: 80.0, height: 80.0)
         layout.sectionInset = UIEdgeInsets(top: 0, left: 10.0, bottom: 0, right: 10.0)
         layout.minimumLineSpacing = 2.0
@@ -62,7 +62,8 @@ final class ListImagesViewController: UIViewController, LightboxControllerPageDe
                 self.lightBox.images = self.pageImages?.images.map({ LightboxImage(imageURL: URL(string: $0.source)!) }) ?? []
                 }, onError: { (error) in
                     print(error)
-            }).disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
     }
     
     func reloadedData(pageImages: PageImages?, controller: DetailPlaceViewController?, viewModel: DetailPlaceViewModel?) {

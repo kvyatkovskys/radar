@@ -8,11 +8,17 @@
 
 import UIKit
 import MapKit
+import Swinject
+import Kingfisher
 
 final class MapViewController: UIViewController, MKMapViewDelegate {
-    typealias Dependecies = HasMapModel & HasPlaceViewModel
+    typealias MapLocations = (location: CLLocationCoordinate2D, title: String?, subTitle: String?)
     
-    var places: [Places]
+    var places: [PlaceModel] {
+        didSet {
+            addPointOnMap(places: places)
+        }
+    }
     var userLocation: CLLocation?
     fileprivate let placeViewModel: PlaceViewModel
     
@@ -40,10 +46,10 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    init(_ dependecies: Dependecies) {
-        self.places = dependecies.places
-        self.userLocation = dependecies.location
-        self.placeViewModel = dependecies.viewModel
+    init(places: [PlaceModel], userLocation: CLLocation?, placeViewModel: PlaceViewModel) {
+        self.places = places
+        self.userLocation = userLocation
+        self.placeViewModel = placeViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -53,27 +59,25 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.addSubview(mapView)
         updateViewConstraints()
         addPointOnMap(places: places)
     }
     
-    func addPointOnMap(places: [Places]) {
+    func addPointOnMap(places: [PlaceModel]) {
         if let location = userLocation {
             centerMapOnLocation(location)
         }
         mapView.removeAnnotations(mapView.annotations)
         
-        typealias MapLocations = (location: CLLocationCoordinate2D, title: String?, subTitle: String?)
-        let locations = places.flatMap({ $0.items.flatMap({ (place) -> [MapLocations] in
+        let locations = places.flatMap({ (place) -> [MapLocations] in
             var locations: [MapLocations] = []
             locations.append(MapLocations(location: CLLocationCoordinate2D(latitude: place.location?.latitude ?? 0,
                                                                            longitude: place.location?.longitude ?? 0),
                                           title: place.name,
                                           subTitle: place.location?.street))
             return locations
-        })})
+        })
         
         locations.forEach { (item) in
             let annotation = MKPointAnnotation()
@@ -83,14 +87,14 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
             
             DispatchQueue.main.async { [unowned self] in
                 self.mapView.addAnnotation(annotation)
-                self.mapView.add(MKCircle(center: item.location, radius: 100.0))
+                self.mapView.addOverlay(MKCircle(center: item.location, radius: 100.0))
             }
         }
     }
     
     fileprivate func centerMapOnLocation(_ location: CLLocation, radius: Double = FilterDistanceViewModel().defaultDistance) {
         let regionRadius: CLLocationDistance = radius
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius, regionRadius)
+        let coordinateRegion = MKCoordinateRegion.init(center: location.coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
         mapView.setRegion(coordinateRegion, animated: true)
     }
     
@@ -113,11 +117,14 @@ final class MapViewController: UIViewController, MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if (control as? UIButton)?.buttonType == .detailDisclosure {
             dismiss(animated: true, completion: nil)
-            places.forEach ({ [unowned self] place in
-                if let index = place.items.index(where: { $0.name == view.annotation?.title ?? "" }) {
-                    self.placeViewModel.openDetailPlace(place.items[index], place.titles[index], place.ratings[index], FavoritesViewModel())
+            if let index = places.index(where: { $0.location?.latitude == view.annotation?.coordinate.latitude
+                && $0.location?.longitude == view.annotation?.coordinate.longitude }) {
+                let container = Container()
+                container.register(KingfisherOptionsInfo.self) { _ in
+                    KingfisherOptionsInfo()
                 }
-            })
+                placeViewModel.openDetailPlace(places[index], FavoritesViewModel(container: container))
+            }
         }
     }
 }

@@ -8,9 +8,9 @@
 
 import UIKit
 import RxSwift
+import Swinject
 
 final class SettingsViewController: UIViewController {
-    typealias Dependecies = HasSettingsViewModel
     
     fileprivate let viewModel: SettingsViewModel
     fileprivate let disposeBag = DisposeBag()
@@ -31,8 +31,8 @@ final class SettingsViewController: UIViewController {
         }
     }
     
-    init(_ dependecies: Dependecies) {
-        self.viewModel = dependecies.viewModel
+    init(_ container: Container) {
+        self.viewModel = container.resolve(SettingsViewModel.self)!
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -90,7 +90,6 @@ extension SettingsViewController: UITableViewDataSource {
         case .favoriteNotify(let title, let enable, let image, let color):
             let cell = tableView.dequeueReusableCell(withIdentifier: SwitchSettingTableViewCell.cellIdentifier,
                                                      for: indexPath) as? SwitchSettingTableViewCell ?? SwitchSettingTableViewCell()
-            
             cell.title = title
             cell.img = image
             cell.imageColor = color
@@ -146,6 +145,9 @@ extension SettingsViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if viewModel.items[section].sectionName.title == "" {
+            return 0
+        }
         return 35.0
     }
     

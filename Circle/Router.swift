@@ -8,6 +8,7 @@
 
 import UIKit
 import Kingfisher
+import Swinject
 
 fileprivate extension UIColor {
     static var tabColor: UIColor {
@@ -23,36 +24,55 @@ struct Router {
     func showMainTabController(_ locationService: LocationService, startTab: Int = 0) -> UITabBarController {
         //swiftlint:disable force_cast
         var placesViewController = UIViewController()
-        var viewModel = PlaceViewModel(PlaceService())
+        let container = Container()
         
-        viewModel.openFilter = {
-            let dependecies = FilterPlacesDependecies(FilterViewModel(), FilterDistanceViewModel(), FilterCategoriesViewModel())
-            self.openFilterPlaces(fromController: placesViewController as! PlacesViewController,
-                                  toController: FilterPlacesViewController(dependecies))
+        container.register(KingfisherOptionsInfo.self) { _ in
+            self.optionKingfisher
         }
         
-        var mapController = UIViewController()
-        viewModel.openMap = { places, location in
-            let dependecies = MapDependecies(places, location, viewModel)
-            mapController = MapViewController(dependecies)
-            self.openMap(fromController: placesViewController, toController: mapController)
+        container.register(PlaceViewModel.self) { (r) in
+            var viewModel = PlaceViewModel(PlaceService(), kingfisher: r.resolve(KingfisherOptionsInfo.self)!, locationService: locationService)
+            
+            viewModel.openFilter = {
+                UIImpactFeedbackGenerator().impactOccurred()
+                let containerFilter = Container()
+                containerFilter.register(FilterViewModel.self) { _ in
+                    FilterViewModel()
+                }
+                containerFilter.register(FilterDistanceViewModel.self) { _ in
+                    FilterDistanceViewModel()
+                }
+                containerFilter.register(FilterCategoriesViewModel.self) { _ in
+                    FilterCategoriesViewModel()
+                }
+                self.openFilterPlaces(fromController: placesViewController as! PlacesViewController, toController: FilterPlacesViewController(containerFilter))
+            }
+            
+            var mapController = UIViewController()
+            viewModel.openMap = { places, location in
+                mapController = MapViewController(places: places, userLocation: location, placeViewModel: viewModel)
+                self.openMap(fromController: placesViewController, toController: mapController)
+            }
+            
+            viewModel.reloadMap = { places, location in
+                guard let map = mapController as? MapViewController else { return }
+                map.places = places
+                map.userLocation = location
+            }
+            
+            viewModel.openDetailPlace = { place, favoritesViewModel in
+                self.openDetailPlace(place, favoritesViewModel, placesViewController)
+            }
+            
+            return viewModel
         }
         
-        viewModel.reloadMap = { places, location in
-            guard let map = mapController as? MapViewController else { return }
-            map.places = places
-            map.userLocation = location
-            map.addPointOnMap(places: places)
+        container.register(LocationService.self) { _ in
+            locationService
         }
         
-        viewModel.openDetailPlace = { place, title, rating, favoritesViewModel in
-            self.openDetailPlace(place, title, rating, favoritesViewModel, placesViewController)
-        }
-        
-        placesViewController = PlacesViewController(PlacesViewDependecies(optionKingfisher,
-                                                                          viewModel,
-                                                                          locationService))
-        let locationImage = UIImage(named: "ic_my_location")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        placesViewController = PlacesViewController(container)
+        let locationImage = UIImage(named: "ic_my_location")?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
         placesViewController.navigationItem.title = NSLocalizedString("aroundHere", comment: "Title for navigation bar in main tab")
         placesViewController.tabBarItem = UITabBarItem(title: NSLocalizedString("mylocation", comment: "Title for main tab"),
                                                        image: locationImage,
@@ -61,14 +81,19 @@ struct Router {
         
         // Search Controller
         var searchViewController = UIViewController()
-        var searchViewModel = SearchViewModel(viewModel)
         
-        searchViewModel.openDetailPlace = { place, title, rating, favoritesViewModel in
-            self.openDetailPlace(place, title, rating, favoritesViewModel, searchViewController)
+        container.register(SearchViewModel.self) { _ in
+            var viewModel = SearchViewModel(container)
+            
+            viewModel.openDetailPlace = { place, favoritesViewModel in
+                self.openDetailPlace(place, favoritesViewModel, searchViewController)
+            }
+            
+            return viewModel
         }
         
-        searchViewController = SearchViewController(SeacrhPlaceDependecies(searchViewModel, optionKingfisher))
-        let searchImage = UIImage(named: "ic_search")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        searchViewController = SearchViewController(container)
+        let searchImage = UIImage(named: "ic_search")?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
         searchViewController.navigationItem.title = NSLocalizedString("findPlace", comment: "Title for navigation bar in search tab")
         searchViewController.tabBarItem = UITabBarItem(title: NSLocalizedString("search", comment: "Title for search tab"),
                                                        image: searchImage,
@@ -77,14 +102,15 @@ struct Router {
         
         // Favorites Controller
         var favoritesViewController = UIViewController()
-        var favoritesViewModel = FavoritesViewModel()
-        
-        favoritesViewModel.openDetailPlace = { place, title, rating, viewModel in
-            self.openDetailPlace(place, title, rating, viewModel, favoritesViewController)
+        container.register(FavoritesViewModel.self) { _ in
+            var favoritesViewModel = FavoritesViewModel(container: container)
+            favoritesViewModel.openDetailPlace = { place, viewModel in
+                self.openDetailPlace(place, viewModel, favoritesViewController)
+            }
+            return favoritesViewModel
         }
-        
-        favoritesViewController = FavoritesViewController(FavoritesDependencies(favoritesViewModel, optionKingfisher))
-        let favoriteImage = UIImage(named: "ic_favorite")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        favoritesViewController = FavoritesViewController(container)
+        let favoriteImage = UIImage(named: "ic_favorite")?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
         favoritesViewController.navigationItem.title = NSLocalizedString("favorites",
                                                                          comment: "Title for navigation bar in favorites tab")
         favoritesViewController.tabBarItem = UITabBarItem(title: NSLocalizedString("favorites", comment: "Title for favorites tab"),
@@ -94,17 +120,18 @@ struct Router {
         
         // Setting Controller
         var settingsController = UIViewController()
-        var settingViewModel = SettingsViewModel()
-        settingViewModel.openSearchHistory = {
-            self.openSearchHistory(settingsController)
+        container.register(SettingsViewModel.self) { _ in
+            var settingViewModel = SettingsViewModel()
+            settingViewModel.openSearchHistory = {
+                self.openSearchHistory(settingsController)
+            }
+            settingViewModel.openListFavoritesNotice = {
+                self.openListFavoritesNotice(settingsController)
+            }
+            return settingViewModel
         }
-        
-        settingViewModel.openListFavoritesNotice = {
-            self.openListFavoritesNotice(settingsController)
-        }
-        
-        settingsController = SettingsViewController(SettingsViewDependecies(settingViewModel))
-        let settingsImage = UIImage(named: "ic_settings")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+        settingsController = SettingsViewController(container)
+        let settingsImage = UIImage(named: "ic_settings")?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
         settingsController.navigationItem.title = NSLocalizedString("appSettings",
                                                                     comment: "Title for navigation bar in settings tab")
         settingsController.tabBarItem = UITabBarItem(title: NSLocalizedString("settings", comment: "Title for settings tab"),
@@ -124,30 +151,51 @@ struct Router {
     }
     
     fileprivate func openListFavoritesNotice(_ fromController: UIViewController) {
-        let listNoticeController = ListFavoritesNoticeViewController(ListFavoritesNoticeDependecies(ListFavoritesNoticeViewModel()))
+        let container = Container()
+        container.register(ListFavoritesNoticeViewModel.self) { _ in
+            ListFavoritesNoticeViewModel()
+        }
+        let listNoticeController = ListFavoritesNoticeViewController(container)
         let newNavController = UINavigationController(rootViewController: listNoticeController)
         newNavController.navigationBar.isTranslucent = true
         fromController.present(newNavController, animated: true, completion: nil)
     }
     
     fileprivate func openSearchHistory(_ fromController: UIViewController) {
-        let showHistoryController = SearchHistoryViewController(SearchHistoryDependecies(SearchHistoryViewModel()))
+        let container = Container()
+        container.register(SearchHistoryViewModel.self) { _ in
+            SearchHistoryViewModel()
+        }
+        let showHistoryController = SearchHistoryViewController(container)
         let newNavController = UINavigationController(rootViewController: showHistoryController)
         newNavController.navigationBar.isTranslucent = true
         fromController.present(newNavController, animated: true, completion: nil)
     }
     
     /// open detail controller about place
-    fileprivate func openDetailPlace(_ place: PlaceModel,
-                                     _ title: NSMutableAttributedString?,
-                                     _ rating: NSMutableAttributedString?,
-                                     _ favoritesViewModel: FavoritesViewModel,
-                                     _ fromController: UIViewController) {
-        let dependecies = DetailPlaceDependecies(DetailPlaceViewModel(place, title, rating, FavoritesService()),
-                                                 favoritesViewModel,
-                                                 optionKingfisher,
-                                                 OpenGraphService())
-        let detailPlaceController = DetailPlaceViewController(dependecies)
+    fileprivate func openDetailPlace(_ place: PlaceModel, _ favoritesViewModel: FavoritesViewModel, _ fromController: UIViewController) {
+        let container = Container()
+        container.register(PlaceModel.self) { _ in
+            place
+        }
+        container.register(FavoritesService.self) { _ in
+            FavoritesService()
+        }
+        container.register(KingfisherOptionsInfo.self) { _ in
+            self.optionKingfisher
+        }
+        container.register(OpenGraphService.self) { _ in
+            OpenGraphService()
+        }
+        container.register(FavoritesViewModel.self) { _ in
+            favoritesViewModel
+        }
+        
+        container.register(DetailPlaceViewModel.self) { _ in
+            DetailPlaceViewModel(container)
+        }
+        
+        let detailPlaceController = DetailPlaceViewController(container)
         detailPlaceController.hidesBottomBarWhenPushed = true
         fromController.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
         fromController.navigationController?.pushViewController(detailPlaceController, animated: true)
@@ -168,10 +216,10 @@ struct Router {
     
     /// open map controller
     fileprivate func openMap(fromController: UIViewController, toController: UIViewController) {
-        fromController.addChildViewController(toController)
+        fromController.addChild(toController)
         toController.view.bounds = fromController.view.bounds
         fromController.view.addSubview(toController.view)
-        toController.didMove(toParentViewController: fromController)
+        toController.didMove(toParent: fromController)
     }
     
     func openPopoverLabel(fromController: DetailPlaceViewController, toController: UIViewController, height: CGFloat) {

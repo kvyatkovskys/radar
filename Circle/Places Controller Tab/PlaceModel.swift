@@ -10,8 +10,8 @@ import Foundation
 import Unbox
 
 struct PlaceDataModel {
-    let data: [PlaceModel]
-    let next: URL?
+    var data: [PlaceModel]
+    var next: URL?
 }
 
 extension PlaceDataModel: Unboxable {
@@ -28,7 +28,31 @@ struct PlaceModel {
     let phone: String?
     let ratingStar: Float?
     let ratingCount: Int?
-    let hours: [String: String]?
+    var rating: NSMutableAttributedString? {
+        let ratingStar = NSAttributedString(string: "\(self.ratingStar ?? 0)",
+            attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 19.0),
+                         NSAttributedString.Key.foregroundColor: self.colorForRating(self.ratingStar ?? 0)])
+        let ratingCount = NSAttributedString(string: " \(self.ratingCount ?? 0)",
+            attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14.0),
+                         NSAttributedString.Key.foregroundColor: UIColor.gray])
+        
+        let result = NSMutableAttributedString(attributedString: ratingStar)
+        result.append(ratingCount)
+        return result
+    }
+    var title: NSMutableAttributedString? {
+        let title = NSAttributedString(string: "\(self.name ?? "")",
+            attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 19.0),
+                         NSAttributedString.Key.foregroundColor: UIColor.black])
+        let about = NSAttributedString(string: "\n\n\(self.about ?? "")",
+            attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14.0),
+                         NSAttributedString.Key.foregroundColor: UIColor.gray])
+        
+        let result = NSMutableAttributedString(attributedString: title)
+        result.append(about)
+        return result
+    }
+    let hours: [[String: String]]?
     let isAlwaysOpen: Bool?
     let isClosed: Bool?
     let address: String?
@@ -47,7 +71,7 @@ struct PlaceModel {
     let restaurantSpecialties: [String: Bool]?
     let fromFavorites: Bool
     
-    init(id: Int, name: String? = nil, phone: String? = nil, ratingStar: Float? = nil, ratingCount: Int? = nil, hours: [String: String]? = nil,
+    init(id: Int, name: String? = nil, phone: String? = nil, ratingStar: Float? = nil, ratingCount: Int? = nil, hours: [[String: String]]? = nil,
          isAlwaysOpen: Bool? = nil, isClosed: Bool? = nil, address: String? = nil, website: String? = nil, categories: [Categories]? = nil,
          subCategories: [String]? = nil, description: String? = nil, coverPhoto: URL? = nil, about: String? = nil, location: LocationPlace? = nil,
          context: String? = nil, appLink: URL? = nil, paymentOptions: [String: Bool]? = nil, parking: [String: Bool]? = nil,
@@ -75,6 +99,19 @@ struct PlaceModel {
         self.restaurantServices = restaurantServices
         self.restaurantSpecialties = restaurantSpecialties
         self.fromFavorites = fromFavorites
+    }
+    
+    fileprivate func colorForRating(_ rating: Float) -> UIColor {
+        var color = UIColor()
+        switch rating {
+        case 3.4...5.0:
+            color = UIColor(withHex: 0x2ecc71, alpha: 1.0)
+        case 1.8...3.4:
+            color = .black
+        default:
+            color = UIColor(withHex: 0xc0392b, alpha: 1.0)
+        }
+        return color
     }
 }
 

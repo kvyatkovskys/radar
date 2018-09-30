@@ -3,10 +3,10 @@
 *.xcuserdata
 *.scannerwork
 *.mobileprovision
+*.xcuserstate
 *.zip
 *.ipa
 *.cer
 *.html
 *.junit
 librealmcore-ios.a
-Keys.swift

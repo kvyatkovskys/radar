@@ -9,6 +9,7 @@
 import UIKit
 import RxSwift
 import RealmSwift
+import Swinject
 
 // color for segmented control
 fileprivate extension UIColor {
@@ -18,21 +19,17 @@ fileprivate extension UIColor {
 }
 
 final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
-    typealias Dependecies = HasFilterPlacesViewModel
-    
     fileprivate let disposeBag = DisposeBag()
     fileprivate let viewModelCategories: FilterCategoriesViewModel
     fileprivate let viewModelDistance: FilterDistanceViewModel
     fileprivate let viewModel: FilterViewModel
-    //swiftlint:disable weak_delegate
-    fileprivate var tableDelegate: CategoriesTableViewDelegate?
     
     fileprivate lazy var segmentedControl: UISegmentedControl = {
         let segmented = UISegmentedControl(items: viewModel.items.map({ $0.title }))
         segmented.selectedSegmentIndex = 0
         segmented.tintColor = UIColor.segmentedColor
-        segmented.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.white], for: .selected)
-        segmented.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.gray], for: .normal)
+        segmented.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
+        segmented.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.gray], for: .normal)
         return segmented
     }()
     
@@ -85,10 +82,10 @@ final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
         }
     }
     
-    init(_ dependecies: Dependecies) {
-        self.viewModel = dependecies.viewModel
-        self.viewModelDistance = dependecies.viewModelDistance
-        self.viewModelCategories = dependecies.viewModelCategories
+    init(_ container: Container) {
+        self.viewModel = container.resolve(FilterViewModel.self)!
+        self.viewModelDistance = container.resolve(FilterDistanceViewModel.self)!
+        self.viewModelCategories = container.resolve(FilterCategoriesViewModel.self)!
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -102,29 +99,46 @@ final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
         view.addSubview(segmentedControl)
         
         tableView.register(CategoriesTableViewCell.self, forCellReuseIdentifier: CategoriesTableViewCell.cellIdentifier)
-        tableDelegate = CategoriesTableViewDelegate(tableView, viewModelCategories)
+        tableView.rx.setDelegate(self).disposed(by: disposeBag)
         
         Observable.of(viewModelCategories.items)
-            .bind(to: tableView.rx.items(cellIdentifier: CategoriesTableViewCell.cellIdentifier,
-                                         cellType: CategoriesTableViewCell.self)) { [unowned self] (index, model, cell) in
-                                            cell.title = model.category.title
-                                            cell.type = model.category
-                                            cell.select = self.viewModelCategories.selectIndexes.contains(index)
-            }.disposed(by: disposeBag)
+            .bind(to: tableView.rx
+                .items(cellIdentifier: CategoriesTableViewCell.cellIdentifier,
+                       cellType: CategoriesTableViewCell.self)) { [unowned self] (index, model, cell) in
+                        cell.title = model.category.title
+                        cell.type = model.category
+                        cell.select = self.viewModelCategories.selectIndexes.contains(index)
+            }
+            .disposed(by: disposeBag)
+        
+        tableView.rx.itemSelected.asObservable()
+            .subscribe(onNext: { [unowned self] (index) in
+                if self.viewModelCategories.selectIndexes.contains(index.row) {
+                    self.viewModelCategories.deletedIndex(index)
+                } else {
+                    self.viewModelCategories.addIndex(index)
+                }
+                self.tableView.reloadRows(at: [index], with: .automatic)
+            }, onError: { (error) in
+                print(error)
+            })
+            .disposed(by: disposeBag)
         
         distanceView.sliderDistance.asObserver()
             .subscribe(onNext: { [unowned self] (value) in
                 self.viewModelDistance.setNewDistance(value: value)
             }, onError: { (error) in
                 print(error)
-            }).disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
         
         distanceView.nearMe.asObservable()
             .subscribe(onNext: { [unowned self] (isOn) in
                 self.viewModelDistance.setMinDistance(value: isOn)
             }, onError: { (error) in
                 print(error)
-            }).disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
         
         segmentedControl.rx.selectedSegmentIndex
             .subscribe(onNext: { [unowned self] (index) in
@@ -134,24 +148,22 @@ final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
                     self.navigationController?.preferredContentSize = CGSize(width: 250.0, height: 200.0)
                     self.view.subviews.filter({ $0 is UITableView || $0 is RatingPlacesView }).forEach({ $0.removeFromSuperview() })
                     self.view.addSubview(self.distanceView)
-                    self.updateViewConstraints()
                 case .categories?:
-                    self.navigationController?.preferredContentSize = CGSize(width: 250.0,
-                                                                             height: Double(self.viewModelCategories.items.count * 60))
+                    self.navigationController?.preferredContentSize = CGSize(width: 250.0, height: Double(self.viewModelCategories.items.count * 60))
                     self.view.subviews.filter({ $0 is DistanceFilterView || $0 is RatingPlacesView }).forEach({ $0.removeFromSuperview() })
                     self.view.addSubview(self.tableView)
-                    self.updateViewConstraints()
                 case .rating?:
                     self.navigationController?.preferredContentSize = CGSize(width: 250.0, height: 200.0)
                     self.view.subviews.filter({ $0 is DistanceFilterView || $0 is UITableView }).forEach({ $0.removeFromSuperview() })
                     self.view.addSubview(self.ratingView)
-                    self.updateViewConstraints()
                 case .none:
                     break
                 }
+                self.updateViewConstraints()
                 }, onError: { (error) in
                     print(error)
-            }).disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
         
         ratingView.chooseRating.asObserver()
             .subscribe(onNext: { (type) in
@@ -172,6 +184,13 @@ final class FilterPlacesViewController: UIViewController, UIPickerViewDelegate {
                 }
             }, onError: { (error) in
                 print(error)
-            }).disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
+    }
+}
+
+extension FilterPlacesViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 55.0
     }
 }

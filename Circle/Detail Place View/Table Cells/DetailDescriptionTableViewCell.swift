@@ -11,18 +11,18 @@ import UIKit
 final class DetailDescriptionTableViewCell: UITableViewCell {
     static let cellIdentifier = "DetailDescriptionTableViewCell"
     
-    fileprivate let descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.textColor = .black
-        label.font = .systemFont(ofSize: 13.0)
-        return label
+    fileprivate let descriptionText: UITextView = {
+        let text = UITextView()
+        text.font = .systemFont(ofSize: 16.0)
+        text.isEditable = false
+        text.isScrollEnabled = false
+        return text
     }()
     
     override func updateConstraints() {
         super.updateConstraints()
         
-        descriptionLabel.snp.makeConstraints { (make) in
+        descriptionText.snp.makeConstraints { (make) in
             make.top.bottom.equalToSuperview()
             make.left.right.equalToSuperview().inset(10.0)
         }
@@ -30,15 +30,15 @@ final class DetailDescriptionTableViewCell: UITableViewCell {
     
     var textDescription: String? {
         didSet {
-            descriptionLabel.text = textDescription
+            descriptionText.text = textDescription
         }
     }
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         selectionStyle = .none
-        addSubview(descriptionLabel)
+        addSubview(descriptionText)
         updateConstraints()
     }
     

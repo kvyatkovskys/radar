@@ -1,5 +1,5 @@
 language: swift
-osx_image: xcode9.2
+osx_image: xcode10
 xcode_workspace: Circle.xcworkspace
 xcode_scheme: Circle
 podfile: Podfile
@@ -8,15 +8,12 @@ env:
     - TERM=dumb
 
 before_install:
-  - gem install cocoapods -v '1.4.0'
   - bundle install
-  - pod repo update
-  - pod install
 
 script:
   #- set -o pipefail && xcodebuild test -workspace Circle.xcworkspace -scheme Circle -sdk iphonesimulator11.2 -destination 'name=iPhone 8,OS=11.2' ONLY_ACTIVE_ARCH=NO | xcpretty
-  - xcrun xcodebuild test -workspace Circle.xcworkspace -scheme Circle -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.2' NLY_ACTIVE_ARCH=NO | xcpretty
-  #- ./fastlane/travis.sh
+  #- xcrun xcodebuild test -workspace Circle.xcworkspace -scheme Circle -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 8,OS=11.2' NLY_ACTIVE_ARCH=NO | xcpretty
+  - ./fastlane/travis.sh
 
 notifications:
   slack:

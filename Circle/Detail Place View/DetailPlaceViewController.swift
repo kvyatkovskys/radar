@@ -7,20 +7,15 @@
 //
 
 import UIKit
-import Kingfisher
 import RxSwift
 import RealmSwift
 import SnapKit
+import Swinject
 
 final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDelegate {
-    typealias Dependecies = HasDetailPlaceViewModel & HasKingfisher & HasOpenGraphService & HasFavoritesViewModel
-    
-    fileprivate let heightHeader: CGFloat = 385.0
     fileprivate var notificationTokenFavorites: NotificationToken?
     fileprivate var viewModel: DetailPlaceViewModel
     fileprivate let favoritesViewModel: FavoritesViewModel
-    fileprivate let kingfisherOptions: KingfisherOptionsInfo
-    fileprivate let sevice: OpenGraphService
     fileprivate let disposeBag = DisposeBag()
     
     fileprivate var favoriteNotify: FavoritesNotify {
@@ -28,7 +23,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
     }
     
     fileprivate lazy var headerView: UIView = {
-        let view = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: heightHeader))
+        let view = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: viewModel.heightHeader))
         view.backgroundColor = .white
         return view
     }()
@@ -42,7 +37,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         image.kf.indicatorType = .activity
         image.kf.setImage(with: viewModel.place.coverPhoto,
                                 placeholder: nil,
-                                options: self.kingfisherOptions,
+                                options: viewModel.kingfisherOptions,
                                 progressBlock: nil,
                                 completionHandler: nil)
         return image
@@ -62,7 +57,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
             .subscribe(onNext: { [unowned self] (url) in
                 image.kf.setImage(with: url,
                                   placeholder: nil,
-                                  options: self.kingfisherOptions,
+                                  options: self.viewModel.kingfisherOptions,
                                   progressBlock: nil,
                                   completionHandler: nil)
             }, onError: { (error) in
@@ -108,53 +103,26 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         frame.size.width = view.frame.width
         listCategories.view.frame = frame
         
-        addChildViewController(listCategories)
+        addChild(listCategories)
         view.addSubview(listCategories.view)
-        listCategories.didMove(toParentViewController: listCategories)
+        listCategories.didMove(toParent: listCategories)
         return view
     }()
     
-    fileprivate lazy var favoriteButton: UIButton = {
-        let button = UIButton()
-        
+    fileprivate lazy var favoriteButton: UIBarButtonItem = {
         let image: UIImage
         if favoriteNotify.addFavorites {
             image = UIImage(named: "ic_favorite")!.withRenderingMode(.alwaysTemplate)
         } else {
             image = UIImage(named: "ic_favorite_border")!.withRenderingMode(.alwaysTemplate)
         }
-        
-        let localized: String
-        if favoriteNotify.addFavorites {
-            localized = NSLocalizedString("remove", comment: "The title for button that removed from favorite")
-        } else {
-            localized = NSLocalizedString("add", comment: "The title for button that added to favorite")
-        }
-        
-        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10.0)
-        button.setImage(image, for: .normal)
-        button.tintColor = UIColor.mainColor
-        button.backgroundColor = UIColor.shadowGray
-        button.setTitle(localized, for: .normal)
-        button.setTitleColor(UIColor.mainColor, for: .normal)
-        button.titleLabel?.font = .boldSystemFont(ofSize: 15.0)
-        button.layer.cornerRadius = 5.0
-        button.addTarget(self, action: #selector(addToFavorites), for: .touchUpInside)
-        button.isSelected = !favoriteNotify.addFavorites
+        let button = UIBarButtonItem(image: image, style: .done, target: self, action: #selector(addToFavorites))
         return button
     }()
     
-    fileprivate lazy var shareButton: UIButton = {
-        let button = UIButton()
-        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10.0)
-        button.setImage(UIImage(named: "ic_share")?.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.tintColor = UIColor.mainColor
-        button.backgroundColor = UIColor.shadowGray
-        button.setTitle(NSLocalizedString("share", comment: "Title for share button"), for: .normal)
-        button.setTitleColor(UIColor.mainColor, for: .normal)
-        button.titleLabel?.font = .boldSystemFont(ofSize: 15.0)
-        button.layer.cornerRadius = 5.0
-        button.addTarget(self, action: #selector(sharePlace), for: .touchUpInside)
+    fileprivate lazy var shareButton: UIBarButtonItem = {
+        let image = UIImage(named: "ic_share")?.withRenderingMode(.alwaysTemplate)
+        let button = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(sharePlace))
         return button
     }()
     
@@ -186,7 +154,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
             notifyImage = UIImage(named: "ic_notifications_off")
         }
 
-        let button = UIBarButtonItem(image: notifyImage, style: .done, target: self, action: #selector(changeNotify))
+        let button = UIBarButtonItem(image: notifyImage, style: .plain, target: self, action: #selector(changeNotify))
         return button
     }
     
@@ -199,21 +167,21 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         }
         
         imageHeader.snp.remakeConstraints { (make) in
-            make.top.left.equalTo(self.tableView)
+            make.top.left.equalTo(tableView)
             make.width.equalTo(ScreenSize.SCREEN_WIDTH)
             make.height.equalTo(160.0)
         }
         
         picture.snp.makeConstraints { (make) in
             make.top.equalTo(imageHeader.snp.bottom).offset(-15.0)
-            make.left.equalTo(self.view).offset(10.0)
+            make.left.equalTo(view).offset(10.0)
             make.size.equalTo(CGSize(width: 100.0, height: 100.0))
         }
         
         titlePlace.snp.remakeConstraints { (make) in
             make.top.equalTo(imageHeader.snp.bottom).offset(10.0)
             make.left.equalTo(picture.snp.right).offset(10.0)
-            make.right.equalTo(self.view).offset(-10.0)
+            make.right.equalTo(view).offset(-10.0)
             make.bottom.equalTo(ratingLabel)
         }
 
@@ -224,36 +192,16 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         }
 
         listSubCategoriesView.snp.remakeConstraints { (make) in
-            make.bottom.equalTo(lineView)
+            make.bottom.equalToSuperview()
             make.right.equalTo(titlePlace)
             make.left.equalTo(ratingLabel)
             make.top.equalTo(titlePlace.snp.bottom).offset(10.0)
         }
-
-        lineView.snp.remakeConstraints { (make) in
-            make.bottom.equalTo(favoriteButton.snp.top).offset(-10.0)
-            make.left.right.equalToSuperview()
-            make.height.equalTo(0.1)
-        }
-
-        favoriteButton.snp.makeConstraints { (make) in
-            make.right.equalTo(headerView.snp.centerX).offset(-12.0)
-            make.bottom.equalToSuperview().offset(-10.0)
-            make.size.equalTo(CGSize(width: 130.0, height: 40.0))
-        }
-
-        shareButton.snp.makeConstraints { (make) in
-            make.left.equalTo(headerView.snp.centerX).offset(12.0)
-            make.bottom.equalTo(favoriteButton)
-            make.size.equalTo(favoriteButton)
-        }
     }
     
-    init(_ dependecies: Dependecies) {
-        self.viewModel = dependecies.detailViewModel
-        self.favoritesViewModel = dependecies.favoritesViewModel
-        self.kingfisherOptions = dependecies.kingfisherOptions
-        self.sevice = dependecies.service
+    init(_ container: Container) {
+        self.viewModel = container.resolve(DetailPlaceViewModel.self)!
+        self.favoritesViewModel = container.resolve(FavoritesViewModel.self)!
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -266,7 +214,9 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         setTitleNavBar()
         
         if favoriteNotify.addFavorites {
-            navigationItem.rightBarButtonItem = rightBarButton()
+            navigationItem.rightBarButtonItems = [shareButton, favoriteButton, rightBarButton()]
+        } else {
+            navigationItem.rightBarButtonItems = [shareButton, favoriteButton]
         }
         
         headerView.addSubview(imageHeader)
@@ -274,9 +224,6 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         headerView.addSubview(titlePlace)
         headerView.addSubview(ratingLabel)
         headerView.addSubview(listSubCategoriesView)
-        headerView.addSubview(lineView)
-        headerView.addSubview(favoriteButton)
-        headerView.addSubview(shareButton)
         tableView.tableHeaderView = headerView
         view.addSubview(tableView)
         updateViewConstraints()
@@ -292,21 +239,19 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
                         self.imageHeader.kf.indicatorType = .activity
                         self.imageHeader.kf.setImage(with: url,
                                                      placeholder: nil,
-                                                     options: self.kingfisherOptions,
+                                                     options: self.viewModel.kingfisherOptions,
                                                      progressBlock: nil,
                                                      completionHandler: nil)
                     }
                     
                     guard self.favoritesViewModel.checkAddAndNotify(self.viewModel.place).addFavorites else {
-                        self.favoriteButton.setTitle(NSLocalizedString("add", comment: "The title for button that added to favorite"), for: .normal)
-                        self.favoriteButton.setImage(UIImage(named: "ic_favorite_border")?.withRenderingMode(.alwaysTemplate), for: .normal)
-                        self.navigationItem.rightBarButtonItem = nil
+                        self.favoriteButton.image = UIImage(named: "ic_favorite_border")?.withRenderingMode(.alwaysTemplate)
+                        self.navigationItem.rightBarButtonItems = [self.shareButton, self.favoriteButton]
                         return
                     }
                     
-                    self.favoriteButton.setTitle(NSLocalizedString("remove", comment: "The title for button that removed from favorite"), for: .normal)
-                    self.favoriteButton.setImage(UIImage(named: "ic_favorite")?.withRenderingMode(.alwaysTemplate), for: .normal)
-                    self.navigationItem.rightBarButtonItem = self.rightBarButton()
+                    self.favoriteButton.image = UIImage(named: "ic_favorite")?.withRenderingMode(.alwaysTemplate)
+                    self.navigationItem.rightBarButtonItems = [self.shareButton, self.favoriteButton, self.rightBarButton()]
                 case .error(let error):
                     fatalError("\(error)")
                 case .initial:
@@ -369,16 +314,14 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         let allow = favoritesViewModel.allowNotify(place: viewModel.place)
     
         guard allow else {
-            navigationItem.rightBarButtonItem?.image = UIImage(named: "ic_notifications_off")
+            navigationItem.rightBarButtonItems?.last?.image = UIImage(named: "ic_notifications_off")
             return
         }
-        navigationItem.rightBarButtonItem?.image = UIImage(named: "ic_notifications_active")
+        navigationItem.rightBarButtonItems?.last?.image = UIImage(named: "ic_notifications_active")
     }
     
-    @objc func addToFavorites(sender: UIButton) {
-        sender.isSelected = !sender.isSelected
-        
-        guard sender.isSelected else {
+    @objc func addToFavorites() {
+        guard favoriteNotify.addFavorites else {
             favoritesViewModel.addToFavorite(place: viewModel.place)
             return
         }
@@ -429,7 +372,7 @@ extension DetailPlaceViewController: UITableViewDataSource {
             
             cell.controller = self
             cell.viewModel = viewModel
-            cell.pageImages = PageImages(images, previews, nextImages, kingfisherOptions)
+            cell.pageImages = PageImages(images, previews, nextImages, viewModel.kingfisherOptions)
             return cell
         case .description(let text, _):
             let cell = tableView.dequeueReusableCell(withIdentifier: DetailDescriptionTableViewCell.cellIdentifier,
@@ -447,6 +390,7 @@ extension DetailPlaceViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: DetailAddressTableViewCell.cellIdentifier,
                                                      for: indexPath) as? DetailAddressTableViewCell ?? DetailAddressTableViewCell()
             
+            cell.title = viewModel.place.name
             cell.address = address
             cell.location = location
             return cell
@@ -512,7 +456,7 @@ extension DetailPlaceViewController: UITableViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard scrollView.contentOffset.y > 210.0 else {
+        guard scrollView.contentOffset.y > 200.0 else {
             setTitleNavBar()
             return
         }

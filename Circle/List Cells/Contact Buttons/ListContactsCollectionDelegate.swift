@@ -29,15 +29,28 @@ extension ListContactsCollectionDelegate: UICollectionViewDelegate, UICollection
         switch contact.type {
         case .phone:
             if let url = URL(string: "tel://\(contact.value ?? "")"), UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
             } else {
                 let localized = NSLocalizedString("telephone", comment: "Title for teh alert show phone")
                 UIApplication.shared.keyWindow?.rootViewController?.showAlertLight(title: localized, message: "\(contact.value ?? "")")
             }
-        case .website, .facebook:
+        case .website:
             if let url = URL(string: "\(contact.value ?? "")"), UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
             }
+        case .facebook:
+            let urlApp = URL(string: "fb://page/?id=\(contact.value ?? "")")!
+            let urlWeb = URL(string: "https://facebook.com/\(contact.value ?? "")")!
+            guard UIApplication.shared.canOpenURL(urlApp) else {
+                UIApplication.shared.open(urlWeb, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
+                return
+            }
+            UIApplication.shared.open(urlApp, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
         }
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+private func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }

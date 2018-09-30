@@ -11,7 +11,17 @@ import Foundation
 let heightTableCell: CGFloat = 280.0
 
 final class KSTableView: UITableView {
-    override init(frame: CGRect, style: UITableViewStyle) {
+    let refresh = UIRefreshControl()
+    
+    /// Enabled refresh for table view
+    var isEnabledRefresh: Bool = false {
+        didSet {
+            guard isEnabledRefresh else { return }
+            self.refreshControl = refresh
+        }
+    }
+    
+    override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
         self.backgroundColor = .white
         self.separatorInset = UIEdgeInsets(top: 0.0, left: 10.0, bottom: 0.0, right: 10.0)

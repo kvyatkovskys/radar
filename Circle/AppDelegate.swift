@@ -16,24 +16,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         migrations(schema: 9)
         print(Realm.Configuration.defaultConfiguration.fileURL as Any)
         
         setupNavigationBar()
         initialViewController()
-        YMMYandexMetrica.activate(withApiKey: yandexKey)
+        YMMYandexMetrica.activate(with: YMMYandexMetricaConfiguration(apiKey: "97b3bd5d-84cc-4288-8742-20f159ab1701")!)
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         checkAuthNotification(application)
         
         return true
     }
     
-    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
         return FBSDKApplicationDelegate.sharedInstance().application(app,
                                                                      open: url,
-                                                                     sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String ?? "",
-                                                                     annotation: options[UIApplicationOpenURLOptionsKey.annotation])
+                                                                     sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String ?? "",
+                                                                     annotation: options[UIApplication.OpenURLOptionsKey.annotation])
     }
     
     fileprivate func checkAuthNotification(_ application: UIApplication) {
@@ -42,6 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             switch settings.authorizationStatus {
             case .denied, .notDetermined:
                 center.requestAuthorization(options: [.alert, .sound, .badge]) { [unowned self] (accept, _) in
+                
                     if !accept {
                         let alertController = UIAlertController(title: NSLocalizedString("noticeDisabled",
                                                                                          comment: "title for alert when disabled notice"),
@@ -55,8 +56,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         
                         let openAction = UIAlertAction(title: NSLocalizedString("openSettings", comment: "button for open settings"),
                                                        style: .default) { _ in
-                            if let url = URL(string: UIApplicationOpenSettingsURLString) {
-                                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                            if let url = URL(string: UIApplication.openSettingsURLString) {
+                                UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
                             }
                         }
                         alertController.addAction(openAction)
@@ -69,6 +70,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     guard application.applicationIconBadgeNumber > 0 else { return }
                     application.applicationIconBadgeNumber = 0
                 }
+            default:
+                break
             }
         }
     }
@@ -84,7 +87,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     fileprivate func setupNavigationBar() {
-        let navBarAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+        let navBarAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         
         UINavigationBar.appearance().titleTextAttributes = navBarAttributes
         UINavigationBar.appearance().barTintColor = UIColor.navBarColor
@@ -136,4 +139,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+private func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }
