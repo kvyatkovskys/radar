@@ -9,7 +9,7 @@ Find out where your friends and acquaintances go.
 Through the application you will be able to see a large list of establishments for your geolocation and selected categories. When you walk near the place that you liked, the app will tell you about it.
 
 <p align="center">
-	<img src="https://raw.githubusercontent.com/kvyatkovskys/radar/master/screenshots/screen%231.png" width="220" height="400">
+	<img src="https://github.com/kvyatkovskys/radar/blob/master/screenshots/screen%231.png" width="220" height="400">
 	<img src="https://raw.githubusercontent.com/kvyatkovskys/radar/master/screenshots/screen%235.png" width="220" height="400">
 </p>
 
