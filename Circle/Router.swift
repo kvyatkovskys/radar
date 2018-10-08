@@ -73,7 +73,6 @@ struct Router {
         
         placesViewController = PlacesViewController(container)
         let locationImage = UIImage(named: "ic_my_location")?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
-        placesViewController.navigationItem.title = NSLocalizedString("aroundHere", comment: "Title for navigation bar in main tab")
         placesViewController.tabBarItem = UITabBarItem(title: NSLocalizedString("mylocation", comment: "Title for main tab"),
                                                        image: locationImage,
                                                        tag: 0)
@@ -216,10 +215,11 @@ struct Router {
     
     /// open map controller
     fileprivate func openMap(fromController: UIViewController, toController: UIViewController) {
-        fromController.addChild(toController)
-        toController.view.bounds = fromController.view.bounds
+        toController.view.transform = CGAffineTransform(translationX: -fromController.view.frame.width, y: 0)
         fromController.view.addSubview(toController.view)
-        toController.didMove(toParent: fromController)
+        UIView.animate(withDuration: 0.3) {
+            toController.view.transform = CGAffineTransform(translationX: 0, y: 0)
+        }
     }
     
     func openPopoverLabel(fromController: DetailPlaceViewController, toController: UIViewController, height: CGFloat) {

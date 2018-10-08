@@ -18,6 +18,7 @@ import Swinject
 final class PlacesViewController: UIViewController {
     fileprivate var notificationTokenCategories: NotificationToken?
     fileprivate var notificationTokenDistance: NotificationToken?
+    fileprivate var notificationTokenLocation: NotificationToken?
     fileprivate var viewModel: PlaceViewModel
     fileprivate let disposeBag = DisposeBag()
     fileprivate let container: Container
@@ -35,10 +36,9 @@ final class PlacesViewController: UIViewController {
     }()
     
     lazy var leftBarButton: UIBarButtonItem = {
-        let image = UIImage(named: "ic_view_list")!.withRenderingMode(.alwaysTemplate)
+        let image = UIImage(named: "ic_map")!.withRenderingMode(.alwaysTemplate)
         let button = UIBarButtonItem(image: image, style: .done, target: self, action: #selector(setView))
         button.tag = viewModel.typeView.rawValue
-        setView(sender: button)
         return button
     }()
     
@@ -46,11 +46,10 @@ final class PlacesViewController: UIViewController {
         return ActivityIndicatorView(container: self.view)
     }()
     
-    fileprivate func updateConstraints() {
+    override func updateViewConstraints() {
         tableView.snp.makeConstraints { (make) in
             make.top.bottom.left.right.equalToSuperview()
         }
-        
         super.updateViewConstraints()
     }
     
@@ -70,6 +69,8 @@ final class PlacesViewController: UIViewController {
         view.backgroundColor = .white
         navigationItem.rightBarButtonItem = rightBarButton
         navigationItem.leftBarButtonItem = leftBarButton
+        view.addSubview(tableView)
+        updateViewConstraints()
         
         viewModel.locationService.start()
         
@@ -129,6 +130,7 @@ final class PlacesViewController: UIViewController {
             let realm = try Realm()
             let selectedCategories = realm.objects(FilterSelectedCategory.self)
             let filterDistance = realm.objects(FilterSelectedDistance.self)
+            let location = realm.objects(Location.self)
             
             notificationTokenCategories = selectedCategories.observe({ [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
@@ -163,6 +165,17 @@ final class PlacesViewController: UIViewController {
                     fatalError("\(error)")
                 }
             })
+            
+            notificationTokenLocation = location.observe({ [unowned self] (changes: RealmCollectionChange) in
+                switch changes {
+                case .initial(let value):
+                    self.navigationItem.title = value.last?.city ?? NSLocalizedString("aroundHere", comment: "Title for navigation bar in main tab")
+                case .update(let value, _, _, _):
+                    self.navigationItem.title = value.last?.city ?? NSLocalizedString("aroundHere", comment: "Title for navigation bar in main tab")
+                case .error(let error):
+                    fatalError("\(error)")
+                }
+            })
         } catch {
             print(error)
         }
@@ -190,6 +203,7 @@ final class PlacesViewController: UIViewController {
     deinit {
         notificationTokenCategories?.invalidate()
         notificationTokenDistance?.invalidate()
+        notificationTokenLocation?.invalidate()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -199,22 +213,23 @@ final class PlacesViewController: UIViewController {
     
     @objc func setView(sender: UIBarButtonItem?) {
         UIImpactFeedbackGenerator().impactOccurred()
-        let type = TypeView(rawValue: sender?.tag ?? 0)!
-        switch type {
-        case .map:
-            sender?.tag = TypeView.table.rawValue
-            view.subviews.forEach({ $0.removeFromSuperview() })
+        switch viewModel.typeView {
+        case .table:
+            UIView.animate(withDuration: 0.3) {
+                self.tableView.transform = CGAffineTransform(translationX: self.view.frame.width, y: 0)
+            }
             viewModel.typeView = .map
             viewModel.openMap(viewModel.places.value.data, viewModel.userLocation)
             navigationItem.leftBarButtonItem?.image = UIImage(named: "ic_view_list")!.withRenderingMode(.alwaysTemplate)
-        case .table:
-            sender?.tag = TypeView.map.rawValue
-            let vc = children.last
-            vc?.view.removeFromSuperview()
-            vc?.removeFromParent()
+        case .map:
+            let viewMap = view.subviews.last
             viewModel.typeView = .table
-            view.addSubview(tableView)
-            updateConstraints()
+            UIView.animate(withDuration: 0.3, animations: {
+                self.tableView.transform = .identity
+                viewMap?.transform = CGAffineTransform(translationX: -self.view.frame.width, y: 0)
+            }, completion: { (_) in
+                viewMap?.removeFromSuperview()
+            })
             navigationItem.leftBarButtonItem?.image = UIImage(named: "ic_map")!.withRenderingMode(.alwaysTemplate)
         }
     }
