@@ -45,7 +45,7 @@ struct DetailPlaceViewModel: DetailPlace {
             colorCategory = place.categories?.first?.color
         }
         
-        self.dataSource = DetailPlaceViewModel.createDataSource(place: place, color: colorCategory)
+        self.dataSource = place.fromFavorites ? [] : DetailPlaceViewModel.createDataSource(place: place, color: colorCategory)
     }
     
     mutating func loadPhotos() -> Observable<DetailSectionObjects> {
@@ -79,6 +79,7 @@ struct DetailPlaceViewModel: DetailPlace {
     }
     
     func getInfoAboutPlace(id: Int) -> Observable<[DetailSectionObjects]> {
+        guard place.fromFavorites else { return Observable.just([]) }
         return favoritesService.loadInfoPlace(id: id).flatMap({ (model) -> Observable<[DetailSectionObjects]> in
             if self.place.fromFavorites {
                 self.updateValues(model)
