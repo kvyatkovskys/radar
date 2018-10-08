@@ -43,25 +43,6 @@ struct PlaceViewModel: Place {
         self.locationService = locationService
     }
     
-//    func changeTypeView(_ type: TypeView) {
-//        do {
-//            let realm = try Realm()
-//            let settings = realm.objects(Settings.self).first
-//            
-//            try realm.write {
-//                guard let oldSettings = settings else {
-//                    let newSettings = Settings()
-//                    newSettings.typeViewMainTab = type.rawValue
-//                    realm.add(newSettings)
-//                    return
-//                }
-//                oldSettings.typeViewMainTab = type.rawValue
-//            }
-//        } catch {
-//            print(error)
-//        }
-//    }
-    
     /// load more places
     func getMorePlaces(url: URL) {
         placeService.loadMorePlaces(url: url)
