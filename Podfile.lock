@@ -5,27 +5,25 @@ PODS:
   - Bolts/AppLinks (1.9.0):
     - Bolts/Tasks
   - Bolts/Tasks (1.9.0)
-  - Cache (4.2.0)
-  - FBSDKCoreKit (4.36.0):
+  - Cache (5.2.0)
+  - FBSDKCoreKit (4.37.0):
     - Bolts (~> 1.7)
-  - FBSDKLoginKit (4.36.0):
+  - FBSDKLoginKit (4.37.0):
     - FBSDKCoreKit
-  - FBSDKPlacesKit (4.36.0):
+  - FBSDKPlacesKit (4.37.0):
     - FBSDKCoreKit
-  - FBSDKShareKit (4.36.0):
-    - FBSDKCoreKit (~> 4.36.0)
-  - Hue (3.0.1)
-  - Imaginary (3.0.3):
-    - Cache (~> 4.0)
+  - FBSDKShareKit (4.37.0):
+    - FBSDKCoreKit (~> 4.37.0)
+  - Imaginary (4.2.0):
+    - Cache (~> 5.0)
   - Kingfisher (4.10.0)
-  - Lightbox (2.1.2):
-    - Hue (~> 3.0)
-    - Imaginary (~> 3.0)
-  - Realm (3.10.0):
-    - Realm/Headers (= 3.10.0)
-  - Realm/Headers (3.10.0)
-  - RealmSwift (3.10.0):
-    - Realm (= 3.10.0)
+  - Lightbox (2.3.0):
+    - Imaginary (~> 4.0)
+  - Realm (3.11.0):
+    - Realm/Headers (= 3.11.0)
+  - Realm/Headers (3.11.0)
+  - RealmSwift (3.11.0):
+    - Realm (= 3.11.0)
   - RxCocoa (4.3.1):
     - RxSwift (~> 4.0)
   - RxSwift (4.3.1)
@@ -57,7 +55,6 @@ SPEC REPOS:
     - FBSDKLoginKit
     - FBSDKPlacesKit
     - FBSDKShareKit
-    - Hue
     - Imaginary
     - Kingfisher
     - Lightbox
@@ -72,17 +69,16 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
-  Cache: f28f8dd64b632155aabf9b3906b036a659048251
-  FBSDKCoreKit: 3b8e6570eedb443f9fc4af196a7bf39f18e3a3d8
-  FBSDKLoginKit: 8bccb6064708ab2f4251a7fc4e3b6d8d00ad91ba
-  FBSDKPlacesKit: ceee4555dcff54fa3e61b9357364d88ac5956a8c
-  FBSDKShareKit: 7090fdd55c39b03941efddb64c83a64ff6b3949f
-  Hue: 93e852fa6211ab35922ad8c293f51c43d6c79eb2
-  Imaginary: 9b45836a5af881f452a86e0a1215772ae4712d00
+  Cache: 807c5d86d01a177f06ede9865add3aea269bbfd4
+  FBSDKCoreKit: fe5f3474499a81963e11e3f3a5c753d0a95ca2b4
+  FBSDKLoginKit: 2f7249686d1e30ce8a5ef5400eedf50b3e3df332
+  FBSDKPlacesKit: efdd193a9abaab00eaa4b75ca3322b132a09172c
+  FBSDKShareKit: 52e0083222c38e930eb6878007478326599195c3
+  Imaginary: dae33d06dbc2ada22f98afef5eb45cc061311a2c
   Kingfisher: 43c4b802d8b5256cf1f4379e9cd10b329be6d3e2
-  Lightbox: 2dc267df8be2285bc7724cb11cbbf4aaaf59dced
-  Realm: 85ab9e4f779d66f6e9ffeb118dc25b7f130c96ac
-  RealmSwift: 69121c8b86d0ae005fb779efdb10e606732e1c74
+  Lightbox: d317750e4132bfb871a5307cfe0a2c7d6a583c65
+  Realm: 92f09a102692b96a9a10e9617f214f15c5ab85fc
+  RealmSwift: 5f0481cd658bb751c509314b964a35eaa264d2cf
   RxCocoa: 78763c7b07d02455598d9fc3c1ad091a28b73635
   RxSwift: fe0fd770a43acdb7d0a53da411c9b892e69bb6e4
   SnapKit: 0de968a9fec17499afa29683b05d0c775b6d1c29
