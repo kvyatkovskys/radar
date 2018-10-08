@@ -1,5 +1,4 @@
 import UIKit
-import Hue
 import AVKit
 import AVFoundation
 import Imaginary
@@ -36,6 +35,11 @@ public class LightboxConfig {
   public static var makeLoadingIndicator: () -> UIView = {
     return LoadingIndicator()
   }
+
+  /// Number of images to preload.
+  ///
+  /// 0 - Preload all images (default).
+  public static var preload = 0
 
   public struct PageIndicator {
     public static var enabled = true
