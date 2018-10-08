@@ -9,8 +9,6 @@
 import UIKit
 
 final class DetailWorkDaysTableViewCell: UITableViewCell, UICollectionViewDelegate {    
-    static let cellIdentifier = "DetailWorkDaysTableViewCell"
-
     fileprivate lazy var listWorkDaysViewController: WorkDaysViewController = {
         let list = WorkDaysViewController(workDays: nil)
         list.view.frame = contentView.frame

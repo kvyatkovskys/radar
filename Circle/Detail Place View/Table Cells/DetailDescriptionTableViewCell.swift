@@ -8,9 +8,7 @@
 
 import UIKit
 
-final class DetailDescriptionTableViewCell: UITableViewCell {
-    static let cellIdentifier = "DetailDescriptionTableViewCell"
-    
+final class DetailDescriptionTableViewCell: UITableViewCell {    
     fileprivate let descriptionText: UITextView = {
         let text = UITextView()
         text.font = .systemFont(ofSize: 16.0)

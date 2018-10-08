@@ -11,9 +11,7 @@ import Kingfisher
 
 typealias PageImages = (images: [Images], previews: [URL?], nextImages: String, kingfisherOptions: KingfisherOptionsInfo?)
 
-final class DetailImagesTableViewCell: UITableViewCell {
-    static let cellIdentifier = "DetailImagesTableViewCell"
-        
+final class DetailImagesTableViewCell: UITableViewCell {        
     fileprivate lazy var listImagesViewController: ListImagesViewController = {
         let list = ListImagesViewController()
         list.view.frame = contentView.frame

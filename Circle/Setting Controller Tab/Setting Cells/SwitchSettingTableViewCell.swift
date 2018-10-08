@@ -8,9 +8,7 @@
 
 import UIKit
 
-final class SwitchSettingTableViewCell: UITableViewCell {
-    static let cellIdentifier = "SwitchSettingTableViewCell"
-    
+final class SwitchSettingTableViewCell: UITableViewCell {    
     fileprivate let imageCell: UIImageView = {
         let image = UIImageView()
         image.contentMode = .center

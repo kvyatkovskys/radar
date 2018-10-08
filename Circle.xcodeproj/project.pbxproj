@@ -95,6 +95,7 @@
 		8BE208A51FFD25CB0048D690 /* FilterPlacesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE208A41FFD25CB0048D690 /* FilterPlacesViewModel.swift */; };
 		8BEB4DF31FFAD285008AD1AB /* PlaceSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEB4DF21FFAD285008AD1AB /* PlaceSetting.swift */; };
 		8BFBF57F2005187100CE2C8B /* CategoriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFBF57E2005187100CE2C8B /* CategoriesTableViewCell.swift */; };
+		F91D178E2167917C00C70B39 /* TableView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91D178D2167917C00C70B39 /* TableView+Extension.swift */; };
 		F96E32CE215234C200ED84F6 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F96E32CD215234C200ED84F6 /* WebViewController.swift */; };
 		F9BA084521500C970072562E /* KSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BA084421500C970072562E /* KSView.swift */; };
 /* End PBXBuildFile section */
@@ -247,6 +248,7 @@
 		EC945378AF2C38ECAC172475 /* Pods_Circle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Circle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F492590FA08D8B776535C3C1 /* Pods-CircleUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CircleUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CircleUITests/Pods-CircleUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		F8A689D0A03FBE0C3621184D /* Pods-CircleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CircleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CircleTests/Pods-CircleTests.release.xcconfig"; sourceTree = "<group>"; };
+		F91D178D2167917C00C70B39 /* TableView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TableView+Extension.swift"; sourceTree = "<group>"; };
 		F96E32CD215234C200ED84F6 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		F9BA084421500C970072562E /* KSView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KSView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -323,6 +325,7 @@
 				8BE208A01FFD1D300048D690 /* Controller+Extension.swift */,
 				8B18FE072007F8E000E637C7 /* View+Extension.swift */,
 				8B82C38520133A0200E0CA89 /* Error+Extension.swift */,
+				F91D178D2167917C00C70B39 /* TableView+Extension.swift */,
 			);
 			path = "Project Extension";
 			sourceTree = "<group>";
@@ -942,6 +945,7 @@
 				8BE2089F1FFD17470048D690 /* FilterPlacesViewController.swift in Sources */,
 				8B18BFD81FFACC6F00C7906D /* PlaceViewModel.swift in Sources */,
 				8B5F71571FF93C9700E628F9 /* PlaceTableViewCell.swift in Sources */,
+				F91D178E2167917C00C70B39 /* TableView+Extension.swift in Sources */,
 				8B2D741120387A520022BDCC /* KSTableView.swift in Sources */,
 				8BC35066201CF60700BB375B /* FavoritesViewController.swift in Sources */,
 				8B3398D4200FE5E2002966ED /* DetailAddressTableViewCell.swift in Sources */,

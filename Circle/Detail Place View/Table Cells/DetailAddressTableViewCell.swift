@@ -11,9 +11,7 @@ import MapKit
 import Contacts
 import MapKit
 
-final class DetailAddressTableViewCell: UITableViewCell, MKMapViewDelegate {
-    static var cellIdentifier = "DetailAddressTableViewCell"
-    
+final class DetailAddressTableViewCell: UITableViewCell, MKMapViewDelegate {    
     fileprivate let addressLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0

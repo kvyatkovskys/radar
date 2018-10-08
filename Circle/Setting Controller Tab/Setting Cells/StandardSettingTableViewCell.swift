@@ -8,9 +8,7 @@
 
 import UIKit
 
-final class StandardSettingTableViewCell: UITableViewCell {
-    static let cellIdentifier = "StandardSettingTableViewCell"
-    
+final class StandardSettingTableViewCell: UITableViewCell {    
     fileprivate let imageCell: UIImageView = {
         let image = UIImageView()
         image.contentMode = .center

@@ -9,9 +9,7 @@
 import UIKit
 import FBSDKLoginKit
 
-final class FCButtonLoginTableViewCell: UITableViewCell {
-    static let cellIdentifier = "FCButtonLoginTableViewCell"
-    
+final class FCButtonLoginTableViewCell: UITableViewCell {    
     fileprivate let loginButton: FBSDKLoginButton = {
         let button = FBSDKLoginButton()
         button.readPermissions = ["public_profile", "email", "user_friends"]

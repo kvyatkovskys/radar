@@ -227,7 +227,7 @@ typealias Days = (day: DaysType, hour: String)
 typealias CurrentDay = (index: Int?, color: UIColor?)
 typealias WorkDays = (closed: [Days], opened: [Days], currentDay: CurrentDay)
 
-enum TypeDetailCell {
+enum TypeDetailCell: CaseIterable {
     case description(String, CGFloat)
     case contact([Contact], CGFloat)
     case address(String, LocationPlace?, CGFloat)
@@ -249,6 +249,57 @@ enum TypeDetailCell {
         case .restaurantService: return NSLocalizedString("restaurantService", comment: "Title for the cell type")
         case .restaurantSpeciality: return NSLocalizedString("restaurantSpecialties", comment: "Title for the cell type")
         case .images: return NSLocalizedString("photos", comment: "Title for the cell type")
+        }
+    }
+    
+    static var allCases: [TypeDetailCell] {
+        return [.description("", 0),
+                .contact([], 0),
+                .address("", nil, 0),
+                .workDays(WorkDays([], [], CurrentDay(nil, nil)), 0),
+                .payment([], 0),
+                .parking([], 0),
+                .restaurantSpeciality([], 0, nil),
+                .restaurantService([], 0, nil),
+                .images([], [], "", 0)]
+    }
+}
+
+extension TypeDetailCell: RawRepresentable {
+    typealias RawValue = String
+    
+    init?(rawValue: String) {
+        switch rawValue {
+        case "DetailWorkDaysTableViewCell":
+            self = .workDays(WorkDays([], [], CurrentDay(nil, nil)), 0)
+        case "DetailDescriptionTableViewCell":
+            self = .description("", 0)
+        case "DeatilContactsTableViewCell":
+            self = .contact([], 0)
+        case "DetailAddressTableViewCell":
+            self = .address("", nil, 0)
+        case "DetailItemsTableViewCell":
+            self = .payment([], 0)
+            self = .parking([], 0)
+        case "DetailRestaurantTableViewCell":
+            self = .restaurantSpeciality([], 0, nil)
+            self = .restaurantService([], 0, nil)
+        case "DetailImagesTableViewCell":
+            self = .images([], [], "", 0)
+        default:
+            return nil
+        }
+    }
+    
+    var rawValue: RawValue {
+        switch self {
+        case .workDays: return "DetailWorkDaysTableViewCell"
+        case .description: return "DetailDescriptionTableViewCell"
+        case .contact: return "DeatilContactsTableViewCell"
+        case .address: return "DetailAddressTableViewCell"
+        case .payment, .parking: return "DetailItemsTableViewCell"
+        case .restaurantService, .restaurantSpeciality: return "DetailRestaurantTableViewCell"
+        case .images: return "DetailImagesTableViewCell"
         }
     }
 }
