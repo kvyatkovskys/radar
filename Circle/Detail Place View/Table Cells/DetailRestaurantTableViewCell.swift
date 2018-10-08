@@ -11,9 +11,7 @@ import UIKit
 typealias RestaurantService = (services: [RestaurantServiceType?], color: UIColor?)
 typealias RestaurantSpeciality = (specialties: [RestaurantSpecialityType?], color: UIColor?)
 
-final class DetailRestaurantTableViewCell: UITableViewCell, UICollectionViewDelegate {
-    static let cellIdentifier = "DetailRestaurantTableViewCell"
-    
+final class DetailRestaurantTableViewCell: UITableViewCell, UICollectionViewDelegate {    
     fileprivate lazy var restaurantViewController: ListRestaurantViewController = {
         let list = ListRestaurantViewController(service: nil, speciality: nil)
         list.view.frame = contentView.frame

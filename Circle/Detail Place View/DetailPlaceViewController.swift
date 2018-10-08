@@ -262,13 +262,24 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
             print(error)
         }
         
-        tableView.register(DetailDescriptionTableViewCell.self, forCellReuseIdentifier: DetailDescriptionTableViewCell.cellIdentifier)
-        tableView.register(DeatilContactsTableViewCell.self, forCellReuseIdentifier: DeatilContactsTableViewCell.cellIdentifier)
-        tableView.register(DetailAddressTableViewCell.self, forCellReuseIdentifier: DetailAddressTableViewCell.cellIdentifier)
-        tableView.register(DetailWorkDaysTableViewCell.self, forCellReuseIdentifier: DetailWorkDaysTableViewCell.cellIdentifier)
-        tableView.register(DetailItemsTableViewCell.self, forCellReuseIdentifier: DetailItemsTableViewCell.cellIdentifier)
-        tableView.register(DetailRestaurantTableViewCell.self, forCellReuseIdentifier: DetailRestaurantTableViewCell.cellIdentifier)
-        tableView.register(DetailImagesTableViewCell.self, forCellReuseIdentifier: DetailImagesTableViewCell.cellIdentifier)
+        tableView.registerCellClasses(cellType: TypeDetailCell.self) { (item) -> UITableViewCell.Type in
+            switch item {
+            case .description:
+                return DetailDescriptionTableViewCell.self
+            case .contact:
+                return DeatilContactsTableViewCell.self
+            case .address:
+                return DetailAddressTableViewCell.self
+            case .workDays:
+                return DetailWorkDaysTableViewCell.self
+            case .parking, .payment:
+                return DetailItemsTableViewCell.self
+            case .restaurantService, .restaurantSpeciality:
+                return DetailRestaurantTableViewCell.self
+            case .images:
+                return DetailImagesTableViewCell.self
+            }
+        }
         
         if viewModel.place.fromFavorites {
             indicatorView.showIndicator()
@@ -367,7 +378,7 @@ extension DetailPlaceViewController: UITableViewDataSource {
         
         switch type {
         case .images(let images, let previews, let nextImages, _):
-            let cell = tableView.dequeueReusableCell(withIdentifier: DetailImagesTableViewCell.cellIdentifier,
+            let cell = tableView.dequeueReusableCell(withIdentifier: type.rawValue,
                                                      for: indexPath) as? DetailImagesTableViewCell ?? DetailImagesTableViewCell()
             
             cell.controller = self
@@ -375,19 +386,19 @@ extension DetailPlaceViewController: UITableViewDataSource {
             cell.pageImages = PageImages(images, previews, nextImages, viewModel.kingfisherOptions)
             return cell
         case .description(let text, _):
-            let cell = tableView.dequeueReusableCell(withIdentifier: DetailDescriptionTableViewCell.cellIdentifier,
+            let cell = tableView.dequeueReusableCell(withIdentifier: type.rawValue,
                                                      for: indexPath) as? DetailDescriptionTableViewCell ?? DetailDescriptionTableViewCell()
             
             cell.textDescription = text
             return cell
         case .contact(let contacts, _):
-            let cell = tableView.dequeueReusableCell(withIdentifier: DeatilContactsTableViewCell.cellIdentifier,
+            let cell = tableView.dequeueReusableCell(withIdentifier: type.rawValue,
                                                      for: indexPath) as? DeatilContactsTableViewCell ?? DeatilContactsTableViewCell()
             
             cell.contacts = contacts
             return cell
         case .address(let address, let location, _):
-            let cell = tableView.dequeueReusableCell(withIdentifier: DetailAddressTableViewCell.cellIdentifier,
+            let cell = tableView.dequeueReusableCell(withIdentifier: type.rawValue,
                                                      for: indexPath) as? DetailAddressTableViewCell ?? DetailAddressTableViewCell()
             
             cell.title = viewModel.place.name
@@ -395,31 +406,31 @@ extension DetailPlaceViewController: UITableViewDataSource {
             cell.location = location
             return cell
         case .workDays(let workDays, _):
-            let cell = tableView.dequeueReusableCell(withIdentifier: DetailWorkDaysTableViewCell.cellIdentifier,
+            let cell = tableView.dequeueReusableCell(withIdentifier: type.rawValue,
                                                      for: indexPath) as? DetailWorkDaysTableViewCell ?? DetailWorkDaysTableViewCell()
             
             cell.workDays = workDays
             return cell
         case .payment(let payments, _):
-            let cell = tableView.dequeueReusableCell(withIdentifier: DetailItemsTableViewCell.cellIdentifier,
+            let cell = tableView.dequeueReusableCell(withIdentifier: type.rawValue,
                                                      for: indexPath) as? DetailItemsTableViewCell ?? DetailItemsTableViewCell()
             
             cell.payments = payments
             return cell
         case .parking(let parkings, _):
-            let cell = tableView.dequeueReusableCell(withIdentifier: DetailItemsTableViewCell.cellIdentifier,
+            let cell = tableView.dequeueReusableCell(withIdentifier: type.rawValue,
                                                      for: indexPath) as? DetailItemsTableViewCell ?? DetailItemsTableViewCell()
             
             cell.parkings = parkings
             return cell
         case .restaurantService(let services, _, let color):
-            let cell = tableView.dequeueReusableCell(withIdentifier: DetailRestaurantTableViewCell.cellIdentifier,
+            let cell = tableView.dequeueReusableCell(withIdentifier: type.rawValue,
                                                      for: indexPath) as? DetailRestaurantTableViewCell ?? DetailRestaurantTableViewCell()
             
             cell.restaurantService = RestaurantService(services, color)
             return cell
         case .restaurantSpeciality(let specialties, _, let color):
-            let cell = tableView.dequeueReusableCell(withIdentifier: DetailRestaurantTableViewCell.cellIdentifier,
+            let cell = tableView.dequeueReusableCell(withIdentifier: type.rawValue,
                                                      for: indexPath) as? DetailRestaurantTableViewCell ?? DetailRestaurantTableViewCell()
             
             cell.restaurantSpeciatity = RestaurantSpeciality(specialties, color)

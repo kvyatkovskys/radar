@@ -36,7 +36,7 @@ enum SettingType: String {
     }
 }
 
-enum SettingRowType {
+enum SettingRowType: CaseIterable {
     case facebookLogin
     case listFavoritesNoticy(title: String, description: String, image: UIImage, color: UIColor)
     case favoriteNotify(title: String, enabled: Bool, image: UIImage, color: UIColor)
@@ -44,6 +44,49 @@ enum SettingRowType {
     case clearHistorySearch(title: String, description: String, image: UIImage, color: UIColor)
     case showSearchHistory(title: String, image: UIImage, color: UIColor)
     case openSettings(title: String, image: UIImage, color: UIColor)
+    
+    static var allCases: [SettingRowType] {
+        return [.facebookLogin,
+                .listFavoritesNoticy(title: "", description: "", image: UIImage(), color: .black),
+                .favoriteNotify(title: "", enabled: false, image: UIImage(), color: .black),
+                .clearFavorites(title: "", description: "", image: UIImage(), color: .black),
+                .clearHistorySearch(title: "", description: "", image: UIImage(), color: .black),
+                .showSearchHistory(title: "", image: UIImage(), color: .black),
+                .openSettings(title: "", image: UIImage(), color: .black)]
+    }
+}
+
+extension SettingRowType: RawRepresentable {
+    typealias RawValue = String
+    
+    init?(rawValue: String) {
+        switch rawValue {
+        case "FCButtonLoginTableViewCell":
+            self = .facebookLogin
+        case "SwitchSettingTableViewCell":
+            self = .favoriteNotify(title: "", enabled: false, image: UIImage(), color: .black)
+        case "StandardSettingTableViewCell":
+            self = .listFavoritesNoticy(title: "", description: "", image: UIImage(), color: .black)
+            self = .clearFavorites(title: "", description: "", image: UIImage(), color: .black)
+            self = .clearHistorySearch(title: "", description: "", image: UIImage(), color: .black)
+            self = .showSearchHistory(title: "", image: UIImage(), color: .black)
+            self = .openSettings(title: "", image: UIImage(), color: .black)
+        default:
+            return nil
+        }
+    }
+    
+    var rawValue: RawValue {
+        switch self {
+        case .facebookLogin: return "FCButtonLoginTableViewCell"
+        case .listFavoritesNoticy,
+             .clearFavorites,
+             .clearHistorySearch,
+             .showSearchHistory,
+             .openSettings: return "StandardSettingTableViewCell"
+        case .favoriteNotify: return "SwitchSettingTableViewCell"
+        }
+    }
 }
 
 struct SettingsObject {

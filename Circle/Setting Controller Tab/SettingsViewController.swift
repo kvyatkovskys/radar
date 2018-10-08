@@ -46,9 +46,20 @@ final class SettingsViewController: UIViewController {
         view.addSubview(tableView)
         updateViewConstraints()
         
-        tableView.register(FCButtonLoginTableViewCell.self, forCellReuseIdentifier: FCButtonLoginTableViewCell.cellIdentifier)
-        tableView.register(StandardSettingTableViewCell.self, forCellReuseIdentifier: StandardSettingTableViewCell.cellIdentifier)
-        tableView.register(SwitchSettingTableViewCell.self, forCellReuseIdentifier: SwitchSettingTableViewCell.cellIdentifier)
+        tableView.registerCellClasses(cellType: SettingRowType.self) { (item) -> UITableViewCell.Type in
+            switch item {
+            case .facebookLogin:
+                return FCButtonLoginTableViewCell.self
+            case .favoriteNotify:
+                return SwitchSettingTableViewCell.self
+            case .listFavoritesNoticy,
+                 .clearFavorites,
+                 .clearHistorySearch,
+                 .showSearchHistory,
+                 .openSettings:
+                return StandardSettingTableViewCell.self
+            }
+        }
     }
     
     func setUpAlertView(title: String, description: String, action: @escaping () -> Void) {
@@ -88,7 +99,7 @@ extension SettingsViewController: UITableViewDataSource {
         
         switch typeCell {
         case .favoriteNotify(let title, let enable, let image, let color):
-            let cell = tableView.dequeueReusableCell(withIdentifier: SwitchSettingTableViewCell.cellIdentifier,
+            let cell = tableView.dequeueReusableCell(withIdentifier: typeCell.rawValue,
                                                      for: indexPath) as? SwitchSettingTableViewCell ?? SwitchSettingTableViewCell()
             cell.title = title
             cell.img = image
@@ -104,14 +115,14 @@ extension SettingsViewController: UITableViewDataSource {
             
             return cell
         case .facebookLogin:
-            let cell = tableView.dequeueReusableCell(withIdentifier: FCButtonLoginTableViewCell.cellIdentifier,
+            let cell = tableView.dequeueReusableCell(withIdentifier: typeCell.rawValue,
                                                      for: indexPath) as? FCButtonLoginTableViewCell ?? FCButtonLoginTableViewCell()
             return cell
         case .clearFavorites(let title, _, let image, let color),
              .clearHistorySearch(let title, _, let image, let color),
              .openSettings(let title, let image, let color):
             
-            let cell = tableView.dequeueReusableCell(withIdentifier: StandardSettingTableViewCell.cellIdentifier,
+            let cell = tableView.dequeueReusableCell(withIdentifier: typeCell.rawValue,
                                                      for: indexPath) as? StandardSettingTableViewCell ?? StandardSettingTableViewCell()
             
             cell.title = title
@@ -121,7 +132,7 @@ extension SettingsViewController: UITableViewDataSource {
         case .listFavoritesNoticy(let title, _, let image, let color),
              .showSearchHistory(let title, let image, let color):
             
-            let cell = tableView.dequeueReusableCell(withIdentifier: StandardSettingTableViewCell.cellIdentifier,
+            let cell = tableView.dequeueReusableCell(withIdentifier: typeCell.rawValue,
                                                      for: indexPath) as? StandardSettingTableViewCell ?? StandardSettingTableViewCell()
             
             cell.title = title

@@ -8,9 +8,7 @@
 
 import UIKit
 
-final class DetailItemsTableViewCell: UITableViewCell, UICollectionViewDelegate {
-    static let cellIdentifier = "DetailItemsTableViewCell"
-    
+final class DetailItemsTableViewCell: UITableViewCell, UICollectionViewDelegate {    
     fileprivate lazy var listItemsViewController: ListItemsViewController = {
         let list = ListItemsViewController(payments: [], parkings: [])
         list.view.frame = contentView.frame

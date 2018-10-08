@@ -9,8 +9,6 @@
 import UIKit
 
 final class DeatilContactsTableViewCell: UITableViewCell {
-    static let cellIdentifier = "DeatilContactsTableViewCell"
-
     fileprivate var collectionDataSource: ListContactsCollectionDataSource?
     //swiftlint:disable weak_delegate
     fileprivate var collectionDelegate: ListContactsCollectionDelegate?
