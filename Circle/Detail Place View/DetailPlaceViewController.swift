@@ -128,7 +128,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
     
     fileprivate let lineView: UIView = {
         let view = UIView()
-        view.backgroundColor = .clear
+        view.backgroundColor = .lightGray
         return view
     }()
     
@@ -170,6 +170,13 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
             make.top.left.equalTo(tableView)
             make.width.equalTo(ScreenSize.SCREEN_WIDTH)
             make.height.equalTo(160.0)
+        }
+        
+        lineView.snp.remakeConstraints { (make) in
+            make.top.equalTo(imageHeader.snp.bottom)
+            make.left.equalTo(tableView)
+            make.height.equalTo(0.5)
+            make.width.equalTo(imageHeader)
         }
         
         picture.snp.makeConstraints { (make) in
@@ -220,6 +227,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
         }
         
         headerView.addSubview(imageHeader)
+        headerView.addSubview(lineView)
         headerView.addSubview(picture)
         headerView.addSubview(titlePlace)
         headerView.addSubview(ratingLabel)
