@@ -55,8 +55,6 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
     fileprivate lazy var tableView: UITableView = {
         let table = UITableView()
         table.tableFooterView = UIView(frame: CGRect.zero)
-        table.dataSource = self
-        table.delegate = self
         return table
     }()
     
@@ -98,7 +96,6 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
             tableView.tableHeaderView = searchController.searchBar
         }
         
-        var isSaveSearchText = false
         let searchDistance = searchController.searchBar.rx.selectedScopeButtonIndex
             .flatMap { Observable.just(SearchDistance(rawValue: $0)) }
         
@@ -134,10 +131,7 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
         resultController.selectResult.asObservable()
             .subscribe(onNext: { [unowned self] (place) in
                 self.searchViewModel.openDetailPlace(place, FavoritesViewModel(container: self.container))
-                if !isSaveSearchText {
-                    isSaveSearchText = true
-                    self.searchViewModel.saveQuerySearch(self.searchController.searchBar.text ?? "")
-                }
+                self.searchViewModel.saveQuerySearch(self.searchController.searchBar.text ?? "")
             }, onError: { (error) in
                 print(error)
             })
@@ -147,14 +141,54 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
         tableView.register(SearchQueryTableViewCell.self, forCellReuseIdentifier: SearchQueryTableViewCell.cellIdentifier)
         tableView.register(PlaceTableViewCell.self, forCellReuseIdentifier: PlaceTableViewCell.cellIndetifier)
         
+        tableView.rx.setDelegate(self).disposed(by: disposeBag)
+        
+        searchViewModel.dataSourceQueries
+            .asObservable()
+            .bind(to: tableView.rx.items) { (table, row, element) in
+                guard row != 0 else {
+                    let cell = table.dequeueReusableCell(withIdentifier: InfoSearchTableViewCell.cellIdentifier,
+                                                         for: IndexPath(row: row, section: 0)) as? InfoSearchTableViewCell ?? InfoSearchTableViewCell()
+                    cell.title = element
+                    return cell
+                }
+                
+                let cell = table.dequeueReusableCell(withIdentifier: SearchQueryTableViewCell.cellIdentifier,
+                                                     for: IndexPath(row: row, section: 0)) as? SearchQueryTableViewCell ?? SearchQueryTableViewCell()
+                cell.title = element
+                return cell
+            }
+            .disposed(by: disposeBag)
+        
+        tableView.rx.itemSelected
+            .subscribe(onNext: { [unowned self] indexPath in
+                self.tableView.deselectRow(at: indexPath, animated: true)
+                guard indexPath.row != 0 else { return }
+                
+                let query = self.searchViewModel.dataSourceQueries.value[indexPath.row]
+                self.searchController.searchBar.text = query
+                self.searchController.isActive = true
+                self.searchViewModel.searchQuery.accept(query)
+            })
+            .disposed(by: disposeBag)
+        
         do {
             let realm = try Realm()
             let results = realm.objects(Search.self)
             
             notificationToken = results.observe { [unowned self] (changes: RealmCollectionChange) in
                 switch changes {
-                case .update, .initial:
-                    self.tableView.reloadData()
+                case .initial:
+                    break
+                case .update(let items, _, _, _):
+                    var queries: [String] = items.filter("query != ''")
+                        .sorted(byKeyPath: "weigth", ascending: false)
+                        .distinct(by: ["query"])
+                        .map({ $0.query })
+                    let endRange = queries.count >= 6 ? 6 : queries.count
+                    queries = queries[0..<endRange].map({ $0.localizedCapitalized })
+                    queries.insert(NSLocalizedString("tryToFind", comment: "Label when queries empty"), at: 0)
+                    self.searchViewModel.dataSourceQueries.accept(queries)
                 case .error(let error):
                     fatalError("\(error)")
                 }
@@ -169,28 +203,6 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
     }
 }
 
-extension SearchViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchViewModel.dataSourceQueries.value.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let querySearch = searchViewModel.dataSourceQueries.value[indexPath.row]
-        
-        guard indexPath.row != 0 else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: InfoSearchTableViewCell.cellIdentifier,
-                                                     for: indexPath) as? InfoSearchTableViewCell ?? InfoSearchTableViewCell()
-            cell.title = querySearch
-            return cell
-        }
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: SearchQueryTableViewCell.cellIdentifier,
-                                                 for: indexPath) as? SearchQueryTableViewCell ?? SearchQueryTableViewCell()
-        cell.title = querySearch
-        return cell
-    }
-}
-
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         tableView.separatorColor = .lightGray
@@ -199,15 +211,5 @@ extension SearchViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44.0
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        guard indexPath.row != 0 else { return }
-        
-        let query = searchViewModel.dataSourceQueries.value[indexPath.row]
-        searchController.searchBar.text = query
-        searchController.isActive = true
-        searchViewModel.searchQuery.accept(query)
     }
 }
