@@ -359,8 +359,8 @@ extension Reactive where Base: UIImageView {
                         transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
                         transition.type = CATransitionType(rawValue: transitionType)
                     #else
-                        transition.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
-                        transition.type = convertToCATransitionType(transitionType)
+                        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+                        transition.type = transitionType
                     #endif
                     imageView.layer.add(transition, forKey: kCATransition)
                 }
@@ -504,8 +504,3 @@ extension ObservableType {
 }
 
 
-
-// Helper function inserted by Swift 4.2 migrator.
-fileprivate func convertToCATransitionType(_ input: String) -> CATransitionType {
-	return CATransitionType(rawValue: input)
-}

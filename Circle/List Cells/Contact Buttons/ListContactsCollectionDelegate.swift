@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SafariServices
 
 final class ListContactsCollectionDelegate: NSObject {
     fileprivate let buttons: [Contact]
@@ -36,13 +37,24 @@ extension ListContactsCollectionDelegate: UICollectionViewDelegate, UICollection
             }
         case .website:
             if let url = URL(string: "\(contact.value ?? "")"), UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
+                let safari = SFSafariViewController(url: url)
+                if let win = UIApplication.shared.keyWindow {
+                    win.rootViewController?.present(safari, animated: true, completion: nil)
+                }
+            } else {
+                if let win = UIApplication.shared.keyWindow {
+                    win.rootViewController?.showAlertLight(title: NSLocalizedString("error", comment: "Title for error"),
+                                                           message: "\(contact.value ?? "")")
+                }
             }
         case .facebook:
             let urlApp = URL(string: "fb://page/?id=\(contact.value ?? "")")!
             let urlWeb = URL(string: "https://facebook.com/\(contact.value ?? "")")!
             guard UIApplication.shared.canOpenURL(urlApp) else {
-                UIApplication.shared.open(urlWeb, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
+                let safari = SFSafariViewController(url: urlWeb)
+                if let win = UIApplication.shared.keyWindow {
+                    win.rootViewController?.present(safari, animated: true, completion: nil)
+                }
                 return
             }
             UIApplication.shared.open(urlApp, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)

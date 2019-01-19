@@ -145,7 +145,7 @@ extension FavoritesViewController: UITableViewDataSource {
                                    placeholder: nil,
                                    options: viewModel.optionsKingfisher,
                                    progressBlock: nil,
-                                   completionHandler: nil)
+                                   completionHandler: { (_) in })
         return cell
     }
 }

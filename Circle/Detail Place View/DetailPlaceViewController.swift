@@ -29,22 +29,22 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
     }()
     
     fileprivate lazy var imageHeader: UIImageView = {
-        let image = UIImageView()
+        var image = UIImageView()
         image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
         image.backgroundColor = .shadowGray
         
         image.kf.indicatorType = .activity
         image.kf.setImage(with: viewModel.place.coverPhoto,
-                                placeholder: nil,
-                                options: viewModel.kingfisherOptions,
-                                progressBlock: nil,
-                                completionHandler: nil)
+                          placeholder: nil,
+                          options: viewModel.kingfisherOptions,
+                          progressBlock: nil,
+                          completionHandler: { (_) in })
         return image
     }()
     
     fileprivate lazy var picture: UIImageView = {
-        let image = UIImageView()
+        var image = UIImageView()
         image.contentMode = .scaleAspectFit
         image.backgroundColor = .shadowGray
         image.layer.shadowColor = UIColor.black.cgColor
@@ -59,7 +59,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
                                   placeholder: nil,
                                   options: self.viewModel.kingfisherOptions,
                                   progressBlock: nil,
-                                  completionHandler: nil)
+                                  completionHandler: { (_) in })
             }, onError: { (error) in
                 print(error)
             }).disposed(by: disposeBag)
@@ -249,7 +249,7 @@ final class DetailPlaceViewController: UIViewController, UIGestureRecognizerDele
                                                      placeholder: nil,
                                                      options: self.viewModel.kingfisherOptions,
                                                      progressBlock: nil,
-                                                     completionHandler: nil)
+                                                     completionHandler: { (_) in })
                     }
                     
                     guard self.favoritesViewModel.checkAddAndNotify(self.viewModel.place).addFavorites else {
