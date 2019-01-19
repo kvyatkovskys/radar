@@ -124,7 +124,7 @@ final class SearchViewController: UIViewController, UISearchControllerDelegate, 
                                                placeholder: nil,
                                                options: self.searchViewModel.kingfisherOptions,
                                                progressBlock: nil,
-                                               completionHandler: nil)
+                                               completionHandler: { (_) in })
             }
             .disposed(by: disposeBag)
         

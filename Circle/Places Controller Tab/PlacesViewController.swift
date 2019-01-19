@@ -116,7 +116,7 @@ final class PlacesViewController: UIViewController {
                                                    placeholder: nil,
                                                    options: self.viewModel.kingfisherOptions,
                                                    progressBlock: nil,
-                                                   completionHandler: nil)
+                                                   completionHandler: { (_) in })
             }
             .disposed(by: disposeBag)
         

@@ -42,11 +42,10 @@ struct PlaceService {
                                                       fields: setting.fields,
                                                       distance: distance,
                                                       cursor: nil)
-        
         return Observable.create({ observable in
-            _ = request?.start(completionHandler: { (_, result, error) in
-                guard error == nil else {
-                    observable.on(.error(error!))
+            request?.start(completionHandler: { (_, result, error) in
+                if let error = error {
+                    observable.on(.error(error))
                     return
                 }
                 if let data = result as? [String: Any], let model: PlaceDataModel = try? unbox(dictionary: data) {

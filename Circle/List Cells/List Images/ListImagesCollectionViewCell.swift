@@ -11,7 +11,7 @@ import UIKit
 class ListImagesCollectionViewCell: UICollectionViewCell {
     static let cellIdentifier = "ListImagesCollectionViewCell"
     
-    let imageView: UIImageView = {
+    var imageView: UIImageView = {
         let image = UIImageView()
         image.clipsToBounds = true
         image.contentMode = .scaleAspectFill

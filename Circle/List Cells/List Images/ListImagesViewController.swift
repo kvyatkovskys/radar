@@ -100,7 +100,7 @@ extension ListImagesViewController: UICollectionViewDataSource {
                                    placeholder: nil,
                                    options: pageImages?.kingfisherOptions,
                                    progressBlock: nil,
-                                   completionHandler: nil)
+                                   completionHandler: { (_) in })
         return cell
     }
 }

@@ -6,31 +6,38 @@ PODS:
     - Bolts/Tasks
   - Bolts/Tasks (1.9.0)
   - Cache (5.2.0)
-  - FBSDKCoreKit (4.37.0):
-    - Bolts (~> 1.7)
-  - FBSDKLoginKit (4.37.0):
+  - FBSDKCoreKit (4.39.1):
+    - Bolts (~> 1.9)
+  - FBSDKLoginKit (4.39.1):
     - FBSDKCoreKit
-  - FBSDKPlacesKit (4.37.0):
+  - FBSDKPlacesKit (4.39.1):
     - FBSDKCoreKit
-  - FBSDKShareKit (4.37.0):
-    - FBSDKCoreKit (~> 4.37.0)
+  - FBSDKShareKit (4.39.1):
+    - FBSDKCoreKit
   - Imaginary (4.2.0):
     - Cache (~> 5.0)
-  - Kingfisher (4.10.0)
+  - Kingfisher (5.1.0)
   - Lightbox (2.3.0):
     - Imaginary (~> 4.0)
-  - Realm (3.11.0):
-    - Realm/Headers (= 3.11.0)
-  - Realm/Headers (3.11.0)
-  - RealmSwift (3.11.0):
-    - Realm (= 3.11.0)
-  - RxCocoa (4.3.1):
+  - Realm (3.13.1):
+    - Realm/Headers (= 3.13.1)
+  - Realm/Headers (3.13.1)
+  - RealmSwift (3.13.1):
+    - Realm (= 3.13.1)
+  - RxAtomic (4.4.0)
+  - RxCocoa (4.4.0):
     - RxSwift (~> 4.0)
-  - RxSwift (4.3.1)
-  - SnapKit (4.0.1)
+  - RxSwift (4.4.0):
+    - RxAtomic (~> 4.4)
+  - SnapKit (4.2.0)
   - Swinject (2.5.0)
   - Unbox (3.0.0)
-  - YandexMobileMetrica/Dynamic (3.3.0)
+  - YandexMobileMetrica/Dynamic (3.5.0):
+    - YandexMobileMetrica/Dynamic/Core (= 3.5.0)
+    - YandexMobileMetrica/Dynamic/Crashes (= 3.5.0)
+  - YandexMobileMetrica/Dynamic/Core (3.5.0)
+  - YandexMobileMetrica/Dynamic/Crashes (3.5.0):
+    - YandexMobileMetrica/Dynamic/Core
 
 DEPENDENCIES:
   - FBSDKCoreKit
@@ -60,6 +67,7 @@ SPEC REPOS:
     - Lightbox
     - Realm
     - RealmSwift
+    - RxAtomic
     - RxCocoa
     - RxSwift
     - SnapKit
@@ -70,22 +78,23 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
   Cache: 807c5d86d01a177f06ede9865add3aea269bbfd4
-  FBSDKCoreKit: fe5f3474499a81963e11e3f3a5c753d0a95ca2b4
-  FBSDKLoginKit: 2f7249686d1e30ce8a5ef5400eedf50b3e3df332
-  FBSDKPlacesKit: efdd193a9abaab00eaa4b75ca3322b132a09172c
-  FBSDKShareKit: 52e0083222c38e930eb6878007478326599195c3
+  FBSDKCoreKit: f442aa96179cc9b382bb4abeb7e340a47cca8f91
+  FBSDKLoginKit: c3079d9a4db27c492287b1eed7a4272b28cf8a59
+  FBSDKPlacesKit: f5b5e4d1e52cfa7b622891c1fb288cbfe73f3ab9
+  FBSDKShareKit: 27d7b982e7b1f4638da2f2b1ab6eba5afc6b5888
   Imaginary: dae33d06dbc2ada22f98afef5eb45cc061311a2c
-  Kingfisher: 43c4b802d8b5256cf1f4379e9cd10b329be6d3e2
+  Kingfisher: fcec238063d17404fca89bf0a850583211c4cbf6
   Lightbox: d317750e4132bfb871a5307cfe0a2c7d6a583c65
-  Realm: 92f09a102692b96a9a10e9617f214f15c5ab85fc
-  RealmSwift: 5f0481cd658bb751c509314b964a35eaa264d2cf
-  RxCocoa: 78763c7b07d02455598d9fc3c1ad091a28b73635
-  RxSwift: fe0fd770a43acdb7d0a53da411c9b892e69bb6e4
-  SnapKit: 0de968a9fec17499afa29683b05d0c775b6d1c29
+  Realm: 50071da38fe079e0735e47c9f2eae738c68c5996
+  RealmSwift: 8a1e6a02b7a08cd17a31e3115143fb69fe5f3fb9
+  RxAtomic: eacf60db868c96bfd63320e28619fe29c179656f
+  RxCocoa: df63ebf7b9a70d6b4eeea407ed5dd4efc8979749
+  RxSwift: 5976ecd04fc2fefd648827c23de5e11157faa973
+  SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
   Swinject: 82cdb851f63f91bba974e3eca1d69780f2f7677e
   Unbox: 9ed33b2a31f7a8a049f54b94d40c4a52a28c4d9d
-  YandexMobileMetrica: 415e4e8a7a23121a3d086958a655f444dd340edb
+  YandexMobileMetrica: 811baea0201471d0bc65d5e8017250505cee0cfe
 
 PODFILE CHECKSUM: fdb6ba4e7b79423b772161d170958a4decbb06ea
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.6.0.beta.2

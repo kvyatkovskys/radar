@@ -26,7 +26,7 @@ final class PlaceTableViewCell: UITableViewCell {
         return view
     }()
     
-    let imageCell: UIImageView = {
+    var imageCell: UIImageView = {
         let image = UIImageView()
         image.clipsToBounds = true
         image.contentMode = .scaleAspectFill
